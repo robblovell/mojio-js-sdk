@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "mojio-config.js",
+  "sourceRoot": "",
+  "sources": [
+    "mojio-config.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA,CAAA,CACI,GADE,CAAN;CACI,CACiB,EAAb,OAAA,2BADJ;CAAA,CAEY,EAAR,EAAA,gCAFJ;CAAA,CAGc,EAAV,IAAA,YAHJ;CAAA,CAIa,EAAT,GAAA;CAJJ,CAKS,EAAL;CANR,GAAA;CAAA"
+}

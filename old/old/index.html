@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+</head>
+<body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js" type="text/javascript"></script>
+
+<!-- MOJIO SCRIPTS -->
+<script src="../../plugins/jquery-1.11.0.min.js"></script>
+<script src="../../plugins/jquery.dataTables.js"></script>
+<script src="../../plugins/jquery.signalR-1.1.3.min.js"></script>
+<script src="../../plugins/jquery-prettyPhoto-3.1.5.js"></script>
+
+<script src="../../mojio/mojio.client-1.0.3.js"> </script>
+<script src="../../mojio/mojio.map-1.0.2.js"> </script>
+<script src="../../mojio/mojio.simulator-1.0.5.js"> </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUa9rgn3oVwrCoym3Hw5MsQt5nf2w9Q2g&sensor=false"></script>
+<!--<script src="../mojio/simulator.js"></script>-->
+
+<script type="text/javascript">
+    $(function () {
+        // Setup loading screen during API calls.
+        var ajaxCount = 0;
+        $(document).on({
+            'ajaxStart.mojio': function () {
+                ajaxCount++;
+                $(".simulator-loading").addClass("loading");
+            },
+            'ajaxStop.mojio': function () {
+                ajaxCount--;
+                if (ajaxCount == 0)
+                    $(".simulator-loading").removeClass("loading");
+            }
+        });
+
+        // Connect to MOJIO API
+        var mojioClient = new Mojio.Client({
+            url: "http://sandbox.api.moj.io/v1",
+            appId: "CB154FCC-4EC1-4EBB-A703-3A8C6E8A9525",
+            secretKey: "78d310d5-a23f-4f05-a0e5-35696aaa9764",
+            token: "", //TODO:: Login.
+            cookieDomain: ".moj.io",
+            cookiePrefix: "MojioToken"
+        });
+
+        mojioClient.login("robbl@moj.io","Tpatpabp1!");
+
+        $('#simulator-link').addClass("active");
+        $('#simulator-link').find('a').append('<span class="selected"></span>');
+    });
+</script>
+
+<div class="page-title">
+    <h3><strong>Vehicle</strong> Simulator</h3>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<div class="simulator-wrapper">
+<div class="simulator-loading"><i class="fa fa-2x fa-spinner"></i></div>
+
+<div class="row">
+<div class="col-md-4">
+    <aside class="sidebar">
+
+        <h4>Trip Creation</h4>
+        <div class="tabs">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#createTrips" data-toggle="tab">Create Trip</a></li>
+                <li><a href="#presetTrips" data-toggle="tab">Preset Trips</a></li>
+            </ul>
+            <div class="tab-content p-b-15">
+                <div class="tab-pane active" id="createTrips">
+                    <div id="simulator-controls">
+                        <label>Pick a device:</label>
+                        <select id="vehicleId" name="mojioID" disabled="disabled" class="form-control">
+                            <option value="">Login to load MOJIO devices.</option>
+                        </select>
+                        <br />
+                        <a href="#" id="playButton" class="btn btn-success"><div class="fa fa-play"></div> Play</a>
+                        <a href="#" id="pauseButton" class="btn btn-primary"><div class="fa fa-pause"></div> Pause</a>
+                        <a href="#" id="stopButton" class="btn btn-danger"><div class="fa fa-stop"></div> Stop</a>
+                        <!-- <a href="#" id="resetButton" class="red_button cta">Reset</a>-->
+                    </div>
+                    <hr />
+                    <p>Create a new trip by adding events (from last to first). Click PLAY when you are ready.</p>
+                    <p>
+                        <a href="#" id="newEventButton" class="btn btn-default">
+                            <i class="fa fa-plus"></i>&nbsp;
+                            Add Event
+                        </a>
+                        <a href="#" class="hide-all-button hidden" onclick="return collapseAllButton();">
+                            <i id="collapse-all-icon" class="fa fa-2x fa-compress"></i>
+                        </a>
+                    </p>
+                    <div class="preset-trip-container hidden"></div>
+                    <ul id="events" class="simple-post-list">
+                        <li id="eventTemplate">
+                            <div class="eventType">
+                                <select class="inputEventType" name="EventType">
+                                    <option value="">-- Select Event --</option>
+                                    <!-- <option value="Information">Information</option> -->
+                                    <optgroup label="Mojio Device Status">
+                                        <option value="MojioOn">Mojio On</option>
+                                        <option value="MojioOff">Mojio Off</option>
+                                        <option value="MojioIdle">Mojio Idle</option>
+                                        <option value="MojioWake">Mojio Wake</option>
+                                        <option value="ConnectionLost">Connection Lost</option>
+                                        <option value="LowBattery">Low Battery</option>
+                                        <option value="OffStatus">Off Status</option>
+                                    </optgroup>
+                                    <optgroup label="Trip Events">
+                                        <option value="IgnitionOn">Ignition On</option>
+                                        <option value="IgnitionOff">Ignition Off</option>
+
+                                        <option value="TripStatus">Trip Status</option>
+                                        <!--  <option value="TripEvent">Basic Trip Event</option>
+                                    <option value="TripStart">Trip Start</option>
+                                    <option value="TripEnd">Trip End</option>-->
+
+                                        <option value="FenceEntered">Fence Entered</option>
+                                        <option value="FenceExited">Fence Exited</option>
+
+                                        <option value="Park">Park</option>
+                                    </optgroup>
+                                    <optgroup label="Trip Warnings">
+                                        <option value="Speed">Excessive Speed</option>
+                                        <option value="Accident">Accident</option>
+
+                                        <option value="HardBrake">Harsh Brake</option>
+                                        <option value="HardRight">Harsh Right</option>
+                                        <option value="HardLeft">Harsh Left</option>
+                                        <option value="HardAcceleration">Harsh Acceleration</option>
+
+                                        <option value="Accelerometer">Accelerometer</option>
+                                        <option value="Acceleration">Acceleration</option>
+                                        <option value="Deceleration">Deceleration</option>
+                                        <option value="HeadingChange">Heading Change</option>
+                                        <option value="Mileage">Mileage</option>
+                                    </optgroup>
+                                    <optgroup label="Notices">
+                                        <option value="Information">Information</option>
+                                        <option value="Warning">Warning</option>
+                                        <option value="MILWarning">MIL Warning</option>
+
+                                        <option value="Alert">Alert</option>
+                                        <option value="TowStart">Tow Start</option>
+                                        <option value="TowStop">Tow Stop</option>
+                                        <option value="Diagnostic">Diagnostics</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="controls">
+                                <a class="hide-events-button" href="#toggleEventOptions" onclick="return toggleEventOptions(this);">
+                                    <i class="fa fa-toggle-up icon icon-toggle-up toggle-icon"></i>
+                                </a>
+                                <a href="#remove" onclick="return removeEvent(this);">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+
+                            <!-- GPS Location, shared by many event types (See IGPSEvent) -->
+                            <div class="onlyEventTypes onlyTypeTripEvent onlyTypeFenceEntered onlyTypeFenceExited onlyTypeSpeed onlyTypeAccident
+                                    onlyTypeHardBrake onlyTypeHardLeft onlyTypeHardRight onlyTypeHardAcceleration onlyTypeTripStart
+                                    onlyTypeTripEnd onlyTypeTripStatus onlyTypeSpeed onlyTypeTowStart onlyTypeTowStop onlyTypeIgnitionOn onlyTypeIgnitionOff">
+                                <input type="text" class="inputLocationLat form-control tip" placeholder="Latitude" name="Location.Lat" value="" data-toggle="tooltip" title="Latitude" data-placement="bottom" />
+                                <input type="text" class="inputLocationLng form-control tip" placeholder="Longitude" name="Location.Lng" value="" data-toggle="tooltip" title="Longitude" data-placement="bottom" />
+                            </div>
+
+                            <!-- Not relivant for trip start and end events -->
+                            <div class="onlyEventTypes onlyTypeSpeed onlyTypeTripStatus">
+                                <input type="text" class="inputHeading form-control tip" placeholder="Heading" size="5" name="Heading" value="" data-toggle="tooltip" title="Heading" data-placement="bottom" />
+                                <input type="text" class="inputSpeed form-control tip" placeholder="Speed" size="5" name="Speed" value="" data-toggle="tooltip" title="Speed" data-placement="bottom" />
+                            </div>
+
+                            <!-- Not relivant for trip start and end events -->
+                            <div class="onlyEventTypes onlyTypeLowBattery">
+                                <input type="text" class="inputVoltage form-control tip" placeholder="Voltage" size="5" name="Voltage" value="" data-toggle="tooltip" title="Voltage" data-placement="bottom" />
+                            </div>
+
+                            <!-- Event types shared with all tripStatuses (including start)
+                        <div class="onlyEventTypes onlyTypeTripEnd onlyTypeTripStart">
+                            <input type="text" class="inputOdometer" placeholder="Odometer" name="Odometer" value="" />
+                            <input type="text" class="inputFuelLevel" placeholder="Fuel Level (%)" size="5" name="FuelLevel" value="" />
+                        </div>-->
+                            <!-- Event types only used for trip status and end -->
+                            <div class="onlyEventTypes onlyTypeTripEnd onlyTypeTripStart onlyTypeIgnitionOn onlyTypeIgnitionOff onlyTypeTripStatus">
+                                <input type="text" class="inputOdometer form-control tip" placeholder="Odometer" name="Odometer" value="" data-toggle="tooltip" title="Odometer Value" data-placement="bottom" />
+                                <input type="text" class="inputFuelLevel form-control tip" placeholder="Fuel Level (%)" size="5" name="FuelLevel" value="" data-toggle="tooltip" title="Fuel Level %" data-placement="bottom" />
+                                <input type="text" class="inputFuelEfficiency form-control tip" placeholder="Efficiency (L/100K)" size="5" name="FuelEfficiency" value="" data-toggle="tooltip" title="Fuel Efficiency (L/100K)" data-placement="bottom" />
+                                <!-- Not implemented yet: <input type="text" class="inputIdleTime" placeholder="Idle Time" name="IdleTime" value="" />
+                            <input type="text" class="inputMovingTime" placeholder="Moving Time" name="MovingTime" value="" />
+                            <input type="text" class="inputStopTime" placeholder="Stop Time" name="StopTime" value="" />-->
+                            </div>
+
+                            <!-- GForce related information -->
+                            <div class="onlyEventTypes onlyTypeHardRight onlyTypeHardLeft onlyTypeHardBrake onlyTypeHardAcceleration">
+                                <input type="text" class="inputForce form-control tip" placeholder="G Force" name="Force" value="" data-toggle="tooltip" title="G Force" data-placement="bottom" />
+                            </div>
+
+                            <!-- Diagnostics Code -->
+                            <div class="onlyEventTypes onlyTypeDiagnostic">
+                                <input type="text" class="inputCode form-control tip" placeholder="DTC Code" name="Code" value="" data-toggle="tooltip" title="DTC Code" data-placement="bottom" />
+                            </div>
+
+                            <div class="clearfix"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-pane" id="presetTrips">
+                    <p>To load a series of preset events, select a preset trip below and its events will get populated into the event list.</p>
+                    <ul id="simulatorSamples" class="simple-post-list"></ul>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <h4>How It Works</h4>
+        <p>
+            The Mojio Vehicle Simulator works by sending events through the Mojio API as though the vehicle were driving around and encountering the scheduled events.
+            <a data-hash href="#simulator-faq">Simulator FAQ</a>
+        </p>
+
+    </aside>
+</div>
+<div class="col-md-8">
+
+    <h2>Map <strong>View</strong></h2>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4>
+                Welcome to the Mojio Vehicle Simulator. To simulate a trip and any number of events to happen to the vehicle during the trip, either create your own by stringing together events, or choose one from a set of default trips. When you are ready, press play.
+            </h4>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="simulator-map"></div>
+            <pre id="logging">VEHICLE LOG...</pre>
+        </div>
+    </div>
+
+    <hr />
+    <div id="simulator-faq">
+        <h2>Simulator FAQ</h2>
+        <div class="panel-group" id="accordion" data-toggle="collapse">
+            <div class="panel panel-default">
+                <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                        <a class="" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            About the Mojio Vehicle Simulator
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" style="height: auto;">
+                    <div class="panel-body">
+                        <p>
+                            Building and debugging apps can be hard. Especially when your app is attempting to interact with
+                            rare and hard to duplicate scenarios.
+                        </p>
+                        <p>
+                            For example, let's say you want to create an app that will respond to high speed vehicle collisions.
+                            It would be quite a pain (literally) if a developer needed to hop in a car every time they wished to test their app.
+                        </p>
+                        <p>
+                            So instead, we have developed a simulator which developers can use to simulate a Mojio device.
+                            The Simulator allows developers to trigger any of the events a real Mojio device could send, and have them processed through
+                            our Mojio servers as though it were the real thing. This way, a developer can peacefully simulate those high speed collisions instantly, as many times as they want,
+                            all from the comfort of their home.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                            How It Works
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse" style="height: 0px;">
+                    <div class="panel-body">
+                        <p>The Mojio Simulator acts just like a Mojio device. This means, once the event has left the Mojio device, or the Mojio Simulator, our servers interact the exact same way with both. In fact, we can't even tell them apart. The events get sent to our servers to be processed, saved to the database, and pushed to any SignalR subscribers (for example the map on this page).</p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                            Using The Simulator
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p>To create a list of events, click the  Add Event button. A new event will be added to the queue. You can use the drop down to select what type of event you wish it to be. Some events also require additional information, for example a GPS event requires Lat/Long, Altitude and Speed. Once you have added one or more events to the queue, you can click the Play button to start executing the simulation. Each event will be sent one at a time starting from the top of the queue, with a 1 second delay between each event.</p>
+                        <p>The simplest way to start using the MOJIO Simulator is to select one of our pre-built samples to run.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading collapsed">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                            Prebuilt Sample Runs
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <p>We have added a few prebuilt simulations you can select from, which will demo common use cases. You can find these on the Preset Trips tab.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+</body>
+</html>
