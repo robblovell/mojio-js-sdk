@@ -19,4 +19,3 @@ mojio.login('mojio', 'mojioR0cks', (error, result) ->
         div.innerHTML += 'POST /login<br>'
         div.innerHTML += JSON.stringify(result)
 )
-

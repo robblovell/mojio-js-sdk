@@ -159,24 +159,23 @@ to the dist directory.
 
 If you need to manually recompile the code, the steps are:
 
+For all code:
+```
+coffee --map --compile src
+```
 For nodejs code
 ```
-coffee --map --output src/nodejs --compile src/nodejs/Mojio.coffee
 cp src/nodejs/*.js dist/nodejs/
 ```
-
 For browser code
 ```
 cd src/browser
-coffee --map --compile Mojio.coffee
-coffee --map --compile HttpBrowser.coffee
 browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
 browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
 ```
 
 ## Todo:
 
-* travis.yml
 * Make browser code compile from nodejs client.
 * Need models
 * POST, PUT, DELETE for resources.
