@@ -16,4 +16,5 @@ script:
   - cd src/browser
   - ../../node_modules/.bin/browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
   - ../../node_modules/.bin/browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
+  - cd ../../
   - mocha
