@@ -14,6 +14,7 @@ Look here:
 example/login.html
 test/login_test.coffee
 ```
+[![build status](https://secure.travis-ci.org/robblovell/mojio-js.png)](http://sandbox.moj.io/)
 ## Install and Test:
 ```
 npm install
@@ -158,8 +159,6 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
 
 ## Build
 All javascript client code is in the 'dist' directory.
-
-[![build status](https://secure.travis-ci.org/robblovell/mojio-js.png)](http://sandbox.moj.io/)
 
 Code must be compiled from coffeescript to javascript first.  Browser based code must be "browserified" to work in a
 browser. A webstorm project is setup to compile the coffeescript code, call browserify and to copy all built code
