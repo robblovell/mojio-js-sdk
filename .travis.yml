@@ -4,6 +4,8 @@ node_js:
 branches:
   only:
     - master
+    - develop
+    - /^release*$/
 notifications:
   email:
     - robbl@moj.io
