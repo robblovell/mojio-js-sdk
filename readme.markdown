@@ -178,7 +178,8 @@ browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
 
 ## Todo:
 
-Make browser code compile from nodejs client.
-Need models
-POST, PUT, DELETE for resources.
-Hyperlinks for resources
+* travis.yml
+* Make browser code compile from nodejs client.
+* Need models
+* POST, PUT, DELETE for resources.
+* Hyperlinks for resources
