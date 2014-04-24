@@ -39,10 +39,11 @@ mocha
 <script src="./login.js"></script>
 </body>
 
-Mojio = @Mojio
 ```
 login.coffee (compiles to login.js included in the html above)
 ```
+Mojio = @Mojio
+
 config = {
     application: 'YOUR APPLICATION KEY',
     secret: 'YOUR SECRET KEY',
