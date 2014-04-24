@@ -40,26 +40,6 @@
     });
   });
 
-  config = {
-    application: 'YOUR APPLICATION KEY',
-    secret: 'YOUR SECRET KEY',
-    hostname: 'staging.api.moj.io',
-    version: 'v1',
-    port: '80'
-  };
-
-  Mojio = require('../dist/nodejs/Mojio.js');
-
-  mojio = new Mojio(config);
-
-  mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
-    if (error) {
-      return Console.log("error: " + error);
-    } else {
-      return console.log("success:" + result);
-    }
-  });
-
 }).call(this);
 
 /*
