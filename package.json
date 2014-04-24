@@ -1,0 +1,13 @@
+{
+    "name": "MOJIO.nodejs.client",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+
+    },
+    "devDependencies": {
+        "mocha": "*",
+        "should": "*",
+        "supertest": "*"
+    }
+}

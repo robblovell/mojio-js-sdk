@@ -1,0 +1,97 @@
+<component name="libraryTable">
+  <library name="Generated files" type="javaScript">
+    <properties>
+      <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/test/login_test.js" />
+        <item url="file://$PROJECT_DIR$/dist/nodejs/mojio-client-node.js" />
+        <item url="file://$PROJECT_DIR$/test/crud_test.js" />
+        <item url="file://$PROJECT_DIR$/dist/nodejs/mojio-client.js" />
+        <item url="file://$PROJECT_DIR$/old/mojio-client-login.js" />
+        <item url="file://$PROJECT_DIR$/dist/browser/Mojio.js" />
+        <item url="file://$PROJECT_DIR$/dist/browser/HttpBrowser.js" />
+        <item url="file://$PROJECT_DIR$/node_modules/http-browserify/node_modules/Base64/test/base64.js" />
+        <item url="file://$PROJECT_DIR$/example/login.js" />
+        <item url="file://$PROJECT_DIR$/src/nodejs/mojio-client.js" />
+        <item url="file://$PROJECT_DIR$/old/mojio-client-events.js" />
+        <item url="file://$PROJECT_DIR$/old/mojio-client-crud.js" />
+        <item url="file://$PROJECT_DIR$/test/data/mojio-test-data.js" />
+        <item url="file://$PROJECT_DIR$/src/nodejs/Mojio.js" />
+        <item url="file://$PROJECT_DIR$/src/browser/HttpBrowser.js" />
+        <item url="file://$PROJECT_DIR$/old/mojio-client-apps.js" />
+        <item url="file://$PROJECT_DIR$/test/apps_test.js" />
+        <item url="file://$PROJECT_DIR$/mojio/old/mojio.map-1.1.0.js" />
+        <item url="file://$PROJECT_DIR$/mojio/old/mojio-simulator-1.1.0.js" />
+        <item url="file://$PROJECT_DIR$/src/browser/Mojio.js" />
+        <item url="file://$PROJECT_DIR$/old/mojio-client-base.js" />
+        <item url="file://$PROJECT_DIR$/dist/nodejs/Mojio.js" />
+        <item url="file://$PROJECT_DIR$/config/mojio-config.js" />
+      </sourceFilesUrls>
+    </properties>
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/test/true_test.js" />
+      <root url="file://$PROJECT_DIR$/test/true_test.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/spec/GrammarHelper.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/karma/requirejs.config.tpl.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/spec/HelperSpec.js" />
+      <root url="file://$PROJECT_DIR$/karma-config.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/Gruntfile.js" />
+      <root url="file://$PROJECT_DIR$/spec/data/mojio-test-data.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/jasmine/boot.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/auto-test.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/runner.js" />
+      <root url="file://$PROJECT_DIR$/spec/login_spec.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/file-finder.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/reporter.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/spec/CoffeeSpec.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/jasmine-loader.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/spec/GrammarHelper.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/karma/requirejs.config.tpl.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/spec/HelperSpec.js" />
+      <root url="file://$PROJECT_DIR$/karma-config.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/Gruntfile.js" />
+      <root url="file://$PROJECT_DIR$/spec/data/mojio-test-data.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/jasmine/boot.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/auto-test.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/runner.js" />
+      <root url="file://$PROJECT_DIR$/spec/login_spec.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/file-finder.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/reporter.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/spec/CoffeeSpec.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/jasmine-node/src/jasmine-loader.js" />
+      <root url="file://$PROJECT_DIR$/mojio-instance.js" />
+      <root url="file://$PROJECT_DIR$/mojio-instance.js" />
+      <root url="file://$PROJECT_DIR$/dist/HttpBrowser.js " />
+      <root url="file://$PROJECT_DIR$/dist/Mojio.js " />
+      <root url="file://$PROJECT_DIR$/dist/HttpBrowser.js " />
+      <root url="file://$PROJECT_DIR$/dist/Mojio.js " />
+      <root url="file://$PROJECT_DIR$/dist/HttpBrowser.js" />
+      <root url="file://$PROJECT_DIR$/dist/Mojio.js" />
+      <root url="file://$PROJECT_DIR$/dist/HttpBrowser.js" />
+      <root url="file://$PROJECT_DIR$/dist/Mojio.js" />
+      <root url="file://$PROJECT_DIR$/dist/nodejs/mojio-client-node.js" />
+      <root url="file://$PROJECT_DIR$/test/login_test.js" />
+      <root url="file://$PROJECT_DIR$/dist/nodejs/mojio-client.js" />
+      <root url="file://$PROJECT_DIR$/test/crud_test.js" />
+      <root url="file://$PROJECT_DIR$/dist/browser/Mojio.js" />
+      <root url="file://$PROJECT_DIR$/old/mojio-client-login.js" />
+      <root url="file://$PROJECT_DIR$/dist/browser/HttpBrowser.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/http-browserify/node_modules/Base64/test/base64.js" />
+      <root url="file://$PROJECT_DIR$/example/login.js" />
+      <root url="file://$PROJECT_DIR$/src/nodejs/mojio-client.js" />
+      <root url="file://$PROJECT_DIR$/old/mojio-client-events.js" />
+      <root url="file://$PROJECT_DIR$/old/mojio-client-crud.js" />
+      <root url="file://$PROJECT_DIR$/test/data/mojio-test-data.js" />
+      <root url="file://$PROJECT_DIR$/src/nodejs/Mojio.js" />
+      <root url="file://$PROJECT_DIR$/src/browser/HttpBrowser.js" />
+      <root url="file://$PROJECT_DIR$/old/mojio-client-apps.js" />
+      <root url="file://$PROJECT_DIR$/mojio/old/mojio.map-1.1.0.js" />
+      <root url="file://$PROJECT_DIR$/test/apps_test.js" />
+      <root url="file://$PROJECT_DIR$/src/browser/Mojio.js" />
+      <root url="file://$PROJECT_DIR$/mojio/old/mojio-simulator-1.1.0.js" />
+      <root url="file://$PROJECT_DIR$/old/mojio-client-base.js" />
+      <root url="file://$PROJECT_DIR$/dist/nodejs/Mojio.js" />
+      <root url="file://$PROJECT_DIR$/config/mojio-config.js" />
+    </CLASSES>
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "mojio-simulator-1.1.0.js",
+  "sourceRoot": "",
+  "sources": [
+    "mojio-simulator-1.1.0.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;CAAA;CAAA"
+}

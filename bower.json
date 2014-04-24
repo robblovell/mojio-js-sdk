@@ -1,0 +1,17 @@
+{
+  "name": "Mojio Client",
+  "version": "1.0.0",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt",
+    "**/*.json",
+    "**/*.md"
+  ],
+  "dependencies": {
+    "jquery": "1.11.0",
+    "requirejs": "2.1.11"
+    "require-cs": "*"
+  },
+  "devDependencies": {
+  }
+}
