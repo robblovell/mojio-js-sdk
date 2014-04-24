@@ -111,7 +111,7 @@
           <file leaf-file-name="readme.markdown" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/readme.markdown">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="84" column="3" selection-start="2191" selection-end="2191" vertical-scroll-proportion="0.0" vertical-offset="795" max-vertical-offset="3383">
+                <state line="64" column="3" selection-start="1481" selection-end="1481" vertical-scroll-proportion="0.0" vertical-offset="495" max-vertical-offset="3443">
                   <folding />
                 </state>
               </provider>
@@ -136,7 +136,7 @@
           <file leaf-file-name="readme.markdown" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/readme.markdown">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="149" column="3" selection-start="4067" selection-end="4067" vertical-scroll-proportion="0.6687898" vertical-offset="1815" max-vertical-offset="3313">
+                <state line="15" column="3" selection-start="513" selection-end="513" vertical-scroll-proportion="0.35828024" vertical-offset="0" max-vertical-offset="3373">
                   <folding />
                 </state>
               </provider>
@@ -1098,7 +1098,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/readme.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="149" column="3" selection-start="4067" selection-end="4067" vertical-scroll-proportion="0.6687898" vertical-offset="1815" max-vertical-offset="3313">
+        <state line="15" column="3" selection-start="513" selection-end="513" vertical-scroll-proportion="0.35828024" vertical-offset="0" max-vertical-offset="3373">
           <folding />
         </state>
       </provider>

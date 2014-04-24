@@ -7,38 +7,18 @@ This repository contains a node js client and a browser js client.
 The client is built in coffeescript and compiled to js for use in the browser and node-js environments.  Built code
 is in the /dist directory.
 
-The browser client needs jquery to work properly.  See the example directory for usage in
-example/login.html.
+The browser client needs jquery to work properly.  See the example and test directories for how to use this client.
 
-## Test:
+Look here:
+```
+example/login.html
+test/login_test.coffee
+```
+## Install and Test:
 ```
 npm install
 bower install
 mocha
-```
-
-## Build
-All javascript client code is in the 'dist' directory.
-
-Code must be compiled from coffeescript to javascript first.  Browser based code must be "browserified" to work in a
-browser. A webstorm project is setup to compile the coffeescript code, call browserify and to copy all built code
-to the dist directory.
-
-If you need to manually recompile the code, the steps are:
-
-For nodejs code
-```
-coffee --map --output src/nodejs --compile src/nodejs/Mojio.coffee
-cp src/nodejs/*.js dist/nodejs/
-```
-
-For browser code
-```
-cd src/browser
-coffee --map --compile Mojio.coffee
-coffee --map --compile HttpBrowser.coffee
-browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
-browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
 ```
 
 ## HTML Example
@@ -170,6 +150,30 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
       return console.log("success:" + result);
     }
   });
+```
+
+## Build
+All javascript client code is in the 'dist' directory.
+
+Code must be compiled from coffeescript to javascript first.  Browser based code must be "browserified" to work in a
+browser. A webstorm project is setup to compile the coffeescript code, call browserify and to copy all built code
+to the dist directory.
+
+If you need to manually recompile the code, the steps are:
+
+For nodejs code
+```
+coffee --map --output src/nodejs --compile src/nodejs/Mojio.coffee
+cp src/nodejs/*.js dist/nodejs/
+```
+
+For browser code
+```
+cd src/browser
+coffee --map --compile Mojio.coffee
+coffee --map --compile HttpBrowser.coffee
+browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
+browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
 ```
 
 ## Todo:
