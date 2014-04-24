@@ -9,7 +9,6 @@ notifications:
   email:
     - robbl@moj.io
 before_script:
-  - npm install -g bower
   - bower install
   - coffee --map --compile src/nodejs
   - cp src/nodejs/*.js dist/nodejs/
