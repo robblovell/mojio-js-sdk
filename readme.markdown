@@ -10,19 +10,21 @@ is in the /dist directory.
 The browser client needs jquery to work properly.  See the example directory for usage in
 example/login.html.
 
-Test:
+# Test:
 ```
 npm install
 bower install
 mocha
 ```
 
-To rebuild js clients in the dist directory:
+# Build
+All javascript client code is in the 'dist' directory.
 
-All code must be compiled from coffeescript to javascript first.  The webstorm project is setup to call browserify and
-to copy all built code to the dist directory in the proper place.
+Code must be compiled from coffeescript to javascript first.  Browser based code must be "browserified" to work in a
+browser. A webstorm project is setup to compile the coffeescript code, call browserify and to copy all built code
+to the dist directory.
 
-Manual steps are:
+If you need to manually recompile the code, the steps are:
 
 For nodejs code
 ```
@@ -39,9 +41,9 @@ browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/Htt
 browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
 ```
 
-HTML:
+# HTML Example
 
-CoffeeScript:
+## CoffeeScript:
 ```
 <!DOCTYPE html>
 <html>
@@ -81,7 +83,7 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
 )
 
 ```
-JavaScript:
+## JavaScript:
 ``````
        <!DOCTYPE html>
        <html>
@@ -126,9 +128,9 @@ JavaScript:
 
        </body>
 ```
-Node JS:
+# Node JS Example
 
-CoffeeScript:
+## CoffeeScript:
 ```
     config = {
                application: 'YOUR APPLICATION KEY',
@@ -145,7 +147,7 @@ CoffeeScript:
     )
 
 ```
-JavaScript
+## JavaScript
 ```
   var Mojio, mojio, config;
 
@@ -170,7 +172,7 @@ JavaScript
   });
 ```
 
-Todo:
+# Todo:
 
 Make browser code compile from nodejs client.
 Need models
