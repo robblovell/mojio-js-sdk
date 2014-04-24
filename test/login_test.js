@@ -4,7 +4,7 @@
 
   Mojio = require('../dist/nodejs/Mojio.js');
 
-  config = require('../config/mojio-config.coffee');
+  config = require('./config/mojio-config.coffee');
 
   mojio = new Mojio(config);
 

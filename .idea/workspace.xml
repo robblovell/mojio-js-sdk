@@ -25,10 +25,10 @@
     <splitter split-orientation="horizontal" split-proportion="0.7343096">
       <split-first>
         <leaf>
-          <file leaf-file-name="login.html" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/example/login.html">
+          <file leaf-file-name="mojio-config.coffee" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test/config/mojio-config.coffee">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="13" column="29" selection-start="270" selection-end="270" vertical-scroll-proportion="-7.5" vertical-offset="15" max-vertical-offset="781">
+                <state line="2" column="58" selection-start="45" selection-end="81" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="721">
                   <folding />
                 </state>
               </provider>
@@ -37,75 +37,25 @@
           <file leaf-file-name="Mojio.coffee" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/nodejs/Mojio.coffee">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="35" column="56" selection-start="1160" selection-end="1160" vertical-scroll-proportion="-2.8846154" vertical-offset="450" max-vertical-offset="2774">
+                <state line="62" column="0" selection-start="2191" selection-end="2191" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2866">
                   <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="crud_test.coffee" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/crud_test.coffee">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="21" column="34" selection-start="705" selection-end="705" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2335">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="readme.markdown" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/readme.markdown">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="0" column="3" selection-start="3" selection-end="3" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="login_test.coffee" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/login_test.coffee">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="0" column="0" selection-start="0" selection-end="982" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1060">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="mojio-config.coffee" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/config/mojio-config.coffee">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="7" column="5" selection-start="226" selection-end="226" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="563">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="http.js" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/Library/Caches/WebStorm7/extLibs/nodejs-v0.10.24-src/core-modules-sources/lib/http.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="1687" column="0" selection-start="48573" selection-end="48573" vertical-scroll-proportion="0.0" vertical-offset="24900" max-vertical-offset="32567">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="crud_test.js" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test/crud_test.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="30" column="11" selection-start="946" selection-end="946" vertical-scroll-proportion="0.0" vertical-offset="172" max-vertical-offset="1236">
-                  <folding>
-                    <marker date="1398306077000" expanded="true" signature="392:1027" placeholder="{...}" />
-                    <marker date="1398306077000" expanded="true" signature="466:1017" placeholder="{...}" />
-                    <marker date="1398306077000" expanded="true" signature="720:836" placeholder="{&quot;resource&quot;: 'Apps'...}" />
-                    <marker date="1398306077000" expanded="true" signature="862:994" placeholder="{...}" />
-                  </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file leaf-file-name="Mojio.js" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/dist/nodejs/Mojio.js">
+            <entry file="file://$PROJECT_DIR$/src/browser/Mojio.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="96" column="0" selection-start="2744" selection-end="2744" vertical-scroll-proportion="0.0" vertical-offset="1252" max-vertical-offset="3970">
+                <state line="5" column="0" selection-start="104" selection-end="104" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="3811">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Mojio.js" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/dist/browser/Mojio.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4983">
                   <folding />
                 </state>
               </provider>
@@ -114,7 +64,52 @@
           <file leaf-file-name="apps_test.coffee" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/apps_test.coffee">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="0" column="0" selection-start="0" selection-end="785" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="925">
+                <state line="1" column="19" selection-start="58" selection-end="58" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="991">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="crud_test.coffee" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test/crud_test.coffee">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="1" column="19" selection-start="58" selection-end="58" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2401">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="login_test.coffee" pinned="false" current="true" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/test/login_test.coffee">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="1" column="19" selection-start="61" selection-end="61" vertical-scroll-proportion="0.02377179" vertical-offset="0" max-vertical-offset="1126">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="mojio-test-data.coffee" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/test/data/mojio-test-data.coffee">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="1" column="0" selection-start="29" selection-end="29" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="706">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/package.json">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="8" column="26" selection-start="193" selection-end="193" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="757">
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="bower.json" pinned="false" current="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/bower.json">
+              <provider selected="true" editor-type-id="text-editor">
+                <state line="6" column="16" selection-start="113" selection-end="113" vertical-scroll-proportion="-2.5" vertical-offset="30" max-vertical-offset="817">
                   <folding />
                 </state>
               </provider>
@@ -127,7 +122,7 @@
           <file leaf-file-name="Mojio.coffee" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/browser/Mojio.coffee">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="4" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.09375" vertical-offset="0" max-vertical-offset="2650">
+                <state line="4" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.093603745" vertical-offset="0" max-vertical-offset="2651">
                   <folding />
                 </state>
               </provider>
@@ -145,8 +140,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/test/data/mojio-test-data.coffee" />
-        <option value="$PROJECT_DIR$/mojio-client-login.coffee" />
         <option value="$PROJECT_DIR$/spec/login_spec.coffee" />
         <option value="$PROJECT_DIR$/mojio.coffee" />
         <option value="$PROJECT_DIR$/mojio-client-events.coffee" />
@@ -157,13 +150,11 @@
         <option value="$PROJECT_DIR$/mojio/simulator.js" />
         <option value="$PROJECT_DIR$/example/index.html" />
         <option value="$PROJECT_DIR$/mojio/mojio.client-1.0.3.js" />
-        <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/mojio/mojio.map-1.1.0.coffee" />
         <option value="$PROJECT_DIR$/mojio-client-bundle.js" />
         <option value="$PROJECT_DIR$/mojio-client=bundle.js" />
         <option value="$PROJECT_DIR$/test/login.js" />
         <option value="$PROJECT_DIR$/test/login-bundle.js" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/mojio-client.js" />
         <option value="$PROJECT_DIR$/test/login.coffee" />
         <option value="$PROJECT_DIR$/test/login.html" />
@@ -174,7 +165,6 @@
         <option value="$PROJECT_DIR$/example/beeper.html" />
         <option value="$PROJECT_DIR$/example/beeper.js" />
         <option value="$PROJECT_DIR$/example/beeper-bundle.js" />
-        <option value="$PROJECT_DIR$/example/login.coffee" />
         <option value="$PROJECT_DIR$/browser-http.coffee" />
         <option value="$PROJECT_DIR$/dist/mojio-client-browser.js" />
         <option value="$PROJECT_DIR$/mojio-client-browser.coffee" />
@@ -188,14 +178,19 @@
         <option value="$PROJECT_DIR$/src/browser/Mojio.coffee" />
         <option value="$PROJECT_DIR$/src/nodejs/mojio-client.coffee" />
         <option value="$PROJECT_DIR$/src/nodejs/mojio-client-node.coffee" />
-        <option value="$PROJECT_DIR$/example/login.html" />
-        <option value="$PROJECT_DIR$/config/mojio-config.coffee" />
         <option value="$PROJECT_DIR$/src/nodejs/Mojio.coffee" />
         <option value="$PROJECT_DIR$/test/crud_test.js" />
-        <option value="$PROJECT_DIR$/test/apps_test.coffee" />
-        <option value="$PROJECT_DIR$/test/login_test.coffee" />
-        <option value="$PROJECT_DIR$/test/crud_test.coffee" />
         <option value="$PROJECT_DIR$/readme.markdown" />
+        <option value="$PROJECT_DIR$/bower.json" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/example/old/beeper.html" />
+        <option value="$PROJECT_DIR$/example/login.html" />
+        <option value="$PROJECT_DIR$/config/mojio-config.coffee" />
+        <option value="$PROJECT_DIR$/example/login.coffee" />
+        <option value="$PROJECT_DIR$/test/data/mojio-test-data.coffee" />
+        <option value="$PROJECT_DIR$/test/apps_test.coffee" />
+        <option value="$PROJECT_DIR$/test/crud_test.coffee" />
+        <option value="$PROJECT_DIR$/test/login_test.coffee" />
       </list>
     </option>
   </component>
@@ -341,48 +336,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MOJIO.nodejs.client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MOJIO.nodejs.client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MOJIO.nodejs.client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MOJIO.nodejs.client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MOJIO.nodejs.client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MOJIO.nodejs.client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="mojio" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -407,11 +360,11 @@
       <recent name="$PROJECT_DIR$/test" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/nodejs" />
-      <recent name="$PROJECT_DIR$/src/browser" />
+      <recent name="$PROJECT_DIR$/test" />
+      <recent name="$PROJECT_DIR$/old" />
       <recent name="$PROJECT_DIR$/example" />
-      <recent name="$PROJECT_DIR$/mojio/old" />
       <recent name="$PROJECT_DIR$/example/old" />
+      <recent name="$PROJECT_DIR$/src/nodejs" />
     </key>
   </component>
   <component name="RunManager" selected="Mocha.MochaTest">
@@ -563,18 +516,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="44" y="22" width="1873" height="1045" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32254586" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32765958" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22570194" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26537216" sideWeight="0.7473002" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22570194" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26429343" sideWeight="0.7473002" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26537216" sideWeight="0.2526998" order="8" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27508092" sideWeight="0.7073434" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26429343" sideWeight="0.2526998" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17799352" sideWeight="0.7073434" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -606,17 +559,17 @@
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/mojio/old/mojio.client-1.0.3.js</url>
+          <url>file://$PROJECT_DIR$/old/mojio/old/mojio.client-1.0.3.js</url>
           <line>704</line>
           <option name="timeStamp" value="265" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/mojio/old/mojio.client-1.0.3.js</url>
+          <url>file://$PROJECT_DIR$/old/mojio/old/mojio.client-1.0.3.js</url>
           <line>724</line>
           <option name="timeStamp" value="266" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/old/index.html</url>
+          <url>file://$PROJECT_DIR$/old/old/index.html</url>
           <line>50</line>
           <option name="timeStamp" value="269" />
         </line-breakpoint>
@@ -671,84 +624,54 @@
           <option name="timeStamp" value="341" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper.js</url>
           <line>17</line>
           <option name="timeStamp" value="371" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper.js</url>
           <line>8</line>
           <option name="timeStamp" value="372" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper.js</url>
           <line>106</line>
           <option name="timeStamp" value="392" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper.js</url>
           <line>112</line>
           <option name="timeStamp" value="393" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper.js</url>
           <line>29</line>
           <option name="timeStamp" value="395" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper-bundle.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper-bundle.js</url>
           <line>10463</line>
           <option name="timeStamp" value="420" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper.js</url>
           <line>43</line>
           <option name="timeStamp" value="422" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper-bundle.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper-bundle.js</url>
           <line>10464</line>
           <option name="timeStamp" value="423" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper-bundle.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper-bundle.js</url>
           <line>31</line>
           <option name="timeStamp" value="425" />
         </line-breakpoint>
         <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/example/beeper-bundle.js</url>
+          <url>file://$PROJECT_DIR$/old/old/beeper-bundle.js</url>
           <line>143</line>
           <option name="timeStamp" value="427" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/src/nodejs/Mojio.coffee</url>
-          <line>62</line>
-          <option name="timeStamp" value="455" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/src/nodejs/Mojio.coffee</url>
-          <line>59</line>
-          <option name="timeStamp" value="457" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/src/nodejs/Mojio.coffee</url>
-          <line>56</line>
-          <option name="timeStamp" value="458" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/src/nodejs/Mojio.coffee</url>
-          <line>54</line>
-          <option name="timeStamp" value="459" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/src/nodejs/Mojio.coffee</url>
-          <line>48</line>
-          <option name="timeStamp" value="461" />
-        </line-breakpoint>
-        <line-breakpoint type="javascript">
-          <url>file://$PROJECT_DIR$/src/nodejs/Mojio.coffee</url>
-          <line>72</line>
-          <option name="timeStamp" value="466" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
@@ -758,38 +681,19 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/mojio/old/mojio.map-1.0.2.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="138" column="16" selection-start="4223" selection-end="4223" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3567">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mojio/old/mojio.simulator-1.0.5.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="19" selection-start="98" selection-end="113" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3087" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/jquery.dataTables.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="182069">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mojio/old/simulator.js">
+    <entry file="file://$PROJECT_DIR$/old/mojio/old/simulator.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="432" column="0" selection-start="78221" selection-end="78221" vertical-scroll-proportion="0.0" vertical-offset="1365" max-vertical-offset="7364">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mojio/old/mojio-simulator-1.1.0.coffee">
+    <entry file="file://$PROJECT_DIR$/old/mojio/old/mojio-simulator-1.1.0.coffee">
       <provider selected="true" editor-type-id="text-editor">
         <state line="49" column="0" selection-start="1097" selection-end="1097" vertical-scroll-proportion="0.0" vertical-offset="465" max-vertical-offset="2428" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/jquery-1.11.0.min.js">
+    <entry file="file://$PROJECT_DIR$/example/plugins/jquery-1.11.0.min.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="1819" selection-start="1903" selection-end="1903" vertical-scroll-proportion="0.03164557" vertical-offset="0" max-vertical-offset="519">
           <folding />
@@ -801,9 +705,11 @@
         <state line="23" column="9" selection-start="377" selection-end="709" vertical-scroll-proportion="0.0" vertical-offset="150" max-vertical-offset="1170" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/mojio-config.js">
+    <entry file="file://$PROJECT_DIR$/test/config/mojio-config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="17" selection-start="66" selection-end="253" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697" />
+        <state line="2" column="17" selection-start="66" selection-end="253" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/data/mojio-test-data.js">
@@ -811,25 +717,14 @@
         <state line="10" column="14" selection-start="276" selection-end="276" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bower.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="64" selection-end="64" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="285">
-          <folding>
-            <marker date="1398034600000" expanded="true" signature="-1:-1" placeholder="{&quot;name&quot;: &quot;Mojio Client&quot;...}" />
-            <marker date="1398034600000" expanded="true" signature="-1:-1" placeholder="{&quot;jquery&quot;: &quot;0.11.0&quot;...}" />
-            <marker date="1398034600000" expanded="true" signature="-1:-1" placeholder="{...}" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mojio/old/mojio-simulator-1.1.0.js">
+    <entry file="file://$PROJECT_DIR$/old/mojio/old/mojio-simulator-1.1.0.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="9" column="0" selection-start="120" selection-end="120" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="607">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mojio/old/mojio.map-1.1.0.coffee">
+    <entry file="file://$PROJECT_DIR$/old/mojio/old/mojio.map-1.1.0.coffee">
       <provider selected="true" editor-type-id="text-editor">
         <state line="131" column="12" selection-start="3810" selection-end="3810" vertical-scroll-proportion="0.0" vertical-offset="1815" max-vertical-offset="2668">
           <folding />
@@ -892,23 +787,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="20" selection-start="81" selection-end="81" vertical-scroll-proportion="-1.875" vertical-offset="0" max-vertical-offset="593">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/apps_test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="19" column="34" selection-start="555" selection-end="555" vertical-scroll-proportion="0.0" vertical-offset="127" max-vertical-offset="1030">
           <folding>
-            <marker date="1398305918000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1398305918000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1398305918000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1398305918000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1398305918000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1398305918000" expanded="true" signature="-1:-1" placeholder="/*...*/" />
+            <marker date="1398307570000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307570000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307570000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307570000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307570000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307570000" expanded="true" signature="-1:-1" placeholder="/*...*/" />
           </folding>
         </state>
       </provider>
@@ -934,21 +822,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/beep.html">
+    <entry file="file://$PROJECT_DIR$/old/old/beep.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="4" selection-start="4" selection-end="4" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="516">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mojio/old/mojio.client-1.0.3.js">
+    <entry file="file://$PROJECT_DIR$/old/mojio/old/mojio.client-1.0.3.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="376" column="17" selection-start="12964" selection-end="13225" vertical-scroll-proportion="0.0" vertical-offset="5141" max-vertical-offset="11523">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/old/index.html">
+    <entry file="file://$PROJECT_DIR$/old/old/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="6" selection-start="0" selection-end="96" vertical-scroll-proportion="196.25" vertical-offset="4800" max-vertical-offset="5567">
           <folding />
@@ -959,51 +847,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="13" column="0" selection-start="298" selection-end="298" vertical-scroll-proportion="0.0" vertical-offset="120" max-vertical-offset="1261">
           <folding>
-            <marker date="1398300548000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1398300548000" expanded="true" signature="-1:-1" placeholder="{...}" />
-            <marker date="1398300548000" expanded="true" signature="-1:-1" placeholder="/*...*/" />
+            <marker date="1398307352000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307352000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307352000" expanded="true" signature="-1:-1" placeholder="/*...*/" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/mojio-client.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3089" column="6" selection-start="85472" selection-end="85472" vertical-scroll-proportion="-55.701004" vertical-offset="90673" max-vertical-offset="96736">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/beeper.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="47" selection-start="243" selection-end="243" vertical-scroll-proportion="-6.875" vertical-offset="0" max-vertical-offset="729">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/jquery/dist/jquery.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3098" column="42" selection-start="84218" selection-end="84218" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="155382">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/beeper-bundle.js">
+    <entry file="file://$PROJECT_DIR$/old/old/beeper-bundle.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="143" column="0" selection-start="4427" selection-end="4490" vertical-scroll-proportion="-11.269231" vertical-offset="1852" max-vertical-offset="158529">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/beeper.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="30" selection-end="56" vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="2255">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/browser/Mojio.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="104" selection-end="104" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3788">
           <folding />
         </state>
       </provider>
@@ -1031,7 +884,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/browser/Mojio.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.09375" vertical-offset="0" max-vertical-offset="2650">
+        <state line="4" column="0" selection-start="62" selection-end="62" vertical-scroll-proportion="0.093603745" vertical-offset="0" max-vertical-offset="2651">
           <folding />
         </state>
       </provider>
@@ -1039,13 +892,6 @@
     <entry file="file://$USER_HOME$/Library/Caches/WebStorm7/extLibs/nodejs-v0.10.24-src/core-modules-sources/lib/module.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="339" column="0" selection-start="9614" selection-end="9614" vertical-scroll-proportion="0.67907804" vertical-offset="4417" max-vertical-offset="8319">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/login.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="12" selection-start="221" selection-end="221" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="864">
           <folding />
         </state>
       </provider>
@@ -1064,50 +910,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/mojio-config.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="7" column="5" selection-start="226" selection-end="226" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="619">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/example/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="29" selection-start="270" selection-end="270" vertical-scroll-proportion="-7.5" vertical-offset="15" max-vertical-offset="780">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/nodejs/Mojio.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="35" column="56" selection-start="1160" selection-end="1160" vertical-scroll-proportion="-2.8846154" vertical-offset="450" max-vertical-offset="2774">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/crud_test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="11" selection-start="946" selection-end="946" vertical-scroll-proportion="0.0" vertical-offset="172" max-vertical-offset="1236">
           <folding>
-            <marker date="1398306077000" expanded="true" signature="392:1027" placeholder="{...}" />
-            <marker date="1398306077000" expanded="true" signature="466:1017" placeholder="{...}" />
-            <marker date="1398306077000" expanded="true" signature="720:836" placeholder="{&quot;resource&quot;: 'Apps'...}" />
-            <marker date="1398306077000" expanded="true" signature="862:994" placeholder="{...}" />
+            <marker date="1398307572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307572000" expanded="true" signature="-1:-1" placeholder="{...}" />
+            <marker date="1398307572000" expanded="true" signature="-1:-1" placeholder="{&quot;resource&quot;: 'Apps'...}" />
+            <marker date="1398307572000" expanded="true" signature="-1:-1" placeholder="{...}" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/apps_test.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="785" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="925">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/login_test.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="982" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1060">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1118,16 +929,121 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/crud_test.coffee">
+    <entry file="file://$PROJECT_DIR$/readme.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="34" selection-start="705" selection-end="705" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2335">
+        <state line="0" column="3" selection-start="3" selection-end="3" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/readme.markdown">
+    <entry file="file://$PROJECT_DIR$/travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="3" selection-start="3" selection-end="3" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="705">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/old/old/beeper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="30" selection-end="56" vertical-scroll-proportion="0.0" vertical-offset="630" max-vertical-offset="2255">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/old/old/beeper.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="47" selection-start="243" selection-end="243" vertical-scroll-proportion="-0.625" vertical-offset="150" max-vertical-offset="882">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/login.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="7" selection-start="338" selection-end="338" vertical-scroll-proportion="-10.625" vertical-offset="0" max-vertical-offset="847">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/example/login.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="0" selection-start="237" selection-end="265" vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="946">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/data/mojio-test-data.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="0" selection-start="29" selection-end="29" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="706">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="26" selection-start="193" selection-end="193" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="837">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="16" selection-start="113" selection-end="113" vertical-scroll-proportion="-2.5" vertical-offset="30" max-vertical-offset="817">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/config/mojio-config.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="58" selection-start="45" selection-end="81" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="721">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/nodejs/Mojio.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-4.683043" vertical-offset="2955" max-vertical-offset="4036">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/nodejs/Mojio.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="0" selection-start="2191" selection-end="2191" vertical-scroll-proportion="0.0" vertical-offset="540" max-vertical-offset="2866">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/browser/Mojio.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="104" selection-end="104" vertical-scroll-proportion="0.0" vertical-offset="60" max-vertical-offset="3811">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/browser/Mojio.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4983">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/apps_test.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="19" selection-start="58" selection-end="58" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="991">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/crud_test.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="19" selection-start="58" selection-end="58" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2401">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/login_test.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1" column="19" selection-start="61" selection-end="61" vertical-scroll-proportion="0.02377179" vertical-offset="0" max-vertical-offset="1126">
           <folding />
         </state>
       </provider>

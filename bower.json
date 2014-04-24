@@ -8,9 +8,7 @@
     "**/*.md"
   ],
   "dependencies": {
-    "jquery": "1.11.0",
-    "requirejs": "2.1.11"
-    "require-cs": "*"
+    "jquery": "1.11.0"
   },
   "devDependencies": {
   }

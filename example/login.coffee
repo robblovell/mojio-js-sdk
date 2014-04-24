@@ -10,6 +10,7 @@ config = {
 
 mojio = new Mojio(config);
 
+#TODO:: make anonymous user.
 mojio.login('mojio', 'mojioR0cks', (error, result) ->
     if (error)
         alert("error:"+error)
