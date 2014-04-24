@@ -33,7 +33,7 @@ module.exports = class Mojio
             withCredentials: false
         }
         parts.path += '/'+request.resource if (request.resource?)
-        parts.path += '/'+request.id if (request.id != '')
+        parts.path += '/'+request.id if (request.id? && request.id != '')
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += @_makeParameters(request.parameters)
 

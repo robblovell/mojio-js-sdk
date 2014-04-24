@@ -16,11 +16,11 @@ describe 'Get_CRUD', ->
             mojio.token.should.be.ok
             result.should.be.an.instanceOf(Object)
             result._id.should.be.an.instanceOf(String)
-            mojio.Request(
+            mojio.request(
                 {
                     resource: 'Apps',
                     method: 'GET',
-                    id: '9189327498-981723498-123948-12342134',
+
                     parameters:
                         {
 #                            limit: 5,
@@ -29,11 +29,12 @@ describe 'Get_CRUD', ->
                         }
                 },
                 (error, result) ->
-                    (error==null).should.be.true
+                    (error?).should.be.false
                     result.should.be.an.instanceOf(Object)
-                    done
+                    done()
             )
         )
+
 
 #describe 'Post_CRUD', ->
 #

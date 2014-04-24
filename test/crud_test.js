@@ -25,12 +25,11 @@
         return mojio.request({
           resource: 'Apps',
           method: 'GET',
-          id: '9189327498-981723498-123948-12342134',
           parameters: {}
         }, function(error, result) {
-          (error === null).should.be["true"];
+          (error != null).should.be["false"];
           result.should.be.an.instanceOf(Object);
-          return done;
+          return done();
         });
       });
     });

@@ -67,7 +67,7 @@
       if ((request.resource != null)) {
         parts.path += '/' + request.resource;
       }
-      if (request.id !== '') {
+      if ((request.id != null) && request.id !== '') {
         parts.path += '/' + request.id;
       }
       if ((request.parameters != null) && Object.keys(request.parameters).length > 0) {
