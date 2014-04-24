@@ -10,10 +10,11 @@ notifications:
     - robbl@moj.io
 
 script:
+  - bower install
   - coffee --map --compile src/nodejs
   - cp src/nodejs/*.js dist/nodejs/
   - coffee --map --compile src/browser
   - cd src/browser
-  - browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
-  - browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
+  - node_modules/.bin/browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
+  - node_modules/.bin/browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
   - mocha

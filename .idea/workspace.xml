@@ -100,19 +100,19 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="readme.markdown" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="readme.markdown" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/readme.markdown">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="175" column="0" selection-start="4267" selection-end="4482" vertical-scroll-proportion="0.5625" vertical-offset="2310" max-vertical-offset="3365">
+                <state line="175" column="0" selection-start="4267" selection-end="4482" vertical-scroll-proportion="0.0" vertical-offset="2310" max-vertical-offset="3365">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="package.json" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/package.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="13" column="1" selection-start="299" selection-end="299" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="729">
+                <state line="13" column="1" selection-start="299" selection-end="299" vertical-scroll-proportion="0.35519126" vertical-offset="0" max-vertical-offset="729">
                   <folding />
                 </state>
               </provider>
@@ -140,10 +140,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name=".travis.yml" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name=".travis.yml" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/.travis.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="10" column="0" selection-start="122" selection-end="122" vertical-scroll-proportion="0.2572899" vertical-offset="0" max-vertical-offset="838">
+                <state line="12" column="17" selection-start="148" selection-end="148" vertical-scroll-proportion="0.30874786" vertical-offset="0" max-vertical-offset="853">
                   <folding />
                 </state>
               </provider>
@@ -387,6 +387,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MOJIO.nodejs.client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MOJIO.nodejs.client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MOJIO.nodejs.client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MOJIO.nodejs.client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="node_modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value=".bin" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1006,23 +1038,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="1" selection-start="299" selection-end="299" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="729">
+        <state line="12" column="17" selection-start="148" selection-end="148" vertical-scroll-proportion="0.30874786" vertical-offset="0" max-vertical-offset="853">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/readme.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="5" selection-start="791" selection-end="791" vertical-scroll-proportion="0.0" vertical-offset="30" max-vertical-offset="3526">
+        <state line="175" column="0" selection-start="4267" selection-end="4482" vertical-scroll-proportion="0.0" vertical-offset="2310" max-vertical-offset="3365">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.travis.yml">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="122" selection-end="122" vertical-scroll-proportion="0.2572899" vertical-offset="0" max-vertical-offset="838">
+        <state line="13" column="1" selection-start="299" selection-end="299" vertical-scroll-proportion="0.35519126" vertical-offset="0" max-vertical-offset="729">
           <folding />
         </state>
       </provider>
