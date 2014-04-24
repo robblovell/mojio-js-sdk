@@ -159,16 +159,14 @@ to the dist directory.
 
 If you need to manually recompile the code, the steps are:
 
-For all code:
-```
-coffee --map --compile src
-```
 For nodejs code
 ```
+coffee --map --compile src/nodejs
 cp src/nodejs/*.js dist/nodejs/
 ```
 For browser code
 ```
+coffee --map --compile src/browser
 cd src/browser
 browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
 browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
