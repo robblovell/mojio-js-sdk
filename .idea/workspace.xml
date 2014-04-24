@@ -64,9 +64,9 @@
           <file leaf-file-name="login_test.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/login_test.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="47" column="0" selection-start="1271" selection-end="1271" vertical-scroll-proportion="0.0" vertical-offset="705" max-vertical-offset="735">
+                <state line="67" column="0" selection-start="1718" selection-end="1718" vertical-scroll-proportion="0.0" vertical-offset="1005" max-vertical-offset="1035">
                   <folding>
-                    <marker date="1398310966000" expanded="true" signature="47:1214" placeholder="{...}" />
+                    <marker date="1398314425000" expanded="true" signature="47:1661" placeholder="{...}" />
                   </folding>
                 </state>
               </provider>
@@ -130,19 +130,19 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="readme.markdown" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="readme.markdown" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/readme.markdown">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="18" column="0" selection-start="539" selection-end="570" vertical-scroll-proportion="0.35367545" vertical-offset="15" max-vertical-offset="3541">
+                <state line="26" column="5" selection-start="695" selection-end="695" vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="3541">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name=".travis.yml" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name=".travis.yml" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/.travis.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="11" column="0" selection-start="137" selection-end="187" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1034">
+                <state line="9" column="18" selection-start="121" selection-end="121" vertical-scroll-proportion="0.1839237" vertical-offset="0" max-vertical-offset="884">
                   <folding />
                 </state>
               </provider>
@@ -217,9 +217,9 @@
         <option value="$PROJECT_DIR$/example/login.coffee" />
         <option value="$PROJECT_DIR$/travis.yml" />
         <option value="$PROJECT_DIR$/build.sh" />
-        <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/readme.markdown" />
         <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
       </list>
     </option>
   </component>
@@ -763,7 +763,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="47" column="0" selection-start="1271" selection-end="1271" vertical-scroll-proportion="0.0" vertical-offset="705" max-vertical-offset="735">
           <folding>
-            <marker date="1398310966000" expanded="true" signature="47:1214" placeholder="{...}" />
+            <marker date="1398314425000" expanded="true" signature="47:1661" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -959,9 +959,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/login_test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="0" selection-start="1271" selection-end="1271" vertical-scroll-proportion="0.0" vertical-offset="330" max-vertical-offset="1285">
+        <state line="67" column="0" selection-start="1718" selection-end="1718" vertical-scroll-proportion="0.0" vertical-offset="1005" max-vertical-offset="1035">
           <folding>
-            <marker date="1398310966000" expanded="true" signature="47:1214" placeholder="{...}" />
+            <marker date="1398314425000" expanded="true" signature="47:1661" placeholder="{...}" />
           </folding>
         </state>
       </provider>
@@ -969,13 +969,6 @@
     <entry file="file://$PROJECT_DIR$/example/login.coffee">
       <provider selected="true" editor-type-id="text-editor">
         <state line="17" column="15" selection-start="389" selection-end="389" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="988">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.travis.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="137" selection-end="187" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1034">
           <folding />
         </state>
       </provider>
@@ -989,7 +982,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/readme.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="0" selection-start="539" selection-end="570" vertical-scroll-proportion="0.35367545" vertical-offset="15" max-vertical-offset="3541">
+        <state line="26" column="5" selection-start="695" selection-end="695" vertical-scroll-proportion="0.0" vertical-offset="15" max-vertical-offset="3541">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="18" selection-start="121" selection-end="121" vertical-scroll-proportion="0.1839237" vertical-offset="0" max-vertical-offset="884">
           <folding />
         </state>
       </provider>
