@@ -79,19 +79,19 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="login_test.coffee" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="login_test.coffee" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/test/login_test.coffee">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1" column="19" selection-start="61" selection-end="61" vertical-scroll-proportion="0.02377179" vertical-offset="0" max-vertical-offset="1126">
+                <state line="1" column="19" selection-start="61" selection-end="61" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1126">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="mojio-test-data.coffee" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name="mojio-test-data.coffee" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/test/data/mojio-test-data.coffee">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="1" column="0" selection-start="29" selection-end="29" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="706">
+                <state line="6" column="3" selection-start="205" selection-end="205" vertical-scroll-proportion="0.14263074" vertical-offset="0" max-vertical-offset="706">
                   <folding />
                 </state>
               </provider>
@@ -187,10 +187,10 @@
         <option value="$PROJECT_DIR$/example/login.html" />
         <option value="$PROJECT_DIR$/config/mojio-config.coffee" />
         <option value="$PROJECT_DIR$/example/login.coffee" />
-        <option value="$PROJECT_DIR$/test/data/mojio-test-data.coffee" />
         <option value="$PROJECT_DIR$/test/apps_test.coffee" />
         <option value="$PROJECT_DIR$/test/crud_test.coffee" />
         <option value="$PROJECT_DIR$/test/login_test.coffee" />
+        <option value="$PROJECT_DIR$/test/data/mojio-test-data.coffee" />
       </list>
     </option>
   </component>
@@ -333,6 +333,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="MOJIO.nodejs.client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MOJIO.nodejs.client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MOJIO.nodejs.client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -516,15 +530,15 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="44" y="22" width="1873" height="1045" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32254586" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32765958" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22570194" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26429343" sideWeight="0.7473002" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22570194" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26429343" sideWeight="0.7473002" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26429343" sideWeight="0.2526998" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17799352" sideWeight="0.7073434" order="2" side_tool="false" content_ui="tabs" />
@@ -971,13 +985,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/data/mojio-test-data.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="0" selection-start="29" selection-end="29" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="706">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state line="8" column="26" selection-start="193" selection-end="193" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="837">
@@ -988,13 +995,6 @@
     <entry file="file://$PROJECT_DIR$/bower.json">
       <provider selected="true" editor-type-id="text-editor">
         <state line="6" column="16" selection-start="113" selection-end="113" vertical-scroll-proportion="-2.5" vertical-offset="30" max-vertical-offset="817">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/config/mojio-config.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="58" selection-start="45" selection-end="81" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="721">
           <folding />
         </state>
       </provider>
@@ -1043,7 +1043,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/login_test.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="19" selection-start="61" selection-end="61" vertical-scroll-proportion="0.02377179" vertical-offset="0" max-vertical-offset="1126">
+        <state line="1" column="19" selection-start="61" selection-end="61" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1126">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/config/mojio-config.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="58" selection-start="45" selection-end="81" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="721">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/data/mojio-test-data.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="3" selection-start="205" selection-end="205" vertical-scroll-proportion="0.14263074" vertical-offset="0" max-vertical-offset="706">
           <folding />
         </state>
       </provider>

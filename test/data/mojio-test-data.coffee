@@ -4,4 +4,4 @@ module.exports =
     secret: '78D310D5-A23F-4F05-A0E5-35696AAA9764'
     username: 'mojio'
     password: 'mojioR0cks'
-    email: 'admin@moj.io'
+   
