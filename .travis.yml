@@ -8,5 +8,8 @@ branches:
 notifications:
   email:
     - robbl@moj.io
+before_script:
+  - npm install -g bower
+  - bower install
 script:
   - mocha
