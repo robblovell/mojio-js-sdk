@@ -90,7 +90,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="login.coffee" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="login.coffee" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/example/login.coffee">
               <provider selected="true" editor-type-id="text-editor">
                 <state line="10" column="26" selection-start="235" selection-end="235" vertical-scroll-proportion="0.24671052" vertical-offset="0" max-vertical-offset="923">
@@ -111,7 +111,7 @@
           <file leaf-file-name="readme.markdown" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/readme.markdown">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="65" column="3" selection-start="1482" selection-end="1482" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="3473">
+                <state line="63" column="3" selection-start="1480" selection-end="1480" vertical-scroll-proportion="0.0" vertical-offset="480" max-vertical-offset="3428">
                   <folding />
                 </state>
               </provider>
@@ -133,10 +133,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="readme.markdown" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="readme.markdown" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/readme.markdown">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="43" column="3" selection-start="1017" selection-end="1017" vertical-scroll-proportion="0.1910828" vertical-offset="525" max-vertical-offset="3403">
+                <state line="5" column="0" selection-start="191" selection-end="191" vertical-scroll-proportion="0.11942675" vertical-offset="0" max-vertical-offset="3358">
                   <folding />
                 </state>
               </provider>
@@ -1089,16 +1089,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/readme.markdown">
+    <entry file="file://$PROJECT_DIR$/example/login.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="3" selection-start="1482" selection-end="1482" vertical-scroll-proportion="0.0" vertical-offset="510" max-vertical-offset="3473">
+        <state line="10" column="26" selection-start="235" selection-end="235" vertical-scroll-proportion="0.24671052" vertical-offset="0" max-vertical-offset="923">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/login.coffee">
+    <entry file="file://$PROJECT_DIR$/readme.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="26" selection-start="235" selection-end="235" vertical-scroll-proportion="0.24671052" vertical-offset="0" max-vertical-offset="923">
+        <state line="5" column="0" selection-start="191" selection-end="191" vertical-scroll-proportion="0.11942675" vertical-offset="0" max-vertical-offset="3358">
           <folding />
         </state>
       </provider>

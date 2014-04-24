@@ -38,7 +38,6 @@ mocha
 <script src="./dist/browser/Mojio.js"></script>
 <script src="./login.js"></script>
 </body>
-
 ```
 login.coffee (compiles to login.js included in the html above)
 ```
@@ -62,95 +61,93 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
         div.innerHTML += 'POST /login<br>'
         div.innerHTML += JSON.stringify(result)
 )
-
 ```
 ### JavaScript:
 ```
-       <!DOCTYPE html>
-       <html>
-       <head>
-           <meta charset="UTF-8">
-           <title>title</title>
-       </head>
-       <body>
-       <div id="result"></div>
-       <script src="./bower_components/jquery/dist/jquery.js"></script>
-       <script src="./dist/browser/HttpBrowser.js"></script>
-       <script src="./dist/browser/Mojio.js"></script>
-       <script type="text/javascript">
-           (function() {
-               var Mojio, config, mojio;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>title</title>
+</head>
+<body>
+<div id="result"></div>
+<script src="./bower_components/jquery/dist/jquery.js"></script>
+<script src="./dist/browser/HttpBrowser.js"></script>
+<script src="./dist/browser/Mojio.js"></script>
+<script type="text/javascript">
+    (function() {
+        var Mojio, config, mojio;
 
-               Mojio = this.Mojio;
+        Mojio = this.Mojio;
 
-               config = {
-                   application: 'YOUR APPLICATION KEY',
-                   secret: 'YOUR SECRET KEY',
-                   hostname: 'sandbox.api.moj.io',
-                   version: 'v1',
-                   port: '80'
-               };
+        config = {
+            application: 'YOUR APPLICATION KEY',
+            secret: 'YOUR SECRET KEY',
+            hostname: 'sandbox.api.moj.io',
+            version: 'v1',
+            port: '80'
+        };
 
-               mojio = new Mojio(config);
+        mojio = new Mojio(config);
 
-               mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
-                   var div;
-                   if (error) {
-                       return alert("error:" + error);
-                   } else {
-                       div = document.getElementById('result');
-                       div.innerHTML += 'POST /login<br>';
-                       return div.innerHTML += JSON.stringify(result);
-                   }
-               });
+        mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
+            var div;
+            if (error) {
+                return alert("error:" + error);
+            } else {
+                div = document.getElementById('result');
+                div.innerHTML += 'POST /login<br>';
+                return div.innerHTML += JSON.stringify(result);
+            }
+        });
 
-           }).call(this);
-       </script>
+    }).call(this);
+</script>
 
-       </body>
+</body>
 ```
 ## Node JS Example
 
 ### CoffeeScript:
 ```
-    config = {
-               application: 'YOUR APPLICATION KEY',
-               secret: 'YOUR SECRET KEY',
-               hostname: 'staging.api.moj.io',
-               version: 'v1',
-               port:'80'
-             }
-    Mojio = require './dist/nodejs/Mojio.js'
-    mojio = new Mojio(config)
+config = {
+           application: 'YOUR APPLICATION KEY',
+           secret: 'YOUR SECRET KEY',
+           hostname: 'staging.api.moj.io',
+           version: 'v1',
+           port:'80'
+         }
+Mojio = require './dist/nodejs/Mojio.js'
+mojio = new Mojio(config)
 
-    mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
-        if error then console.log("error: "+error) else console.log("success:"+result)
-    )
-
+mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
+    if error then console.log("error: "+error) else console.log("success:"+result)
+)
 ```
 ### JavaScript
 ```
-  var Mojio, mojio, config;
+var Mojio, mojio, config;
 
-  config = {
-    application: 'YOUR APPLICATION KEY',
-    secret: 'YOUR SECRET KEY',
-    hostname: 'staging.api.moj.io',
-    version: 'v1',
-    port: '80'
-  };
+config = {
+  application: 'YOUR APPLICATION KEY',
+  secret: 'YOUR SECRET KEY',
+  hostname: 'staging.api.moj.io',
+  version: 'v1',
+  port: '80'
+};
 
-  Mojio = require('./dist/nodejs/Mojio.js');
+Mojio = require('./dist/nodejs/Mojio.js');
 
-  mojio = new Mojio(config);
+mojio = new Mojio(config);
 
-  mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
-    if (error) {
-      return console.log("error: " + error);
-    } else {
-      return console.log("success:" + result);
-    }
-  });
+mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
+  if (error) {
+    return console.log("error: " + error);
+  } else {
+    return console.log("success:" + result);
+  }
+});
 ```
 
 ## Build
