@@ -119,7 +119,7 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
                version: 'v1',
                port:'80'
              }
-    Mojio = require '../dist/nodejs/Mojio.js'
+    Mojio = require './dist/nodejs/Mojio.js'
     mojio = new Mojio(config)
 
     mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
@@ -139,7 +139,7 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
     port: '80'
   };
 
-  Mojio = require('../dist/nodejs/Mojio.js');
+  Mojio = require('./dist/nodejs/Mojio.js');
 
   mojio = new Mojio(config);
 
