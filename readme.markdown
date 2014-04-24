@@ -147,7 +147,7 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
     )
 
 ```
-##E JavaScript
+### JavaScript
 ```
   var Mojio, mojio, config;
 
