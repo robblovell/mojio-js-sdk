@@ -20,7 +20,6 @@ describe 'Get_CRUD', ->
                 {
                     resource: 'Apps',
                     method: 'GET',
-
                     parameters:
                         {
 #                            limit: 5,
