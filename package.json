@@ -6,7 +6,6 @@
         "mocha": "*",
         "should": "*",
         "supertest": "*",
-        "browserify": "*",
         "http-browserify": "*"
     }
 }

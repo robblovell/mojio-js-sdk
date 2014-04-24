@@ -20,10 +20,12 @@ npm install
 bower install
 mocha
 ```
-You may need to install coffeescript and bower:
+You may need to install coffeescript, bower, browserify, and mocha:
 ```
 npm install -g coffee
 npm install -g bower
+npm install -g browserify
+npm install -g mocha
 ```
 ## HTML Example
 
