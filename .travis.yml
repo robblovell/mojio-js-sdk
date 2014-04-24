@@ -8,8 +8,12 @@ branches:
 notifications:
   email:
     - robbl@moj.io
-before_script:
-  - npm install -g bower
-  - bower install
+
 script:
+  - coffee --map --compile src/nodejs
+  - cp src/nodejs/*.js dist/nodejs/
+  - coffee --map --compile src/browser
+  - cd src/browser
+  - browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
+  - browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
   - mocha

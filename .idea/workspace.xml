@@ -100,10 +100,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="readme.markdown" pinned="false" current="true" current-in-tab="true">
+          <file leaf-file-name="readme.markdown" pinned="false" current="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/readme.markdown">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="16" column="95" selection-start="609" selection-end="609" vertical-scroll-proportion="0.4017857" vertical-offset="15" max-vertical-offset="3365">
+                <state line="175" column="0" selection-start="4267" selection-end="4482" vertical-scroll-proportion="0.5625" vertical-offset="2310" max-vertical-offset="3365">
                   <folding />
                 </state>
               </provider>
@@ -112,7 +112,7 @@
           <file leaf-file-name="package.json" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/package.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="8" column="0" selection-start="167" selection-end="167" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="661">
+                <state line="13" column="1" selection-start="299" selection-end="299" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="729">
                   <folding />
                 </state>
               </provider>
@@ -140,19 +140,19 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name=".travis.yml" pinned="false" current="false" current-in-tab="false">
+          <file leaf-file-name=".travis.yml" pinned="false" current="true" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/.travis.yml">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="12" column="17" selection-start="179" selection-end="179" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="791">
+                <state line="10" column="0" selection-start="122" selection-end="122" vertical-scroll-proportion="0.2572899" vertical-offset="0" max-vertical-offset="838">
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="inject.js" pinned="false" current="false" current-in-tab="true">
+          <file leaf-file-name="inject.js" pinned="false" current="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/node_modules/http-browserify/inject.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state line="85" column="21" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.3327616" vertical-offset="1081" max-vertical-offset="87958">
+                <state line="85" column="21" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.0" vertical-offset="1081" max-vertical-offset="87958">
                   <folding />
                 </state>
               </provider>
@@ -225,11 +225,11 @@
         <option value="$PROJECT_DIR$/example/login.coffee" />
         <option value="$PROJECT_DIR$/travis.yml" />
         <option value="$PROJECT_DIR$/build.sh" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/.travis.yml" />
         <option value="$PROJECT_DIR$/test/login_test.js" />
         <option value="$PROJECT_DIR$/test/login_test.coffee" />
         <option value="$PROJECT_DIR$/readme.markdown" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/.travis.yml" />
       </list>
     </option>
   </component>
@@ -982,27 +982,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.travis.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="17" selection-start="179" selection-end="179" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="791">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/http-browserify/inject.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="85" column="21" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.3327616" vertical-offset="1081" max-vertical-offset="87958">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="167" selection-end="167" vertical-scroll-proportion="-5.0" vertical-offset="0" max-vertical-offset="661">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/login_test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="36" column="13" selection-start="1164" selection-end="1164" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1263">
@@ -1020,9 +999,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/http-browserify/inject.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="85" column="21" selection-start="3115" selection-end="3115" vertical-scroll-proportion="0.0" vertical-offset="1081" max-vertical-offset="87958">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="1" selection-start="299" selection-end="299" vertical-scroll-proportion="-8.125" vertical-offset="0" max-vertical-offset="729">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/readme.markdown">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="95" selection-start="609" selection-end="609" vertical-scroll-proportion="0.4017857" vertical-offset="15" max-vertical-offset="3365">
+        <state line="27" column="5" selection-start="791" selection-end="791" vertical-scroll-proportion="0.0" vertical-offset="30" max-vertical-offset="3526">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="0" selection-start="122" selection-end="122" vertical-scroll-proportion="0.2572899" vertical-offset="0" max-vertical-offset="838">
           <folding />
         </state>
       </provider>

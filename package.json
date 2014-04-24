@@ -6,6 +6,9 @@
         "mocha": "*",
         "should": "*",
         "supertest": "*",
-        "http-browserify": "*"
+        "http-browserify": "*",
+        "bower": "latest",
+        "coffee-script": "latest",
+        "browserify": "latest"
     }
 }
