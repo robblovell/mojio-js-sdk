@@ -14,7 +14,7 @@ Look here in the repository:
 example/login.html
 test/login_test.coffee
 ```
-[![build status](https://secure.travis-ci.org/robblovell/mojio-js.png)](http://sandbox.moj.io/)
+[![build status](https://travis-ci.org/mojio/mojio-js.svg?branch=master)](https://travis-ci.org/mojio/mojio-js)
 ## Install and Test:
 ```
 npm install

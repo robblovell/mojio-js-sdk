@@ -1,7 +1,12 @@
 {
     "name": "mojio-js",
+    "author": "Robb Lovell",
+    "description": "Mojio javascript REST client.",
     "version": "0.1.0",
-    "private": true,
+    "private": false,
+    "repository": {
+        "url": ""
+    },
     "devDependencies": {
         "mocha": "*",
         "should": "*",
