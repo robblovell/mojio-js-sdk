@@ -9,7 +9,7 @@ is in the /dist directory.
 
 The browser client needs jquery to work properly.  See the example and test directories for how to use this client.
 
-Look here:
+Look here in the repository:
 ```
 example/login.html
 test/login_test.coffee
