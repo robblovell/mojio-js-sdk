@@ -125,7 +125,7 @@ config = {
            version: 'v1',
            port:'80'
          }
-Mojio = require './dist/nodejs/Mojio.js'
+Mojio = require './lib/Mojio.js'
 mojio = new Mojio(config)
 
 mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
@@ -144,7 +144,7 @@ config = {
   port: '80'
 };
 
-Mojio = require('./dist/nodejs/Mojio.js');
+Mojio = require('./lib/Mojio.js');
 
 mojio = new Mojio(config);
 
@@ -169,7 +169,7 @@ If you need to manually recompile the code, the steps are:
 For nodejs code
 ```
 coffee --map --compile src/nodejs
-cp src/nodejs/*.js dist/nodejs/
+cp src/nodejs/*.js lib/
 ```
 For browser code
 ```

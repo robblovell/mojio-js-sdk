@@ -2,7 +2,7 @@
 (function() {
   var Mojio, assert, config, mojio, should, testdata;
 
-  Mojio = require('../dist/nodejs/Mojio');
+  Mojio = require('../lib/Mojio');
 
   config = require('./config/mojio-config.coffee');
 

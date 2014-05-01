@@ -1,4 +1,4 @@
-Mojio = require '../dist/nodejs/Mojio.js'
+Mojio = require '../lib/Mojio.js'
 config = require './config/mojio-config.coffee'
 
 mojio = new Mojio(config)
