@@ -203,6 +203,27 @@
     };
 
     /*
+        Trips
+    */
+
+
+    Mojio.prototype.trips_resource = 'Trips';
+
+    Mojio.prototype._trips = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.trips_resource
+      }, callback);
+    };
+
+    Mojio.prototype.trips = function(callback) {
+      var _this = this;
+      return this._trips(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
         Events
     */
 
@@ -210,7 +231,7 @@
     Mojio.prototype.events_resource = 'Events';
 
     Mojio.prototype._events = function(callback) {
-      return this.Request({
+      return this.request({
         method: 'GET',
         resource: this.events_resource
       }, callback);
@@ -219,6 +240,48 @@
     Mojio.prototype.events = function(callback) {
       var _this = this;
       return this._events(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
+        Mojios
+    */
+
+
+    Mojio.prototype.mojios_resource = 'Mojios';
+
+    Mojio.prototype._mojios = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.mojios_resource
+      }, callback);
+    };
+
+    Mojio.prototype.mojios = function(callback) {
+      var _this = this;
+      return this._mojios(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
+        Vehicles
+    */
+
+
+    Mojio.prototype.vehicles_resource = 'Vehicles';
+
+    Mojio.prototype._vehicles = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.vehicles_resource
+      }, callback);
+    };
+
+    Mojio.prototype.vehicles = function(callback) {
+      var _this = this;
+      return this._vehicles(function(error, result) {
         return callback(error, result);
       });
     };

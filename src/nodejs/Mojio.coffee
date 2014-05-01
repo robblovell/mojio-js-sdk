@@ -126,7 +126,6 @@ module.exports = class Mojio
     delete: (request, callback) ->
         @request(request, callback)
 
-
     ###
         Applications
     ###
@@ -139,6 +138,17 @@ module.exports = class Mojio
     applications: (callback) ->
         @_applications((error, result) => callback(error, result))
 
+    ###
+        Trips
+    ###
+    trips_resource: 'Trips'
+
+    _trips: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @trips_resource }, callback)
+
+    # Get Applications
+    trips: (callback) ->
+        @_trips((error, result) => callback(error, result))
 
     ###
         Events
@@ -146,11 +156,35 @@ module.exports = class Mojio
     events_resource: 'Events'
 
     _events: (callback) -> # Use if you want the raw result of the call.
-        @Request({ method: 'GET', resource: @events_resource }, callback)
+        @request({ method: 'GET', resource: @events_resource }, callback)
 
     # Get Applications
     events: (callback) ->
         @_events((error, result) => callback(error, result))
+
+    ###
+        Mojios
+    ###
+    mojios_resource: 'Mojios'
+
+    _mojios: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @mojios_resource }, callback)
+
+    # Get Applications
+    mojios: (callback) ->
+        @_mojios((error, result) => callback(error, result))
+
+    ###
+        Vehicles
+    ###
+    vehicles_resource: 'Vehicles'
+
+    _vehicles: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @vehicles_resource }, callback)
+
+    # Get Applications
+    vehicles: (callback) ->
+        @_vehicles((error, result) => callback(error, result))
 
     ###
             Schema
