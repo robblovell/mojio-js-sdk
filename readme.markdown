@@ -9,12 +9,12 @@ is in the /dist directory.
 
 The browser client needs jquery to work properly.  See the example and test directories for how to use this client.
 
-Look here:
+Look here in the repository:
 ```
 example/login.html
 test/login_test.coffee
 ```
-[![build status](https://secure.travis-ci.org/robblovell/mojio-js.png)](http://sandbox.moj.io/)
+[![build status](https://travis-ci.org/mojio/mojio-js.svg?branch=master)](https://travis-ci.org/mojio/mojio-js)
 ## Install and Test:
 ```
 npm install
@@ -125,7 +125,7 @@ config = {
            version: 'v1',
            port:'80'
          }
-Mojio = require './dist/nodejs/Mojio.js'
+Mojio = require './lib/Mojio.js'
 mojio = new Mojio(config)
 
 mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
@@ -144,7 +144,7 @@ config = {
   port: '80'
 };
 
-Mojio = require('./dist/nodejs/Mojio.js');
+Mojio = require('./lib/Mojio.js');
 
 mojio = new Mojio(config);
 
@@ -169,7 +169,7 @@ If you need to manually recompile the code, the steps are:
 For nodejs code
 ```
 coffee --map --compile src/nodejs
-cp src/nodejs/*.js dist/nodejs/
+cp src/nodejs/*.js lib/
 ```
 For browser code
 ```
