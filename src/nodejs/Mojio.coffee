@@ -2,7 +2,6 @@ http = require 'http'
 
 module.exports = class Mojio
 
-
     defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
 
     constructor: (@options) ->
@@ -44,21 +43,27 @@ module.exports = class Mojio
 
         parts.body = request.body if request.body
 
-        action = http.request parts, (result) ->
-            if (result.statusCode > 299)
-                callback(result, null)
-            else if (result.statusCode != 204)
+        action = http.request parts
 
-                result.setEncoding('utf8') if !window?  # browser side missing setEncoding.
-                result.on('data', (data) ->
+        action.on('response', (response) ->
+            if (response.statusCode > 299)
+                callback(response, null)
+            else if (response.statusCode != 204)
+                data = ""
+                response.setEncoding('utf8') if !window?
+                response.on('data', (chunk) ->
+                    data += chunk
+                )
+
+                response.on('end', () ->
                     if (data instanceof Object)
                         callback(data,null)
                     else
                         callback(null, JSON.parse(data))
                 )
             else
-                callback(null, result)
-
+                callback(null, response)
+        )
         action.on 'error', (error) ->
             callback(error,null)
 
@@ -121,7 +126,6 @@ module.exports = class Mojio
     delete: (request, callback) ->
         @request(request, callback)
 
-
     ###
         Applications
     ###
@@ -134,6 +138,17 @@ module.exports = class Mojio
     applications: (callback) ->
         @_applications((error, result) => callback(error, result))
 
+    ###
+        Trips
+    ###
+    trips_resource: 'Trips'
+
+    _trips: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @trips_resource }, callback)
+
+    # Get Applications
+    trips: (callback) ->
+        @_trips((error, result) => callback(error, result))
 
     ###
         Events
@@ -141,10 +156,44 @@ module.exports = class Mojio
     events_resource: 'Events'
 
     _events: (callback) -> # Use if you want the raw result of the call.
-        @Request({ method: 'GET', resource: @events_resource }, callback)
+        @request({ method: 'GET', resource: @events_resource }, callback)
 
     # Get Applications
     events: (callback) ->
         @_events((error, result) => callback(error, result))
 
+    ###
+        Mojios
+    ###
+    mojios_resource: 'Mojios'
 
+    _mojios: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @mojios_resource }, callback)
+
+    # Get Applications
+    mojios: (callback) ->
+        @_mojios((error, result) => callback(error, result))
+
+    ###
+        Vehicles
+    ###
+    vehicles_resource: 'Vehicles'
+
+    _vehicles: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @vehicles_resource }, callback)
+
+    # Get Applications
+    vehicles: (callback) ->
+        @_vehicles((error, result) => callback(error, result))
+
+    ###
+            Schema
+    ###
+    schema_resource: 'Schema'
+
+    _schema: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @schema_resource}, callback)
+
+    # Get Applications
+    schema: (callback) ->
+        @_schema((error, result) => callback(error, result))

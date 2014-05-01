@@ -185,4 +185,3 @@ browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
 * Need models
 * POST, PUT, DELETE for resources.
 * Hyperlinks for resources
-* Versioning for dependencies
