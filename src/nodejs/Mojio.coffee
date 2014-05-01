@@ -44,21 +44,28 @@ module.exports = class Mojio
 
         parts.body = request.body if request.body
 
-        action = http.request parts, (result) ->
-            if (result.statusCode > 299)
-                callback(result, null)
-            else if (result.statusCode != 204)
+        action = http.request parts
 
-                result.setEncoding('utf8') if !window?  # browser side missing setEncoding.
-                result.on('data', (data) ->
+        action.on('response', (response) ->
+            if (response.statusCode > 299)
+                callback(response, null)
+            else if (response.statusCode != 204)
+                data = ""
+                response.setEncoding('utf8') if !window?
+                response.on('data', (chunk) ->
+                    data += chunk
+                )
+
+                response.on('end', () ->
                     if (data instanceof Object)
                         callback(data,null)
                     else
+                        console.log(data)
                         callback(null, JSON.parse(data))
                 )
             else
-                callback(null, result)
-
+                callback(null, response)
+        )
         action.on 'error', (error) ->
             callback(error,null)
 
@@ -147,4 +154,14 @@ module.exports = class Mojio
     events: (callback) ->
         @_events((error, result) => callback(error, result))
 
+    ###
+            Schema
+    ###
+    schema_resource: 'Schema'
 
+    _schema: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @schema_resource}, callback)
+
+    # Get Applications
+    schema: (callback) ->
+        @_schema((error, result) => callback(error, result))
