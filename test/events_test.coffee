@@ -8,7 +8,9 @@ testdata = require('./data/mojio-test-data')
 should = require('should')
 
 describe 'Event', ->
+    @.timeout(15000)
     it 'can get events', (done) ->
+
         mojio.login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
             mojio.should.be.an.instanceOf(Mojio)
