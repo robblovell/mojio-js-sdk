@@ -95,7 +95,6 @@ module.exports = class Mojio
             callback(error, result)
         )
 
-
     _logout: (callback) ->
         @request(
             {

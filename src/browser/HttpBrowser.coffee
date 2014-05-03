@@ -35,10 +35,8 @@ module.exports = class HttpBrowser
 
         url = params.scheme+"://"+params.host+":"+params.port+params.path
 
-        return sendRequest(url, params.data, params.method)
-            .done((result) ->
+        return sendRequest(url, params.data, params.method).done((result) ->
                 callback(null,result)
-            )
-            .fail( () ->
+            ).fail( () ->
                 callback("Failed",null)
             )
