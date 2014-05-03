@@ -8,7 +8,6 @@ testdata = require('./data/mojio-test-data')
 should = require('should')
 
 describe 'Event', ->
-
     it 'can get events', (done) ->
         mojio.login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
