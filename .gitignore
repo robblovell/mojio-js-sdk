@@ -1,3 +1,9 @@
 node_modules
 bower_components
 .idea
+src/**/*.js
+src/**/*.map
+test/**/*.js
+test/**/*.map
+example/**/*.js
+example/**/*.map

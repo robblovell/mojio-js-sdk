@@ -2,7 +2,6 @@ Http = require './HttpBrowser'
 
 module.exports = class Mojio
 
-
     defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
 
     constructor: (@options) ->
