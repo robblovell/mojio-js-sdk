@@ -10,6 +10,9 @@ notifications:
   email:
     - robbl@moj.io
 
+before_script:
+  - npm install -g bower
+  
 script:
   - bower install
   - coffee --map --compile src/nodejs
