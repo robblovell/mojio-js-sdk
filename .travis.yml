@@ -20,6 +20,6 @@ script:
   - coffee --map --compile src/browser
   - cd src/browser
   - ../../node_modules/.bin/browserify -r ./HttpBrowserWrapper.js --standalone HttpBrowserWrapper > ../../dist/browser/HttpBrowserWrapper.js
-  - ../../node_modules/.bin/browserify -r ./MojioClientBrowser.js --standalone MojioClient > ../../dist/browser/MojioClientBrowser.js
+  - ../../node_modules/.bin/browserify -r ./MojioClient.js --standalone MojioClient > ../../dist/browser/MojioClient.js
   - cd ../../
   - mocha
