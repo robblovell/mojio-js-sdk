@@ -1,4 +1,4 @@
-Http = require './HttpBrowser'
+Http = require './HttpBrowserWrapper'
 
 module.exports = class MojioClient
 

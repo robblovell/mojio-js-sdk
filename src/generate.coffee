@@ -1,3 +1,6 @@
+fs = require('fs')
+Combyne = require('combyne')
+
 MojioClient = require '../lib/MojioClient'
 mojio = new MojioClient(
     {
@@ -16,52 +19,61 @@ mojio.schema((error, result) ->
             if (err)
                 throw err
         )
-        for model, schema of result
-            continue if (model == "Invoice" || model == "Product" || model == "Login")
-            fs = require('fs');
-            # write the models.
-            wstream = fs.createWriteStream("./models/"+model+'.coffee')
-            wstream.write("Model = require('./MojioModel')\n")
-            wstream.write("module.exports = class "+model+" extends  Model\n")
-            wstream.write("    constructor: (json) ->\n")
-            wstream.write("        @schema = \n")
-            str = JSON.stringify(schema,null,4)
-            spl = str.split('\n')
-            for s in spl
-                wstream.write('            '+s+'\n')
-            wstream.write("        super(json)\n")
-            wstream.end()
-            continue if (model == "Address" || model == "Location")
 
-            # write the tests.
-            wstream = fs.createWriteStream('../test/'+model+'_test.coffee')
-            wstream.write("MojioClient = require '../lib/MojioClient'\n")
-            wstream.write(model+" = require '../src/models/"+model+"'\n")
-            wstream.write("config = require './config/mojio-config.coffee'\n")
+        fs.readFile('./models/ModelTemplate.mustache', (err, data) ->
+            model_template = Combyne(data.toString())
+            fs.readFile('../test/TestTemplate.mustache', (err, data) ->
+                test_template = Combyne(data.toString())
 
-            wstream.write("mojio_client = new MojioClient(config)\n")
+                models = []
+                i=0
+                for model, schema of result
 
-            wstream.write("assert = require('assert')\n")
-            wstream.write("testdata = require('./data/mojio-test-data')\n")
-            wstream.write("should = require('should')\n")
+                    continue if (model == "Invoice" || model == "Product" || model == "Login")
 
-            wstream.write("describe '"+model+"', ->\n")
-            wstream.write("    it 'can get "+model+"', (done) ->\n")
-            wstream.write("        mojio_client.login(testdata.username, testdata.password, (error, result) ->\n")
-            wstream.write("            (error==null).should.be.true\n")
-            wstream.write("            mojio_client."+model.toLowerCase()+"s((error, result) ->\n")
-            wstream.write("                (error==null).should.be.true\n")
-            wstream.write("                mojio_client.should.be.an.instanceOf(MojioClient)\n")
-            wstream.write("                if (result.Data instanceof Array)\n")
-            wstream.write("                    "+model.toLowerCase()+" = new "+model+"(result.Data[0])\n")
-            wstream.write("                else if (result.Data?)\n")
-            wstream.write("                    "+model.toLowerCase()+" = new "+model+"(result.Data)\n")
-            wstream.write("                else\n")
-            wstream.write("                    "+model.toLowerCase()+" = new "+model+"(result)\n")
-            wstream.write("                "+model.toLowerCase()+".should.be.an.instanceOf("+model+")\n")
-            wstream.write("                done()\n")
-            wstream.write("            )\n")
-            wstream.write("        )\n")
-            wstream.end()
+                    view = {
+                        Model: model
+                        model: model.toLowerCase()
+                        schema: ""
+                    }
 
+                    str = JSON.stringify(schema,null,4)
+                    spl = str.split('\n')
+                    for s in spl
+                        view['schema'] += '            '+s+'\n'
+
+                    output = model_template.render(view)
+                    wstream = fs.createWriteStream("./models/"+model+".coffee")
+                    wstream.write(output)
+                    wstream.end()
+
+                    continue if (model == "Address" || model == "Location")
+
+                    output = test_template.render(view)
+                    wstream = fs.createWriteStream("../test/"+model+"_test.coffee")
+                    wstream.write(output)
+                    wstream.end()
+                    models[i++] = view
+
+                fs.readFile('./MojioClientTemplate.mustache', (err, data) ->
+                    client_template = Combyne(data.toString())
+                    view['models'] = models
+                    view['http_require'] = "Http = require './HttpNodeWrapper'"
+                    view['http_request'] = "http = new Http()"
+                    output = client_template.render(view)
+
+                    wstream = fs.createWriteStream("./nodejs/MojioClient.coffee")
+                    wstream.write(output)
+                    wstream.end()
+
+                    view['http_require'] = "Http = require './HttpBrowserWrapper'"
+                    view['http_request'] = "http = new Http($)"
+                    output = client_template.render(view)
+
+                    wstream = fs.createWriteStream("./browser/MojioClient.coffee")
+                    wstream.write(output)
+                    wstream.end()
+                )
+            )
+        )
 )

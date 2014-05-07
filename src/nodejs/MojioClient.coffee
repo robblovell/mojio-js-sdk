@@ -1,4 +1,4 @@
-Http = require './HttpMojio'
+Http = require './HttpNodeWrapper'
 
 module.exports = class MojioClient
 

@@ -1,5 +1,5 @@
 Http = require 'http'
-module.exports = class HttpMojio
+module.exports = class HttpNodeWrapper
 
     request: (params, callback) ->
         action = Http.request params
