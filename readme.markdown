@@ -222,3 +222,5 @@ browserify -r ./MojioClient.js --standalone Mojio > ../../dist/browser/MojioClie
 * Needs all the models, missing event.coffee
 * POST, PUT, DELETE for resources.
 * Hyperlinks for resources
+* Observer and Subscription endpoints
+* Fix mocha test on travis CI
