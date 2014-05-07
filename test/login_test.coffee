@@ -1,7 +1,7 @@
-Mojio = require '../lib/Mojio.js'
+MojioClient = require '../lib/MojioClient'
 config = require './config/mojio-config.coffee'
 
-mojio = new Mojio(config)
+mojio_client = new MojioClient(config)
 
 ###
     Sandbox:
@@ -19,10 +19,10 @@ should = require('should')
 describe 'Login', ->
 
     it 'can login', (done) ->
-        mojio.login(testdata.username, testdata.password, (error, result) ->
+        mojio_client.login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
-            mojio.should.be.an.instanceOf(Mojio)
-            mojio.token.should.be.ok
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            mojio_client.token.should.be.ok
             result.should.be.an.instanceOf(Object)
             result._id.should.be.an.instanceOf(String)
             done()
@@ -31,11 +31,11 @@ describe 'Login', ->
 describe 'Logout', ->
 
     it 'can logout', (done) ->
-        mojio.login(testdata.username, testdata.password, (error, result) ->
-            mojio.logout((error, result) ->
+        mojio_client.login(testdata.username, testdata.password, (error, result) ->
+            mojio_client.logout((error, result) ->
                 (error==null).should.be.true
-                mojio.should.be.an.instanceOf(Mojio)
-                (mojio.token==null).should.be.true
+                mojio_client.should.be.an.instanceOf(MojioClient)
+                (mojio_client.token==null).should.be.true
                 done()
             )
         )

@@ -105,7 +105,6 @@ module.exports = class Mojio
     delete: (request, callback) ->
         @request(request, callback)
 
-
     ###
         Applications
     ###
@@ -118,7 +117,6 @@ module.exports = class Mojio
     applications: (callback) ->
         @_applications((error, result) => callback(error, result))
 
-
     ###
         Events
     ###
@@ -127,8 +125,6 @@ module.exports = class Mojio
     _events: (callback) -> # Use if you want the raw result of the call.
         @Request({ method: 'GET', resource: @events_resource }, callback)
 
-    # Get Applications
+    # Get Events
     events: (callback) ->
         @_events((error, result) => callback(error, result))
-
-

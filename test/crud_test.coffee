@@ -1,7 +1,7 @@
-Mojio = require '../lib/Mojio'
+MojioClient = require '../lib/MojioClient'
 config = require './config/mojio-config.coffee'
 
-mojio = new Mojio(config)
+mojio_client = new MojioClient(config)
 
 assert = require("assert")
 testdata = require('./data/mojio-test-data')
@@ -10,13 +10,9 @@ should = require('should')
 describe 'Get_CRUD', ->
 
     it 'can get resource', (done) ->
-        mojio.login(testdata.username, testdata.password, (error, result) ->
+        mojio_client.login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
-            mojio.should.be.an.instanceOf(Mojio)
-            mojio.token.should.be.ok
-            result.should.be.an.instanceOf(Object)
-            result._id.should.be.an.instanceOf(String)
-            mojio.request(
+            mojio_client.request(
                 {
                     resource: 'Apps',
                     method: 'GET',

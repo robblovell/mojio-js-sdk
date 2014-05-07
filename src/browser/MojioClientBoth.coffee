@@ -1,6 +1,9 @@
-http = require 'http'
+if (window?)
+    Http = require './HttpBrowser'
+else
+    http = require 'http'
 
-module.exports = class Mojio
+module.exports = class MojioClient
 
     defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
 
@@ -42,32 +45,38 @@ module.exports = class Mojio
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
 
         parts.body = request.body if request.body
+        if (window?)
+            http = new Http($)
+            action = http.request parts, (error, result) ->
+                callback(error, null) if (error)
+                callback(null, result)
 
-        action = http.request parts
+        else
+            action = http.request parts
 
-        action.on('response', (response) ->
-            if (response.statusCode > 299)
-                callback(response, null)
-            else if (response.statusCode != 204)
-                data = ""
-                response.setEncoding('utf8') if !window?
-                response.on('data', (chunk) ->
-                    data += chunk
-                )
+            action.on('response', (response) ->
+                if (response.statusCode > 299)
+                    callback(response, null)
+                else if (response.statusCode != 204)
+                    data = ""
+                    response.setEncoding('utf8') if !window?
+                    response.on('data', (chunk) ->
+                        data += chunk
+                    )
 
-                response.on('end', () ->
-                    if (data instanceof Object)
-                        callback(data,null)
-                    else
-                        callback(null, JSON.parse(data))
-                )
-            else
-                callback(null, response)
-        )
-        action.on 'error', (error) ->
-            callback(error,null)
+                    response.on('end', () ->
+                        if (data instanceof Object)
+                            callback(data,null)
+                        else
+                            callback(null, JSON.parse(data))
+                    )
+                else
+                    callback(null, response)
+            )
+            action.on 'error', (error) ->
+                callback(error,null)
 
-        action.end()
+            action.end()
 
     ###
         Login
@@ -137,6 +146,13 @@ module.exports = class Mojio
     applications: (callback) ->
         @_applications((error, result) => callback(error, result))
 
+    _apps: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @apps_resource, id: @options.application}, callback)
+
+    # Get Applications
+    apps: (callback) ->
+        @_apps((error, result) => callback(error, result))
+
     ###
         Trips
     ###
@@ -148,6 +164,19 @@ module.exports = class Mojio
     # Get Applications
     trips: (callback) ->
         @_trips((error, result) => callback(error, result))
+
+    ###
+        Users
+    ###
+    users_resource: 'Users'
+
+    _users: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @users_resource }, callback)
+
+    # Get Applications
+    users: (callback) ->
+        @_users((error, result) => callback(error, result))
+
 
     ###
         Events

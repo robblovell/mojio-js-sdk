@@ -1,4 +1,4 @@
-Mojio = @Mojio
+MojioClient = @MojioClient
 
 config = {
     #application: 'e626b252-5e1f-48c6-a56c-54832e655c46',
@@ -11,10 +11,10 @@ config = {
     port: '80'
 }
 
-mojio = new Mojio(config);
+mojio_client = new MojioClient(config);
 
 #TODO:: make anonymous user.
-mojio.login('anonymous@moj.io', 'Password007', (error, result) ->
+mojio_client.login('anonymous@moj.io', 'Password007', (error, result) ->
     if (error)
         alert("error:"+error)
     else
