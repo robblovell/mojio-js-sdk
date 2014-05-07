@@ -1,4 +1,4 @@
-module.exports = class HttpBrowser
+module.exports = class HttpBrowserWrapper
 
     constructor: (@$) ->
 
