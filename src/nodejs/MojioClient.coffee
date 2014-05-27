@@ -181,19 +181,6 @@ module.exports = class MojioClient
 
 
     ###
-    Observer
-    ###
-    observers_resource: 'Observers'
-
-    _observers: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @observers_resource}, callback)
-
-    # Get Observer
-    observers: (callback) ->
-        @_observers((error, result) => callback(error, result))
-
-
-    ###
     Subscription
     ###
     subscriptions_resource: 'Subscriptions'
@@ -218,18 +205,6 @@ module.exports = class MojioClient
     events: (callback) ->
         @_events((error, result) => callback(error, result))
 
-
-    ###
-       Event
-    ###
-    events_resource: 'Events'
-
-    _events: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @events_resource}, callback)
-
-    # Get Trip
-    events: (callback) ->
-        @_events((error, result) => callback(error, result))
 
     ###
             Schema

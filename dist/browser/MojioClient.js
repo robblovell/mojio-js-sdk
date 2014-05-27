@@ -360,27 +360,6 @@
     };
 
     /*
-    Observer
-    */
-
-
-    MojioClient.prototype.observers_resource = 'Observers';
-
-    MojioClient.prototype._observers = function(callback) {
-      return this.request({
-        method: 'GET',
-        resource: this.observers_resource
-      }, callback);
-    };
-
-    MojioClient.prototype.observers = function(callback) {
-      var _this = this;
-      return this._observers(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
     Subscription
     */
 
@@ -403,27 +382,6 @@
 
     /*
     Event
-    */
-
-
-    MojioClient.prototype.events_resource = 'Events';
-
-    MojioClient.prototype._events = function(callback) {
-      return this.request({
-        method: 'GET',
-        resource: this.events_resource
-      }, callback);
-    };
-
-    MojioClient.prototype.events = function(callback) {
-      var _this = this;
-      return this._events(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
-       Event
     */
 
 
