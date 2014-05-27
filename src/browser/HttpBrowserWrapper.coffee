@@ -1,4 +1,4 @@
-module.exports = class HttpBrowser
+module.exports = class HttpBrowserWrapper
 
     constructor: (@$) ->
 
@@ -23,7 +23,7 @@ module.exports = class HttpBrowser
             type: method,
             cache: false,
             error: (obj, status, error) ->
-                log('Error during request: (' + status + ') ' + error);
+                console.log('Error during request: (' + status + ') ' + error);
 
         })
 
@@ -31,6 +31,7 @@ module.exports = class HttpBrowser
         params.method = "GET" unless params.method?
         params.host = params.hostname if (!params.host? and params.hostname?)
         params.scheme = window.location.protocol.split(':')[0] unless params.scheme?
+        params.scheme = 'http' if params.scheme == 'file'
         params.data = {} unless params.data?
 
         url = params.scheme+"://"+params.host+":"+params.port+params.path

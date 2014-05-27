@@ -4,7 +4,7 @@ Mojio javascript REST client.  Mojio provides a standard REST platform for writi
 
 This repository contains a node js client and a browser js client.
 
-The client is built in coffeescript and compiled to js for use in the browser and node-js environments.  Built code
+The client is built from mustache files using combyne.  The builder generates coffeescript files which are then compiled to js for use in the browser and node-js environments.  Built code
 is in the /dist directory.
 
 The browser client needs jquery to work properly.  See the example and test directories for how to use this client.
@@ -41,8 +41,8 @@ npm install -g mocha
 <body>
 <div id="result"></div>
 <script src="./bower_components/jquery/dist/jquery.js"></script>
-<script src="./dist/browser/HttpBrowser.js"></script>
-<script src="./dist/browser/Mojio.js"></script>
+<script src="./dist/browser/HttpBrowserWrapper.js"></script>
+<script src="./dist/browser/MojioClient.js"></script>
 <script src="./login.js"></script>
 </body>
 ```
@@ -80,8 +80,8 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
 <body>
 <div id="result"></div>
 <script src="./bower_components/jquery/dist/jquery.js"></script>
-<script src="./dist/browser/HttpBrowser.js"></script>
-<script src="./dist/browser/Mojio.js"></script>
+<script src="./dist/browser/HttpBrowserWrapper.js"></script>
+<script src="./dist/browser/MojioClient.js"></script>
 <script type="text/javascript">
     (function() {
         var Mojio, config, mojio;
@@ -121,11 +121,11 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
 config = {
            application: 'YOUR APPLICATION KEY',
            secret: 'YOUR SECRET KEY',
-           hostname: 'staging.api.moj.io',
+           hostname: 'sandbox.api.moj.io',
            version: 'v1',
            port:'80'
          }
-Mojio = require './lib/Mojio.js'
+Mojio = require './lib/MojioClient.js'
 mojio = new Mojio(config)
 
 mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
@@ -139,12 +139,12 @@ var Mojio, mojio, config;
 config = {
   application: 'YOUR APPLICATION KEY',
   secret: 'YOUR SECRET KEY',
-  hostname: 'staging.api.moj.io',
+  hostname: 'sandbox.api.moj.io',
   version: 'v1',
   port: '80'
 };
 
-Mojio = require('./lib/Mojio.js');
+Mojio = require('./lib/MojioClient.js');
 
 mojio = new Mojio(config);
 
@@ -160,9 +160,47 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
 ## Build
 All javascript client code is in the 'dist' directory.
 
-Code must be compiled from coffeescript to javascript first.  Browser based code must be "browserified" to work in a
-browser. A webstorm project is setup to compile the coffeescript code, call browserify and to copy all built code
-to the dist directory.
+Code is generate first by running the generator in /src/generate.coffee. The generator makes a request to the schema
+REST endpoint and retrieves all the schemas for objects stored in the database and creates model files, calls to
+the REST endpoints in the client, and tests for those calls.
+
+```
+cd src
+coffee generate.coffee
+```
+
+This creates:
+```
+browser/MojioClient.coffee
+nodejs/MojioClient.coffee
+models/Address.coffee
+models/App.coffee
+models/Location.coffee
+models/Mojio.coffee
+models/Trip.coffee
+models/User.coffee
+models/Vehicle.coffee
+../test/App_test.coffee
+../Mojio_test.coffee
+../Trip_test.coffee
+../User_test.coffee
+../Vehicle_test.coffee
+```
+
+These files are not created by the generator:
+```
+browser/HttpBrowserWrapper.coffee
+nodejs/HttpBrowserWrapper.coffee
+models/MojioModel.coffee
+models/schema.coffee
+../test/crud_test.cofffee
+../test/events_test.cofffee
+../test/login_test.cofffee
+../test/schema_test.cofffee
+```
+
+Once the code is generated, it must be compiled from coffeescript to javascript and copied to the dist and lib directories.
+Browser based code must be "browserified" to work in a browser.
 
 If you need to manually recompile the code, the steps are:
 
@@ -175,13 +213,14 @@ For browser code
 ```
 coffee --map --compile src/browser
 cd src/browser
-browserify -r ./HttpBrowser.js --standalone HttpBrowser > ../../dist/browser/HttpBrowser.js
-browserify -r ./Mojio.js --standalone Mojio > ../../dist/browser/Mojio.js
+browserify -r ./HttpBrowserWrapper.js --standalone HttpBrowserWrapper > ../../dist/browser/HttpBrowserWrapper.js
+browserify -r ./MojioClient.js --standalone Mojio > ../../dist/browser/MojioClient.js
 ```
 
 ## Todo:
 
-* Make browser code compile from nodejs client.
-* Need models
+* Needs all the models, missing event.coffee
 * POST, PUT, DELETE for resources.
 * Hyperlinks for resources
+* Observer and Subscription endpoints
+* Fix mocha test on travis CI

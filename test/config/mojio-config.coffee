@@ -1,10 +1,8 @@
-
 module.exports =
     {
-        application: 'e626b252-5e1f-48c6-a56c-54832e655c46',
-        secret: '295869cf-c4ae-439b-ba9e-a0fd1423ac0a',
-
-        hostname: 'staging.api.moj.io',
+        application: 'f201b929-d28c-415d-9b71-8112532301cb',
+        secret: '2ef80a7a-780d-41c1-8a02-13a286f11a23',
+        hostname: 'api.moj.io',
         version: 'v1',
         port:'80'
     }
