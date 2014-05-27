@@ -36,7 +36,7 @@
         type: method,
         cache: false,
         error: function(obj, status, error) {
-          return log('Error during request: (' + status + ') ' + error);
+          return console.log('Error during request: (' + status + ') ' + error);
         }
       });
     };
@@ -51,6 +51,9 @@
       }
       if (params.scheme == null) {
         params.scheme = window.location.protocol.split(':')[0];
+      }
+      if (params.scheme === 'file') {
+        params.scheme = 'http';
       }
       if (params.data == null) {
         params.data = {};
