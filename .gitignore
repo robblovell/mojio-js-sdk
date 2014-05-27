@@ -7,3 +7,4 @@ test/**/*.js
 test/**/*.map
 example/**/*.js
 example/**/*.map
+npm-debug.log
