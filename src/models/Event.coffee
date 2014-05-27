@@ -1,7 +1,6 @@
 MojioModel = require('./MojioModel')
 module.exports = class Event extends MojioModel
     constructor: (json) ->
-
         @schema =
             {
                 "Type": "Integer",
@@ -15,8 +14,21 @@ module.exports = class Event extends MojioModel
                 "BatteryVoltage": "Float",
                 "ConnectionLost": "Boolean",
                 "_id": "String",
-                "_deleted": "Boolean"
+                "_deleted": "Boolean",
+                "TripId": "String",
+                "Altitude": "Float",
+                "Heading": "Integer",
+                "Distance": "Float",
+                "FuelLevel": "Float",
+                "FuelEfficiency": "Float",
+                "Speed": "Float",
+                "Acceleration": "Float",
+                "Deceleration": "Float",
+                "Odometer": "Float",
+                "RPM": "Integer",
+                "DTCs": "Array",
+                "MilStatus": "Boolean",
+                "Force": "Float"
             }
-
 
         super(json)

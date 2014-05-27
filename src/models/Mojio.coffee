@@ -1,7 +1,6 @@
 MojioModel = require('./MojioModel')
 module.exports = class Mojio extends MojioModel
     constructor: (json) ->
-
         @schema =
             {
                 "Type": "Integer",
@@ -13,6 +12,5 @@ module.exports = class Mojio extends MojioModel
                 "_id": "String",
                 "_deleted": "Boolean"
             }
-
 
         super(json)

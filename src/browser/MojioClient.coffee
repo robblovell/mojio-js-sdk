@@ -168,6 +168,45 @@ module.exports = class MojioClient
 
 
     ###
+    Product
+    ###
+    products_resource: 'Products'
+
+    _products: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @products_resource}, callback)
+
+    # Get Product
+    products: (callback) ->
+        @_products((error, result) => callback(error, result))
+
+
+    ###
+    Observer
+    ###
+    observers_resource: 'Observers'
+
+    _observers: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @observers_resource}, callback)
+
+    # Get Observer
+    observers: (callback) ->
+        @_observers((error, result) => callback(error, result))
+
+
+    ###
+    Subscription
+    ###
+    subscriptions_resource: 'Subscriptions'
+
+    _subscriptions: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @subscriptions_resource}, callback)
+
+    # Get Subscription
+    subscriptions: (callback) ->
+        @_subscriptions((error, result) => callback(error, result))
+
+
+    ###
     Event
     ###
     events_resource: 'Events'

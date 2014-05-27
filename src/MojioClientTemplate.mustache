@@ -116,18 +116,6 @@ module.exports = class MojioClient
 {%endeach%}
 
     ###
-       Event
-    ###
-    events_resource: 'Events'
-
-    _events: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @events_resource}, callback)
-
-    # Get Trip
-    events: (callback) ->
-        @_events((error, result) => callback(error, result))
-
-    ###
             Schema
     ###
     schema_resource: 'Schema'

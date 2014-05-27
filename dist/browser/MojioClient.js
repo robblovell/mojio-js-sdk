@@ -339,6 +339,69 @@
     };
 
     /*
+    Product
+    */
+
+
+    MojioClient.prototype.products_resource = 'Products';
+
+    MojioClient.prototype._products = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.products_resource
+      }, callback);
+    };
+
+    MojioClient.prototype.products = function(callback) {
+      var _this = this;
+      return this._products(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
+    Observer
+    */
+
+
+    MojioClient.prototype.observers_resource = 'Observers';
+
+    MojioClient.prototype._observers = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.observers_resource
+      }, callback);
+    };
+
+    MojioClient.prototype.observers = function(callback) {
+      var _this = this;
+      return this._observers(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
+    Subscription
+    */
+
+
+    MojioClient.prototype.subscriptions_resource = 'Subscriptions';
+
+    MojioClient.prototype._subscriptions = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.subscriptions_resource
+      }, callback);
+    };
+
+    MojioClient.prototype.subscriptions = function(callback) {
+      var _this = this;
+      return this._subscriptions(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
     Event
     */
 
