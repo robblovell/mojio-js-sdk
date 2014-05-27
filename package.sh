@@ -17,4 +17,4 @@
 #
 # now register the bower package:
 #
-#       bower register mojio-js https://github.com/mojio/mojio-js
+#       bower register mojio-js https://github.com/mojio/mojio-js.git
