@@ -62,7 +62,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                 wstream.write(output)
                 wstream.end()
 
-                continue if (model == "Address" || model == "Location")
+                continue if (model == "Address" || model == "Location" || model == "Observer")
 
                 output = test_template.render(view)
                 wstream = fs.createWriteStream("../test/"+model+"_test.coffee")
