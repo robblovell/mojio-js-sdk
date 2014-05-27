@@ -12,7 +12,7 @@
 #
 # tag the repo with the correct version and push the tags to origin.
 #
-#       git tag -a v0.1.5 -m "Release v0.1.5"
+#       git tag -a v0.1.6 -m "Release v0.1.6"
 #       git push origin master --tags
 #
 # now register the bower package:
