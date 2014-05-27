@@ -4,6 +4,7 @@ module.exports = class Vehicle extends MojioModel
 
         @schema =
             {
+                "Type": "Integer",
                 "OwnerId": "String",
                 "MojioId": "String",
                 "Name": "String",

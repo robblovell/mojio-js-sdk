@@ -4,6 +4,7 @@ module.exports = class Mojio extends MojioModel
 
         @schema =
             {
+                "Type": "Integer",
                 "OwnerId": "String",
                 "Name": "String",
                 "Imei": "String",

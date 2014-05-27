@@ -4,6 +4,7 @@ module.exports = class Trip extends MojioModel
 
         @schema =
             {
+                "Type": "Integer",
                 "MojioId": "String",
                 "VehicleId": "String",
                 "StartTime": "String",

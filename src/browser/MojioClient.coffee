@@ -100,10 +100,10 @@ module.exports = class MojioClient
 
     delete: (request, callback) ->
         @request(request, callback)
-    
+
 
     ###
-       App
+    App
     ###
     apps_resource: 'Apps'
 
@@ -113,10 +113,10 @@ module.exports = class MojioClient
     # Get App
     apps: (callback) ->
         @_apps((error, result) => callback(error, result))
-    
+
 
     ###
-       Mojio
+    Mojio
     ###
     mojios_resource: 'Mojios'
 
@@ -126,36 +126,10 @@ module.exports = class MojioClient
     # Get Mojio
     mojios: (callback) ->
         @_mojios((error, result) => callback(error, result))
-    
+
 
     ###
-       Vehicle
-    ###
-    vehicles_resource: 'Vehicles'
-
-    _vehicles: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @vehicles_resource}, callback)
-
-    # Get Vehicle
-    vehicles: (callback) ->
-        @_vehicles((error, result) => callback(error, result))
-    
-
-    ###
-       User
-    ###
-    users_resource: 'Users'
-
-    _users: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @users_resource}, callback)
-
-    # Get User
-    users: (callback) ->
-        @_users((error, result) => callback(error, result))
-    
-
-    ###
-       Trip
+    Trip
     ###
     trips_resource: 'Trips'
 
@@ -165,7 +139,46 @@ module.exports = class MojioClient
     # Get Trip
     trips: (callback) ->
         @_trips((error, result) => callback(error, result))
-    
+
+
+    ###
+    User
+    ###
+    users_resource: 'Users'
+
+    _users: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @users_resource}, callback)
+
+    # Get User
+    users: (callback) ->
+        @_users((error, result) => callback(error, result))
+
+
+    ###
+    Vehicle
+    ###
+    vehicles_resource: 'Vehicles'
+
+    _vehicles: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @vehicles_resource}, callback)
+
+    # Get Vehicle
+    vehicles: (callback) ->
+        @_vehicles((error, result) => callback(error, result))
+
+
+    ###
+    Event
+    ###
+    events_resource: 'Events'
+
+    _events: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @events_resource}, callback)
+
+    # Get Event
+    events: (callback) ->
+        @_events((error, result) => callback(error, result))
+
 
     ###
        Event

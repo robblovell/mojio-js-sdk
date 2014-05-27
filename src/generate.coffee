@@ -4,7 +4,7 @@ Combyne = require('combyne')
 MojioClient = require '../lib/MojioClient'
 mojio = new MojioClient(
     {
-        hostname: 'sandbox.api.moj.io',
+        hostname: 'api.moj.io',
         version: 'v1',
         port:'80'
     })
@@ -15,10 +15,10 @@ mojio.schema((error, result) ->
     else
         fs = require('fs')
         console.log(result)
-        fs.writeFile('./models/schema.coffee', JSON.stringify(result,null,4), (err) ->
-            if (err)
-                throw err
-        )
+#        fs.writeFile('./models/schema.coffee', JSON.stringify(result,null,4), (err) ->
+#            if (err)
+#                throw err
+#        )
 
         fs.readFile('./models/ModelTemplate.mustache', (err, data) ->
             model_template = Combyne(data.toString())
@@ -30,6 +30,8 @@ mojio.schema((error, result) ->
                 for model, schema of result
 
                     continue if (model == "Invoice" || model == "Product" || model == "Login")
+                    continue if (model != "App" && model != "Address" && model != "Location" && model != "Trip" && model != "User" && model != "Vehicle"  && model != "Event" && model != "Mojio")
+
 
                     view = {
                         Model: model

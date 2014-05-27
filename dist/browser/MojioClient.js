@@ -234,7 +234,7 @@
     };
 
     /*
-       App
+    App
     */
 
 
@@ -255,7 +255,7 @@
     };
 
     /*
-       Mojio
+    Mojio
     */
 
 
@@ -276,28 +276,28 @@
     };
 
     /*
-       Vehicle
+    Trip
     */
 
 
-    MojioClient.prototype.vehicles_resource = 'Vehicles';
+    MojioClient.prototype.trips_resource = 'Trips';
 
-    MojioClient.prototype._vehicles = function(callback) {
+    MojioClient.prototype._trips = function(callback) {
       return this.request({
         method: 'GET',
-        resource: this.vehicles_resource
+        resource: this.trips_resource
       }, callback);
     };
 
-    MojioClient.prototype.vehicles = function(callback) {
+    MojioClient.prototype.trips = function(callback) {
       var _this = this;
-      return this._vehicles(function(error, result) {
+      return this._trips(function(error, result) {
         return callback(error, result);
       });
     };
 
     /*
-       User
+    User
     */
 
 
@@ -318,22 +318,43 @@
     };
 
     /*
-       Trip
+    Vehicle
     */
 
 
-    MojioClient.prototype.trips_resource = 'Trips';
+    MojioClient.prototype.vehicles_resource = 'Vehicles';
 
-    MojioClient.prototype._trips = function(callback) {
+    MojioClient.prototype._vehicles = function(callback) {
       return this.request({
         method: 'GET',
-        resource: this.trips_resource
+        resource: this.vehicles_resource
       }, callback);
     };
 
-    MojioClient.prototype.trips = function(callback) {
+    MojioClient.prototype.vehicles = function(callback) {
       var _this = this;
-      return this._trips(function(error, result) {
+      return this._vehicles(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
+    Event
+    */
+
+
+    MojioClient.prototype.events_resource = 'Events';
+
+    MojioClient.prototype._events = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.events_resource
+      }, callback);
+    };
+
+    MojioClient.prototype.events = function(callback) {
+      var _this = this;
+      return this._events(function(error, result) {
         return callback(error, result);
       });
     };
