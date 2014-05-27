@@ -1,11 +1,21 @@
 {
-  "name": "Mojio Client",
-  "version": "1.0.0",
+  "name": "mojio-js",
+  "version": "0.1.5",
+  "main": "dist/MojioClient.js",
   "ignore": [
+    ".gitignore",
+    "travis.yml",
+    "build.sh",
+    "package.json",
     ".jshintrc",
     "**/*.txt",
     "**/*.json",
-    "**/*.md"
+    "**/*.md",
+    "bower_components",
+    "lib",
+    "node_modules",
+    "src",
+    "test"
   ],
   "dependencies": {
     "jquery": "1.11.0"
