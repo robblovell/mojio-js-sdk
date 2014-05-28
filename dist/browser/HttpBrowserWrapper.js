@@ -20,15 +20,7 @@
       }
     };
 
-    sendRequest = function(url, data, method) {
-      var headers;
-      if (!method) {
-        method = "GET";
-      }
-      if (!data) {
-        data = {};
-      }
-      headers = {};
+    sendRequest = function(url, data, method, headers) {
       return this.$.ajax(url, {
         data: dataByMethod(data, method),
         headers: headers,
@@ -58,8 +50,11 @@
       if (params.data == null) {
         params.data = {};
       }
+      if (params.headers == null) {
+        params.headers = {};
+      }
       url = params.scheme + "://" + params.host + ":" + params.port + params.path;
-      return sendRequest(url, params.data, params.method).done(function(result) {
+      return sendRequest(url, params.data, params.method, params.headers).done(function(result) {
         return callback(null, result);
       }).fail(function() {
         return callback("Failed", null);
