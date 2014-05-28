@@ -26,16 +26,11 @@ describe 'App', ->
         done()
 
     it 'can get App', (done) ->
-        mojio_client.apps((error, result) ->
+        mojio_client.apps({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            if (result.Data instanceof Array)
-                app = new App(result.Data[0])
-            else if (result.Data?)
-                app = new App(result.Data)
-            else
-                app = new App(result)
-            app.should.be.an.instanceOf(App)
+
+            result.should.be.an.instanceOf(App)
             done()
         )
 

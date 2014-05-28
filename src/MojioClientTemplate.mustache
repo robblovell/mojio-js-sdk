@@ -109,14 +109,19 @@ module.exports = class MojioClient
     _{{model}}s: (callback) -> # Use if you want the raw result of the call.
         @request({ method: 'GET', resource: @{{model}}s_resource}, callback)
 
-    # Get {{Model}}
-    {{model}}s: (callback) ->
+    # Get {{Model}}s
+    {{model}}s: (callback) -> # returns a javascript object
         @_{{model}}s((error, result) => callback(error, result))
 
     # Post {{Model}}
-    # TODO::
+    post_{{model}}: ({{model}}_model, callback) -> # Create a new {{Model}}.
+        @request.body = JSON.stringify({{model}}_model)
+        @request({ method: 'POST', resource: @{{model}}s_resource}, callback)
 
     # Put {{Model}}
+    # TODO::
+
+    # Get {{Model}}
     # TODO::
 
     # Delete {{Model}}
@@ -141,21 +146,21 @@ module.exports = class MojioClient
     _schema: (callback) -> # Use if you want the raw result of the call.
         @request({ method: 'GET', resource: @schema_resource}, callback)
 
-    # Get Applications
+    # Get Schema
     schema: (callback) ->
         @_schema((error, result) => callback(error, result))
 
 
     ###
-            Observer
+            Observe
     ###
-    oserver_resource: 'Observer'
+    oserver_resource: 'Observe'
 
     _observer: (callback) -> # Use if you want the raw result of the call.
         @request({ method: 'GET', resource: @observer_resource}, callback)
 
     # Get Applications
-    observer: (callback) ->
+    observers: (callback) ->
         @_observer((error, result) => callback(error, result))
 
     trip_observer: (callback) ->

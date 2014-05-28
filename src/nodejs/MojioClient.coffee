@@ -104,23 +104,47 @@ module.exports = class MojioClient
     ###
     App
     ###
+
     apps_resource: 'Apps'
-
-    _apps: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @apps_resource}, callback)
-
-    # Get App
-    apps: (callback) ->
-        @_apps((error, result) => callback(error, result))
+    App = require('../src/models/App');
 
     # Post App
-    # TODO::
+    post_app: (app_model, callback) ->
+        @request({ method: 'POST', resource: @apps_resource, body: JSON.stringify(app_model) }, callback)
 
     # Put App
-    # TODO::
+    put_app: (app_model, callback) ->
+        @request({ method: 'PUT', resource: @apps_resource, body: JSON.stringify(app_model) }, callback)
 
     # Delete App
-    # TODO::
+    delete_app: (id, callback) ->
+        @request({ method: 'PUT', resource: @apps_resource, parameters: JSON.stringify({id: id}) }, callback)
+
+    # Make an app from a result
+    make_app: (json) ->
+        if (json.Data instanceof Array)
+            object = new App(json.Data[0])
+        else if (json.Data?)
+            object = new App(json.Data)
+        else
+            object = new App(json)
+        return object
+
+    # Get Apps
+    _apps: (criteria, callback) -> # Internal, Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @apps_resource, parameters: criteria }, callback)
+
+    apps: (criteria, callback) ->
+        @_apps(criteria, (error, result) =>
+            callback(error, @make_app(result))
+        )
+
+    # Get App
+    app: (id, callback) ->
+        @request({ method: 'GET', resource: @apps_resource, parameters: {id: id} },
+            (error, result) =>
+                callback(error, @make_app(result))
+        )
 
     # Post App_observer
     # TODO::
@@ -167,13 +191,22 @@ module.exports = class MojioClient
     Trip
     ###
     trips_resource: 'Trips'
+    Trip = require('../src/models/Trip');
 
     _trips: (callback) -> # Use if you want the raw result of the call.
         @request({ method: 'GET', resource: @trips_resource}, callback)
 
     # Get Trip
     trips: (callback) ->
-        @_trips((error, result) => callback(error, result))
+        @_trips((error, result) =>
+            if (result.Data instanceof Array)
+                object = new Trip(result.Data[0])
+            else if (result.Data?)
+                object = new Trip(result.Data)
+            else
+                object = new Trip(result)
+            callback(error, object)
+        )
 
     # Post Trip
     # TODO::
@@ -366,7 +399,7 @@ module.exports = class MojioClient
     ###
             Observer
     ###
-    oserver_resource: 'Observer'
+    observer_resource: 'Observe'
 
     _observer: (callback) -> # Use if you want the raw result of the call.
         @request({ method: 'GET', resource: @observer_resource}, callback)
@@ -375,6 +408,6 @@ module.exports = class MojioClient
     observer: (callback) ->
         @_observer((error, result) => callback(error, result))
 
-    trip_observer: (callback) ->
-        @request({ method: 'POST', resource: @observer_resource}, callback)
+#    trip_observer: (callback) ->
+#        @request({ method: 'POST', resource: @observer_resource}, callback)
 
