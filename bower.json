@@ -1,6 +1,6 @@
 {
   "name": "mojio-js",
-  "version": "0.1.6",
+  "version": "0.1.12",
   "main": "dist/MojioClient.js",
   "ignore": [
     ".gitignore",
@@ -13,6 +13,7 @@
     "**/*.md",
     "bower_components",
     "lib",
+    "/example",
     "node_modules",
     "src",
     "test"
