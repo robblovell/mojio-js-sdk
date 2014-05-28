@@ -101,7 +101,6 @@ module.exports = class MojioClient
     delete: (request, callback) ->
         @request(request, callback)
 {%each models%}
-
     ###
     {{Model}}
     ###
@@ -113,6 +112,25 @@ module.exports = class MojioClient
     # Get {{Model}}
     {{model}}s: (callback) ->
         @_{{model}}s((error, result) => callback(error, result))
+
+    # Post {{Model}}
+    # TODO::
+
+    # Put {{Model}}
+    # TODO::
+
+    # Delete {{Model}}
+    # TODO::
+
+    # Post {{Model}}_observer
+    # TODO::
+
+    # Put {{Model}}_observer
+    # TODO::
+
+    # Delete {{Model}}_observer
+    # TODO:
+
 {%endeach%}
 
     ###
@@ -126,3 +144,20 @@ module.exports = class MojioClient
     # Get Applications
     schema: (callback) ->
         @_schema((error, result) => callback(error, result))
+
+
+    ###
+            Observer
+    ###
+    oserver_resource: 'Observer'
+
+    _observer: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @observer_resource}, callback)
+
+    # Get Applications
+    observer: (callback) ->
+        @_observer((error, result) => callback(error, result))
+
+    trip_observer: (callback) ->
+        @request({ method: 'POST', resource: @observer_resource}, callback)
+
