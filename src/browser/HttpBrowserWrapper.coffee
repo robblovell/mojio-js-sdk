@@ -7,15 +7,7 @@ module.exports = class HttpBrowserWrapper
             when 'POST','PUT' then JSON.stringify(data)
             else return data
 
-    sendRequest = (url, data, method) ->
-
-        method = "GET" if (!method)
-        data = {} if (!data)
-
-        headers = {}
-
-#        headers[settings.mojioTokenHeader] = getTokenId() if (getTokenId() != null)
-
+    sendRequest = (url, data, method, headers) ->
         return @$.ajax(url, {
             data: dataByMethod(data, method),
             headers: headers,
@@ -33,10 +25,11 @@ module.exports = class HttpBrowserWrapper
         params.scheme = window.location.protocol.split(':')[0] unless params.scheme?
         params.scheme = 'http' if params.scheme == 'file'
         params.data = {} unless params.data?
+        params.headers = {} unless params.headers?
 
         url = params.scheme+"://"+params.host+":"+params.port+params.path
 
-        return sendRequest(url, params.data, params.method).done((result) ->
+        return sendRequest(url, params.data, params.method, params.headers).done((result) ->
                 callback(null,result)
             ).fail( () ->
                 callback("Failed",null)

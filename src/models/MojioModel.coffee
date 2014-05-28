@@ -1,3 +1,4 @@
+# the base class for models.
 module.exports = class MojioModel
     schema: {}
 
