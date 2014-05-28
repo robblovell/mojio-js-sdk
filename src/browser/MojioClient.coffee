@@ -101,7 +101,6 @@ module.exports = class MojioClient
     delete: (request, callback) ->
         @request(request, callback)
 
-
     ###
     App
     ###
@@ -113,6 +112,24 @@ module.exports = class MojioClient
     # Get App
     apps: (callback) ->
         @_apps((error, result) => callback(error, result))
+
+    # Post App
+    # TODO::
+
+    # Put App
+    # TODO::
+
+    # Delete App
+    # TODO::
+
+    # Post App_observer
+    # TODO::
+
+    # Put App_observer
+    # TODO::
+
+    # Delete App_observer
+    # TODO:
 
 
     ###
@@ -127,6 +144,24 @@ module.exports = class MojioClient
     mojios: (callback) ->
         @_mojios((error, result) => callback(error, result))
 
+    # Post Mojio
+    # TODO::
+
+    # Put Mojio
+    # TODO::
+
+    # Delete Mojio
+    # TODO::
+
+    # Post Mojio_observer
+    # TODO::
+
+    # Put Mojio_observer
+    # TODO::
+
+    # Delete Mojio_observer
+    # TODO:
+
 
     ###
     Trip
@@ -139,6 +174,24 @@ module.exports = class MojioClient
     # Get Trip
     trips: (callback) ->
         @_trips((error, result) => callback(error, result))
+
+    # Post Trip
+    # TODO::
+
+    # Put Trip
+    # TODO::
+
+    # Delete Trip
+    # TODO::
+
+    # Post Trip_observer
+    # TODO::
+
+    # Put Trip_observer
+    # TODO::
+
+    # Delete Trip_observer
+    # TODO:
 
 
     ###
@@ -153,6 +206,24 @@ module.exports = class MojioClient
     users: (callback) ->
         @_users((error, result) => callback(error, result))
 
+    # Post User
+    # TODO::
+
+    # Put User
+    # TODO::
+
+    # Delete User
+    # TODO::
+
+    # Post User_observer
+    # TODO::
+
+    # Put User_observer
+    # TODO::
+
+    # Delete User_observer
+    # TODO:
+
 
     ###
     Vehicle
@@ -165,6 +236,24 @@ module.exports = class MojioClient
     # Get Vehicle
     vehicles: (callback) ->
         @_vehicles((error, result) => callback(error, result))
+
+    # Post Vehicle
+    # TODO::
+
+    # Put Vehicle
+    # TODO::
+
+    # Delete Vehicle
+    # TODO::
+
+    # Post Vehicle_observer
+    # TODO::
+
+    # Put Vehicle_observer
+    # TODO::
+
+    # Delete Vehicle_observer
+    # TODO:
 
 
     ###
@@ -179,6 +268,24 @@ module.exports = class MojioClient
     products: (callback) ->
         @_products((error, result) => callback(error, result))
 
+    # Post Product
+    # TODO::
+
+    # Put Product
+    # TODO::
+
+    # Delete Product
+    # TODO::
+
+    # Post Product_observer
+    # TODO::
+
+    # Put Product_observer
+    # TODO::
+
+    # Delete Product_observer
+    # TODO:
+
 
     ###
     Subscription
@@ -191,6 +298,24 @@ module.exports = class MojioClient
     # Get Subscription
     subscriptions: (callback) ->
         @_subscriptions((error, result) => callback(error, result))
+
+    # Post Subscription
+    # TODO::
+
+    # Put Subscription
+    # TODO::
+
+    # Delete Subscription
+    # TODO::
+
+    # Post Subscription_observer
+    # TODO::
+
+    # Put Subscription_observer
+    # TODO::
+
+    # Delete Subscription_observer
+    # TODO:
 
 
     ###
@@ -205,6 +330,25 @@ module.exports = class MojioClient
     events: (callback) ->
         @_events((error, result) => callback(error, result))
 
+    # Post Event
+    # TODO::
+
+    # Put Event
+    # TODO::
+
+    # Delete Event
+    # TODO::
+
+    # Post Event_observer
+    # TODO::
+
+    # Put Event_observer
+    # TODO::
+
+    # Delete Event_observer
+    # TODO:
+
+
 
     ###
             Schema
@@ -217,3 +361,20 @@ module.exports = class MojioClient
     # Get Applications
     schema: (callback) ->
         @_schema((error, result) => callback(error, result))
+
+
+    ###
+            Observer
+    ###
+    oserver_resource: 'Observer'
+
+    _observer: (callback) -> # Use if you want the raw result of the call.
+        @request({ method: 'GET', resource: @observer_resource}, callback)
+
+    # Get Applications
+    observer: (callback) ->
+        @_observer((error, result) => callback(error, result))
+
+    trip_observer: (callback) ->
+        @request({ method: 'POST', resource: @observer_resource}, callback)
+

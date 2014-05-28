@@ -422,6 +422,34 @@
       });
     };
 
+    /*
+            Observer
+    */
+
+
+    MojioClient.prototype.oserver_resource = 'Observer';
+
+    MojioClient.prototype._observer = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.observer_resource
+      }, callback);
+    };
+
+    MojioClient.prototype.observer = function(callback) {
+      var _this = this;
+      return this._observer(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    MojioClient.prototype.trip_observer = function(callback) {
+      return this.request({
+        method: 'POST',
+        resource: this.observer_resource
+      }, callback);
+    };
+
     return MojioClient;
 
   })();
