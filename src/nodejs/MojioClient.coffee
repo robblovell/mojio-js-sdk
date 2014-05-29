@@ -101,60 +101,61 @@ module.exports = class MojioClient
     delete: (request, callback) ->
         @request(request, callback)
 
+
+    mojio_models = {}  # this is so make_model can use a string to constuct the model.
+    App = require('../src/models/App');
+    mojio_models['App'] = App
+
+    # Make an app from a result
+    make_model: (type, json) ->
+        if (json.Data instanceof Array)
+            object = new mojio_models[type](json.Data[0])
+        else if (json.Data?)
+            object = new mojio_models[type](json.Data)
+        else
+            object = new mojio_models[type](json)
+        return object
+
     ###
     App
     ###
 
-    apps_resource: 'Apps'
-    App = require('../src/models/App');
-
     # Post App
-    post_app: (app_model, callback) ->
-        @request({ method: 'POST', resource: @apps_resource, body: JSON.stringify(app_model) }, callback)
+    postApp: (app_model, callback) ->
+        @request({ method: 'POST', resource: 'Apps', body: JSON.stringify(app_model) }, callback)
 
     # Put App
-    put_app: (app_model, callback) ->
-        @request({ method: 'PUT', resource: @apps_resource, body: JSON.stringify(app_model) }, callback)
+    putApp: (app_model, callback) ->
+        @request({ method: 'PUT',  resource: 'Apps', body: JSON.stringify(app_model) }, callback)
 
     # Delete App
-    delete_app: (id, callback) ->
-        @request({ method: 'PUT', resource: @apps_resource, parameters: JSON.stringify({id: id}) }, callback)
-
-    # Make an app from a result
-    make_app: (json) ->
-        if (json.Data instanceof Array)
-            object = new App(json.Data[0])
-        else if (json.Data?)
-            object = new App(json.Data)
-        else
-            object = new App(json)
-        return object
+    deleteApp: (app_model, callback) ->
+        @request({ method: 'PUT',  resource: 'Apps', parameters: JSON.stringify({id: app_model.id}) }, callback)
 
     # Get Apps
-    _apps: (criteria, callback) -> # Internal, Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @apps_resource, parameters: criteria }, callback)
-
-    apps: (criteria, callback) ->
-        @_apps(criteria, (error, result) =>
-            callback(error, @make_app(result))
+    getApps: (parameters, callback) ->
+        @request({ method: 'GET',  resource: 'Apps', parameters: parameters }, (error, result) =>
+            callback(error, @make_model('App', result))
         )
 
     # Get App
-    app: (id, callback) ->
-        @request({ method: 'GET', resource: @apps_resource, parameters: {id: id} },
-            (error, result) =>
-                callback(error, @make_app(result))
+    getApp: (id, callback) ->
+        @request({ method: 'GET',  resource: 'Apps', parameters: {id: id} }, (error, result) =>
+            callback(error, @make_model('App', result))
         )
 
-    # Post App_observer
-    # TODO::
-
-    # Put App_observer
-    # TODO::
+    # Create an Observer of an App
+    observeApp: (id, callback) ->
+        @request({ method: 'PUT',  resource: 'Observer', parameters: {Subject: 'App', SubjectId: id} }, callback)
 
     # Delete App_observer
-    # TODO:
+    unobserveApp: (id, callback) ->
+        @request({ method: 'DELETE',  resource: 'Observer', parameters: {Subject: 'App', SubjectId: id} }, callback)
 
+    # Get Apps Legacy
+    apps: (callback) ->
+        console.log("Deprication Warning: Use getApps instead")
+        @getApps({}, callback)
 
     ###
     Mojio

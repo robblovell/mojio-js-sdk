@@ -100,6 +100,23 @@ module.exports = class MojioClient
 
     delete: (request, callback) ->
         @request(request, callback)
+
+    mojio_models = {}  # this is so make_model can use a string to constuct the model.
+{%each models%}
+    {{Model}} = require('../src/models/{{Model}}');
+    mojio_models['{{Model}}'] = {{Model}}
+{%endeach%}
+
+    # Make an model from a type and result
+    make_model: (type, json) ->
+        if (json.Data instanceof Array)
+            object = new mojio_models[type](json.Data[0])
+        else if (json.Data?)
+            object = new mojio_models[type](json.Data)
+        else
+            object = new mojio_models[type](json)
+        return object
+
 {%each models%}
     ###
     {{Model}}

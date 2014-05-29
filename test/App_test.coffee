@@ -26,7 +26,7 @@ describe 'App', ->
         done()
 
     it 'can get App', (done) ->
-        mojio_client.apps({}, (error, result) ->
+        mojio_client.getApps({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
 
