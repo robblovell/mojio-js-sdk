@@ -11,6 +11,11 @@ module.exports = class MojioClient
         @options.version ?= defaults.version
         @options.application = @options.application
         @options.secret = @options.secret  # TODO:: header and https only
+        @options.observerTransport = 'SingalR'
+        @conn = null
+        @hub = null
+        @connStatus = null
+        @token = null
 
     ###
         Helpers
@@ -37,7 +42,7 @@ module.exports = class MojioClient
             parts.path += @_makeParameters(request.parameters)
 
         parts.headers = {}
-        parts.headers["MojioAPIToken"] = @token if @token?
+        parts.headers["MojioAPIToken"] = getTokenId()
         parts.headers += request.headers if (request.headers?)
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
 
@@ -67,7 +72,7 @@ module.exports = class MojioClient
     login: (username, password, callback) ->
         @_login(username, password, (error, result) =>
             if (result?)
-                @token = result._id
+                @token = result
             callback(error, result)
         )
 
@@ -75,7 +80,7 @@ module.exports = class MojioClient
         @request(
             {
                 method: 'DELETE', resource: @login_resource,
-                id: if mojio_token? then mojio_token else @token
+                id: if mojio_token? then mojio_token else getTokenId()
             }, callback
         )
 
@@ -144,6 +149,11 @@ module.exports = class MojioClient
             callback(error, @make_model('App', result))
         )
 
+    # Get Apps Legacy
+    apps: (callback) ->
+        console.log("Deprication Warning: Use getApps instead")
+        @getApps({}, callback)
+
     # Create an Observer of an App
     observeApp: (id, callback) ->
         @request({ method: 'PUT',  resource: 'Observer', parameters: {Subject: 'App', SubjectId: id} }, callback)
@@ -152,10 +162,48 @@ module.exports = class MojioClient
     unobserveApp: (id, callback) ->
         @request({ method: 'DELETE',  resource: 'Observer', parameters: {Subject: 'App', SubjectId: id} }, callback)
 
-    # Get Apps Legacy
-    apps: (callback) ->
-        console.log("Deprication Warning: Use getApps instead")
-        @getApps({}, callback)
+
+    validateEntityDescriptor: (entities, callback) ->
+        if (entities? and entities typeof Array)
+            callback(null, entities)
+        else if (entities? and entities type of Object)
+            callback(null, [entities])
+        else
+            callback("Entity must be an objects specifying a type and a guid id: { type: string id: string } or an array of objects.",null)
+
+
+    _observe: (entity, callback) ->
+        #
+
+    _unobserve: (entity, callback) ->
+        #
+    _unobserveAll: () ->
+        #
+
+    # entityDescriptor is an object with the schema: { type: string id: string } or
+    # an array of these objects.  Type is the type of entity to observe, one of the Mojio models
+    # id is the guid id of the specific entity to observe.
+    observe: (entityDescriptor, callback) ->
+        @validateEntityDescriptor(entityDescriptor, (error, entities) ->
+            return if error?
+            observers = []
+            @observe(entity, (error, result) ->
+                observers.push(result)
+            ) for entity in entities
+            callback(null, "Subscribed")
+        )
+
+    unobserve: (entityDescriptor, callback) ->
+        unless (entityDescriptor?)
+            @unobserveAll()
+            callback(null, "Un-Subscribed")
+
+        else
+            @validateEntityDescriptor(entityDescriptor, (error, entities) ->
+                callback(error, null) if error?
+                @unobserve(entity) for entity in entities
+                callback(null, "Un-Subscribed")
+            )
 
     ###
     Mojio
@@ -411,4 +459,84 @@ module.exports = class MojioClient
 
 #    trip_observer: (callback) ->
 #        @request({ method: 'POST', resource: @observer_resource}, callback)
+
+    ###
+        Signal R
+    ###
+
+    getTokenId:  () ->
+        return if @token? then @token.id else null
+
+    getUserId:  () ->
+        return if @token? then @token.UserId else null
+
+    isLoggedIn: () ->
+        return getUserId() != null
+
+    getCurrentUser: (func) ->
+        if (@user?)
+            func(@user)
+        else if (isLoggedIn())
+            get('users', getUserId())
+            .done( (user) ->
+                return unless (user?)
+                @user = user if (getUserId() == @user._id)
+                func(@user)
+            )
+        else
+            return false
+        return true
+
+    dataByMethod: (data, method) ->
+        switch (method.toUpperCase())
+            when 'POST', 'PUT' then return JSON.stringify(data)
+            else return data
+
+    getHub: () ->
+        return @hub if (@hub?)
+
+        @conn = $.hubConnection(settings.url + "/signalr", { useDefaultPath: false })
+        @hub = _conn.createHubProxy('hub')
+
+        @hub.on("error", (data) ->
+            log(data)
+        )
+
+        @connStatus = @conn.start().done( () -> @connStatus = null )
+
+        return @hub
+
+    subscribe: (type, ids, groups) ->
+        hub = getHub()
+
+        if (!groups)
+            groups = Mojio.EventTypes
+
+        if (hub.connection.state != 1)
+            if (@connStatus)
+                @connStatus.done( () -> subscribe(type, ids, groups) )
+            else
+                @connStatus = hub.connection.start().done(() -> subscribe(type, ids, groups) )
+
+            return @connStatus
+
+        action = (ids instanceof Array) ? "Subscribe" : "SubscribeOne"
+
+        return hub.invoke(action, getTokenId(), type, ids, groups)
+
+    unsubscribe: (type, ids, groups) ->
+        hub = getHub()
+
+        if (!groups)
+            groups = Mojio.EventTypes
+
+        if (hub.connection.state != 1)
+            if (@connStatus)
+                @connStatus.done( () -> unsubscribe(type, ids, groups) )
+            else
+                @connStatus = hub.connection.start().done( () -> unsubscribe(type, ids, groups) )
+
+            return @connStatus
+
+        return hub.invoke("Unsubscribe", getTokenId(), type, ids, groups)
 
