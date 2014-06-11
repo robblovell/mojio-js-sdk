@@ -54,4 +54,4 @@ describe 'App', ->
 
     it 'can delete App observer', (done) ->
         true.should.be.true
-        done()
+        don e()
