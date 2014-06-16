@@ -25,6 +25,7 @@ module.exports = class HttpBrowserWrapper
         params.scheme = window.location.protocol.split(':')[0] unless params.scheme?
         params.scheme = 'http' if params.scheme == 'file'
         params.data = {} unless params.data?
+        params.data = params.body if params.body?
         params.headers = {} unless params.headers?
 
         url = params.scheme+"://"+params.host+":"+params.port+params.path

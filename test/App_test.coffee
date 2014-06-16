@@ -25,8 +25,29 @@ describe 'App', ->
         true.should.be.true
         done()
 
-    it 'can get App', (done) ->
+    it 'can get Apps from Model', (done) ->
+        App = new App({})
+        App.authorization(mojio_client, (error, result) ->
+            App.get({}, (error, result) ->
+                (error==null).should.be.true
+                mojio_client.should.be.an.instanceOf(MojioClient)
+
+                result.should.be.an.instanceOf(App)
+                done()
+            )
+        )
+
+    it 'can get Apps', (done) ->
         mojio_client.getApps({}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+
+            result.should.be.an.instanceOf(App)
+            done()
+        )
+
+    it 'can get App', (done) ->
+        mojio_client.getApp("cb154fcc-4ec1-4ebb-a703-3a8c6e8a9525", (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
 

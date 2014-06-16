@@ -36,6 +36,10 @@
       return _results;
     };
 
+    MojioModel.prototype.stringify = function() {
+      return JSON.stringify(this);
+    };
+
     return MojioModel;
 
   })();

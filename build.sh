@@ -18,4 +18,4 @@ cd ../models
 ../../node_modules/.bin/browserify -r ./User.js --standalone App > ../../dist/browser/User.js
 ../../node_modules/.bin/browserify -r ./Vehicle.js --standalone App > ../../dist/browser/Vehicle.js
 cd ../../
-mocha -t 12000
+# mocha -t 12000

@@ -20,7 +20,7 @@ module.exports = class MojioClient
     ###
         Helpers
     ###
-    _makeParameters: (params) ->
+    @_makeParameters: (params) ->
         '' if params.length==0
         query = '?'
         for property, value of params
@@ -39,14 +39,15 @@ module.exports = class MojioClient
         parts.path += '/'+request.resource if (request.resource?)
         parts.path += '/'+request.id if (request.id? && request.id != '')
         if (request.parameters? and Object.keys(request.parameters).length > 0)
-            parts.path += @_makeParameters(request.parameters)
+            parts.path += MojioClient._makeParameters(request.parameters)
 
         parts.headers = {}
-        parts.headers["MojioAPIToken"] = getTokenId()
+        parts.headers["MojioAPIToken"] = @getTokenId()
         parts.headers += request.headers if (request.headers?)
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
+        parts.headers["Content-Type"] = 'application/json'
 
-        parts.body = request.body if request.body
+        parts.body = request.body if request.body?
 
         http = new Http()
         http.request(parts, callback)
@@ -80,7 +81,7 @@ module.exports = class MojioClient
         @request(
             {
                 method: 'DELETE', resource: @login_resource,
-                id: if mojio_token? then mojio_token else getTokenId()
+                id: if mojio_token? then mojio_token else @getTokenId()
             }, callback
         )
 
@@ -91,68 +92,43 @@ module.exports = class MojioClient
             callback(error, result)
         )
 
-    ###
-        CRUD
-    ###
-    get: (request, callback) ->
-        @request(request, callback)
-
-    post: (request, callback) ->
-        @request(request, callback)
-
-    put: (request, callback) ->
-        @request(request, callback)
-
-    delete: (request, callback) ->
-        @request(request, callback)
-
-
     mojio_models = {}  # this is so make_model can use a string to constuct the model.
-    App = require('../src/models/App');
+    App = require('../models/App');
     mojio_models['App'] = App
 
     # Make an app from a result
     make_model: (type, json) ->
         if (json.Data instanceof Array)
-            object = new mojio_models[type](json.Data[0])
+            object = new Array()
+            object.push(new mojio_models[type](data)) for data in json.Data
         else if (json.Data?)
             object = new mojio_models[type](json.Data)
         else
             object = new mojio_models[type](json)
         return object
 
-    ###
-    App
-    ###
+    # Model CRUD
+    query: (model, criteria, callback) ->
 
-    # Post App
-    postApp: (app_model, callback) ->
-        @request({ method: 'POST', resource: 'Apps', body: JSON.stringify(app_model) }, callback)
+        if (criteria instanceof Object)
+            @request({ method: 'GET',  resource: model.resource(), parameters: criteria }, (error, result) =>
+                callback(error, @make_model(model.model(), result))
+            )
+        else if (typeof criteria == "string") # instanceof only works for coffeescript classes.
+            @request({ method: 'GET',  resource: model.resource(), parameters: {id: criteria} }, (error, result) =>
+                callback(error, @make_model(model.model(), result))
+            )
+        else
+            callback("criteria given is not in understood format, string or object.",null)
 
-    # Put App
-    putApp: (app_model, callback) ->
-        @request({ method: 'PUT',  resource: 'Apps', body: JSON.stringify(app_model) }, callback)
+    save: (model, callback) ->
+        @request({ method: 'PUT', resource: model.resource(), body: model.stringify() }, callback)
 
     # Delete App
-    deleteApp: (app_model, callback) ->
-        @request({ method: 'PUT',  resource: 'Apps', parameters: JSON.stringify({id: app_model.id}) }, callback)
+    delete: (model, callback) ->
+        @request({ method: 'DELETE',  resource: model.resource(), parameters: {id: model._id} }, callback)
 
-    # Get Apps
-    getApps: (parameters, callback) ->
-        @request({ method: 'GET',  resource: 'Apps', parameters: parameters }, (error, result) =>
-            callback(error, @make_model('App', result))
-        )
 
-    # Get App
-    getApp: (id, callback) ->
-        @request({ method: 'GET',  resource: 'Apps', parameters: {id: id} }, (error, result) =>
-            callback(error, @make_model('App', result))
-        )
-
-    # Get Apps Legacy
-    apps: (callback) ->
-        console.log("Deprication Warning: Use getApps instead")
-        @getApps({}, callback)
 
     # Create an Observer of an App
     observeApp: (id, callback) ->
@@ -205,232 +181,6 @@ module.exports = class MojioClient
                 callback(null, "Un-Subscribed")
             )
 
-    ###
-    Mojio
-    ###
-    mojios_resource: 'Mojios'
-
-    _mojios: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @mojios_resource}, callback)
-
-    # Get Mojio
-    mojios: (callback) ->
-        @_mojios((error, result) => callback(error, result))
-
-    # Post Mojio
-    # TODO::
-
-    # Put Mojio
-    # TODO::
-
-    # Delete Mojio
-    # TODO::
-
-    # Post Mojio_observer
-    # TODO::
-
-    # Put Mojio_observer
-    # TODO::
-
-    # Delete Mojio_observer
-    # TODO:
-
-
-    ###
-    Trip
-    ###
-    trips_resource: 'Trips'
-    Trip = require('../src/models/Trip');
-
-    _trips: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @trips_resource}, callback)
-
-    # Get Trip
-    trips: (callback) ->
-        @_trips((error, result) =>
-            if (result.Data instanceof Array)
-                object = new Trip(result.Data[0])
-            else if (result.Data?)
-                object = new Trip(result.Data)
-            else
-                object = new Trip(result)
-            callback(error, object)
-        )
-
-    # Post Trip
-    # TODO::
-
-    # Put Trip
-    # TODO::
-
-    # Delete Trip
-    # TODO::
-
-    # Post Trip_observer
-    # TODO::
-
-    # Put Trip_observer
-    # TODO::
-
-    # Delete Trip_observer
-    # TODO:
-
-
-    ###
-    User
-    ###
-    users_resource: 'Users'
-
-    _users: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @users_resource}, callback)
-
-    # Get User
-    users: (callback) ->
-        @_users((error, result) => callback(error, result))
-
-    # Post User
-    # TODO::
-
-    # Put User
-    # TODO::
-
-    # Delete User
-    # TODO::
-
-    # Post User_observer
-    # TODO::
-
-    # Put User_observer
-    # TODO::
-
-    # Delete User_observer
-    # TODO:
-
-
-    ###
-    Vehicle
-    ###
-    vehicles_resource: 'Vehicles'
-
-    _vehicles: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @vehicles_resource}, callback)
-
-    # Get Vehicle
-    vehicles: (callback) ->
-        @_vehicles((error, result) => callback(error, result))
-
-    # Post Vehicle
-    # TODO::
-
-    # Put Vehicle
-    # TODO::
-
-    # Delete Vehicle
-    # TODO::
-
-    # Post Vehicle_observer
-    # TODO::
-
-    # Put Vehicle_observer
-    # TODO::
-
-    # Delete Vehicle_observer
-    # TODO:
-
-
-    ###
-    Product
-    ###
-    products_resource: 'Products'
-
-    _products: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @products_resource}, callback)
-
-    # Get Product
-    products: (callback) ->
-        @_products((error, result) => callback(error, result))
-
-    # Post Product
-    # TODO::
-
-    # Put Product
-    # TODO::
-
-    # Delete Product
-    # TODO::
-
-    # Post Product_observer
-    # TODO::
-
-    # Put Product_observer
-    # TODO::
-
-    # Delete Product_observer
-    # TODO:
-
-
-    ###
-    Subscription
-    ###
-    subscriptions_resource: 'Subscriptions'
-
-    _subscriptions: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @subscriptions_resource}, callback)
-
-    # Get Subscription
-    subscriptions: (callback) ->
-        @_subscriptions((error, result) => callback(error, result))
-
-    # Post Subscription
-    # TODO::
-
-    # Put Subscription
-    # TODO::
-
-    # Delete Subscription
-    # TODO::
-
-    # Post Subscription_observer
-    # TODO::
-
-    # Put Subscription_observer
-    # TODO::
-
-    # Delete Subscription_observer
-    # TODO:
-
-
-    ###
-    Event
-    ###
-    events_resource: 'Events'
-
-    _events: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @events_resource}, callback)
-
-    # Get Event
-    events: (callback) ->
-        @_events((error, result) => callback(error, result))
-
-    # Post Event
-    # TODO::
-
-    # Put Event
-    # TODO::
-
-    # Delete Event
-    # TODO::
-
-    # Post Event_observer
-    # TODO::
-
-    # Put Event_observer
-    # TODO::
-
-    # Delete Event_observer
-    # TODO:
-
-
 
     ###
             Schema
@@ -465,7 +215,7 @@ module.exports = class MojioClient
     ###
 
     getTokenId:  () ->
-        return if @token? then @token.id else null
+        return if @token? then @token._id else null
 
     getUserId:  () ->
         return if @token? then @token.UserId else null
@@ -522,7 +272,7 @@ module.exports = class MojioClient
 
         action = (ids instanceof Array) ? "Subscribe" : "SubscribeOne"
 
-        return hub.invoke(action, getTokenId(), type, ids, groups)
+        return hub.invoke(action, @getTokenId(), type, ids, groups)
 
     unsubscribe: (type, ids, groups) ->
         hub = getHub()
@@ -538,5 +288,5 @@ module.exports = class MojioClient
 
             return @connStatus
 
-        return hub.invoke("Unsubscribe", getTokenId(), type, ids, groups)
+        return hub.invoke("Unsubscribe", @getTokenId(), type, ids, groups)
 

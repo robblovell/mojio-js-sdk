@@ -23,6 +23,50 @@
       App.__super__.constructor.call(this, json);
     }
 
+    App.get = function(criteria, callback) {
+      return callback(null, null);
+    };
+
+    App.save = function(model, callback) {
+      return MojioClient.request({
+        method: 'PUT',
+        resource: 'Apps',
+        body: JSON.stringify(model)
+      }, callback);
+    };
+
+    App.prototype.get = function(criteria, callback) {
+      return callback(null, null);
+    };
+
+    App.prototype.save = function() {
+      MojioClient.request({
+        method: 'PUT',
+        resource: 'Apps',
+        body: this.stringify()
+      }, callback);
+      return callback(null, null);
+    };
+
+    App.prototype["delete"] = function() {
+      return callback(null, null);
+    };
+
+    App.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    App.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    App.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
     return App;
 
   })(MojioModel);
@@ -69,6 +113,10 @@
         _results.push(this.set(field, value));
       }
       return _results;
+    };
+
+    MojioModel.prototype.stringify = function() {
+      return JSON.stringify(this);
     };
 
     return MojioModel;

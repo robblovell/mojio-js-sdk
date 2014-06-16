@@ -1,3 +1,3 @@
 module.exports =
-    username: 'anonymous@moj.io'
-    password: 'Password007'
+    username: 'robbl@moj.io'
+    password: 'Tpatpabp1!'
