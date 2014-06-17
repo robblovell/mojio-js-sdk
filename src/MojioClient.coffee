@@ -1,4 +1,4 @@
-Http = require './HttpNodeWrapper'
+Http = require './nodejs_shim/HttpNodeWrapper'
 
 module.exports = class MojioClient
 
@@ -93,7 +93,7 @@ module.exports = class MojioClient
         )
 
     mojio_models = {}  # this is so make_model can use a string to constuct the model.
-    App = require('../models/App');
+    App = require('./models/App');
     mojio_models['App'] = App
 
     # Make an app from a result

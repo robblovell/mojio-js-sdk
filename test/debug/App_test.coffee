@@ -1,4 +1,4 @@
-MojioClient = require '../../src/nodejs/MojioClient'
+MojioClient = require '../../src/MojioClient'
 App = require '../../src/models/App'
 config = require '../config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
@@ -33,7 +33,8 @@ describe 'App', ->
             mojio_client.should.be.an.instanceOf(MojioClient)
 
             result.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(App) for instance in result
+            if (result.instanceOf(Array))
+                instance.should.be.an.instanceOf(App) for instance in result
             done()
         )
 

@@ -50,6 +50,9 @@
       if (params.data == null) {
         params.data = {};
       }
+      if (params.body != null) {
+        params.data = params.body;
+      }
       if (params.headers == null) {
         params.headers = {};
       }

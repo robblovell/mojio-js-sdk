@@ -1,7 +1,11 @@
 #!/bin/sh
 bower install
-coffee --map --compile src/nodejs
-cp src/nodejs/*.js lib/
+coffee --map --compile src/nodejs_shim
+coffee --map --compile src/models
+coffee --map --compile src
+cp src/nodejs_shim/*.js lib/nodejs_shim
+cp src/*.js lib/
+cp src/models/*.js lib/models
 coffee --map --compile src/browser
 cd src/browser
 ../../node_modules/.bin/browserify -r ./HttpBrowserWrapper.js --standalone HttpBrowserWrapper > ../../dist/browser/HttpBrowserWrapper.js
