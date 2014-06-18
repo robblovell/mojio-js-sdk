@@ -5,7 +5,6 @@ mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
-mock = require('jsmockito')
 
 testObject = null
 
