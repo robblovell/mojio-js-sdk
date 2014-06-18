@@ -118,12 +118,10 @@ module.exports = class MojioClient
     Event = require('../models/Event');
     mojio_models['Event'] = Event
 
+
     # Make an app from a result
     make_model: (type, json) ->
-        if (json instanceof Array)
-            object = new Array()
-            object.push(new mojio_models[type](data)) for data in json
-        else if (json.Data instanceof Array)
+        if (json.Data instanceof Array)
             object = new Array()
             object.push(new mojio_models[type](data)) for data in json.Data
         else if (json.Data?)
