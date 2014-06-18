@@ -3,7 +3,7 @@ MojioModel = require('./MojioModel')
 module.exports = class App extends MojioModel
     # instance variables
     _schema:             {
-                "Type": "Integer",
+                "Type": "String",
                 "Name": "String",
                 "Description": "String",
                 "CreationDate": "String",
@@ -20,15 +20,6 @@ module.exports = class App extends MojioModel
 
     constructor: (json) ->
         super(json)
-
-    observe: (children=null, callback) ->
-        callback(null,null)
-
-    storage: (property, value, callback) ->
-        callback(null,null)
-
-    statistic: (expression, callback) ->
-        callback(null,null)
 
     # class variables and functions
     @_resource: 'Apps'

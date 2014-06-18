@@ -11,7 +11,7 @@
     __extends(Event, _super);
 
     Event.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "MojioId": "String",
       "VehicleId": "String",
       "OwnerId": "String",
@@ -46,21 +46,6 @@
     function Event(json) {
       Event.__super__.constructor.call(this, json);
     }
-
-    Event.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    Event.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    Event.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     Event._resource = 'Events';
 
@@ -99,7 +84,7 @@
       this.validate(json);
     }
 
-    MojioModel.prototype.set = function(field, value) {
+    MojioModel.prototype.setField = function(field, value) {
       if ((this.schema()[field] != null) || typeof value === "function") {
         this[field] = value;
         return this[field];
@@ -109,7 +94,7 @@
       }
     };
 
-    MojioModel.prototype.get = function(field) {
+    MojioModel.prototype.getField = function(field) {
       return this[field];
     };
 
@@ -118,7 +103,7 @@
       _results = [];
       for (field in json) {
         value = json[field];
-        _results.push(this.set(field, value));
+        _results.push(this.setField(field, value));
       }
       return _results;
     };
@@ -222,6 +207,21 @@
       });
     };
 
+    MojioModel.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    MojioModel.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    MojioModel.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
     MojioModel.prototype.resource = function() {
       return this._resource;
     };
@@ -252,23 +252,23 @@
       for (field in _ref) {
         value = _ref[field];
         if (field === "Type") {
-          this.set(field, this.model());
+          this.setField(field, this.model());
         } else if (field === "UserName") {
-          this.set(field, "Tester");
+          this.setField(field, "Tester");
         } else if (field === "Email") {
-          this.set(field, "test@moj.io");
+          this.setField(field, "test@moj.io");
         } else if (field === "Password") {
-          this.set(field, "Password007!");
+          this.setField(field, "Password007!");
         } else if (field !== '_id' || withid) {
           switch (value) {
             case "Integer":
-              this.set(field, "0");
+              this.setField(field, "0");
               break;
             case "Boolean":
-              this.set(field, false);
+              this.setField(field, false);
               break;
             case "String":
-              this.set(field, "test" + Math.random());
+              this.setField(field, "test" + Math.random());
           }
         }
       }

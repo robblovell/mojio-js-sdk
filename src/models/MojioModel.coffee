@@ -7,7 +7,7 @@ module.exports = class MojioModel
         @_client = null
         @validate(json)
 
-    set: (field, value) ->
+    setField: (field, value) ->
         if (@schema()[field]? || typeof value == "function")
             @[field] = value
             return @[field]
@@ -16,12 +16,12 @@ module.exports = class MojioModel
                 field=="_IsAuthenticated" || field=="IsAuthenticated")
             throw "Field '"+field+"' not in model '"+@constructor.name+"'."
 
-    get: (field) ->
+    getField: (field) ->
         return @[field]
 
     validate: (json) ->
         for field, value of json
-            @set(field, value)
+            @setField(field, value)
 
     stringify: () ->
         JSON.stringify(@, @filter)
@@ -78,6 +78,16 @@ module.exports = class MojioModel
             callback(error, result)
         )
 
+    # Unimplemented
+    observe: (children=null, callback) ->
+        callback(null,null)
+
+    storage: (property, value, callback) ->
+        callback(null,null)
+
+    statistic: (expression, callback) ->
+        callback(null,null)
+    # Gettors
     resource: () ->
         return @_resource
 
@@ -97,17 +107,17 @@ module.exports = class MojioModel
     mock: (type, withid=false) ->
         for field, value of @schema()
             if (field == "Type")
-                @set(field,@model())
+                @setField(field,@model())
             else if (field == "UserName")
-                @set(field,"Tester")
+                @setField(field,"Tester")
             else if (field == "Email")
-                @set(field,"test@moj.io")
+                @setField(field,"test@moj.io")
             else if (field == "Password")
-                @set(field,"Password007!")
+                @setField(field,"Password007!")
             else if (field != '_id' or withid)
                 switch (value)
-                    when "Integer" then @set(field, "0")
-                    when "Boolean" then @set(field, false)
-                    when "String" then @set(field, "test"+Math.random())
+                    when "Integer" then @setField(field, "0")
+                    when "Boolean" then @setField(field, false)
+                    when "String" then @setField(field, "test"+Math.random())
 
         return @
