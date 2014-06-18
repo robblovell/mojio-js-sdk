@@ -23,5 +23,6 @@ cd ../../
 # copy the example, do this manually until references can be corrected with the move.
 # cp example/*.js dist/example
 # cp example/*.html dist/example
+coffee --map --compile test
 
 mocha -t 12000 test
