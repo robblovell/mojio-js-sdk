@@ -587,7 +587,7 @@
     __extends(App, _super);
 
     App.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "Name": "String",
       "Description": "String",
       "CreationDate": "String",
@@ -605,21 +605,6 @@
     function App(json) {
       App.__super__.constructor.call(this, json);
     }
-
-    App.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    App.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    App.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     App._resource = 'Apps';
 
@@ -656,7 +641,7 @@
     __extends(Event, _super);
 
     Event.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "MojioId": "String",
       "VehicleId": "String",
       "OwnerId": "String",
@@ -691,21 +676,6 @@
     function Event(json) {
       Event.__super__.constructor.call(this, json);
     }
-
-    Event.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    Event.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    Event.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     Event._resource = 'Events';
 
@@ -742,7 +712,7 @@
     __extends(Mojio, _super);
 
     Mojio.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "OwnerId": "String",
       "Name": "String",
       "Imei": "String",
@@ -759,21 +729,6 @@
     function Mojio(json) {
       Mojio.__super__.constructor.call(this, json);
     }
-
-    Mojio.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    Mojio.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    Mojio.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     Mojio._resource = 'Mojios';
 
@@ -812,7 +767,7 @@
       this.validate(json);
     }
 
-    MojioModel.prototype.set = function(field, value) {
+    MojioModel.prototype.setField = function(field, value) {
       if ((this.schema()[field] != null) || typeof value === "function") {
         this[field] = value;
         return this[field];
@@ -822,7 +777,7 @@
       }
     };
 
-    MojioModel.prototype.get = function(field) {
+    MojioModel.prototype.getField = function(field) {
       return this[field];
     };
 
@@ -831,7 +786,7 @@
       _results = [];
       for (field in json) {
         value = json[field];
-        _results.push(this.set(field, value));
+        _results.push(this.setField(field, value));
       }
       return _results;
     };
@@ -935,6 +890,21 @@
       });
     };
 
+    MojioModel.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    MojioModel.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    MojioModel.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
     MojioModel.prototype.resource = function() {
       return this._resource;
     };
@@ -965,23 +935,23 @@
       for (field in _ref) {
         value = _ref[field];
         if (field === "Type") {
-          this.set(field, this.model());
+          this.setField(field, this.model());
         } else if (field === "UserName") {
-          this.set(field, "Tester");
+          this.setField(field, "Tester");
         } else if (field === "Email") {
-          this.set(field, "test@moj.io");
+          this.setField(field, "test@moj.io");
         } else if (field === "Password") {
-          this.set(field, "Password007!");
+          this.setField(field, "Password007!");
         } else if (field !== '_id' || withid) {
           switch (value) {
             case "Integer":
-              this.set(field, "0");
+              this.setField(field, "0");
               break;
             case "Boolean":
-              this.set(field, false);
+              this.setField(field, false);
               break;
             case "String":
-              this.set(field, "test" + Math.random());
+              this.setField(field, "test" + Math.random());
           }
         }
       }
@@ -1011,7 +981,7 @@
     __extends(Product, _super);
 
     Product.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "AppId": "String",
       "Name": "String",
       "Description": "String",
@@ -1032,21 +1002,6 @@
     function Product(json) {
       Product.__super__.constructor.call(this, json);
     }
-
-    Product.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    Product.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    Product.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     Product._resource = 'Products';
 
@@ -1083,7 +1038,7 @@
     __extends(Subscription, _super);
 
     Subscription.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "ChannelType": "Integer",
       "ChannelTarget": "String",
       "AppId": "String",
@@ -1104,21 +1059,6 @@
     function Subscription(json) {
       Subscription.__super__.constructor.call(this, json);
     }
-
-    Subscription.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    Subscription.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    Subscription.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     Subscription._resource = 'Subscriptions';
 
@@ -1155,7 +1095,7 @@
     __extends(Trip, _super);
 
     Trip.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "MojioId": "String",
       "VehicleId": "String",
       "StartTime": "String",
@@ -1190,21 +1130,6 @@
     function Trip(json) {
       Trip.__super__.constructor.call(this, json);
     }
-
-    Trip.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    Trip.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    Trip.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     Trip._resource = 'Trips';
 
@@ -1264,21 +1189,6 @@
       User.__super__.constructor.call(this, json);
     }
 
-    User.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    User.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    User.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
-
     User._resource = 'Users';
 
     User._model = 'User';
@@ -1314,7 +1224,7 @@
     __extends(Vehicle, _super);
 
     Vehicle.prototype._schema = {
-      "Type": "Integer",
+      "Type": "String",
       "OwnerId": "String",
       "MojioId": "String",
       "Name": "String",
@@ -1344,21 +1254,6 @@
     function Vehicle(json) {
       Vehicle.__super__.constructor.call(this, json);
     }
-
-    Vehicle.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
-      }
-      return callback(null, null);
-    };
-
-    Vehicle.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
-    };
-
-    Vehicle.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
-    };
 
     Vehicle._resource = 'Vehicles';
 

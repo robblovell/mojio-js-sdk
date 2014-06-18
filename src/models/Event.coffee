@@ -3,7 +3,7 @@ MojioModel = require('./MojioModel')
 module.exports = class Event extends MojioModel
     # instance variables
     _schema:             {
-                "Type": "Integer",
+                "Type": "String",
                 "MojioId": "String",
                 "VehicleId": "String",
                 "OwnerId": "String",
@@ -37,15 +37,6 @@ module.exports = class Event extends MojioModel
 
     constructor: (json) ->
         super(json)
-
-    observe: (children=null, callback) ->
-        callback(null,null)
-
-    storage: (property, value, callback) ->
-        callback(null,null)
-
-    statistic: (expression, callback) ->
-        callback(null,null)
 
     # class variables and functions
     @_resource: 'Events'

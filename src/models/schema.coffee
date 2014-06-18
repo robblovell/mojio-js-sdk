@@ -1,6 +1,6 @@
 {
     "App": {
-        "Type": "Integer",
+        "Type": "String",
         "Name": "String",
         "Description": "String",
         "CreationDate": "String",
@@ -11,7 +11,7 @@
         "_deleted": "Boolean"
     },
     "Mojio": {
-        "Type": "Integer",
+        "Type": "String",
         "OwnerId": "String",
         "Name": "String",
         "Imei": "String",
@@ -21,7 +21,7 @@
         "_deleted": "Boolean"
     },
     "Trip": {
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "StartTime": "String",
@@ -64,7 +64,7 @@
         "_deleted": "Boolean"
     },
     "Vehicle": {
-        "Type": "Integer",
+        "Type": "String",
         "OwnerId": "String",
         "MojioId": "String",
         "Name": "String",
@@ -102,7 +102,7 @@
         "IsValid": "Boolean"
     },
     "Invoice": {
-        "Type": "Integer",
+        "Type": "String",
         "BuyerId": "String",
         "AppId": "String",
         "Date": "String",
@@ -125,7 +125,7 @@
         "_deleted": "Boolean"
     },
     "Product": {
-        "Type": "Integer",
+        "Type": "String",
         "AppId": "String",
         "Name": "String",
         "Description": "String",
@@ -139,7 +139,7 @@
         "_deleted": "Boolean"
     },
     "Observer": {
-        "Type": "Integer",
+        "Type": "String",
         "Name": "String",
         "ObserverType": "Integer",
         "AppId": "String",
@@ -158,7 +158,7 @@
         "Transport": "Integer"
     },
     "Subscription": {
-        "Type": "Integer",
+        "Type": "String",
         "ChannelType": "Integer",
         "ChannelTarget": "String",
         "AppId": "String",
@@ -172,7 +172,7 @@
         "_deleted": "Boolean"
     },
     "Event": {
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -197,7 +197,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -211,7 +211,7 @@
         "_deleted": "Boolean"
     },
     "AccelerometerEvent": {
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -236,7 +236,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -261,7 +261,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -286,7 +286,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -302,7 +302,7 @@
     "DiagnosticEvent": {
         "DTCs": "Array",
         "MilStatus": "Boolean",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -327,7 +327,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -352,7 +352,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -378,7 +378,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -403,7 +403,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -428,7 +428,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -453,7 +453,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -467,7 +467,7 @@
         "_deleted": "Boolean"
     },
     "ParkEvent": {
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -481,7 +481,7 @@
         "_deleted": "Boolean"
     },
     "PowerEvent": {
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -506,7 +506,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -531,7 +531,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",
@@ -556,7 +556,7 @@
         "Deceleration": "Float",
         "Odometer": "Float",
         "RPM": "Integer",
-        "Type": "Integer",
+        "Type": "String",
         "MojioId": "String",
         "VehicleId": "String",
         "OwnerId": "String",

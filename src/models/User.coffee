@@ -25,15 +25,6 @@ module.exports = class User extends MojioModel
     constructor: (json) ->
         super(json)
 
-    observe: (children=null, callback) ->
-        callback(null,null)
-
-    storage: (property, value, callback) ->
-        callback(null,null)
-
-    statistic: (expression, callback) ->
-        callback(null,null)
-
     # class variables and functions
     @_resource: 'Users'
     @_model: 'User'

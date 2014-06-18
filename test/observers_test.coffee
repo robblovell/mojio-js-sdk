@@ -43,21 +43,3 @@ describe 'Observer', ->
     it 'can delete Observer', (done) ->
         true.should.be.true
         done()
-
-    # Test Observer with Observer
-
-    it 'can post Observer observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can put Observer observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get Observer observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can delete Observer observer', (done) ->
-        true.should.be.true
-        done()
