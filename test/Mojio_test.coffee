@@ -22,7 +22,7 @@ describe 'Mojio', ->
         mojio = new Mojio({})
         mojio.authorization(mojio_client)
 
-        mojio.query({}, (error, result) ->
+        mojio.get({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -37,7 +37,7 @@ describe 'Mojio', ->
 
     it 'can get Mojios', (done) ->
 
-        mojio_client.query(Mojio, {}, (error, result) ->
+        mojio_client.get(Mojio, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -48,16 +48,16 @@ describe 'Mojio', ->
     it 'can create, find, save, and delete Mojio', (done) ->
         mojio = new Mojio().mock()
 
-        mojio_client.create(mojio, (error, result) ->
+        mojio_client.post(mojio, (error, result) ->
             (error==null).should.be.true
             mojio = new Mojio(result)
 
-            mojio_client.query(Mojio, mojio.id(), (error, result) ->
+            mojio_client.get(Mojio, mojio.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
                 result.should.be.an.instanceOf(Mojio)
 
-                mojio_client.save(result, (error, result) ->
+                mojio_client.put(result, (error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     mojio = new Mojio(result)
@@ -77,18 +77,18 @@ describe 'Mojio', ->
         mojio.authorization(mojio_client)
         mojio._id = null;
 
-        mojio.create((error, result) ->
+        mojio.post((error, result) ->
             (error==null).should.be.true
             result.should.be.an.instanceOf(Object)
             mojio = new Mojio(result)
             mojio.authorization(mojio_client)
 
-            mojio.query(mojio.id(), (error, result) ->
+            mojio.get(mojio.id(), (error, result) ->
                 result.should.be.an.instanceOf(Mojio)
                 mojio = new Mojio(result)
                 mojio.authorization(mojio_client)
 
-                mojio.save((error, result) ->
+                mojio.put((error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     mojio = new Mojio(result)

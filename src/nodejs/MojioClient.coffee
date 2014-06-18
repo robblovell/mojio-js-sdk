@@ -145,13 +145,22 @@ module.exports = class MojioClient
         else
             callback("criteria given is not in understood format, string or object.",null)
 
+    get: (model, criteria, callback) ->
+        @query(model, criteria, callback)
+
     save: (model, callback) ->
         @request({ method: 'PUT', resource: model.resource(), body: model.stringify(), parameters: {id: model._id} }, callback)
+
+    put: (model, callback) ->
+        @save(model, callback)
 
     create: (model, callback) ->
         @request({ method: 'POST', resource: model.resource(), body: model.stringify() }, callback)
 
-    # Delete Event
+    post: (model, callback) ->
+        @create(model, callback)
+
+# Delete Event
     delete: (model, callback) ->
         @request({ method: 'DELETE',  resource: model.resource(), parameters: {id: model._id} }, callback)
 

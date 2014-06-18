@@ -291,6 +291,10 @@
       }
     };
 
+    MojioClient.prototype.get = function(model, criteria, callback) {
+      return this.query(model, criteria, callback);
+    };
+
     MojioClient.prototype.save = function(model, callback) {
       return this.request({
         method: 'PUT',
@@ -302,12 +306,20 @@
       }, callback);
     };
 
+    MojioClient.prototype.put = function(model, callback) {
+      return this.save(model, callback);
+    };
+
     MojioClient.prototype.create = function(model, callback) {
       return this.request({
         method: 'POST',
         resource: model.resource(),
         body: model.stringify()
       }, callback);
+    };
+
+    MojioClient.prototype.post = function(model, callback) {
+      return this.create(model, callback);
     };
 
     MojioClient.prototype["delete"] = function(model, callback) {
@@ -865,6 +877,10 @@
       }
     };
 
+    MojioModel.prototype.get = function(criteria, callback) {
+      return this.query(criteria, callback);
+    };
+
     MojioModel.prototype.create = function(callback) {
       var _this = this;
       if (this._client === null) {
@@ -878,6 +894,10 @@
       }, function(error, result) {
         return callback(error, result);
       });
+    };
+
+    MojioModel.prototype.post = function(callback) {
+      return this.create(callback);
     };
 
     MojioModel.prototype.save = function(callback) {
@@ -896,6 +916,10 @@
       }, function(error, result) {
         return callback(error, result);
       });
+    };
+
+    MojioModel.prototype.put = function(callback) {
+      return this.save(callback);
     };
 
     MojioModel.prototype["delete"] = function(callback) {

@@ -22,7 +22,7 @@ describe 'Product', ->
         product = new Product({})
         product.authorization(mojio_client)
 
-        product.query({}, (error, result) ->
+        product.get({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -37,7 +37,7 @@ describe 'Product', ->
 
     it 'can get Products', (done) ->
 
-        mojio_client.query(Product, {}, (error, result) ->
+        mojio_client.get(Product, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -48,16 +48,16 @@ describe 'Product', ->
     it 'can create, find, save, and delete Product', (done) ->
         product = new Product().mock()
 
-        mojio_client.create(product, (error, result) ->
+        mojio_client.post(product, (error, result) ->
             (error==null).should.be.true
             product = new Product(result)
 
-            mojio_client.query(Product, product.id(), (error, result) ->
+            mojio_client.get(Product, product.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
                 result.should.be.an.instanceOf(Product)
 
-                mojio_client.save(result, (error, result) ->
+                mojio_client.put(result, (error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     product = new Product(result)
@@ -77,18 +77,18 @@ describe 'Product', ->
         product.authorization(mojio_client)
         product._id = null;
 
-        product.create((error, result) ->
+        product.post((error, result) ->
             (error==null).should.be.true
             result.should.be.an.instanceOf(Object)
             product = new Product(result)
             product.authorization(mojio_client)
 
-            product.query(product.id(), (error, result) ->
+            product.get(product.id(), (error, result) ->
                 result.should.be.an.instanceOf(Product)
                 product = new Product(result)
                 product.authorization(mojio_client)
 
-                product.save((error, result) ->
+                product.put((error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     product = new Product(result)

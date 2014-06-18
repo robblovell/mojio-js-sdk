@@ -22,7 +22,7 @@ describe 'App', ->
         app = new App({})
         app.authorization(mojio_client)
 
-        app.query({}, (error, result) ->
+        app.get({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -37,7 +37,7 @@ describe 'App', ->
 
     it 'can get Apps', (done) ->
 
-        mojio_client.query(App, {}, (error, result) ->
+        mojio_client.get(App, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -48,16 +48,16 @@ describe 'App', ->
     it 'can create, find, save, and delete App', (done) ->
         app = new App().mock()
 
-        mojio_client.create(app, (error, result) ->
+        mojio_client.post(app, (error, result) ->
             (error==null).should.be.true
             app = new App(result)
 
-            mojio_client.query(App, app.id(), (error, result) ->
+            mojio_client.get(App, app.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
                 result.should.be.an.instanceOf(App)
 
-                mojio_client.save(result, (error, result) ->
+                mojio_client.put(result, (error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     app = new App(result)
@@ -77,18 +77,18 @@ describe 'App', ->
         app.authorization(mojio_client)
         app._id = null;
 
-        app.create((error, result) ->
+        app.post((error, result) ->
             (error==null).should.be.true
             result.should.be.an.instanceOf(Object)
             app = new App(result)
             app.authorization(mojio_client)
 
-            app.query(app.id(), (error, result) ->
+            app.get(app.id(), (error, result) ->
                 result.should.be.an.instanceOf(App)
                 app = new App(result)
                 app.authorization(mojio_client)
 
-                app.save((error, result) ->
+                app.put((error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     app = new App(result)
