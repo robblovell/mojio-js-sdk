@@ -24,4 +24,4 @@ cd ../../
 # cp example/*.js dist/example
 # cp example/*.html dist/example
 
-mocha -t 12000
+mocha -t 12000 test
