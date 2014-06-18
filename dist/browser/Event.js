@@ -164,6 +164,10 @@
       }
     };
 
+    MojioModel.prototype.get = function(criteria, callback) {
+      return this.query(criteria, callback);
+    };
+
     MojioModel.prototype.create = function(callback) {
       var _this = this;
       if (this._client === null) {
@@ -177,6 +181,10 @@
       }, function(error, result) {
         return callback(error, result);
       });
+    };
+
+    MojioModel.prototype.post = function(callback) {
+      return this.create(callback);
     };
 
     MojioModel.prototype.save = function(callback) {
@@ -195,6 +203,10 @@
       }, function(error, result) {
         return callback(error, result);
       });
+    };
+
+    MojioModel.prototype.put = function(callback) {
+      return this.save(callback);
     };
 
     MojioModel.prototype["delete"] = function(callback) {

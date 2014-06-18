@@ -22,7 +22,7 @@ describe '{{Model}}', ->
         {{model}} = new {{Model}}({})
         {{model}}.authorization(mojio_client)
 
-        {{model}}.query({}, (error, result) ->
+        {{model}}.get({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -37,7 +37,7 @@ describe '{{Model}}', ->
 
     it 'can get {{Resource}}', (done) ->
 
-        mojio_client.query({{Model}}, {}, (error, result) ->
+        mojio_client.get({{Model}}, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -48,16 +48,16 @@ describe '{{Model}}', ->
     it 'can create, find, save, and delete {{Model}}', (done) ->
         {{model}} = new {{Model}}().mock()
 
-        mojio_client.create({{model}}, (error, result) ->
+        mojio_client.post({{model}}, (error, result) ->
             (error==null).should.be.true
             {{model}} = new {{Model}}(result)
 
-            mojio_client.query({{Model}}, {{model}}.id(), (error, result) ->
+            mojio_client.get({{Model}}, {{model}}.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
                 result.should.be.an.instanceOf({{Model}})
 
-                mojio_client.save(result, (error, result) ->
+                mojio_client.put(result, (error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     {{model}} = new {{Model}}(result)
@@ -77,18 +77,18 @@ describe '{{Model}}', ->
         {{model}}.authorization(mojio_client)
         {{model}}._id = null;
 
-        {{model}}.create((error, result) ->
+        {{model}}.post((error, result) ->
             (error==null).should.be.true
             result.should.be.an.instanceOf(Object)
             {{model}} = new {{Model}}(result)
             {{model}}.authorization(mojio_client)
 
-            {{model}}.query({{model}}.id(), (error, result) ->
+            {{model}}.get({{model}}.id(), (error, result) ->
                 result.should.be.an.instanceOf({{Model}})
                 {{model}} = new {{Model}}(result)
                 {{model}}.authorization(mojio_client)
 
-                {{model}}.save((error, result) ->
+                {{model}}.put((error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     {{model}} = new {{Model}}(result)

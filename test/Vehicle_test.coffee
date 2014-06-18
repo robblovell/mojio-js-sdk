@@ -22,7 +22,7 @@ describe 'Vehicle', ->
         vehicle = new Vehicle({})
         vehicle.authorization(mojio_client)
 
-        vehicle.query({}, (error, result) ->
+        vehicle.get({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -37,7 +37,7 @@ describe 'Vehicle', ->
 
     it 'can get Vehicles', (done) ->
 
-        mojio_client.query(Vehicle, {}, (error, result) ->
+        mojio_client.get(Vehicle, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
@@ -48,16 +48,16 @@ describe 'Vehicle', ->
     it 'can create, find, save, and delete Vehicle', (done) ->
         vehicle = new Vehicle().mock()
 
-        mojio_client.create(vehicle, (error, result) ->
+        mojio_client.post(vehicle, (error, result) ->
             (error==null).should.be.true
             vehicle = new Vehicle(result)
 
-            mojio_client.query(Vehicle, vehicle.id(), (error, result) ->
+            mojio_client.get(Vehicle, vehicle.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
                 result.should.be.an.instanceOf(Vehicle)
 
-                mojio_client.save(result, (error, result) ->
+                mojio_client.put(result, (error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     vehicle = new Vehicle(result)
@@ -77,18 +77,18 @@ describe 'Vehicle', ->
         vehicle.authorization(mojio_client)
         vehicle._id = null;
 
-        vehicle.create((error, result) ->
+        vehicle.post((error, result) ->
             (error==null).should.be.true
             result.should.be.an.instanceOf(Object)
             vehicle = new Vehicle(result)
             vehicle.authorization(mojio_client)
 
-            vehicle.query(vehicle.id(), (error, result) ->
+            vehicle.get(vehicle.id(), (error, result) ->
                 result.should.be.an.instanceOf(Vehicle)
                 vehicle = new Vehicle(result)
                 vehicle.authorization(mojio_client)
 
-                vehicle.save((error, result) ->
+                vehicle.put((error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
                     vehicle = new Vehicle(result)

@@ -48,6 +48,9 @@ module.exports = class MojioModel
         else
             callback("criteria given is not in understood format, string or object.",null)
 
+    get: (criteria, callback) ->
+        @query(criteria,callback)
+
     create: (callback) ->
         if (@_client == null)
             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null)
@@ -56,6 +59,9 @@ module.exports = class MojioModel
             callback(error, result)
         )
 
+    post: (callback) ->
+        @create(callback)
+
     save: (callback) ->
         if (@_client == null)
             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null)
@@ -63,6 +69,9 @@ module.exports = class MojioModel
         @_client.request({ method: 'PUT',  resource: @resource(), body: @stringify(), parameters: {id: @_id} }, (error, result) =>
             callback(error, result)
         )
+
+    put: (callback) ->
+        @save(callback)
 
     delete: (callback) ->
         @_client.request({ method: 'DELETE',  resource: @resource(), parameters: {id: @_id} }, (error, result) =>
