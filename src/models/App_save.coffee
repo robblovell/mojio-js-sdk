@@ -2,18 +2,17 @@ MojioModel = require('./MojioModel')
 
 module.exports = class App extends MojioModel
     # instance variables
-    _schema:             {
-                "Type": "Integer",
-                "Name": "String",
-                "Description": "String",
-                "CreationDate": "String",
-                "Downloads": "Integer",
-                "RedirectUris": "String",
-                "ApplicationType": "String",
-                "_id": "String",
-                "_deleted": "Boolean"
-            }
-
+    _schema: {
+        "Type": "Integer",
+        "Name": "String",
+        "Description": "String",
+        "CreationDate": "String",
+        "Downloads": "Integer",
+        "RedirectUris": "String",
+        "ApplicationType": "String",
+        "_id": "String",
+        "_deleted": "Boolean"
+    }
 
     _resource: 'Apps'
     _model: 'App'

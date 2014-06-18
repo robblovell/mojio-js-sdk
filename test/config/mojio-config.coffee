@@ -1,7 +1,7 @@
 module.exports =
     {
-        application: 'f201b929-d28c-415d-9b71-8112532301cb',
-        secret: '2ef80a7a-780d-41c1-8a02-13a286f11a23',
+        application: '9ea750d2-7085-4125-bcd8-5e6d05d1d695',
+        secret: 'e464f45a-e877-4655-b119-f7c58c10549f',
         hostname: '192.168.0.148',
         version: 'v1',
         port:'2006'

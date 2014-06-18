@@ -1,10 +1,13 @@
-MojioClient = require '../lib/MojioClient'
-User = require '../src/models/User'
+MojioClient = require '../lib/nodejs/MojioClient'
+User = require '../lib/models/User'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
+mock = require('jsmockito')
+
+testObject = null
 
 describe 'User', ->
 
@@ -16,48 +19,29 @@ describe 'User', ->
     )
 
     # test User
+    it 'can get Users from Model', (done) ->
+        user = new User({})
+        user.authorization(mojio_client)
 
-    it 'can post User', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can put User', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get User', (done) ->
-        mojio_client.users((error, result) ->
+        user.query({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            if (result.Data instanceof Array)
-                user = new User(result.Data[0])
-            else if (result.Data?)
-                user = new User(result.Data)
+            result.should.be.an.instanceOf(Array)
+            if (result instanceof (Array))
+                instance.should.be.an.instanceOf(User) for instance in result
+                testObject = instance  # save for later reference.
             else
-                user = new User(result)
-            user.should.be.an.instanceOf(User)
+                result.should.be.an.instanceOf(User)
+                testObject = result
             done()
         )
 
+    it 'can get Users', (done) ->
 
-    it 'can delete User', (done) ->
-        true.should.be.true
-        done()
-
-    # Test Observer with User
-
-    it 'can post User observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can put User observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get User observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can delete User observer', (done) ->
-        true.should.be.true
-        done()
+        mojio_client.query(User, {}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(User) for instance in result
+            done()
+        )

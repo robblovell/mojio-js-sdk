@@ -1,8 +1,8 @@
 MojioModel = require('./MojioModel')
+
 module.exports = class Product extends MojioModel
-    constructor: (json) ->
-        @schema =
-            {
+    # instance variables
+    _schema:             {
                 "Type": "Integer",
                 "AppId": "String",
                 "Name": "String",
@@ -17,4 +17,29 @@ module.exports = class Product extends MojioModel
                 "_deleted": "Boolean"
             }
 
+
+    _resource: 'Products'
+    _model: 'Product'
+
+    constructor: (json) ->
         super(json)
+
+    observe: (children=null, callback) ->
+        callback(null,null)
+
+    storage: (property, value, callback) ->
+        callback(null,null)
+
+    statistic: (expression, callback) ->
+        callback(null,null)
+
+    # class variables and functions
+    @_resource: 'Products'
+    @_model: 'Product'
+
+    @resource: () ->
+        return Product._resource
+
+    @model: () ->
+        return Product._model
+

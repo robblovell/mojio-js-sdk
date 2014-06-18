@@ -1,10 +1,13 @@
-MojioClient = require '../lib/MojioClient'
-Event = require '../src/models/Event'
+MojioClient = require '../lib/nodejs/MojioClient'
+Event = require '../lib/models/Event'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
+mock = require('jsmockito')
+
+testObject = null
 
 describe 'Event', ->
 
@@ -16,48 +19,29 @@ describe 'Event', ->
     )
 
     # test Event
+    it 'can get Events from Model', (done) ->
+        event = new Event({})
+        event.authorization(mojio_client)
 
-    it 'can post Event', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can put Event', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get Event', (done) ->
-        mojio_client.events((error, result) ->
+        event.query({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            if (result.Data instanceof Array)
-                event = new Event(result.Data[0])
-            else if (result.Data?)
-                event = new Event(result.Data)
+            result.should.be.an.instanceOf(Array)
+            if (result instanceof (Array))
+                instance.should.be.an.instanceOf(Event) for instance in result
+                testObject = instance  # save for later reference.
             else
-                event = new Event(result)
-            event.should.be.an.instanceOf(Event)
+                result.should.be.an.instanceOf(Event)
+                testObject = result
             done()
         )
 
+    it 'can get Events', (done) ->
 
-    it 'can delete Event', (done) ->
-        true.should.be.true
-        done()
-
-    # Test Observer with Event
-
-    it 'can post Event observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can put Event observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get Event observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can delete Event observer', (done) ->
-        true.should.be.true
-        done()
+        mojio_client.query(Event, {}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(Event) for instance in result
+            done()
+        )

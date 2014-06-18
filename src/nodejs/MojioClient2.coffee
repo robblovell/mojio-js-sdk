@@ -1,4 +1,4 @@
-{{http_require}}
+Http = require './HttpNodeWrapper'
 
 module.exports = class MojioClient
 
@@ -49,7 +49,7 @@ module.exports = class MojioClient
 
         parts.body = request.body if request.body?
 
-        {{http_request}}
+        http = new Http()
         http.request(parts, callback)
     ###
         Login
@@ -93,10 +93,31 @@ module.exports = class MojioClient
         )
 
     mojio_models = {}  # this is so make_model can use a string to constuct the model.
-{%each models%}
-    {{Model}} = require('../models/{{Model}}');
-    mojio_models['{{Model}}'] = {{Model}}
-{%endeach%}
+
+    App = require('../models/App');
+    mojio_models['App'] = App
+
+    Mojio = require('../models/Mojio');
+    mojio_models['Mojio'] = Mojio
+
+    Trip = require('../models/Trip');
+    mojio_models['Trip'] = Trip
+
+    User = require('../models/User');
+    mojio_models['User'] = User
+
+    Vehicle = require('../models/Vehicle');
+    mojio_models['Vehicle'] = Vehicle
+
+    Product = require('../models/Product');
+    mojio_models['Product'] = Product
+
+    Subscription = require('../models/Subscription');
+    mojio_models['Subscription'] = Subscription
+
+    Event = require('../models/Event');
+    mojio_models['Event'] = Event
+
 
     # Make an app from a result
     make_model: (type, json) ->
@@ -130,19 +151,19 @@ module.exports = class MojioClient
     create: (model, callback) ->
         @request({ method: 'POST', resource: model.resource(), body: model.stringify() }, callback)
 
-    # Delete {{Model}}
+    # Delete Event
     delete: (model, callback) ->
         @request({ method: 'DELETE',  resource: model.resource(), parameters: {id: model._id} }, callback)
 
 
 
-    # Create an Observer of an {{Model}}
-    observe{{Model}}: (id, callback) ->
-        @request({ method: 'PUT',  resource: 'Observer', parameters: {Subject: '{{Resource}}', SubjectId: id} }, callback)
+    # Create an Observer of an Event
+    observeEvent: (id, callback) ->
+        @request({ method: 'PUT',  resource: 'Observer', parameters: {Subject: 'Events', SubjectId: id} }, callback)
 
-    # Delete {{Model}}_observer
-    unobserve{{Model}}: (id, callback) ->
-        @request({ method: 'DELETE',  resource: 'Observer', parameters: {Subject: '{{Resource}}', SubjectId: id} }, callback)
+    # Delete Event_observer
+    unobserveEvent: (id, callback) ->
+        @request({ method: 'DELETE',  resource: 'Observer', parameters: {Subject: 'Events', SubjectId: id} }, callback)
 
 
     validateEntityDescriptor: (entities, callback) ->

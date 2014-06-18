@@ -1,10 +1,13 @@
-MojioClient = require '../lib/MojioClient'
-Trip = require '../src/models/Trip'
+MojioClient = require '../lib/nodejs/MojioClient'
+Trip = require '../lib/models/Trip'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
+mock = require('jsmockito')
+
+testObject = null
 
 describe 'Trip', ->
 
@@ -16,43 +19,29 @@ describe 'Trip', ->
     )
 
     # test Trip
+    it 'can get Trips from Model', (done) ->
+        trip = new Trip({})
+        trip.authorization(mojio_client)
 
-    it 'can post Trip', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can put Trip', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get Trip', (done) ->
-        mojio_client.trips((error, result) ->
+        trip.query({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-
-            trip.should.be.an.instanceOf(Trip)
+            result.should.be.an.instanceOf(Array)
+            if (result instanceof (Array))
+                instance.should.be.an.instanceOf(Trip) for instance in result
+                testObject = instance  # save for later reference.
+            else
+                result.should.be.an.instanceOf(Trip)
+                testObject = result
             done()
         )
 
+    it 'can get Trips', (done) ->
 
-    it 'can delete Trip', (done) ->
-        true.should.be.true
-        done()
-
-    # Test Observer with Trip
-
-    it 'can post Trip observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can put Trip observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get Trip observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can delete Trip observer', (done) ->
-        true.should.be.true
-        done()
+        mojio_client.query(Trip, {}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(Trip) for instance in result
+            done()
+        )

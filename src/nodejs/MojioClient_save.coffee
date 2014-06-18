@@ -1,4 +1,4 @@
-Http = require './nodejs_shim/HttpNodeWrapper'
+Http = require './HttpNodeWrapper'
 
 module.exports = class MojioClient
 
@@ -93,7 +93,7 @@ module.exports = class MojioClient
         )
 
     mojio_models = {}  # this is so make_model can use a string to constuct the model.
-    App = require('./models/App');
+    App = require('./../models/App');
     mojio_models['App'] = App
 
     # Make an app from a result
@@ -156,9 +156,9 @@ module.exports = class MojioClient
     _unobserveAll: () ->
         #
 
-    # entityDescriptor is an object with the schema: { type: string id: string } or
-    # an array of these objects.  Type is the type of entity to observe, one of the Mojio models
-    # id is the guid id of the specific entity to observe.
+        # entityDescriptor is an object with the schema: { type: string id: string } or
+        # an array of these objects.  Type is the type of entity to observe, one of the Mojio models
+        # id is the guid id of the specific entity to observe.
     observe: (entityDescriptor, callback) ->
         @validateEntityDescriptor(entityDescriptor, (error, entities) ->
             return if error?
@@ -190,10 +190,8 @@ module.exports = class MojioClient
     _schema: (callback) -> # Use if you want the raw result of the call.
         @request({ method: 'GET', resource: @schema_resource}, callback)
 
-    # Get Applications
     schema: (callback) ->
         @_schema((error, result) => callback(error, result))
-
 
     ###
             Observer
@@ -203,12 +201,8 @@ module.exports = class MojioClient
     _observer: (callback) -> # Use if you want the raw result of the call.
         @request({ method: 'GET', resource: @observer_resource}, callback)
 
-    # Get Applications
     observer: (callback) ->
         @_observer((error, result) => callback(error, result))
-
-#    trip_observer: (callback) ->
-#        @request({ method: 'POST', resource: @observer_resource}, callback)
 
     ###
         Signal R
@@ -229,10 +223,10 @@ module.exports = class MojioClient
         else if (isLoggedIn())
             get('users', getUserId())
             .done( (user) ->
-                return unless (user?)
-                @user = user if (getUserId() == @user._id)
-                func(@user)
-            )
+                    return unless (user?)
+                    @user = user if (getUserId() == @user._id)
+                    func(@user)
+                )
         else
             return false
         return true

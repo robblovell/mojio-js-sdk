@@ -1,15 +1,15 @@
-MojioClient = require '../lib/nodejs/MojioClient'
-Mojio = require '../lib/models/Mojio'
-config = require './config/mojio-config.coffee'
+MojioClient = require '../../src/nodejs/MojioClient'
+User = require '../../src/models/User'
+config = require '../config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
-testdata = require('./data/mojio-test-data')
+testdata = require('../data/mojio-test-data')
 should = require('should')
 mock = require('jsmockito')
 
 testObject = null
 
-describe 'Mojio', ->
+describe 'User', ->
 
     before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
@@ -18,52 +18,52 @@ describe 'Mojio', ->
         )
     )
 
-    # test Mojio
-    it 'can get Mojios from Model', (done) ->
-        mojio = new Mojio({})
-        mojio.authorization(mojio_client)
+    # test User
+    it 'can get Users from Model', (done) ->
+        user = new User({})
+        user.authorization(mojio_client)
 
-        mojio.query({}, (error, result) ->
+        user.query({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
             if (result instanceof (Array))
-                instance.should.be.an.instanceOf(Mojio) for instance in result
+                instance.should.be.an.instanceOf(User) for instance in result
                 testObject = instance  # save for later reference.
             else
-                result.should.be.an.instanceOf(Mojio)
+                result.should.be.an.instanceOf(User)
                 testObject = result
             done()
         )
 
-    it 'can get Mojios', (done) ->
+    it 'can get Users', (done) ->
 
-        mojio_client.query(Mojio, {}, (error, result) ->
+        mojio_client.query(User, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(Mojio) for instance in result
+            instance.should.be.an.instanceOf(User) for instance in result
             done()
         )
 
-    it 'can create, find, save, and delete Mojio', (done) ->
-        mojio = new Mojio().mock()
+    it 'can create, find, save, and delete User', (done) ->
+        user = new User().mock()
 
-        mojio_client.create(mojio, (error, result) ->
+        mojio_client.create(user, (error, result) ->
             (error==null).should.be.true
-            mojio = new Mojio(result)
+            user = new User(result)
 
-            mojio_client.query(Mojio, mojio.id(), (error, result) ->
+            mojio_client.query(User, user.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
-                result.should.be.an.instanceOf(Mojio)
+                result.should.be.an.instanceOf(User)
 
                 mojio_client.save(result, (error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
-                    mojio = new Mojio(result)
+                    user = new User(result)
 
-                    mojio_client.delete(mojio, (error, result) ->
+                    mojio_client.delete(user, (error, result) ->
                         (error==null).should.be.true
                         (result.result == "ok").should.be.true
                         done()
@@ -72,30 +72,30 @@ describe 'Mojio', ->
             )
         )
 
-    it 'can create, save, and delete Mojio from model', (done) ->
+    it 'can create, save, and delete User from model', (done) ->
         # todo define entityType as an enum to be used here.
-        mojio = new Mojio().mock()
-        mojio.authorization(mojio_client)
-        mojio._id = null;
+        user = new User().mock()
+        user.authorization(mojio_client)
+        user._id = null;
 
-        mojio.create((error, result) ->
+        user.create((error, result) ->
             (error==null).should.be.true
             result.should.be.an.instanceOf(Object)
-            mojio = new Mojio(result)
-            mojio.authorization(mojio_client)
+            user = new User(result)
+            user.authorization(mojio_client)
 
-            mojio.query(mojio.id(), (error, result) ->
-                result.should.be.an.instanceOf(Mojio)
-                mojio = new Mojio(result)
-                mojio.authorization(mojio_client)
+            user.query(user.id(), (error, result) ->
+                result.should.be.an.instanceOf(User)
+                user = new User(result)
+                user.authorization(mojio_client)
 
-                mojio.save((error, result) ->
+                user.save((error, result) ->
                     (error==null).should.be.true
                     result.should.be.an.instanceOf(Object)
-                    mojio = new Mojio(result)
-                    mojio.authorization(mojio_client)
+                    user = new User(result)
+                    user.authorization(mojio_client)
 
-                    mojio.delete((error, result) ->
+                    user.delete((error, result) ->
                         (error==null).should.be.true
                         (result.result == "ok").should.be.true
                         done()

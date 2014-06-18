@@ -1,12 +1,12 @@
-MojioClient = require '../lib/nodejs/MojioClient'
-Observer = require '../src/models/Observer'
+MojioClient = require '../lib/MojioClient'
+{{Model}} = require '../src/models/{{Model}}'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
 
-describe 'Observer', ->
+describe '{{Model}}', ->
 
     before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
@@ -15,49 +15,48 @@ describe 'Observer', ->
         )
     )
 
-    # test Observer
+    # test {{Model}}
 
-    it 'can post Observer', (done) ->
+    it 'can post {{Model}}', (done) ->
         true.should.be.true
         done()
 
-    it 'can put Observer', (done) ->
+    it 'can put {{Model}}', (done) ->
         true.should.be.true
         done()
 
-    it 'can get Observer', (done) ->
-        mojio_client.observer((error, result) ->
+    it 'can get {{Model}}', (done) ->
+        mojio_client.{{model}}s((error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             if (result.Data instanceof Array)
-                observer = new Observer(result.Data[0])
+                {{model}} = new {{Model}}(result.Data[0])
             else if (result.Data?)
-                observer = new Observer(result.Data)
+                {{model}} = new {{Model}}(result.Data)
             else
-                observer = new Observer(result)
-            observer.should.be.an.instanceOf(Observer)
+                {{model}} = new {{Model}}(result)
+            {{model}}.should.be.an.instanceOf({{Model}})
             done()
         )
 
-
-    it 'can delete Observer', (done) ->
+    it 'can delete {{Model}}', (done) ->
         true.should.be.true
         done()
 
-    # Test Observer with Observer
+    # Test Observer with {{Model}}
 
-    it 'can post Observer observer', (done) ->
+    it 'can post {{Model}} observer', (done) ->
         true.should.be.true
         done()
 
-    it 'can put Observer observer', (done) ->
+    it 'can put {{Model}} observer', (done) ->
         true.should.be.true
         done()
 
-    it 'can get Observer observer', (done) ->
+    it 'can get {{Model}} observer', (done) ->
         true.should.be.true
         done()
 
-    it 'can delete Observer observer', (done) ->
+    it 'can delete {{Model}} observer', (done) ->
         true.should.be.true
         done()
