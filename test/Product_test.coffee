@@ -1,24 +1,106 @@
-MojioClient = require '../lib/MojioClient'
-Product = require '../src/models/Product'
+MojioClient = require '../lib/nodejs/MojioClient'
+Product = require '../lib/models/Product'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
+mock = require('jsmockito')
+
+testObject = null
+
 describe 'Product', ->
-    it 'can get Product', (done) ->
+
+    before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
-            mojio_client.products((error, result) ->
+            done()
+        )
+    )
+
+    # test Product
+    it 'can get Products from Model', (done) ->
+        product = new Product({})
+        product.authorization(mojio_client)
+
+        product.query({}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            if (result instanceof (Array))
+                instance.should.be.an.instanceOf(Product) for instance in result
+                testObject = instance  # save for later reference.
+            else
+                result.should.be.an.instanceOf(Product)
+                testObject = result
+            done()
+        )
+
+    it 'can get Products', (done) ->
+
+        mojio_client.query(Product, {}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(Product) for instance in result
+            done()
+        )
+
+    it 'can create, find, save, and delete Product', (done) ->
+        product = new Product().mock()
+
+        mojio_client.create(product, (error, result) ->
+            (error==null).should.be.true
+            product = new Product(result)
+
+            mojio_client.query(Product, product.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
-                if (result.Data instanceof Array)
-                    product = new Product(result.Data[0])
-                else if (result.Data?)
-                    product = new Product(result.Data)
-                else
+                result.should.be.an.instanceOf(Product)
+
+                mojio_client.save(result, (error, result) ->
+                    (error==null).should.be.true
+                    result.should.be.an.instanceOf(Object)
                     product = new Product(result)
-                product.should.be.an.instanceOf(Product)
-                done()
+
+                    mojio_client.delete(product, (error, result) ->
+                        (error==null).should.be.true
+                        (result.result == "ok").should.be.true
+                        done()
+                    )
+                )
+            )
+        )
+
+    it 'can create, save, and delete Product from model', (done) ->
+        # todo define entityType as an enum to be used here.
+        product = new Product().mock()
+        product.authorization(mojio_client)
+        product._id = null;
+
+        product.create((error, result) ->
+            (error==null).should.be.true
+            result.should.be.an.instanceOf(Object)
+            product = new Product(result)
+            product.authorization(mojio_client)
+
+            product.query(product.id(), (error, result) ->
+                result.should.be.an.instanceOf(Product)
+                product = new Product(result)
+                product.authorization(mojio_client)
+
+                product.save((error, result) ->
+                    (error==null).should.be.true
+                    result.should.be.an.instanceOf(Object)
+                    product = new Product(result)
+                    product.authorization(mojio_client)
+
+                    product.delete((error, result) ->
+                        (error==null).should.be.true
+                        (result.result == "ok").should.be.true
+                        done()
+                    )
+                )
+
             )
         )

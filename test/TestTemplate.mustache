@@ -1,24 +1,106 @@
-MojioClient = require '../lib/MojioClient'
-{{Model}} = require '../src/models/{{Model}}'
+MojioClient = require '../lib/nodejs/MojioClient'
+{{Model}} = require '../lib/models/{{Model}}'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
+mock = require('jsmockito')
+
+testObject = null
+
 describe '{{Model}}', ->
-    it 'can get {{Model}}', (done) ->
+
+    before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
-            mojio_client.{{model}}s((error, result) ->
+            done()
+        )
+    )
+
+    # test {{Model}}
+    it 'can get {{Resource}} from Model', (done) ->
+        {{model}} = new {{Model}}({})
+        {{model}}.authorization(mojio_client)
+
+        {{model}}.query({}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            if (result instanceof (Array))
+                instance.should.be.an.instanceOf({{Model}}) for instance in result
+                testObject = instance  # save for later reference.
+            else
+                result.should.be.an.instanceOf({{Model}})
+                testObject = result
+            done()
+        )
+
+    it 'can get {{Resource}}', (done) ->
+
+        mojio_client.query({{Model}}, {}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf({{Model}}) for instance in result
+            done()
+        )
+
+    it 'can create, find, save, and delete {{Model}}', (done) ->
+        {{model}} = new {{Model}}().mock()
+
+        mojio_client.create({{model}}, (error, result) ->
+            (error==null).should.be.true
+            {{model}} = new {{Model}}(result)
+
+            mojio_client.query({{Model}}, {{model}}.id(), (error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
-                if (result.Data instanceof Array)
-                    {{model}} = new {{Model}}(result.Data[0])
-                else if (result.Data?)
-                    {{model}} = new {{Model}}(result.Data)
-                else
+                result.should.be.an.instanceOf({{Model}})
+
+                mojio_client.save(result, (error, result) ->
+                    (error==null).should.be.true
+                    result.should.be.an.instanceOf(Object)
                     {{model}} = new {{Model}}(result)
-                {{model}}.should.be.an.instanceOf({{Model}})
-                done()
+
+                    mojio_client.delete({{model}}, (error, result) ->
+                        (error==null).should.be.true
+                        (result.result == "ok").should.be.true
+                        done()
+                    )
+                )
+            )
+        )
+
+    it 'can create, save, and delete {{Model}} from model', (done) ->
+        # todo define entityType as an enum to be used here.
+        {{model}} = new {{Model}}().mock()
+        {{model}}.authorization(mojio_client)
+        {{model}}._id = null;
+
+        {{model}}.create((error, result) ->
+            (error==null).should.be.true
+            result.should.be.an.instanceOf(Object)
+            {{model}} = new {{Model}}(result)
+            {{model}}.authorization(mojio_client)
+
+            {{model}}.query({{model}}.id(), (error, result) ->
+                result.should.be.an.instanceOf({{Model}})
+                {{model}} = new {{Model}}(result)
+                {{model}}.authorization(mojio_client)
+
+                {{model}}.save((error, result) ->
+                    (error==null).should.be.true
+                    result.should.be.an.instanceOf(Object)
+                    {{model}} = new {{Model}}(result)
+                    {{model}}.authorization(mojio_client)
+
+                    {{model}}.delete((error, result) ->
+                        (error==null).should.be.true
+                        (result.result == "ok").should.be.true
+                        done()
+                    )
+                )
+
             )
         )

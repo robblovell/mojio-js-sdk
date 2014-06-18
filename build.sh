@@ -1,7 +1,9 @@
 #!/bin/sh
 bower install
 coffee --map --compile src/nodejs
-cp src/nodejs/*.js lib/
+coffee --map --compile src/models
+cp src/nodejs/*.js lib/nodejs
+cp src/models/*.js lib/models
 coffee --map --compile src/browser
 cd src/browser
 ../../node_modules/.bin/browserify -r ./HttpBrowserWrapper.js --standalone HttpBrowserWrapper > ../../dist/browser/HttpBrowserWrapper.js
@@ -18,4 +20,8 @@ cd ../models
 ../../node_modules/.bin/browserify -r ./User.js --standalone App > ../../dist/browser/User.js
 ../../node_modules/.bin/browserify -r ./Vehicle.js --standalone App > ../../dist/browser/Vehicle.js
 cd ../../
+# copy the example, do this manually until references can be corrected with the move.
+# cp example/*.js dist/example
+# cp example/*.html dist/example
+
 mocha -t 12000

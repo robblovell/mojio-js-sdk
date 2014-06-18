@@ -1,4 +1,4 @@
-MojioClient = require '../lib/MojioClient'
+MojioClient = require '../lib/nodejs/MojioClient'
 config = require './config/mojio-config.coffee'
 
 mojio_client = new MojioClient(config)

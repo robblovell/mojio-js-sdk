@@ -1,6 +1,31 @@
 MojioModel = require('./MojioModel')
+
 module.exports = class {{Model}} extends MojioModel
+    # instance variables
+    _schema: {{schema}}
+
+    _resource: '{{Resource}}'
+    _model: '{{Model}}'
+
     constructor: (json) ->
-        @schema =
-{{schema}}
         super(json)
+
+    observe: (children=null, callback) ->
+        callback(null,null)
+
+    storage: (property, value, callback) ->
+        callback(null,null)
+
+    statistic: (expression, callback) ->
+        callback(null,null)
+
+    # class variables and functions
+    @_resource: '{{Resource}}'
+    @_model: '{{Model}}'
+
+    @resource: () ->
+        return {{Model}}._resource
+
+    @model: () ->
+        return {{Model}}._model
+

@@ -5,6 +5,8 @@
         "Description": "String",
         "CreationDate": "String",
         "Downloads": "Integer",
+        "RedirectUris": "String",
+        "ApplicationType": "String",
         "_id": "String",
         "_deleted": "Boolean"
     },
@@ -47,7 +49,8 @@
         "_deleted": "Boolean"
     },
     "User": {
-        "Type": "Integer",
+        "Type": "String",
+        "Name": "String",
         "UserName": "String",
         "FirstName": "String",
         "LastName": "String",

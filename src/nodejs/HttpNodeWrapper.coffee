@@ -18,12 +18,17 @@ module.exports = class HttpNodeWrapper
                     if (data instanceof Object)
                         callback(data,null)
                     else
-                        callback(null, JSON.parse(data))
+                        if (data == "")
+                            callback(null, {result: "ok"})
+                        else
+                            callback(null, JSON.parse(data))
                 )
             else
                 callback(null, response)
         )
         action.on 'error', (error) ->
             callback(error,null)
+
+        action.write(params.body) if (params.body?)
 
         action.end()

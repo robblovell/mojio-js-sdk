@@ -50,6 +50,9 @@
       if (params.data == null) {
         params.data = {};
       }
+      if (params.body != null) {
+        params.data = params.body;
+      }
       if (params.headers == null) {
         params.headers = {};
       }
@@ -79,7 +82,7 @@
   Http = _dereq_('./HttpBrowserWrapper');
 
   module.exports = MojioClient = (function() {
-    var defaults;
+    var App, Event, Mojio, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
 
     defaults = {
       hostname: 'sandbox.api.moj.io',
@@ -108,6 +111,11 @@
       }
       this.options.application = this.options.application;
       this.options.secret = this.options.secret;
+      this.options.observerTransport = 'SingalR';
+      this.conn = null;
+      this.hub = null;
+      this.connStatus = null;
+      this.token = null;
     }
 
     /*
@@ -115,7 +123,7 @@
     */
 
 
-    MojioClient.prototype._makeParameters = function(params) {
+    MojioClient._makeParameters = function(params) {
       var property, query, value;
       if (params.length === 0) {
         '';
@@ -145,16 +153,15 @@
         parts.path += '/' + request.id;
       }
       if ((request.parameters != null) && Object.keys(request.parameters).length > 0) {
-        parts.path += this._makeParameters(request.parameters);
+        parts.path += MojioClient._makeParameters(request.parameters);
       }
       parts.headers = {};
-      if (this.token != null) {
-        parts.headers["MojioAPIToken"] = this.token;
-      }
+      parts.headers["MojioAPIToken"] = this.getTokenId();
       if ((request.headers != null)) {
         parts.headers += request.headers;
       }
-      if (request.body) {
+      parts.headers["Content-Type"] = 'application/json';
+      if (request.body != null) {
         parts.body = request.body;
       }
       http = new Http($);
@@ -185,7 +192,7 @@
       var _this = this;
       return this._login(username, password, function(error, result) {
         if ((result != null)) {
-          _this.token = result._id;
+          _this.token = result;
         }
         return callback(error, result);
       });
@@ -195,7 +202,7 @@
       return this.request({
         method: 'DELETE',
         resource: this.login_resource,
-        id: typeof mojio_token !== "undefined" && mojio_token !== null ? mojio_token : this.token
+        id: typeof mojio_token !== "undefined" && mojio_token !== null ? mojio_token : this.getTokenId()
       }, callback);
     };
 
@@ -207,193 +214,184 @@
       });
     };
 
-    /*
-        CRUD
-    */
+    mojio_models = {};
 
+    App = _dereq_('../models/App');
 
-    MojioClient.prototype.get = function(request, callback) {
-      return this.request(request, callback);
+    mojio_models['App'] = App;
+
+    Mojio = _dereq_('../models/Mojio');
+
+    mojio_models['Mojio'] = Mojio;
+
+    Trip = _dereq_('../models/Trip');
+
+    mojio_models['Trip'] = Trip;
+
+    User = _dereq_('../models/User');
+
+    mojio_models['User'] = User;
+
+    Vehicle = _dereq_('../models/Vehicle');
+
+    mojio_models['Vehicle'] = Vehicle;
+
+    Product = _dereq_('../models/Product');
+
+    mojio_models['Product'] = Product;
+
+    Subscription = _dereq_('../models/Subscription');
+
+    mojio_models['Subscription'] = Subscription;
+
+    Event = _dereq_('../models/Event');
+
+    mojio_models['Event'] = Event;
+
+    MojioClient.prototype.make_model = function(type, json) {
+      var data, object, _i, _len, _ref;
+      if (json.Data instanceof Array) {
+        object = new Array();
+        _ref = json.Data;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          data = _ref[_i];
+          object.push(new mojio_models[type](data));
+        }
+      } else if ((json.Data != null)) {
+        object = new mojio_models[type](json.Data);
+      } else {
+        object = new mojio_models[type](json);
+      }
+      object._client = this;
+      return object;
     };
 
-    MojioClient.prototype.post = function(request, callback) {
-      return this.request(request, callback);
+    MojioClient.prototype.query = function(model, criteria, callback) {
+      var _this = this;
+      if (criteria instanceof Object) {
+        return this.request({
+          method: 'GET',
+          resource: model.resource(),
+          parameters: criteria
+        }, function(error, result) {
+          return callback(error, _this.make_model(model.model(), result));
+        });
+      } else if (typeof criteria === "string") {
+        return this.request({
+          method: 'GET',
+          resource: model.resource(),
+          parameters: {
+            id: criteria
+          }
+        }, function(error, result) {
+          return callback(error, _this.make_model(model.model(), result));
+        });
+      } else {
+        return callback("criteria given is not in understood format, string or object.", null);
+      }
     };
 
-    MojioClient.prototype.put = function(request, callback) {
-      return this.request(request, callback);
-    };
-
-    MojioClient.prototype["delete"] = function(request, callback) {
-      return this.request(request, callback);
-    };
-
-    /*
-    App
-    */
-
-
-    MojioClient.prototype.apps_resource = 'Apps';
-
-    MojioClient.prototype._apps = function(callback) {
+    MojioClient.prototype.save = function(model, callback) {
       return this.request({
-        method: 'GET',
-        resource: this.apps_resource
+        method: 'PUT',
+        resource: model.resource(),
+        body: model.stringify(),
+        parameters: {
+          id: model._id
+        }
       }, callback);
     };
 
-    MojioClient.prototype.apps = function(callback) {
-      var _this = this;
-      return this._apps(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
-    Mojio
-    */
-
-
-    MojioClient.prototype.mojios_resource = 'Mojios';
-
-    MojioClient.prototype._mojios = function(callback) {
+    MojioClient.prototype.create = function(model, callback) {
       return this.request({
-        method: 'GET',
-        resource: this.mojios_resource
+        method: 'POST',
+        resource: model.resource(),
+        body: model.stringify()
       }, callback);
     };
 
-    MojioClient.prototype.mojios = function(callback) {
-      var _this = this;
-      return this._mojios(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
-    Trip
-    */
-
-
-    MojioClient.prototype.trips_resource = 'Trips';
-
-    MojioClient.prototype._trips = function(callback) {
+    MojioClient.prototype["delete"] = function(model, callback) {
       return this.request({
-        method: 'GET',
-        resource: this.trips_resource
+        method: 'DELETE',
+        resource: model.resource(),
+        parameters: {
+          id: model._id
+        }
       }, callback);
     };
 
-    MojioClient.prototype.trips = function(callback) {
-      var _this = this;
-      return this._trips(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
-    User
-    */
-
-
-    MojioClient.prototype.users_resource = 'Users';
-
-    MojioClient.prototype._users = function(callback) {
+    MojioClient.prototype.observeEvent = function(id, callback) {
       return this.request({
-        method: 'GET',
-        resource: this.users_resource
+        method: 'PUT',
+        resource: 'Observer',
+        parameters: {
+          Subject: 'Events',
+          SubjectId: id
+        }
       }, callback);
     };
 
-    MojioClient.prototype.users = function(callback) {
-      var _this = this;
-      return this._users(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
-    Vehicle
-    */
-
-
-    MojioClient.prototype.vehicles_resource = 'Vehicles';
-
-    MojioClient.prototype._vehicles = function(callback) {
+    MojioClient.prototype.unobserveEvent = function(id, callback) {
       return this.request({
-        method: 'GET',
-        resource: this.vehicles_resource
+        method: 'DELETE',
+        resource: 'Observer',
+        parameters: {
+          Subject: 'Events',
+          SubjectId: id
+        }
       }, callback);
     };
 
-    MojioClient.prototype.vehicles = function(callback) {
-      var _this = this;
-      return this._vehicles(function(error, result) {
-        return callback(error, result);
+    MojioClient.prototype.validateEntityDescriptor = function(entities, callback) {
+      if ((entities != null) && entities(typeof Array)) {
+        return callback(null, entities);
+      } else if ((entities != null) && entities(type in Object)) {
+        return callback(null, [entities]);
+      } else {
+        return callback("Entity must be an objects specifying a type and a guid id: { type: string id: string } or an array of objects.", null);
+      }
+    };
+
+    MojioClient.prototype._observe = function(entity, callback) {};
+
+    MojioClient.prototype._unobserve = function(entity, callback) {};
+
+    MojioClient.prototype._unobserveAll = function() {};
+
+    MojioClient.prototype.observe = function(entityDescriptor, callback) {
+      return this.validateEntityDescriptor(entityDescriptor, function(error, entities) {
+        var entity, observers, _i, _len;
+        if (error != null) {
+          return;
+        }
+        observers = [];
+        for (_i = 0, _len = entities.length; _i < _len; _i++) {
+          entity = entities[_i];
+          this.observe(entity, function(error, result) {
+            return observers.push(result);
+          });
+        }
+        return callback(null, "Subscribed");
       });
     };
 
-    /*
-    Product
-    */
-
-
-    MojioClient.prototype.products_resource = 'Products';
-
-    MojioClient.prototype._products = function(callback) {
-      return this.request({
-        method: 'GET',
-        resource: this.products_resource
-      }, callback);
-    };
-
-    MojioClient.prototype.products = function(callback) {
-      var _this = this;
-      return this._products(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
-    Subscription
-    */
-
-
-    MojioClient.prototype.subscriptions_resource = 'Subscriptions';
-
-    MojioClient.prototype._subscriptions = function(callback) {
-      return this.request({
-        method: 'GET',
-        resource: this.subscriptions_resource
-      }, callback);
-    };
-
-    MojioClient.prototype.subscriptions = function(callback) {
-      var _this = this;
-      return this._subscriptions(function(error, result) {
-        return callback(error, result);
-      });
-    };
-
-    /*
-    Event
-    */
-
-
-    MojioClient.prototype.events_resource = 'Events';
-
-    MojioClient.prototype._events = function(callback) {
-      return this.request({
-        method: 'GET',
-        resource: this.events_resource
-      }, callback);
-    };
-
-    MojioClient.prototype.events = function(callback) {
-      var _this = this;
-      return this._events(function(error, result) {
-        return callback(error, result);
-      });
+    MojioClient.prototype.unobserve = function(entityDescriptor, callback) {
+      if (!(entityDescriptor != null)) {
+        this.unobserveAll();
+        return callback(null, "Un-Subscribed");
+      } else {
+        return this.validateEntityDescriptor(entityDescriptor, function(error, entities) {
+          var entity, _i, _len;
+          if (error != null) {
+            callback(error, null);
+          }
+          for (_i = 0, _len = entities.length; _i < _len; _i++) {
+            entity = entities[_i];
+            this.unobserve(entity);
+          }
+          return callback(null, "Un-Subscribed");
+        });
+      }
     };
 
     /*
@@ -417,6 +415,143 @@
       });
     };
 
+    /*
+            Observer
+    */
+
+
+    MojioClient.prototype.observer_resource = 'Observe';
+
+    MojioClient.prototype._observer = function(callback) {
+      return this.request({
+        method: 'GET',
+        resource: this.observer_resource
+      }, callback);
+    };
+
+    MojioClient.prototype.observer = function(callback) {
+      var _this = this;
+      return this._observer(function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    /*
+        Signal R
+    */
+
+
+    MojioClient.prototype.getTokenId = function() {
+      if (this.token != null) {
+        return this.token._id;
+      } else {
+        return null;
+      }
+    };
+
+    MojioClient.prototype.getUserId = function() {
+      if (this.token != null) {
+        return this.token.UserId;
+      } else {
+        return null;
+      }
+    };
+
+    MojioClient.prototype.isLoggedIn = function() {
+      return getUserId() !== null;
+    };
+
+    MojioClient.prototype.getCurrentUser = function(func) {
+      if ((this.user != null)) {
+        func(this.user);
+      } else if (isLoggedIn()) {
+        get('users', getUserId()).done(function(user) {
+          if (!(user != null)) {
+            return;
+          }
+          if (getUserId() === this.user._id) {
+            this.user = user;
+          }
+          return func(this.user);
+        });
+      } else {
+        return false;
+      }
+      return true;
+    };
+
+    MojioClient.prototype.dataByMethod = function(data, method) {
+      switch (method.toUpperCase()) {
+        case 'POST':
+        case 'PUT':
+          return JSON.stringify(data);
+        default:
+          return data;
+      }
+    };
+
+    MojioClient.prototype.getHub = function() {
+      if ((this.hub != null)) {
+        return this.hub;
+      }
+      this.conn = $.hubConnection(settings.url + "/signalr", {
+        useDefaultPath: false
+      });
+      this.hub = _conn.createHubProxy('hub');
+      this.hub.on("error", function(data) {
+        return log(data);
+      });
+      this.connStatus = this.conn.start().done(function() {
+        return this.connStatus = null;
+      });
+      return this.hub;
+    };
+
+    MojioClient.prototype.subscribe = function(type, ids, groups) {
+      var action, hub, _ref;
+      hub = getHub();
+      if (!groups) {
+        groups = Mojio.EventTypes;
+      }
+      if (hub.connection.state !== 1) {
+        if (this.connStatus) {
+          this.connStatus.done(function() {
+            return subscribe(type, ids, groups);
+          });
+        } else {
+          this.connStatus = hub.connection.start().done(function() {
+            return subscribe(type, ids, groups);
+          });
+        }
+        return this.connStatus;
+      }
+      action = (_ref = ids instanceof Array) != null ? _ref : {
+        "Subscribe": "SubscribeOne"
+      };
+      return hub.invoke(action, this.getTokenId(), type, ids, groups);
+    };
+
+    MojioClient.prototype.unsubscribe = function(type, ids, groups) {
+      var hub;
+      hub = getHub();
+      if (!groups) {
+        groups = Mojio.EventTypes;
+      }
+      if (hub.connection.state !== 1) {
+        if (this.connStatus) {
+          this.connStatus.done(function() {
+            return unsubscribe(type, ids, groups);
+          });
+        } else {
+          this.connStatus = hub.connection.start().done(function() {
+            return unsubscribe(type, ids, groups);
+          });
+        }
+        return this.connStatus;
+      }
+      return hub.invoke("Unsubscribe", this.getTokenId(), type, ids, groups);
+    };
+
     return MojioClient;
 
   })();
@@ -427,6 +562,802 @@
 //@ sourceMappingURL=MojioClient.map
 */
 
-},{"./HttpBrowserWrapper":1}]},{},[2])
+},{"../models/App":3,"../models/Event":4,"../models/Mojio":5,"../models/Product":7,"../models/Subscription":8,"../models/Trip":9,"../models/User":10,"../models/Vehicle":11,"./HttpBrowserWrapper":1}],3:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var App, MojioModel,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = App = (function(_super) {
+    __extends(App, _super);
+
+    App.prototype._schema = {
+      "Type": "Integer",
+      "Name": "String",
+      "Description": "String",
+      "CreationDate": "String",
+      "Downloads": "Integer",
+      "RedirectUris": "String",
+      "ApplicationType": "String",
+      "_id": "String",
+      "_deleted": "Boolean"
+    };
+
+    App.prototype._resource = 'Apps';
+
+    App.prototype._model = 'App';
+
+    function App(json) {
+      App.__super__.constructor.call(this, json);
+    }
+
+    App.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    App.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    App.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    App._resource = 'Apps';
+
+    App._model = 'App';
+
+    App.resource = function() {
+      return App._resource;
+    };
+
+    App.model = function() {
+      return App._model;
+    };
+
+    return App;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=App.map
+*/
+
+},{"./MojioModel":6}],4:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var Event, MojioModel,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = Event = (function(_super) {
+    __extends(Event, _super);
+
+    Event.prototype._schema = {
+      "Type": "Integer",
+      "MojioId": "String",
+      "VehicleId": "String",
+      "OwnerId": "String",
+      "EventType": "Integer",
+      "Time": "String",
+      "Location": "Object",
+      "TimeIsApprox": "Boolean",
+      "BatteryVoltage": "Float",
+      "ConnectionLost": "Boolean",
+      "_id": "String",
+      "_deleted": "Boolean",
+      "TripId": "String",
+      "Altitude": "Float",
+      "Heading": "Integer",
+      "Distance": "Float",
+      "FuelLevel": "Float",
+      "FuelEfficiency": "Float",
+      "Speed": "Float",
+      "Acceleration": "Float",
+      "Deceleration": "Float",
+      "Odometer": "Float",
+      "RPM": "Integer",
+      "DTCs": "Array",
+      "MilStatus": "Boolean",
+      "Force": "Float"
+    };
+
+    Event.prototype._resource = 'Events';
+
+    Event.prototype._model = 'Event';
+
+    function Event(json) {
+      Event.__super__.constructor.call(this, json);
+    }
+
+    Event.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    Event.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    Event.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    Event._resource = 'Events';
+
+    Event._model = 'Event';
+
+    Event.resource = function() {
+      return Event._resource;
+    };
+
+    Event.model = function() {
+      return Event._model;
+    };
+
+    return Event;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=Event.map
+*/
+
+},{"./MojioModel":6}],5:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var Mojio, MojioModel,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = Mojio = (function(_super) {
+    __extends(Mojio, _super);
+
+    Mojio.prototype._schema = {
+      "Type": "Integer",
+      "OwnerId": "String",
+      "Name": "String",
+      "Imei": "String",
+      "LastContactTime": "String",
+      "VehicleId": "String",
+      "_id": "String",
+      "_deleted": "Boolean"
+    };
+
+    Mojio.prototype._resource = 'Mojios';
+
+    Mojio.prototype._model = 'Mojio';
+
+    function Mojio(json) {
+      Mojio.__super__.constructor.call(this, json);
+    }
+
+    Mojio.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    Mojio.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    Mojio.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    Mojio._resource = 'Mojios';
+
+    Mojio._model = 'Mojio';
+
+    Mojio.resource = function() {
+      return Mojio._resource;
+    };
+
+    Mojio.model = function() {
+      return Mojio._model;
+    };
+
+    return Mojio;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=Mojio.map
+*/
+
+},{"./MojioModel":6}],6:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var MojioModel;
+
+  module.exports = MojioModel = (function() {
+    MojioModel._resource = 'Schema';
+
+    MojioModel._model = 'Model';
+
+    function MojioModel(json) {
+      this._client = null;
+      this.validate(json);
+    }
+
+    MojioModel.prototype.set = function(field, value) {
+      if ((this.schema()[field] != null) || typeof value === "function") {
+        this[field] = value;
+        return this[field];
+      }
+      if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
+        throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
+      }
+    };
+
+    MojioModel.prototype.get = function(field) {
+      return this[field];
+    };
+
+    MojioModel.prototype.validate = function(json) {
+      var field, value, _results;
+      _results = [];
+      for (field in json) {
+        value = json[field];
+        _results.push(this.set(field, value));
+      }
+      return _results;
+    };
+
+    MojioModel.prototype.stringify = function() {
+      return JSON.stringify(this, this.filter);
+    };
+
+    MojioModel.prototype.filter = function(key, value) {
+      if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+        return void 0;
+      } else {
+        return value;
+      }
+    };
+
+    MojioModel.prototype.query = function(criteria, callback) {
+      var _this = this;
+      if (this._client === null) {
+        callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+        return;
+      }
+      if (criteria instanceof Object) {
+        return this._client.request({
+          method: 'GET',
+          resource: this.resource(),
+          parameters: criteria
+        }, function(error, result) {
+          return callback(error, _this._client.make_model(_this.model(), result));
+        });
+      } else if (typeof criteria === "string") {
+        return this._client.request({
+          method: 'GET',
+          resource: this.resource(),
+          parameters: {
+            id: criteria
+          }
+        }, function(error, result) {
+          return callback(error, _this._client.make_model(_this.model(), result));
+        });
+      } else {
+        return callback("criteria given is not in understood format, string or object.", null);
+      }
+    };
+
+    MojioModel.prototype.create = function(callback) {
+      var _this = this;
+      if (this._client === null) {
+        callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+        return;
+      }
+      return this._client.request({
+        method: 'POST',
+        resource: this.resource(),
+        body: this.stringify()
+      }, function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    MojioModel.prototype.save = function(callback) {
+      var _this = this;
+      if (this._client === null) {
+        callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+        return;
+      }
+      return this._client.request({
+        method: 'PUT',
+        resource: this.resource(),
+        body: this.stringify(),
+        parameters: {
+          id: this._id
+        }
+      }, function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    MojioModel.prototype["delete"] = function(callback) {
+      var _this = this;
+      return this._client.request({
+        method: 'DELETE',
+        resource: this.resource(),
+        parameters: {
+          id: this._id
+        }
+      }, function(error, result) {
+        return callback(error, result);
+      });
+    };
+
+    MojioModel.prototype.resource = function() {
+      return this._resource;
+    };
+
+    MojioModel.prototype.model = function() {
+      return this._model;
+    };
+
+    MojioModel.prototype.schema = function() {
+      return this._schema;
+    };
+
+    MojioModel.prototype.authorization = function(client) {
+      this._client = client;
+      return this;
+    };
+
+    MojioModel.prototype.id = function() {
+      return this._id;
+    };
+
+    MojioModel.prototype.mock = function(type, withid) {
+      var field, value, _ref;
+      if (withid == null) {
+        withid = false;
+      }
+      _ref = this.schema();
+      for (field in _ref) {
+        value = _ref[field];
+        if (field === "Type") {
+          this.set(field, this.model());
+        } else if (field === "UserName") {
+          this.set(field, "Tester");
+        } else if (field === "Email") {
+          this.set(field, "test@moj.io");
+        } else if (field === "Password") {
+          this.set(field, "Password007!");
+        } else if (field !== '_id' || withid) {
+          switch (value) {
+            case "Integer":
+              this.set(field, "0");
+              break;
+            case "Boolean":
+              this.set(field, false);
+              break;
+            case "String":
+              this.set(field, "test" + Math.random());
+          }
+        }
+      }
+      return this;
+    };
+
+    return MojioModel;
+
+  })();
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=MojioModel.map
+*/
+
+},{}],7:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var MojioModel, Product,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = Product = (function(_super) {
+    __extends(Product, _super);
+
+    Product.prototype._schema = {
+      "Type": "Integer",
+      "AppId": "String",
+      "Name": "String",
+      "Description": "String",
+      "Shipping": "Boolean",
+      "Taxable": "Boolean",
+      "Price": "Float",
+      "Discontinued": "Boolean",
+      "OwnerId": "String",
+      "CreationDate": "String",
+      "_id": "String",
+      "_deleted": "Boolean"
+    };
+
+    Product.prototype._resource = 'Products';
+
+    Product.prototype._model = 'Product';
+
+    function Product(json) {
+      Product.__super__.constructor.call(this, json);
+    }
+
+    Product.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    Product.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    Product.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    Product._resource = 'Products';
+
+    Product._model = 'Product';
+
+    Product.resource = function() {
+      return Product._resource;
+    };
+
+    Product.model = function() {
+      return Product._model;
+    };
+
+    return Product;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=Product.map
+*/
+
+},{"./MojioModel":6}],8:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var MojioModel, Subscription,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = Subscription = (function(_super) {
+    __extends(Subscription, _super);
+
+    Subscription.prototype._schema = {
+      "Type": "Integer",
+      "ChannelType": "Integer",
+      "ChannelTarget": "String",
+      "AppId": "String",
+      "OwnerId": "String",
+      "Event": "Integer",
+      "EntityType": "Integer",
+      "EntityId": "String",
+      "Interval": "Integer",
+      "LastMessage": "String",
+      "_id": "String",
+      "_deleted": "Boolean"
+    };
+
+    Subscription.prototype._resource = 'Subscriptions';
+
+    Subscription.prototype._model = 'Subscription';
+
+    function Subscription(json) {
+      Subscription.__super__.constructor.call(this, json);
+    }
+
+    Subscription.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    Subscription.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    Subscription.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    Subscription._resource = 'Subscriptions';
+
+    Subscription._model = 'Subscription';
+
+    Subscription.resource = function() {
+      return Subscription._resource;
+    };
+
+    Subscription.model = function() {
+      return Subscription._model;
+    };
+
+    return Subscription;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=Subscription.map
+*/
+
+},{"./MojioModel":6}],9:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var MojioModel, Trip,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = Trip = (function(_super) {
+    __extends(Trip, _super);
+
+    Trip.prototype._schema = {
+      "Type": "Integer",
+      "MojioId": "String",
+      "VehicleId": "String",
+      "StartTime": "String",
+      "LastUpdatedTime": "String",
+      "EndTime": "String",
+      "MaxSpeed": "Float",
+      "MaxAcceleration": "Float",
+      "MaxDeceleration": "Float",
+      "MaxRPM": "Integer",
+      "FuelLevel": "Float",
+      "FuelEfficiency": "Float",
+      "Distance": "Float",
+      "MovingTime": "Float",
+      "IdleTime": "Float",
+      "StopTime": "Float",
+      "StartLocation": "Object",
+      "LastKnownLocation": "Object",
+      "EndLocation": "Object",
+      "StartAddress": "Object",
+      "EndAddress": "Object",
+      "ForcefullyEnded": "Boolean",
+      "StartMilage": "Float",
+      "EndMilage": "Float",
+      "_id": "String",
+      "_deleted": "Boolean"
+    };
+
+    Trip.prototype._resource = 'Trips';
+
+    Trip.prototype._model = 'Trip';
+
+    function Trip(json) {
+      Trip.__super__.constructor.call(this, json);
+    }
+
+    Trip.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    Trip.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    Trip.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    Trip._resource = 'Trips';
+
+    Trip._model = 'Trip';
+
+    Trip.resource = function() {
+      return Trip._resource;
+    };
+
+    Trip.model = function() {
+      return Trip._model;
+    };
+
+    return Trip;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=Trip.map
+*/
+
+},{"./MojioModel":6}],10:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var MojioModel, User,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = User = (function(_super) {
+    __extends(User, _super);
+
+    User.prototype._schema = {
+      "Type": "String",
+      "Name": "String",
+      "UserName": "String",
+      "FirstName": "String",
+      "LastName": "String",
+      "Email": "String",
+      "UserCount": "Integer",
+      "Credits": "Integer",
+      "CreationDate": "String",
+      "LastActivityDate": "String",
+      "LastLoginDate": "String",
+      "_id": "String",
+      "_deleted": "Boolean"
+    };
+
+    User.prototype._resource = 'Users';
+
+    User.prototype._model = 'User';
+
+    function User(json) {
+      User.__super__.constructor.call(this, json);
+    }
+
+    User.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    User.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    User.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    User._resource = 'Users';
+
+    User._model = 'User';
+
+    User.resource = function() {
+      return User._resource;
+    };
+
+    User.model = function() {
+      return User._model;
+    };
+
+    return User;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=User.map
+*/
+
+},{"./MojioModel":6}],11:[function(_dereq_,module,exports){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var MojioModel, Vehicle,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+
+  MojioModel = _dereq_('./MojioModel');
+
+  module.exports = Vehicle = (function(_super) {
+    __extends(Vehicle, _super);
+
+    Vehicle.prototype._schema = {
+      "Type": "Integer",
+      "OwnerId": "String",
+      "MojioId": "String",
+      "Name": "String",
+      "VIN": "String",
+      "LicensePlate": "String",
+      "IgnitionOn": "Boolean",
+      "LastTripEvent": "String",
+      "LastLocationTime": "String",
+      "LastLocation": "Object",
+      "LastSpeed": "Float",
+      "FuelLevel": "Float",
+      "LastFuelEfficiency": "Float",
+      "CurrentTrip": "String",
+      "LastTrip": "String",
+      "LastContactTime": "String",
+      "MilStatus": "Boolean",
+      "FaultsDetected": "Boolean",
+      "Viewers": "Array",
+      "_id": "String",
+      "_deleted": "Boolean"
+    };
+
+    Vehicle.prototype._resource = 'Vehicles';
+
+    Vehicle.prototype._model = 'Vehicle';
+
+    function Vehicle(json) {
+      Vehicle.__super__.constructor.call(this, json);
+    }
+
+    Vehicle.prototype.observe = function(children, callback) {
+      if (children == null) {
+        children = null;
+      }
+      return callback(null, null);
+    };
+
+    Vehicle.prototype.storage = function(property, value, callback) {
+      return callback(null, null);
+    };
+
+    Vehicle.prototype.statistic = function(expression, callback) {
+      return callback(null, null);
+    };
+
+    Vehicle._resource = 'Vehicles';
+
+    Vehicle._model = 'Vehicle';
+
+    Vehicle.resource = function() {
+      return Vehicle._resource;
+    };
+
+    Vehicle.model = function() {
+      return Vehicle._model;
+    };
+
+    return Vehicle;
+
+  })(MojioModel);
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=Vehicle.map
+*/
+
+},{"./MojioModel":6}]},{},[2])
 (2)
 });

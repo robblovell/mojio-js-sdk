@@ -1,8 +1,8 @@
 MojioModel = require('./MojioModel')
+
 module.exports = class Subscription extends MojioModel
-    constructor: (json) ->
-        @schema =
-            {
+    # instance variables
+    _schema:             {
                 "Type": "Integer",
                 "ChannelType": "Integer",
                 "ChannelTarget": "String",
@@ -17,4 +17,29 @@ module.exports = class Subscription extends MojioModel
                 "_deleted": "Boolean"
             }
 
+
+    _resource: 'Subscriptions'
+    _model: 'Subscription'
+
+    constructor: (json) ->
         super(json)
+
+    observe: (children=null, callback) ->
+        callback(null,null)
+
+    storage: (property, value, callback) ->
+        callback(null,null)
+
+    statistic: (expression, callback) ->
+        callback(null,null)
+
+    # class variables and functions
+    @_resource: 'Subscriptions'
+    @_model: 'Subscription'
+
+    @resource: () ->
+        return Subscription._resource
+
+    @model: () ->
+        return Subscription._model
+
