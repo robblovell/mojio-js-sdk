@@ -1,5 +1,5 @@
 Http = require './HttpNodeWrapper'
-
+SignalR = require 'signalr-client'
 module.exports = class MojioClient
 
     defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
@@ -16,6 +16,7 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @token = null
+        @signalr = new SignalR.client("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
 
     ###
         Helpers
@@ -118,6 +119,8 @@ module.exports = class MojioClient
     Event = require('../models/Event');
     mojio_models['Event'] = Event
 
+    Observer = require('../models/Observer');
+    mojio_models['Observer'] = Observer
 
     # Make an app from a result
     make_model: (type, json) ->
@@ -132,8 +135,8 @@ module.exports = class MojioClient
         return object
 
     # Model CRUD
+    # query: (model, criteria=null, limit=null, offset=null, sortby="", desc=false, callback) ->
     query: (model, criteria, callback) ->
-
         if (criteria instanceof Object)
             @request({ method: 'GET',  resource: model.resource(), parameters: criteria }, (error, result) =>
                 callback(error, @make_model(model.model(), result))
@@ -185,38 +188,6 @@ module.exports = class MojioClient
 
 
     _observe: (entity, callback) ->
-        #
-
-    _unobserve: (entity, callback) ->
-        #
-    _unobserveAll: () ->
-        #
-
-        # entityDescriptor is an object with the schema: { type: string id: string } or
-        # an array of these objects.  Type is the type of entity to observe, one of the Mojio models
-        # id is the guid id of the specific entity to observe.
-    observe: (entityDescriptor, callback) ->
-        @validateEntityDescriptor(entityDescriptor, (error, entities) ->
-            return if error?
-            observers = []
-            @observe(entity, (error, result) ->
-                observers.push(result)
-            ) for entity in entities
-            callback(null, "Subscribed")
-        )
-
-    unobserve: (entityDescriptor, callback) ->
-        unless (entityDescriptor?)
-            @unobserveAll()
-            callback(null, "Un-Subscribed")
-
-        else
-            @validateEntityDescriptor(entityDescriptor, (error, entities) ->
-                callback(error, null) if error?
-                @unobserve(entity) for entity in entities
-                callback(null, "Un-Subscribed")
-            )
-
 
     ###
             Schema
@@ -232,13 +203,55 @@ module.exports = class MojioClient
     ###
             Observer
     ###
-    observer_resource: 'Observe'
 
-    _observer: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @observer_resource}, callback)
+    observer_callbacks:  {}
 
-    observer: (callback) ->
-        @_observer((error, result) => callback(error, result))
+    observer_registry: (entity) =>
+        if @observer_callbacks[entity._id]
+            callback(entity) for callback in @observer_callbacks[entity._id]
+
+    # observer callback takes an entity as a parameter.
+    observer: (object, subject=null, observer_callback, callback) => # Use if you want the raw result of the call.
+        # subject is { model: type, _id: id }
+        if (subject == null)
+            observer = new Observer(
+                {
+                    ObserverType: "Generic", Status: "Approved", Name: "Test"+Math.random(),
+                    Subject: object.model(), SubjectId: object.id(), "Transports": "SignalR"
+                }
+            )
+
+        else
+            observer = new Observer(
+                {
+                    ObserverType: "Generic", Subject: subject.model(), SubjectId: subject.id(),
+                    Parent: object.model(), ParentId: object.id(), "Transports": "SignalR"
+                }
+            )
+
+        @request({ method: 'PUT', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
+            callback(error, null) if error
+            hub = @getHub()
+            if (!@observer_callbacks[result.SubjectId]?)
+                @observer_callbacks[result.SubjectId] = []
+            @observer_callbacks[result.SubjectId].push(observer_callback)
+            hub.invoke('Subscribe', result._id)
+            callback(null, observer)
+        )
+
+    unobserve: (observer, observer_callback=null) ->
+        if (observer_callback == null)
+            @observer_callbacks[observer.SubjectId] = []
+        else
+            temp = []
+            for callback in @observer_callbacks[observer.SubjectId]
+                temp[observer.SubjectId].push(callback) if (callback != observer_callback)
+            @observer_callbacks[observer.SubjectId] = temp
+
+        if (@observer_callbacks[observer.SubjectId].length == 0)
+            hub.invoke('Unsubscribe', observer._id)
+
+        callback(null, observer)
 
     ###
         Signal R
@@ -275,48 +288,44 @@ module.exports = class MojioClient
     getHub: () ->
         return @hub if (@hub?)
 
-        @conn = $.hubConnection(settings.url + "/signalr", { useDefaultPath: false })
-        @hub = _conn.createHubProxy('hub')
-
-        @hub.on("error", (data) ->
+        @hub = @signalr.hub('ObserverHub');
+        @hub.on("Error", (data) ->
             log(data)
         )
-
-        @connStatus = @conn.start().done( () -> @connStatus = null )
-
+        @hub.on("UpdateEntity", @observer_registry) # observer_callback(entity)
         return @hub
 
-    subscribe: (type, ids, groups) ->
-        hub = getHub()
-
-        if (!groups)
-            groups = Mojio.EventTypes
-
-        if (hub.connection.state != 1)
-            if (@connStatus)
-                @connStatus.done( () -> subscribe(type, ids, groups) )
-            else
-                @connStatus = hub.connection.start().done(() -> subscribe(type, ids, groups) )
-
-            return @connStatus
-
-        action = (ids instanceof Array) ? "Subscribe" : "SubscribeOne"
-
-        return hub.invoke(action, @getTokenId(), type, ids, groups)
-
-    unsubscribe: (type, ids, groups) ->
-        hub = getHub()
-
-        if (!groups)
-            groups = Mojio.EventTypes
-
-        if (hub.connection.state != 1)
-            if (@connStatus)
-                @connStatus.done( () -> unsubscribe(type, ids, groups) )
-            else
-                @connStatus = hub.connection.start().done( () -> unsubscribe(type, ids, groups) )
-
-            return @connStatus
-
-        return hub.invoke("Unsubscribe", @getTokenId(), type, ids, groups)
+#    subscribe: (type, ids, groups, callback) ->
+#        getHub((error,result) ->
+#            hub = result
+#            if (!groups)
+#                groups = Mojio.EventTypes
+#
+#            if (hub.connection.state != 1)
+#                if (@connStatus)
+#                    @connStatus.done( () -> subscribe(type, ids, groups) )
+#                else
+#                    @connStatus = hub.connection.start().done(() -> subscribe(type, ids, groups) )
+#
+#                return @connStatus
+#
+#            action = (ids instanceof Array) ? "Subscribe" : "SubscribeOne"
+#
+#            callback(null, hub.invoke(action, @getTokenId(), type, ids, groups))
+#
+#    unsubscribe: (type, ids, groups, callback) ->
+#        getHub((error,result) ->
+#            hub = result
+#            if (!groups)
+#                groups = Mojio.EventTypes
+#
+#            if (hub.connection.state != 1)
+#                if (@connStatus)
+#                    @connStatus.done( () -> unsubscribe(type, ids, groups) )
+#                else
+#                    @connStatus = hub.connection.start().done( () -> unsubscribe(type, ids, groups) )
+#
+#                return @connStatus
+#
+#            callback(null, hub.invoke("Unsubscribe", @getTokenId(), type, ids, groups))
 

@@ -229,7 +229,7 @@
     Observer.prototype._schema = {
       "Type": "String",
       "Name": "String",
-      "ObserverType": "Integer",
+      "ObserverType": "String",
       "AppId": "String",
       "OwnerId": "String",
       "Parent": "String",

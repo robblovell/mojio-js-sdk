@@ -5,7 +5,7 @@ module.exports = class Observer extends MojioModel
     _schema:             {
                 "Type": "String",
                 "Name": "String",
-                "ObserverType": "Integer",
+                "ObserverType": "String",
                 "AppId": "String",
                 "OwnerId": "String",
                 "Parent": "String",
@@ -20,14 +20,14 @@ module.exports = class Observer extends MojioModel
             }
 
 
-    _resource: 'Observers'
+    _resource: 'Observe'
     _model: 'Observer'
 
     constructor: (json) ->
         super(json)
 
     # class variables and functions
-    @_resource: 'Observers'
+    @_resource: 'Observe'
     @_model: 'Observer'
 
     @resource: () ->

@@ -17,29 +17,26 @@ describe 'Observer', ->
 
     # test Observer
 
-    it 'can post Observer', (done) ->
-        true.should.be.true
-        done()
+    it 'can Observe Object', (done) ->
 
-    it 'can put Observer', (done) ->
-        true.should.be.true
-        done()
-
-    it 'can get Observer', (done) ->
-        mojio_client.observer((error, result) ->
+        mojio_client.get(App, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            if (result.Data instanceof Array)
-                observer = new Observer(result.Data[0])
-            else if (result.Data?)
-                observer = new Observer(result.Data)
-            else
-                observer = new Observer(result)
-            observer.should.be.an.instanceOf(Observer)
-            done()
+            result.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(App) for instance in result
+            app = new App(result[0])
+
+            mojio_client.observer(app, null,
+                test_callback(entity) ->
+                    entity.should.be.an.instanceOf(Object)
+                    done()
+                ,
+                (error, result) ->
+                    app.Description = "Changed"
+                    mojio_client.post(app, (error, result) ->
+                        (error==null).should.be.true
+                    )
+            )
         )
 
 
-    it 'can delete Observer', (done) ->
-        true.should.be.true
-        done()
