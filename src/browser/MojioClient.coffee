@@ -1,5 +1,7 @@
 Http = require './HttpBrowserWrapper'
 SignalR = require 'signalr-client'
+Observer = require '../models/Observer'
+
 module.exports = class MojioClient
 
     defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
