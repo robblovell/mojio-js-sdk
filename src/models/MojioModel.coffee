@@ -23,10 +23,16 @@ module.exports = class MojioModel
         for field, value of json
             @setField(field, value)
 
-    stringify: () ->
-        JSON.stringify(@, @filter)
+    # TODO:: make it so that stringify doesn't have to be used to make a saveable json string.
+#    toJSON: () ->
+#        object = {}
+#        object[key] = @[key] for key, value of @schema()
+#        return object
 
-    filter: (key, value) ->
+    stringify: () ->
+        JSON.stringify(@, @replacer)
+
+    replacer: (key, value) ->
         if (key=="_client" || key=="_schema" || key == "_resource" || key == "_model")
             return undefined
         else
