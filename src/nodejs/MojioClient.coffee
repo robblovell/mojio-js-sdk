@@ -163,39 +163,14 @@ module.exports = class MojioClient
     post: (model, callback) ->
         @create(model, callback)
 
-# Delete Event
     delete: (model, callback) ->
         @request({ method: 'DELETE',  resource: model.resource(), parameters: {id: model._id} }, callback)
-
-
-
-    # Create an Observer of an Event
-    observeEvent: (id, callback) ->
-        @request({ method: 'PUT',  resource: 'Observer', parameters: {Subject: 'Events', SubjectId: id} }, callback)
-
-    # Delete Event_observer
-    unobserveEvent: (id, callback) ->
-        @request({ method: 'DELETE',  resource: 'Observer', parameters: {Subject: 'Events', SubjectId: id} }, callback)
-
-
-    validateEntityDescriptor: (entities, callback) ->
-        if (entities? and entities typeof Array)
-            callback(null, entities)
-        else if (entities? and entities type of Object)
-            callback(null, [entities])
-        else
-            callback("Entity must be an objects specifying a type and a guid id: { type: string id: string } or an array of objects.",null)
-
-
-    _observe: (entity, callback) ->
 
     ###
             Schema
     ###
-    schema_resource: 'Schema'
-
     _schema: (callback) -> # Use if you want the raw result of the call.
-        @request({ method: 'GET', resource: @schema_resource}, callback)
+        @request({ method: 'GET', resource: 'Schema'}, callback)
 
     schema: (callback) ->
         @_schema((error, result) => callback(error, result))
@@ -203,7 +178,6 @@ module.exports = class MojioClient
     ###
             Observer
     ###
-
     observer_callbacks:  {}
 
     observer_registry: (entity) =>
@@ -280,11 +254,6 @@ module.exports = class MojioClient
             return false
         return true
 
-    dataByMethod: (data, method) ->
-        switch (method.toUpperCase())
-            when 'POST', 'PUT' then return JSON.stringify(data)
-            else return data
-
     getHub: () ->
         return @hub if (@hub?)
 
@@ -294,38 +263,3 @@ module.exports = class MojioClient
         )
         @hub.on("UpdateEntity", @observer_registry) # observer_callback(entity)
         return @hub
-
-#    subscribe: (type, ids, groups, callback) ->
-#        getHub((error,result) ->
-#            hub = result
-#            if (!groups)
-#                groups = Mojio.EventTypes
-#
-#            if (hub.connection.state != 1)
-#                if (@connStatus)
-#                    @connStatus.done( () -> subscribe(type, ids, groups) )
-#                else
-#                    @connStatus = hub.connection.start().done(() -> subscribe(type, ids, groups) )
-#
-#                return @connStatus
-#
-#            action = (ids instanceof Array) ? "Subscribe" : "SubscribeOne"
-#
-#            callback(null, hub.invoke(action, @getTokenId(), type, ids, groups))
-#
-#    unsubscribe: (type, ids, groups, callback) ->
-#        getHub((error,result) ->
-#            hub = result
-#            if (!groups)
-#                groups = Mojio.EventTypes
-#
-#            if (hub.connection.state != 1)
-#                if (@connStatus)
-#                    @connStatus.done( () -> unsubscribe(type, ids, groups) )
-#                else
-#                    @connStatus = hub.connection.start().done( () -> unsubscribe(type, ids, groups) )
-#
-#                return @connStatus
-#
-#            callback(null, hub.invoke("Unsubscribe", @getTokenId(), type, ids, groups))
-
