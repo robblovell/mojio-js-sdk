@@ -18,7 +18,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
 
                     continue if (model != "App" && model != "Address" && model != "Location" && model != "Trip" &&
                         model != "User" && model != "Vehicle"  && model != "Event" && model != "Mojio" &&
-                        model != "Observer" && model != "Subscription" && model != "Product")
+                        model != "Subscription" && model != "Product")
 
                     view = {
                         Resource: model+"s"

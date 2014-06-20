@@ -1,6 +1,5 @@
 Http = require './HttpNodeWrapper'
 SignalR = require 'signalr-client'
-Observer = require '../models/Observer'
 
 module.exports = class MojioClient
 
@@ -121,7 +120,8 @@ module.exports = class MojioClient
     Event = require('../models/Event');
     mojio_models['Event'] = Event
 
-
+    Observer = require('../models/Observer');
+    mojio_models['Observer'] = Observer
 
     # Make an app from a result
     make_model: (type, json) ->
