@@ -20,14 +20,14 @@ module.exports = class Observer extends MojioModel
             }
 
 
-    _resource: 'Observe'
+    _resource: 'Observers'
     _model: 'Observer'
 
     constructor: (json) ->
         super(json)
 
     # class variables and functions
-    @_resource: 'Observe'
+    @_resource: 'Observers'
     @_model: 'Observer'
 
     @resource: () ->
