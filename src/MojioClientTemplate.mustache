@@ -1,5 +1,7 @@
 {{http_require}}
 SignalR = require 'signalr-client'
+Observer = require '../models/Observer'
+
 module.exports = class MojioClient
 
     defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
@@ -62,11 +64,11 @@ module.exports = class MojioClient
             {
                 method: 'POST', resource: @login_resource, id: @options.application,
                 parameters:
-                {
-                    userOrEmail: username
-                    password: password
-                    secretKey: @options.secret
-                }
+                    {
+                        userOrEmail: username
+                        password: password
+                        secretKey: @options.secret
+                    }
             }, callback
         )
 

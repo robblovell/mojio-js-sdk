@@ -1,5 +1,5 @@
-MojioClient = require '../../src/nodejs/MojioClient'
-App = require '../../src/models/App'
+MojioClient = require '../lib/nodejs/MojioClient'
+App = require '../lib/models/App'
 assert = require("assert")
 should = require('should')
 
