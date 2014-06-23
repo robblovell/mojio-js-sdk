@@ -15,10 +15,13 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                 models = []
                 i=0
                 for model, schema of result
+                    console.log("Looking at "+model)
 
                     continue if (model != "App" && model != "Address" && model != "Location" && model != "Trip" &&
                         model != "User" && model != "Vehicle"  && model != "Event" && model != "Mojio" &&
-                        model != "Observer" && model != "Subscription" && model != "Product")
+                        model != "Subscription" && model != "Product" && model != "Observer")
+
+                    console.log("Processing "+model)
 
                     view = {
                         Resource: model+"s"
@@ -27,7 +30,6 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                         schema: ""
                     }
 
-                    console.log("Processing "+model)
                     if (model == "Event")
                         # agregate all the Event based objects into one schema.
                         for event_model, event_schema of result
