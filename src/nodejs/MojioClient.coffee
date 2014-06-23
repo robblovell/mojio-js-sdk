@@ -3,7 +3,7 @@ SignalR = require 'signalr-client'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
+    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1' }
 
     constructor: (@options) ->
         @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version }

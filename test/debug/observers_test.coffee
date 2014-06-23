@@ -26,16 +26,21 @@ describe 'Observer', ->
         mojio_client.post(app, (error, result) ->
             (error==null).should.be.true
             app = new App(result)
+            console.log("created app")
 
             mojio_client.observer(app, null,
                 (entity) ->
                     entity.should.be.an.instanceOf(Object)
+                    console.log("Observed change seen.")
                     done()
                 ,
                 (error, result) ->
                     app.Description = "Changed"
+                    console.log("changing app...")
+
                     mojio_client.put(app, (error, result) ->
                         (error==null).should.be.true
+                        console.log("App changed.")
                     )
             )
         )
