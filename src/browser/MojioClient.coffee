@@ -120,6 +120,7 @@ module.exports = class MojioClient
     Event = require('../models/Event');
     mojio_models['Event'] = Event
 
+
     Observer = require('../models/Observer');
     mojio_models['Observer'] = Observer
 

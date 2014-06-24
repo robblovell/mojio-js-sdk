@@ -1,9 +1,9 @@
 Http = require './HttpNodeWrapper'
-SignalR = require 'signalr-client'
+SignalR = require './SignalRNodeWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1' }
+    defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
 
     constructor: (@options) ->
         @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version }
@@ -17,7 +17,7 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @token = null
-        @signalr = new SignalR.client("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
+        @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
 
     ###
         Helpers
@@ -120,6 +120,7 @@ module.exports = class MojioClient
     Event = require('../models/Event');
     mojio_models['Event'] = Event
 
+
     Observer = require('../models/Observer');
     mojio_models['Observer'] = Observer
 
@@ -206,25 +207,35 @@ module.exports = class MojioClient
 
         @request({ method: 'PUT', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
             callback(error, null) if error
-            hub = @getHub()
-            if (!@observer_callbacks[result.SubjectId]?)
-                @observer_callbacks[result.SubjectId] = []
-            @observer_callbacks[result.SubjectId].push(observer_callback)
-            hub.invoke('Subscribe', result._id)
+            @signalr.subscribe('ObserverHub', 'Subscribe', result.SubjectId, result._id, observer_callback)
+#            @signalr.setCallback(result.SubjectId, observer_callback)
+#            @signalr.getHub('ObserverHub').invoke('Subscribe', result._id)
+
+#            hub = @getHub()
+#            if (!@observer_callbacks[result.SubjectId]?)
+#                @observer_callbacks[result.SubjectId] = []
+#            @observer_callbacks[result.SubjectId].push(observer_callback)
+#            hub.invoke('Subscribe', result._id)
             callback(null, observer)
         )
 
     unobserve: (observer, observer_callback=null) ->
-        if (observer_callback == null)
-            @observer_callbacks[observer.SubjectId] = []
-        else
-            temp = []
-            for callback in @observer_callbacks[observer.SubjectId]
-                temp[observer.SubjectId].push(callback) if (callback != observer_callback)
-            @observer_callbacks[observer.SubjectId] = temp
+        @signalr.unsubscribe('ObserverHub', 'Subscribe', result.SubjectId, result._id, observer_callback)
 
-        if (@observer_callbacks[observer.SubjectId].length == 0)
-            hub.invoke('Unsubscribe', observer._id)
+#        @signalr.removeCallback(observer.SubjectId, observer_callback)
+#        if (@signalr.observer_callbacks[observer.SubjectId].length == 0)
+#            @signalr.getHub('ObserverHub').invoke('Unsubscribe', observer._id)
+
+#        if (observer_callback == null)
+#            @observer_callbacks[observer.SubjectId] = []
+#        else
+#            temp = []
+#            for callback in @observer_callbacks[observer.SubjectId]
+#                temp[observer.SubjectId].push(callback) if (callback != observer_callback)
+#            @observer_callbacks[observer.SubjectId] = temp
+#
+#        if (@observer_callbacks[observer.SubjectId].length == 0)
+#            hub.invoke('Unsubscribe', observer._id)
 
         callback(null, observer)
 
@@ -255,12 +266,12 @@ module.exports = class MojioClient
             return false
         return true
 
-    getHub: () ->
-        return @hub if (@hub?)
-
-        @hub = @signalr.hub('ObserverHub');
-        @hub.on("Error", (data) ->
-            log(data)
-        )
-        @hub.on("UpdateEntity", @observer_registry) # observer_callback(entity)
-        return @hub
+#    getHub: () ->
+#        return @hub if (@hub?)
+#
+#        @hub = @signalr.hub('ObserverHub');
+#        @hub.on("Error", (data) ->
+#            log(data)
+#        )
+#        @hub.on("UpdateEntity", @observer_registry) # observer_callback(entity)
+#        return @hub
