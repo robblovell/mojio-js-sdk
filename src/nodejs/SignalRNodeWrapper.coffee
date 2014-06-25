@@ -8,19 +8,31 @@ module.exports = class SignalRNodeWrapper
             callback(entity) for callback in @observer_callbacks[entity._id]
 
     constructor: (url, hubs) ->
-        @hub = null
+        @hubs = {}
         @signalr = new SignalR.client(url, hubs)
 
-    getHub: (which) ->
-        return @hub if (@hub?)
+    reconnect: (which, callback) ->
+        callback(null, @hubs[which])  # not implemented yet.  Race condition exists here.
 
-        @hub = @signalr.hub(which);
-        @hub.on("Error", (data) ->
-            log(data)
-        )
-        @hub.on("UpdateEntity", @observer_registry) # observer_callback(entity)
-        return @hub
+    getHub: (which, callback) ->
+        if @hubs[which]?
+            callback(null, @hubs[which])
+        else
+            @hubs[which] = @signalr.hub(which);
+            @hubs[which].on("Error", (data) ->
+                log(data)
+            )
+            @hubs[which].on("UpdateEntity", @observer_registry) # observer_callback(entity)
+            callback(null, @hubs[which])
 
+#            @reconnect(which, (error, result) ->
+#                callback(error, null) if error?
+#                # todo: "UpdateEntity" doesn't belong here.
+#                result.on("UpdateEntity", @observer_registry) # observer_callback(entity)
+#                callback(null, result)
+#            )
+
+    # TODO:: move callback list maintenance to separate class.
     setCallback: (id, futureCallback) ->
         if (!@observer_callbacks[id]?)
             @observer_callbacks[id] = []
@@ -34,14 +46,25 @@ module.exports = class SignalRNodeWrapper
             temp = []
             # reform the obxerver_callbacks list without the given pastCallback
             for callback in @observer_callbacks[id]
-                temp[id].push(callback) if (callback != pastCallback)
+                temp.push(callback) if (callback != pastCallback)
             @observer_callbacks[id] = temp
+        return
 
-    subscribe: (hub, method, subject, object, futureCallback) ->
+    subscribe: (hubName, method, subject, object, futureCallback, callback) ->
         @setCallback(subject, futureCallback)
-        @getHub(hub).invoke(method, object)
+        @getHub(hubName, (error, hub) ->
+            callback(error, null) if error?
+            hub.invoke(method, object) if hub?
+            callback(null, hub)
+        )
 
-    unsubscribe: (hub, method, subject, object, pastCallback) ->
+    unsubscribe: (hubName, method, subject, object, pastCallback, callback) ->
         @removeCallback(subject, pastCallback)
         if (@observer_callbacks[subject].length == 0)
-            @getHub(hub).invoke(method, object)
+            @getHub(hubName, (error, hub) ->
+                callback(error, null) if error?
+                hub.invoke(method, object) if hub?
+                callback(null, hub)
+            )
+        else
+            callback(null, true)

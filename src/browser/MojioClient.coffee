@@ -1,5 +1,5 @@
 Http = require './HttpBrowserWrapper'
-SignalR = require 'signalr-client'
+SignalR = require './SignalRBrowserWrapper'
 
 module.exports = class MojioClient
 
@@ -17,7 +17,10 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @token = null
-        @signalr = new SignalR.client("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
+        @_hub = null
+        @_connStatus = null
+        @_conn = null
+        #@signalr = new SignalR($,"http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
 
     ###
         Helpers
@@ -51,7 +54,7 @@ module.exports = class MojioClient
 
         parts.body = request.body if request.body?
 
-        http = new Http()
+        http = new Http($)
         http.request(parts, callback)
     ###
         Login
@@ -180,14 +183,8 @@ module.exports = class MojioClient
     ###
             Observer
     ###
-    observer_callbacks:  {}
 
-    observer_registry: (entity) =>
-        if @observer_callbacks[entity._id]
-            callback(entity) for callback in @observer_callbacks[entity._id]
-
-    # observer callback takes an entity as a parameter.
-    observer: (object, subject=null, observer_callback, callback) => # Use if you want the raw result of the call.
+    observe: (object, subject=null, observer_callback, callback) ->
         # subject is { model: type, _id: id }
         if (subject == null)
             observer = new Observer(
@@ -206,28 +203,24 @@ module.exports = class MojioClient
             )
 
         @request({ method: 'PUT', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
-            callback(error, null) if error
-            hub = @getHub()
-            if (!@observer_callbacks[result.SubjectId]?)
-                @observer_callbacks[result.SubjectId] = []
-            @observer_callbacks[result.SubjectId].push(observer_callback)
-            hub.invoke('Subscribe', result._id)
-            callback(null, observer)
+            if error
+                callback(error, null)
+            else
+                observer = new Observer(result)
+                @subscribe("http://"+@options.hostname+":"+@options.port+"/v1/signalr",'ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback)
+                callback(null, observer)
+#                @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, (error, result) ->
+#                    callback(null, observer)
+#                )
         )
 
-    unobserve: (observer, observer_callback=null) ->
-        if (observer_callback == null)
-            @observer_callbacks[observer.SubjectId] = []
+    unobserve: (observer, subject, observer_callback=null, callback) ->
+        if !observer || !subject?
+            callback("Observer and subject required.")
         else
-            temp = []
-            for callback in @observer_callbacks[observer.SubjectId]
-                temp[observer.SubjectId].push(callback) if (callback != observer_callback)
-            @observer_callbacks[observer.SubjectId] = temp
-
-        if (@observer_callbacks[observer.SubjectId].length == 0)
-            hub.invoke('Unsubscribe', observer._id)
-
-        callback(null, observer)
+            @signalr.unsubscribe("http://"+@options.hostname+":"+@options.port+"/v1/signalr",'ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, (error, result) ->
+                callback(null, observer)
+            )
 
     ###
         Signal R
@@ -256,12 +249,59 @@ module.exports = class MojioClient
             return false
         return true
 
-    getHub: () ->
-        return @hub if (@hub?)
 
-        @hub = @signalr.hub('ObserverHub');
-        @hub.on("Error", (data) ->
-            log(data)
+    subscribe: (url, hubName, method, subject, object, futureCallback) ->
+        hub = @getHub(url, hubName, futureCallback)
+
+        if (hub.connection.state != 1)
+            if (@_connStatus)
+                @_connStatus.done( () =>
+                    @subscribe(url, hubName, method, subject, object, futureCallback)
+                )
+            else
+                @_connStatus = hub.connection.start().done( () =>
+                    @subscribe(url, hubName, method, subject, object, futureCallback)
+                )
+
+            return @_connStatus
+
+        return hub.invoke(method, object)
+
+#    unsubscribe: (url, hubName, method, subject, object, pastCallback) ->
+#        if (@observer_callbacks[subject].length == 0)
+#            hub = @getHub(url, hubName,pastCallback)
+#
+#            if (hub.connection.state != 1)
+#                if (@_connStatus)
+#                    @_connStatus.done(() ->
+#                        unsubscribe(type, ids, groups)
+#                    )
+#                else
+#                    @_connStatus = hub.connection.start().done( () ->
+#                        unsubscribe(type, ids, groups)
+#                    )
+#
+#                return @_connStatus
+#
+#            return hub.invoke(method, object)
+
+    getHub: (url, hubName, futureCallback) ->
+        if (@_hub)
+            return @_hub
+
+        @_conn = $.hubConnection(url, { useDefaultPath: false })
+        @_conn.error( (error) ->
+            console.log("Connection error"+error)
         )
-        @hub.on("UpdateEntity", @observer_registry) # observer_callback(entity)
-        return @hub
+        @_hub = @_conn.createHubProxy(hubName)
+
+        @_hub.on("error", (data) ->
+            console.log("Connection error"+data)
+        )
+        @_hub.on("UpdateEntity", futureCallback)
+
+        @_connStatus = @_conn.start().done( () ->
+            @_connStatus = null
+        )
+
+        return @_hub
