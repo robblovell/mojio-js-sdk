@@ -7,12 +7,10 @@ module.exports = class SignalRNodeWrapper
         if @observer_callbacks[entity._id]
             callback(entity) for callback in @observer_callbacks[entity._id]
 
-    constructor: (url, hubs) ->
+    constructor: (url, hubNames, jquery) ->
+        @url = url
         @hubs = {}
-        @signalr = new SignalR.client(url, hubs)
-
-    reconnect: (which, callback) ->
-        callback(null, @hubs[which])  # not implemented yet.  Race condition exists here.
+        @signalr = new SignalR.client(url, hubNames, null) # query not used.
 
     getHub: (which, callback) ->
         if @hubs[which]?
@@ -24,13 +22,6 @@ module.exports = class SignalRNodeWrapper
             )
             @hubs[which].on("UpdateEntity", @observer_registry) # observer_callback(entity)
             callback(null, @hubs[which])
-
-#            @reconnect(which, (error, result) ->
-#                callback(error, null) if error?
-#                # todo: "UpdateEntity" doesn't belong here.
-#                result.on("UpdateEntity", @observer_registry) # observer_callback(entity)
-#                callback(null, result)
-#            )
 
     # TODO:: move callback list maintenance to separate class.
     setCallback: (id, futureCallback) ->

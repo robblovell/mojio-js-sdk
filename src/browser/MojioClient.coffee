@@ -20,7 +20,7 @@ module.exports = class MojioClient
         @_hub = null
         @_connStatus = null
         @_conn = null
-        #@signalr = new SignalR($,"http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
+        @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'], $)
 
     ###
         Helpers
@@ -56,6 +56,8 @@ module.exports = class MojioClient
 
         http = new Http($)
         http.request(parts, callback)
+        @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'], $)
+
     ###
         Login
     ###
@@ -207,18 +209,16 @@ module.exports = class MojioClient
                 callback(error, null)
             else
                 observer = new Observer(result)
-                @subscribe("http://"+@options.hostname+":"+@options.port+"/v1/signalr",'ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback)
-                callback(null, observer)
-#                @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, (error, result) ->
-#                    callback(null, observer)
-#                )
+                @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, (error, result) ->
+                    callback(null, observer)
+                )
         )
 
     unobserve: (observer, subject, observer_callback=null, callback) ->
         if !observer || !subject?
             callback("Observer and subject required.")
         else
-            @signalr.unsubscribe("http://"+@options.hostname+":"+@options.port+"/v1/signalr",'ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, (error, result) ->
+            @signalr.unsubscribe('ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, (error, result) ->
                 callback(null, observer)
             )
 
@@ -248,60 +248,3 @@ module.exports = class MojioClient
         else
             return false
         return true
-
-
-    subscribe: (url, hubName, method, subject, object, futureCallback) ->
-        hub = @getHub(url, hubName, futureCallback)
-
-        if (hub.connection.state != 1)
-            if (@_connStatus)
-                @_connStatus.done( () =>
-                    @subscribe(url, hubName, method, subject, object, futureCallback)
-                )
-            else
-                @_connStatus = hub.connection.start().done( () =>
-                    @subscribe(url, hubName, method, subject, object, futureCallback)
-                )
-
-            return @_connStatus
-
-        return hub.invoke(method, object)
-
-#    unsubscribe: (url, hubName, method, subject, object, pastCallback) ->
-#        if (@observer_callbacks[subject].length == 0)
-#            hub = @getHub(url, hubName,pastCallback)
-#
-#            if (hub.connection.state != 1)
-#                if (@_connStatus)
-#                    @_connStatus.done(() ->
-#                        unsubscribe(type, ids, groups)
-#                    )
-#                else
-#                    @_connStatus = hub.connection.start().done( () ->
-#                        unsubscribe(type, ids, groups)
-#                    )
-#
-#                return @_connStatus
-#
-#            return hub.invoke(method, object)
-
-    getHub: (url, hubName, futureCallback) ->
-        if (@_hub)
-            return @_hub
-
-        @_conn = $.hubConnection(url, { useDefaultPath: false })
-        @_conn.error( (error) ->
-            console.log("Connection error"+error)
-        )
-        @_hub = @_conn.createHubProxy(hubName)
-
-        @_hub.on("error", (data) ->
-            console.log("Connection error"+data)
-        )
-        @_hub.on("UpdateEntity", futureCallback)
-
-        @_connStatus = @_conn.start().done( () ->
-            @_connStatus = null
-        )
-
-        return @_hub

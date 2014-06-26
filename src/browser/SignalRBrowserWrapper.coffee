@@ -7,105 +7,46 @@ module.exports = class SignalRBrowserWrapper
         if @observer_callbacks[entity._id]
             callback(entity) for callback in @observer_callbacks[entity._id]
 
-        @conn = null
-        @connStatus = null
-        @hub = null
+    constructor: (url, hubNames, jquery) ->  # hubNames not used.
+        @$ = jquery
+        @url = url
+        @hubs = {}
+        @signalr = null
+        @connectionStatus = false
 
-    constructor: (@$, @url, @hubs) ->
-
-    getHub: (which) ->
-        if (@hub)
-            return @hub;
-
-        @conn = $.hubConnection(@url, { useDefaultPath: false })
-        @hub = @conn.createHubProxy(which);
-
-        @hub.on("error", (data) ->
-            log(data);
-        )
-        @hub.on("UpdateEntity", @observer_registry)
-        @conn.start().done( () ->
-            console.log("Connection started")
-        )
-
-        return @hub
-
-    subscribe: (hubName, method, subject, object, futureCallback, callback) ->
-        @setCallback(subject, futureCallback)
-        hub = @getHub(hubName)
-
-        if (hub.connection.state != 1)
-            if (@connStatus)
-                @connStatus.done(() =>
-                    console.log("Hub Connection done")
-                    @subscribe(hubName, method, subject, object, futureCallback, callback)
-                )
-            else
-                @connStatus = hub.connection.start().done(() =>
-                    console.log("Hub Connection restarted")
-                    @subscribe(hubName, method, subject, object, futureCallback, callback)
-                )
-            console.log("subscribe exiting.");
-
-            callback(null, @connStatus) if callback
+    getHub: (which, callback) ->
+        if (@hubs[which])
+            callback(null, @hubs[which])
         else
-            console.log("Call invoke.");
+            if (!@signalr?)
+                @signalr = @$.hubConnection(@url, { useDefaultPath: false })
+                @signalr.error( (error) ->
+                    console.log("Connection error"+error)
+                    callback(error, null)
+                )
 
-            hub.invoke(method, object)
-            console.log("subscribe exiting.");
+            @hubs[which] = @signalr.createHubProxy(which)
 
-            callback(null, true) if callback
+            @hubs[which].on("error", (data) ->
+                console.log("Hub '"+which+"' has error"+data)
+            )
+            @hubs[which].on("UpdateEntity", @observer_registry)
 
-#        @signalr = $.hubConnection(url, { useDefaultPath: false })
-#        @hubs = {}
-#        @connectionStatus = null
-#
-#        for hub in hubs
-#            @hubs[hub] = @signalr.createHubProxy(hub)
-#            # todo: "UpdateEntity" doesn't belong here.
-#            @hubs[hub].on("UpdateEntity", @observer_registry)
-#            @hubs[hub].start().done(() ->
-#                console.log("Hub connection started!")
-#            )
-#
-#        @connectionStatus = @signalr.start({ transport: ['webSockets', 'longPolling'] }, () ->
-#            console.log("connection started!")
-#        )
+            if (@hubs[which].connection.state != 1)
+                if (!@connectionStatus)
+                    @signalr.start().done( () =>
+                        @connectionStatus = true
+                        @hubs[which].connection.start().done( () =>
+                            callback(null, @hubs[which])
+                        )
+                    )
+                else
+                    @hubs[which].connection.start().done( () =>
+                        callback(null, @hubs[which])
+                    )
+            else
+                callback(null, @hubs[which])
 
-#    reconnect: (which, callback) ->
-#        if (@hubs[which].connection.state != 1)
-#            if (@connectionStatus[which]?) # Connection may still be in progress.
-#                @connectionStatus[which].done(callback)
-#            else # new connection.
-#                @connectionStatus[which] = @hubs[which].connection.start().done(callback)
-#        else
-#            callback(null, true)
-#
-#    getHub: (which) ->
-#        if (@hubs[which]?)
-#            return @hubs[which];
-#
-#        @signalr = $.hubConnection(@url, { useDefaultPath: false })
-#
-#        @hubs[which] = @signalr.createHubProxy(which);
-#        @hubs[which].on("UpdateEntity", @observer_registry)
-#
-#        @connectionStatus = @signalr.start({ transport: ['webSockets', 'longPolling'] }, () ->
-#            @connectionStatus = null
-#            console.log("connection started!")
-#        )
-#
-#        return @hubs[which]
-
-#        if !@hubs[which]?
-#            @hubs[which] = @signalr.createHubProxy(which)
-#
-#        @reconnect(which, (error, result) ->
-#            callback(error, null) if error?
-#            # todo: "UpdateEntity" doesn't belong here.
-#            @hubs[which].on("UpdateEntity", @observer_registry) # observer_callback(entity)
-#            callback(null, @hubs[which])
-#        )
 
     # TODO:: move callback list maintenance to separate class.
     setCallback: (id, futureCallback) ->
@@ -125,36 +66,25 @@ module.exports = class SignalRBrowserWrapper
             @observer_callbacks[id] = temp
         return
 
-#    subscribe: (hubName, method, subject, object, futureCallback, callback) ->
-#        @setCallback(subject, futureCallback)
-#        hub = @getHub(hubName)
-#        if (hub.connection.state != 1)
-#            if (@connection_status) # Connection may still be in progress.
-#                @connection_status.done( () =>
-#                    @subscribe(hubName, method, subject, object, futureCallback, null)
-#                )
-#            else # new connection.
-#                @connection_status = hub.connection.start().done( () =>
-#                    @subscribe(hubName, method, subject, object, futureCallback, null)
-#                )
-#        else
-#            hub.invoke(method, object)
-#        callback(null, true) if (callback)
-
-
-#        @getHub(hubName, (error, hub) ->
-#            callback(error, null) if error?
-#            hub.invoke(method, object) if hub?
-#            callback(null, true)
-#        )
+    subscribe: (hubName, method, subject, object, futureCallback, callback) ->
+        @setCallback(subject, futureCallback)
+        @getHub(hubName, (error, hub) ->
+            if error?
+                callback(error, null)
+            else
+                hub.invoke(method, object)
+                callback(null, hub)
+        )
 
     unsubscribe: (hubName, method, subject, object, pastCallback, callback) ->
         @removeCallback(subject, pastCallback)
         if (@observer_callbacks[subject].length == 0)
             @getHub(hubName, (error, hub) ->
-                callback(error, null) if error?
-                hub.invoke(method, object) if hub?
-                callback(null, true)
+                if error?
+                    callback(error, null)
+                else
+                    hub.invoke(method, object) if hub?
+                    callback(null, hub)
             )
         else
             callback(null, true)

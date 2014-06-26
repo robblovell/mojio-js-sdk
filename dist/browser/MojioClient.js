@@ -111,6 +111,7 @@
       this._hub = null;
       this._connStatus = null;
       this._conn = null;
+      this.signalr = new SignalR("http://" + this.options.hostname + ":" + this.options.port + "/v1/signalr", ['ObserverHub'], $);
     }
 
     /*
@@ -160,7 +161,8 @@
         parts.body = request.body;
       }
       http = new Http($);
-      return http.request(parts, callback);
+      http.request(parts, callback);
+      return this.signalr = new SignalR("http://" + this.options.hostname + ":" + this.options.port + "/v1/signalr", ['ObserverHub'], $);
     };
 
     /*
@@ -389,8 +391,9 @@
           return callback(error, null);
         } else {
           observer = new Observer(result);
-          _this.subscribe("http://" + _this.options.hostname + ":" + _this.options.port + "/v1/signalr", 'ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback);
-          return callback(null, observer);
+          return _this.signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, function(error, result) {
+            return callback(null, observer);
+          });
         }
       });
     };
@@ -402,7 +405,7 @@
       if (!observer || (subject == null)) {
         return callback("Observer and subject required.");
       } else {
-        return this.signalr.unsubscribe("http://" + this.options.hostname + ":" + this.options.port + "/v1/signalr", 'ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, function(error, result) {
+        return this.signalr.unsubscribe('ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, function(error, result) {
           return callback(null, observer);
         });
       }
@@ -452,46 +455,6 @@
       return true;
     };
 
-    MojioClient.prototype.subscribe = function(url, hubName, method, subject, object, futureCallback) {
-      var hub,
-        _this = this;
-      hub = this.getHub(url, hubName, futureCallback);
-      if (hub.connection.state !== 1) {
-        if (this._connStatus) {
-          this._connStatus.done(function() {
-            return _this.subscribe(url, hubName, method, subject, object, futureCallback);
-          });
-        } else {
-          this._connStatus = hub.connection.start().done(function() {
-            return _this.subscribe(url, hubName, method, subject, object, futureCallback);
-          });
-        }
-        return this._connStatus;
-      }
-      return hub.invoke(method, object);
-    };
-
-    MojioClient.prototype.getHub = function(url, hubName, futureCallback) {
-      if (this._hub) {
-        return this._hub;
-      }
-      this._conn = $.hubConnection(url, {
-        useDefaultPath: false
-      });
-      this._conn.error(function(error) {
-        return console.log("Connection error" + error);
-      });
-      this._hub = this._conn.createHubProxy(hubName);
-      this._hub.on("error", function(data) {
-        return console.log("Connection error" + data);
-      });
-      this._hub.on("UpdateEntity", futureCallback);
-      this._connStatus = this._conn.start().done(function() {
-        return this._connStatus = null;
-      });
-      return this._hub;
-    };
-
     return MojioClient;
 
   })();
@@ -512,71 +475,61 @@
     SignalRBrowserWrapper.prototype.observer_callbacks = {};
 
     SignalRBrowserWrapper.prototype.observer_registry = function(entity) {
-      var callback, _i, _len, _ref;
+      var callback, _i, _len, _ref, _results;
       if (this.observer_callbacks[entity._id]) {
         _ref = this.observer_callbacks[entity._id];
+        _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           callback = _ref[_i];
-          callback(entity);
+          _results.push(callback(entity));
         }
+        return _results;
       }
-      this.conn = null;
-      this.connStatus = null;
-      return this.hub = null;
     };
 
-    function SignalRBrowserWrapper($, url, hubs) {
-      this.$ = $;
-      this.url = url;
-      this.hubs = hubs;
+    function SignalRBrowserWrapper(url, hubNames, jquery) {
       this.observer_registry = __bind(this.observer_registry, this);
+      this.$ = jquery;
+      this.url = url;
+      this.hubs = {};
+      this.signalr = null;
+      this.connectionStatus = false;
     }
 
-    SignalRBrowserWrapper.prototype.getHub = function(which) {
-      if (this.hub) {
-        return this.hub;
-      }
-      this.conn = $.hubConnection(this.url, {
-        useDefaultPath: false
-      });
-      this.hub = this.conn.createHubProxy(which);
-      this.hub.on("error", function(data) {
-        return log(data);
-      });
-      this.hub.on("UpdateEntity", this.observer_registry);
-      this.conn.start().done(function() {
-        return console.log("Connection started");
-      });
-      return this.hub;
-    };
-
-    SignalRBrowserWrapper.prototype.subscribe = function(hubName, method, subject, object, futureCallback, callback) {
-      var hub,
-        _this = this;
-      this.setCallback(subject, futureCallback);
-      hub = this.getHub(hubName);
-      if (hub.connection.state !== 1) {
-        if (this.connStatus) {
-          this.connStatus.done(function() {
-            console.log("Hub Connection done");
-            return _this.subscribe(hubName, method, subject, object, futureCallback, callback);
-          });
-        } else {
-          this.connStatus = hub.connection.start().done(function() {
-            console.log("Hub Connection restarted");
-            return _this.subscribe(hubName, method, subject, object, futureCallback, callback);
-          });
-        }
-        console.log("subscribe exiting.");
-        if (callback) {
-          return callback(null, this.connStatus);
-        }
+    SignalRBrowserWrapper.prototype.getHub = function(which, callback) {
+      var _this = this;
+      if (this.hubs[which]) {
+        return callback(null, this.hubs[which]);
       } else {
-        console.log("Call invoke.");
-        hub.invoke(method, object);
-        console.log("subscribe exiting.");
-        if (callback) {
-          return callback(null, true);
+        if (this.signalr == null) {
+          this.signalr = this.$.hubConnection(this.url, {
+            useDefaultPath: false
+          });
+          this.signalr.error(function(error) {
+            console.log("Connection error" + error);
+            return callback(error, null);
+          });
+        }
+        this.hubs[which] = this.signalr.createHubProxy(which);
+        this.hubs[which].on("error", function(data) {
+          return console.log("Hub '" + which + "' has error" + data);
+        });
+        this.hubs[which].on("UpdateEntity", this.observer_registry);
+        if (this.hubs[which].connection.state !== 1) {
+          if (!this.connectionStatus) {
+            return this.signalr.start().done(function() {
+              _this.connectionStatus = true;
+              return _this.hubs[which].connection.start().done(function() {
+                return callback(null, _this.hubs[which]);
+              });
+            });
+          } else {
+            return this.hubs[which].connection.start().done(function() {
+              return callback(null, _this.hubs[which]);
+            });
+          }
+        } else {
+          return callback(null, this.hubs[which]);
         }
       }
     };
@@ -605,17 +558,30 @@
       }
     };
 
+    SignalRBrowserWrapper.prototype.subscribe = function(hubName, method, subject, object, futureCallback, callback) {
+      this.setCallback(subject, futureCallback);
+      return this.getHub(hubName, function(error, hub) {
+        if (error != null) {
+          return callback(error, null);
+        } else {
+          hub.invoke(method, object);
+          return callback(null, hub);
+        }
+      });
+    };
+
     SignalRBrowserWrapper.prototype.unsubscribe = function(hubName, method, subject, object, pastCallback, callback) {
       this.removeCallback(subject, pastCallback);
       if (this.observer_callbacks[subject].length === 0) {
         return this.getHub(hubName, function(error, hub) {
           if (error != null) {
-            callback(error, null);
+            return callback(error, null);
+          } else {
+            if (hub != null) {
+              hub.invoke(method, object);
+            }
+            return callback(null, hub);
           }
-          if (hub != null) {
-            hub.invoke(method, object);
-          }
-          return callback(null, true);
         });
       } else {
         return callback(null, true);
