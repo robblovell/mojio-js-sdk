@@ -17,9 +17,7 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @token = null
-        @_hub = null
-        @_connStatus = null
-        @_conn = null
+
         @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'], $)
 
     ###
@@ -99,6 +97,7 @@ module.exports = class MojioClient
         )
 
     mojio_models = {}  # this is so make_model can use a string to constuct the model.
+
 
     App = require('../models/App');
     mojio_models['App'] = App

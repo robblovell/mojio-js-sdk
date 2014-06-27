@@ -9,6 +9,7 @@ should = require('should')
 count = [0,0]
 app1=null
 app2=null
+observer = null
 describe 'Observer', ->
 
     before( (done) ->
@@ -26,16 +27,26 @@ describe 'Observer', ->
         mojio_client.post(app, (error, result) ->
             (error==null).should.be.true
             app = new App(result)
+            console.log("created app")
 
-            mojio_client.observer(app, null,
+            mojio_client.observe(app, null,
                 (entity) ->
                     entity.should.be.an.instanceOf(Object)
-                    done()
+                    console.log("Observed change seen.")
+                    mojio_client.unobserve(observer, app, null, (error, result) ->
+                        result.should.be.an.instanceOf(Observer)
+                        done()
+                    )
                 ,
                 (error, result) ->
                     app.Description = "Changed"
+                    console.log("changing app...")
+                    result.should.be.an.instanceOf(Observer)
+                    observer = result
+
                     mojio_client.put(app, (error, result) ->
                         (error==null).should.be.true
+                        console.log("App changed.")
                     )
             )
         )
@@ -60,7 +71,7 @@ describe 'Observer', ->
                 app2 = new App(result)
                 console.log("created app2")
 
-                mojio_client.observer(app1, null,
+                mojio_client.observe(app1, null,
                     # Callback for app1.
                     (entity) ->
                         entity.should.be.an.instanceOf(Object)
@@ -69,7 +80,7 @@ describe 'Observer', ->
                         doubleDone(0)
                     ,
                     (error, result) ->
-                        mojio_client.observer(app2, null,
+                        mojio_client.observe(app2, null,
                             # Callback for app2.
                             (entity) ->
                                 entity.should.be.an.instanceOf(Object)

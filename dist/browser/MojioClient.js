@@ -108,9 +108,6 @@
       this.hub = null;
       this.connStatus = null;
       this.token = null;
-      this._hub = null;
-      this._connStatus = null;
-      this._conn = null;
       this.signalr = new SignalR("http://" + this.options.hostname + ":" + this.options.port + "/v1/signalr", ['ObserverHub'], $);
     }
 
@@ -161,8 +158,7 @@
         parts.body = request.body;
       }
       http = new Http($);
-      http.request(parts, callback);
-      return this.signalr = new SignalR("http://" + this.options.hostname + ":" + this.options.port + "/v1/signalr", ['ObserverHub'], $);
+      return http.request(parts, callback);
     };
 
     /*
