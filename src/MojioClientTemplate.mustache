@@ -45,7 +45,7 @@ module.exports = class MojioClient
             parts.path += MojioClient._makeParameters(request.parameters)
 
         parts.headers = {}
-        parts.headers["MojioAPIToken"] = @getTokenId()
+        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
         parts.headers += request.headers if (request.headers?)
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
         parts.headers["Content-Type"] = 'application/json'

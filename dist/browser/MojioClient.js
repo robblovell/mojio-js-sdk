@@ -149,7 +149,9 @@
         parts.path += MojioClient._makeParameters(request.parameters);
       }
       parts.headers = {};
-      parts.headers["MojioAPIToken"] = this.getTokenId();
+      if (this.getTokenId() != null) {
+        parts.headers["MojioAPIToken"] = this.getTokenId();
+      }
       if ((request.headers != null)) {
         parts.headers += request.headers;
       }
