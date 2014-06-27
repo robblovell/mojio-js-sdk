@@ -7,16 +7,27 @@
     App = this.App;
 
     config = {
-        application: '9ea750d2-7085-4125-bcd8-5e6d05d1d695',
-        secret: 'e464f45a-e877-4655-b119-f7c58c10549f',
-        hostname: 'develop.api.moj.io',
+        application: 'Your-Sandbox-Application-Key-Here',
+        secret: 'Your-Sandbox-Application-Secret-Here',
+        hostname: 'api.moj.io',
         version: 'v1',
-        port: '80'
+        port: '80',
+        login: 'Your-Username',
+        password: 'Your-Password'
     };
 
     mojio_client = new MojioClient(config);
 
     $(function() {
+        if (config.application == 'Your-Sandbox-Application-Key-Here')
+            div = document.getElementById('result');
+            div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.js.  <br>';
+            return;
+        if (config.login == 'Your-Username')
+            div = document.getElementById('result2');
+            div.innerHTML += 'Mojio Error:: Set a username and password in login.js.  <br>';
+            return;
+
         var appChangedCallback;
         appChangedCallback = function(entity) {
             var div;
@@ -24,7 +35,7 @@
             div.innerHTML += 'Observed /App <br>';
             return div.innerHTML += JSON.stringify(entity);
         };
-        return mojio_client.login('anonymous@moj.io', 'Password007', function(error, result) {
+        return mojio_client.login(config.login, config.password, function(error, result) {
             var app, div;
             if (error) {
                 return alert("Login Error:" + error);
