@@ -66,6 +66,8 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     view['models'] = models
                     view['http_require'] = "Http = require './HttpNodeWrapper'"
                     view['http_request'] = "http = new Http()"
+                    view['extra_signalr_params'] = "" # none.
+                    view['signalr_require'] = "SignalR = require './SignalRNodeWrapper'"
                     output = client_template.render(view)
 
                     wstream = fs.createWriteStream("./nodejs/MojioClient.coffee")
@@ -74,6 +76,8 @@ fs.readFile('./models/schema.coffee', (err, data) ->
 
                     view['http_require'] = "Http = require './HttpBrowserWrapper'"
                     view['http_request'] = "http = new Http($)"
+                    view['extra_signalr_params'] = ", $"
+                    view['signalr_require'] = "SignalR = require './SignalRBrowserWrapper'"
                     output = client_template.render(view)
 
                     wstream = fs.createWriteStream("./browser/MojioClient.coffee")

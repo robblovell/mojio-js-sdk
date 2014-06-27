@@ -56,7 +56,6 @@ module.exports = class MojioClient
 
         http = new Http($)
         http.request(parts, callback)
-        @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'], $)
 
     ###
         Login
