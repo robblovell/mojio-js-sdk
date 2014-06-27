@@ -6,17 +6,31 @@ config =     {
     secret: 'e464f45a-e877-4655-b119-f7c58c10549f',
     hostname: 'develop.api.moj.io',
     version: 'v1',
-    port:'80'
+    port:'80',
+    login: 'anonymous@moj.io',
+    password: 'Password007'
 }
+
 
 mojio_client = new MojioClient(config);
 $( () ->
+
     appChangedCallback = (entity) ->
         div = document.getElementById('result6')
         div.innerHTML += 'Observed /App <br>'
         div.innerHTML += JSON.stringify(entity)
 
-    mojio_client.login('anonymous@moj.io', 'Password007', (error, result) ->
+    if (config.application == 'Your-Sandbox-Application-Key-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.js.  <br>'
+        return
+
+    if (config.login == 'Your-Username')
+        div = document.getElementById('result2')
+        div.innerHTML += 'Mojio Error:: Set a username and password in login.js.  <br>'
+        return
+
+    mojio_client.login(config.login, config.password, (error, result) ->
         if (error)
             alert("Login Error:"+error)
         else
