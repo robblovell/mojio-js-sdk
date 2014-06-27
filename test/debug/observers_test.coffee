@@ -1,10 +1,10 @@
-MojioClient = require '../lib/nodejs/MojioClient'
-Observer = require '../lib/models/Observer'
-App = require '../lib/models/App'
-config = require './config/mojio-config.coffee'
+MojioClient = require '../../src/nodejs/MojioClient'
+Observer = require '../../src/models/Observer'
+App = require '../../src/models/App'
+config = require '../config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
-testdata = require('./data/mojio-test-data')
+testdata = require('../data/mojio-test-data')
 should = require('should')
 count = [0,0]
 app1=null

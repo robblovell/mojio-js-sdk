@@ -5,7 +5,7 @@ module.exports = class Observer extends MojioModel
     _schema:             {
                 "Type": "String",
                 "Name": "String",
-                "ObserverType": "Integer",
+                "ObserverType": "String",
                 "AppId": "String",
                 "OwnerId": "String",
                 "Parent": "String",

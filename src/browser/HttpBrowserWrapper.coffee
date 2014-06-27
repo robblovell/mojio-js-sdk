@@ -1,15 +1,11 @@
+# assume's jQuery. (bower install jquery)
 module.exports = class HttpBrowserWrapper
 
     constructor: (@$) ->
 
-    dataByMethod =  (data, method) ->
-        switch method.toUpperCase()
-            when 'POST','PUT' then JSON.stringify(data)
-            else return data
-
     sendRequest = (url, data, method, headers) ->
         return @$.ajax(url, {
-            data: dataByMethod(data, method),
+            data: data,
             headers: headers,
             contentType: "application/json",
             type: method,

@@ -88,10 +88,10 @@
     };
 
     MojioModel.prototype.stringify = function() {
-      return JSON.stringify(this, this.filter);
+      return JSON.stringify(this, this.replacer);
     };
 
-    MojioModel.prototype.filter = function(key, value) {
+    MojioModel.prototype.replacer = function(key, value) {
       if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
         return void 0;
       } else {
