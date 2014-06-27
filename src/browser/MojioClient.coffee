@@ -1,5 +1,5 @@
 Http = require './HttpBrowserWrapper'
-SignalR = require 'signalr-client'
+SignalR = require './SignalRBrowserWrapper'
 
 module.exports = class MojioClient
 
@@ -17,7 +17,8 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @token = null
-        @signalr = new SignalR.client("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
+
+        @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'], $)
 
     ###
         Helpers
@@ -51,8 +52,9 @@ module.exports = class MojioClient
 
         parts.body = request.body if request.body?
 
-        http = new Http()
+        http = new Http($)
         http.request(parts, callback)
+
     ###
         Login
     ###
@@ -95,6 +97,7 @@ module.exports = class MojioClient
         )
 
     mojio_models = {}  # this is so make_model can use a string to constuct the model.
+
 
     App = require('../models/App');
     mojio_models['App'] = App
@@ -180,14 +183,8 @@ module.exports = class MojioClient
     ###
             Observer
     ###
-    observer_callbacks:  {}
 
-    observer_registry: (entity) =>
-        if @observer_callbacks[entity._id]
-            callback(entity) for callback in @observer_callbacks[entity._id]
-
-    # observer callback takes an entity as a parameter.
-    observer: (object, subject=null, observer_callback, callback) => # Use if you want the raw result of the call.
+    observe: (object, subject=null, observer_callback, callback) ->
         # subject is { model: type, _id: id }
         if (subject == null)
             observer = new Observer(
@@ -206,28 +203,22 @@ module.exports = class MojioClient
             )
 
         @request({ method: 'PUT', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
-            callback(error, null) if error
-            hub = @getHub()
-            if (!@observer_callbacks[result.SubjectId]?)
-                @observer_callbacks[result.SubjectId] = []
-            @observer_callbacks[result.SubjectId].push(observer_callback)
-            hub.invoke('Subscribe', result._id)
-            callback(null, observer)
+            if error
+                callback(error, null)
+            else
+                observer = new Observer(result)
+                @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, (error, result) ->
+                    callback(null, observer)
+                )
         )
 
-    unobserve: (observer, observer_callback=null) ->
-        if (observer_callback == null)
-            @observer_callbacks[observer.SubjectId] = []
+    unobserve: (observer, subject, observer_callback=null, callback) ->
+        if !observer || !subject?
+            callback("Observer and subject required.")
         else
-            temp = []
-            for callback in @observer_callbacks[observer.SubjectId]
-                temp[observer.SubjectId].push(callback) if (callback != observer_callback)
-            @observer_callbacks[observer.SubjectId] = temp
-
-        if (@observer_callbacks[observer.SubjectId].length == 0)
-            hub.invoke('Unsubscribe', observer._id)
-
-        callback(null, observer)
+            @signalr.unsubscribe('ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, (error, result) ->
+                callback(null, observer)
+            )
 
     ###
         Signal R
@@ -255,13 +246,3 @@ module.exports = class MojioClient
         else
             return false
         return true
-
-    getHub: () ->
-        return @hub if (@hub?)
-
-        @hub = @signalr.hub('ObserverHub');
-        @hub.on("Error", (data) ->
-            log(data)
-        )
-        @hub.on("UpdateEntity", @observer_registry) # observer_callback(entity)
-        return @hub

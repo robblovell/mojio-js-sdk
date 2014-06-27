@@ -4,25 +4,15 @@
   var HttpBrowserWrapper;
 
   module.exports = HttpBrowserWrapper = (function() {
-    var dataByMethod, sendRequest;
+    var sendRequest;
 
     function HttpBrowserWrapper($) {
       this.$ = $;
     }
 
-    dataByMethod = function(data, method) {
-      switch (method.toUpperCase()) {
-        case 'POST':
-        case 'PUT':
-          return JSON.stringify(data);
-        default:
-          return data;
-      }
-    };
-
     sendRequest = function(url, data, method, headers) {
       return this.$.ajax(url, {
-        data: dataByMethod(data, method),
+        data: data,
         headers: headers,
         contentType: "application/json",
         type: method,
