@@ -4,39 +4,40 @@
 
     MojioClient = this.MojioClient;
 
-    App = this.App;
-
     config = {
-        application: 'Your-Sandbox-Application-Key-Here',
-        secret: 'Your-Sandbox-Application-Secret-Here',
-        hostname: 'api.moj.io',
+        application: '9ea750d2-7085-4125-bcd8-5e6d05d1d695',
+        secret: 'e464f45a-e877-4655-b119-f7c58c10549f',
+        hostname: 'develop.api.moj.io',
         version: 'v1',
         port: '80',
-        login: 'Your-Username',
-        password: 'Your-Password'
+        login: 'anonymous@moj.io',
+        password: 'Password007'
     };
 
     mojio_client = new MojioClient(config);
 
-    $(function() {
-        if (config.application == 'Your-Sandbox-Application-Key-Here')
-            div = document.getElementById('result');
-            div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.js.  <br>';
-            return;
-        if (config.login == 'Your-Username')
-            div = document.getElementById('result2');
-            div.innerHTML += 'Mojio Error:: Set a username and password in login.js.  <br>';
-            return;
+    App = mojio_client.model('App');
 
-        var appChangedCallback;
+    $(function() {
+        var appChangedCallback, div;
         appChangedCallback = function(entity) {
             var div;
             div = document.getElementById('result6');
             div.innerHTML += 'Observed /App <br>';
             return div.innerHTML += JSON.stringify(entity);
         };
+        if (config.application === 'Your-Sandbox-Application-Key-Here') {
+            div = document.getElementById('result');
+            div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.js.  <br>';
+            return;
+        }
+        if (config.login === 'Your-Username') {
+            div = document.getElementById('result2');
+            div.innerHTML += 'Mojio Error:: Set a username and password in login.js.  <br>';
+            return;
+        }
         return mojio_client.login(config.login, config.password, function(error, result) {
-            var app, div;
+            var app;
             if (error) {
                 return alert("Login Error:" + error);
             } else {
