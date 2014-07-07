@@ -1,5 +1,4 @@
 MojioClient = @MojioClient
-App = @App;
 
 config =     {
     application: '9ea750d2-7085-4125-bcd8-5e6d05d1d695',
@@ -11,8 +10,9 @@ config =     {
     password: 'Password007'
 }
 
+mojio_client = new MojioClient(config)
+App = mojio_client.model('App')
 
-mojio_client = new MojioClient(config);
 $( () ->
 
     appChangedCallback = (entity) ->
