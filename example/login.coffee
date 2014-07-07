@@ -1,5 +1,5 @@
 MojioClient = @MojioClient
-App = @App
+App = @App;
 
 config =     {
     application: '9ea750d2-7085-4125-bcd8-5e6d05d1d695',

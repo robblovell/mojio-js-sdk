@@ -247,9 +247,14 @@
 
     mojio_models['Observer'] = Observer;
 
-    MojioClient.prototype.make_model = function(type, json) {
+    MojioClient.prototype.model = function(type, json) {
       var data, object, _i, _len, _ref;
-      if (json.Data instanceof Array) {
+      if (json == null) {
+        json = null;
+      }
+      if (json === null) {
+        return mojio_models[type];
+      } else if (json.Data instanceof Array) {
         object = new Array();
         _ref = json.Data;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -273,7 +278,7 @@
           resource: model.resource(),
           parameters: criteria
         }, function(error, result) {
-          return callback(error, _this.make_model(model.model(), result));
+          return callback(error, _this.model(model.model(), result));
         });
       } else if (typeof criteria === "string") {
         return this.request({
@@ -283,7 +288,7 @@
             id: criteria
           }
         }, function(error, result) {
-          return callback(error, _this.make_model(model.model(), result));
+          return callback(error, _this.model(model.model(), result));
         });
       } else {
         return callback("criteria given is not in understood format, string or object.", null);
@@ -837,7 +842,7 @@
           resource: this.resource(),
           parameters: criteria
         }, function(error, result) {
-          return callback(error, _this._client.make_model(_this.model(), result));
+          return callback(error, _this._client.model(_this.model(), result));
         });
       } else if (typeof criteria === "string") {
         return this._client.request({
@@ -847,7 +852,7 @@
             id: criteria
           }
         }, function(error, result) {
-          return callback(error, _this._client.make_model(_this.model(), result));
+          return callback(error, _this._client.model(_this.model(), result));
         });
       } else {
         return callback("criteria given is not in understood format, string or object.", null);

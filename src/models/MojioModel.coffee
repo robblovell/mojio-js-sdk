@@ -45,11 +45,11 @@ module.exports = class MojioModel
             return
         if (criteria instanceof Object)
             @_client.request({ method: 'GET',  resource: @resource(), parameters: criteria }, (error, result) =>
-                callback(error, @_client.make_model(@model(), result))
+                callback(error, @_client.model(@model(), result))
             )
         else if (typeof criteria == "string") # instanceof only works for coffeescript classes.
             @_client.request({ method: 'GET',  resource: @resource(), parameters: {id: criteria} }, (error, result) =>
-                callback(error, @_client.make_model(@model(), result))
+                callback(error, @_client.model(@model(), result))
             )
         else
             callback("criteria given is not in understood format, string or object.",null)

@@ -96,7 +96,7 @@ module.exports = class MojioClient
             callback(error, result)
         )
 
-    mojio_models = {}  # this is so make_model can use a string to constuct the model.
+    mojio_models = {}  # this is so model can use a string to constuct the model.
 
 
     App = require('../models/App');
@@ -128,8 +128,10 @@ module.exports = class MojioClient
     mojio_models['Observer'] = Observer
 
     # Make an app from a result
-    make_model: (type, json) ->
-        if (json.Data instanceof Array)
+    model: (type, json=null) ->
+        if (json == null)
+            return mojio_models[type]
+        else if (json.Data instanceof Array)
             object = new Array()
             object.push(new mojio_models[type](data)) for data in json.Data
         else if (json.Data?)
@@ -144,11 +146,11 @@ module.exports = class MojioClient
     query: (model, criteria, callback) ->
         if (criteria instanceof Object)
             @request({ method: 'GET',  resource: model.resource(), parameters: criteria }, (error, result) =>
-                callback(error, @make_model(model.model(), result))
+                callback(error, @model(model.model(), result))
             )
         else if (typeof criteria == "string") # instanceof only works for coffeescript classes.
             @request({ method: 'GET',  resource: model.resource(), parameters: {id: criteria} }, (error, result) =>
-                callback(error, @make_model(model.model(), result))
+                callback(error, @model(model.model(), result))
             )
         else
             callback("criteria given is not in understood format, string or object.",null)
