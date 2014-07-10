@@ -8,9 +8,9 @@ fs.readFile('./models/schema.coffee', (err, data) ->
 
     fs.readFile('./models/ModelTemplate.mustache', (err, data) ->
         model_template = Combyne(data.toString())
-        fs.readFile('../test/TestTemplate.mustache', (err, data) ->
+        fs.readFile('../../test/TestTemplate.mustache', (err, data) ->
             test_template = Combyne(data.toString())
-            fs.readFile('../test/TestTemplate_Short.mustache', (err, data) ->
+            fs.readFile('../../test/TestTemplate_Short.mustache', (err, data) ->
                 short_test_template = Combyne(data.toString())
                 models = []
                 i=0
@@ -55,7 +55,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                         output = short_test_template.render(view)
                     else
                         output = test_template.render(view)
-                    wstream = fs.createWriteStream("../test/"+model+"_test.coffee")
+                    wstream = fs.createWriteStream("../../test/"+model+"_test.coffee")
                     wstream.write(output)
                     wstream.end()
                     models[i++] = view

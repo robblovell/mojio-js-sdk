@@ -1,4 +1,4 @@
-cd src
+cd src/js
 coffee generate.coffee
-cd ..
+cd ../..
 ./build.sh
