@@ -1,0 +1,4 @@
+-main helloworld.Main
+-cp src
+-java bin/hello.java
+-debug

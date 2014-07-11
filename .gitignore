@@ -8,3 +8,4 @@ test/**/*.map
 example/**/*.js
 example/**/*.map
 npm-debug.log
+src/haxe/bin

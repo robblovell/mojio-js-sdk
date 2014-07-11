@@ -15,8 +15,8 @@ before_script:
   
 script:
   - bower install
-  - coffee --map --compile src/nodejs
-  - coffee --map --compile src/models
+  - coffee --map --compile src/js/nodejs
+  - coffee --map --compile src/js/models
   - cp src/js/nodejs/*.js lib/nodejs
   - cp src/js/models/*.js lib/models
   - coffee --map --compile src/js/browser

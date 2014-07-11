@@ -1,0 +1,4 @@
+-main helloworld.Main
+-cp src
+-cpp bin/hello.cpp
+-debug

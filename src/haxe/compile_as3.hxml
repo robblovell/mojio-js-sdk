@@ -1,0 +1,4 @@
+-main helloworld.Main
+-cp src
+-as3 bin/hello.as3
+-debug

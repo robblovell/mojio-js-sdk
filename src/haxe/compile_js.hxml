@@ -1,0 +1,4 @@
+-main helloworld.Main
+-cp src
+-js bin/hello.js
+-debug
