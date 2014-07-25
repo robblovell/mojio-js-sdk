@@ -28,7 +28,13 @@ module.exports = class Event extends MojioModel
                 "RPM": "Integer",
                 "DTCs": "Array",
                 "MilStatus": "Boolean",
-                "Force": "Float"
+                "Force": "Float",
+                "MaxSpeed": "Float",
+                "AverageSpeed": "Float",
+                "MovingTime" : "Float",
+                "IdleTime" : "Float",
+                "StopTime" : "Float",
+                "MaxRPM" : "Float"
             }
 
 
