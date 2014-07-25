@@ -11,7 +11,7 @@ notifications:
     - robbl@moj.io
 
 before_script:
-  - npm install -g bower@1.3.3
+  - npm install -g bower
   
 script:
   - bower install
