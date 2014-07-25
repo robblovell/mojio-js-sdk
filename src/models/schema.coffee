@@ -516,6 +516,12 @@
         "TimeIsApprox": "Boolean",
         "BatteryVoltage": "Float",
         "ConnectionLost": "Boolean",
+        "MaxSpeed": "Float",
+        "AverageSpeed": "Float",
+        "MovingTime" : "Float",
+        "IdleTime" : "Float",
+        "StopTime" : "Float",
+        "MaxRPM" : "Float",
         "_id": "String",
         "_deleted": "Boolean"
     },
