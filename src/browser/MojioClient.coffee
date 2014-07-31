@@ -23,6 +23,24 @@ module.exports = class MojioClient
     ###
         Helpers
     ###
+    @getResult: (type, results) ->
+        objects = []
+        if (results instanceof Array)
+            arrlength = results.length;
+            objects[i] = new mojio_models[type](result) for result in results
+
+        else if (results.Data instanceof Array)
+            arrlength = results.Data.length;
+            objects[i] = new mojio_models[type](result) for result in results.Data
+
+        else if ((result.Data != null))
+            objects[i] = new mojio_models[type](result.Data)
+        else
+            objects[i] = new mojio_models[type](result)
+
+        return objects
+
+
     @_makeParameters: (params) ->
         '' if params.length==0
         query = '?'
