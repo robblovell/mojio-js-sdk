@@ -114,30 +114,31 @@
     /*
         Helpers
     */
-      MojioClient.getResult = function(type, results) {
-          var arrlength, objects, result, _i, _j, _len, _len1, _ref;
-          objects = [];
-          if (results instanceof Array) {
-              arrlength = results.length;
-              for (_i = 0, _len = results.length; _i < _len; _i++) {
-                  result = results[_i];
-                  objects[i] = new mojio_models[type](result);
-              }
-          } else if (results.Data instanceof Array) {
-              arrlength = results.Data.length;
-              _ref = results.Data;
-              for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-                  result = _ref[_j];
-                  objects[i] = new mojio_models[type](result);
-              }
-          } else if (result.Data !== null) {
-              objects[i] = new mojio_models[type](result.Data);
-          } else {
-              objects[i] = new mojio_models[type](result);
-          }
-          return objects;
-      };
 
+
+    MojioClient.prototype.getResults = function(type, results) {
+      var arrlength, objects, result, _i, _j, _len, _len1, _ref;
+      objects = [];
+      if (results instanceof Array) {
+        arrlength = results.length;
+        for (_i = 0, _len = results.length; _i < _len; _i++) {
+          result = results[_i];
+          objects.push(new type(result));
+        }
+      } else if (results.Data instanceof Array) {
+        arrlength = results.Data.length;
+        _ref = results.Data;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          result = _ref[_j];
+          objects.push(new type(result));
+        }
+      } else if (result.Data !== null) {
+        objects.push(new type(result.Data));
+      } else {
+        objects.push(new type(result));
+      }
+      return objects;
+    };
 
     MojioClient._makeParameters = function(params) {
       var property, query, value;
@@ -716,7 +717,13 @@
       "RPM": "Integer",
       "DTCs": "Array",
       "MilStatus": "Boolean",
-      "Force": "Float"
+      "Force": "Float",
+      "MaxSpeed": "Float",
+      "AverageSpeed": "Float",
+      "MovingTime": "Float",
+      "IdleTime": "Float",
+      "StopTime": "Float",
+      "MaxRPM": "Float"
     };
 
     Event.prototype._resource = 'Events';

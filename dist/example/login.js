@@ -45,20 +45,13 @@
                 div.innerHTML += 'POST /login<br>';
                 div.innerHTML += JSON.stringify(result);
                 mojio_client.query(App, {}, function(error, result) {
-                    var app;
+                    var app, apps;
                     if (error) {
                         div = document.getElementById('result2');
                         return div.innerHTML += 'Get Apps Error' + error + '<br>';
                     } else {
-                        if (result instanceof Array) {
-                            app = new App(result[0]);
-                        } else if (result.Data instanceof Array) {
-                            app = new App(result.Data[0]);
-                        } else if ((result.Data != null)) {
-                            app = new App(result.Data);
-                        } else {
-                            app = new App(result);
-                        }
+                        apps = mojio_client.getResults(App, result);
+                        app = apps[0];
                         div = document.getElementById('result2');
                         div.innerHTML += 'Query /App<br>';
                         return div.innerHTML += JSON.stringify(result);
