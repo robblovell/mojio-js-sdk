@@ -39,6 +39,7 @@ module.exports = class MojioModel
             return value
 
     # instance methods.
+    # GET
     query: (criteria, callback) ->
         if (@_client == null)
             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null)
@@ -57,42 +58,51 @@ module.exports = class MojioModel
     get: (criteria, callback) ->
         @query(criteria,callback)
 
+    # POST
     create: (callback) ->
         if (@_client == null)
             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null)
             return
-        @_client.request({ method: 'POST',  resource: @resource(), body: @stringify() }, (error, result) =>
-            callback(error, result)
-        )
+        @_client.request({ method: 'POST',  resource: @resource(), body: @stringify() }, callback)
 
     post: (callback) ->
         @create(callback)
 
+    # PUT
     save: (callback) ->
         if (@_client == null)
             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null)
             return
-        @_client.request({ method: 'PUT',  resource: @resource(), body: @stringify(), parameters: {id: @_id} }, (error, result) =>
-            callback(error, result)
-        )
+        @_client.request({ method: 'PUT',  resource: @resource(), body: @stringify(), parameters: {id: @_id} }, callback)
 
     put: (callback) ->
         @save(callback)
 
+    # DELETE
     delete: (callback) ->
-        @_client.request({ method: 'DELETE',  resource: @resource(), parameters: {id: @_id} }, (error, result) =>
-            callback(error, result)
-        )
+        @_client.request({ method: 'DELETE',  resource: @resource(), parameters: {id: @_id} }, callback)
+
+    # OBSERVER
+    observe: (object, subject=null, observer_callback, callback) ->
+        @_client.observe(object, subject, observer_callback, callback)
+
+    unobserve: (object, subject=null, observer_callback, callback) ->
+        @_client.observe(object, subject, observer_callback, callback)
+
+    # STORAGE
+    store: (model, key, value, callback) ->
+        @_client.store(model, key, value, callback)
+
+    storage: (model, key, callback) ->
+        @_client.storage(model, key, callback)
+
+    unstore: (model, key, callback) ->
+        @_client.unstore(model, key, callback)
 
     # Unimplemented
-    observe: (children=null, callback) ->
-        callback(null,null)
-
-    storage: (property, value, callback) ->
-        callback(null,null)
-
     statistic: (expression, callback) ->
-        callback(null,null)
+        callback(null,true)
+
     # Gettors
     resource: () ->
         return @_resource
