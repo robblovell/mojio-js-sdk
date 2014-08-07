@@ -137,7 +137,6 @@
     };
 
     MojioModel.prototype.create = function(callback) {
-      var _this = this;
       if (this._client === null) {
         callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
         return;
@@ -146,9 +145,7 @@
         method: 'POST',
         resource: this.resource(),
         body: this.stringify()
-      }, function(error, result) {
-        return callback(error, result);
-      });
+      }, callback);
     };
 
     MojioModel.prototype.post = function(callback) {
@@ -156,7 +153,6 @@
     };
 
     MojioModel.prototype.save = function(callback) {
-      var _this = this;
       if (this._client === null) {
         callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
         return;
@@ -168,9 +164,7 @@
         parameters: {
           id: this._id
         }
-      }, function(error, result) {
-        return callback(error, result);
-      });
+      }, callback);
     };
 
     MojioModel.prototype.put = function(callback) {
@@ -178,31 +172,43 @@
     };
 
     MojioModel.prototype["delete"] = function(callback) {
-      var _this = this;
       return this._client.request({
         method: 'DELETE',
         resource: this.resource(),
         parameters: {
           id: this._id
         }
-      }, function(error, result) {
-        return callback(error, result);
-      });
+      }, callback);
     };
 
-    MojioModel.prototype.observe = function(children, callback) {
-      if (children == null) {
-        children = null;
+    MojioModel.prototype.observe = function(object, subject, observer_callback, callback) {
+      if (subject == null) {
+        subject = null;
       }
-      return callback(null, null);
+      return this._client.observe(object, subject, observer_callback, callback);
     };
 
-    MojioModel.prototype.storage = function(property, value, callback) {
-      return callback(null, null);
+    MojioModel.prototype.unobserve = function(object, subject, observer_callback, callback) {
+      if (subject == null) {
+        subject = null;
+      }
+      return this._client.observe(object, subject, observer_callback, callback);
+    };
+
+    MojioModel.prototype.store = function(model, key, value, callback) {
+      return this._client.store(model, key, value, callback);
+    };
+
+    MojioModel.prototype.storage = function(model, key, callback) {
+      return this._client.storage(model, key, callback);
+    };
+
+    MojioModel.prototype.unstore = function(model, key, callback) {
+      return this._client.unstore(model, key, callback);
     };
 
     MojioModel.prototype.statistic = function(expression, callback) {
-      return callback(null, null);
+      return callback(null, true);
     };
 
     MojioModel.prototype.resource = function() {

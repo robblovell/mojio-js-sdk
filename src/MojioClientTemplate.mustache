@@ -46,6 +46,26 @@ module.exports = class MojioClient
             query += "#{property}=#{value}&"
         return query.slice(0,-1)
 
+    getPath: (resource, id, action, key) ->
+        if (key && id && action && id != '' && action != '')
+            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id) + "/" + encodeURIComponent(action) + "/" + encodeURIComponent(key);
+        else if (id && action && id != '' && action != '')
+            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id) + "/" + encodeURIComponent(action);
+        else if (id && id != '')
+            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id);
+        else if (action && action != '')
+            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(action);
+
+        return "/" + encodeURIComponent(resource);
+
+    dataByMethod: (data, method) ->
+        switch (method.toUpperCase())
+            when 'POST' or 'PUT' then return @stringify(data)
+            else return data
+
+    stringify: (data) ->
+        return JSON.stringify(data)
+
     request: (request, callback) ->
         parts = {
             hostname: @options.hostname
@@ -55,8 +75,8 @@ module.exports = class MojioClient
             method: request.method,
             withCredentials: false
         }
-        parts.path += '/'+request.resource if (request.resource?)
-        parts.path += '/'+request.id if (request.id? && request.id != '')
+        parts.path = '/'+@options.version + @getPath(request.resource, request.id, request.action, request.key)
+
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += MojioClient._makeParameters(request.parameters)
 
@@ -70,6 +90,7 @@ module.exports = class MojioClient
 
         {{http_request}}
         http.request(parts, callback)
+
 
     ###
         Login
@@ -215,6 +236,42 @@ module.exports = class MojioClient
         else
             @signalr.unsubscribe('ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, (error, result) ->
                 callback(null, observer)
+            )
+
+    ###
+        Storage
+    ###
+
+    store: (model, key, value, callback) ->
+        if !model || !model._id
+            callback("Storage requires an object with a valid id.")
+        else
+            @request({ method: 'PUT', resource: model.resource(), id: model.id(), action: 'store', key: key, body: JSON.stringify(value) }, (error, result) =>
+                if error
+                    callback(error, null)
+                else
+                    callback(null, result)
+            )
+    storage: (model, key, callback) ->
+        if !model || !model._id
+            callback("Get of storage requires an object with a valid id.")
+        else
+            @request({ method: 'GET', resource: model.resource(), id: model.id(), action: 'store', key: key}, (error, result) =>
+                if error
+                    callback(error, null)
+                else
+                    callback(null, result)
+            )
+
+    unstore: (model, key, callback) ->
+        if !model || !model._id
+            callback("Storage requires an object with a valid id.")
+        else
+            @request({ method: 'DELETE', resource: model.resource(), id: model.id(), action: 'store', key: key}, (error, result) =>
+                if error
+                    callback(error, null)
+                else
+                    callback(null, result)
             )
 
     ###
