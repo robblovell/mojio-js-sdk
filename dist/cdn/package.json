@@ -1,0 +1,31 @@
+{
+    "name": "mojio-js",
+    "filename": "mojio.min.js",
+    "version": "1.4.0",
+    "description": "Mojio's mojio-js is a client to Mojio's connected car API.",
+    "homepage": "https://github.com/mojio/mojio-js",
+    "keywords": [
+        "javascript",
+        "vehicle",
+        "car",
+        "connected"
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/mojio/mojio-js"
+        }
+    ],
+    "npmName": "mojio-js",
+    "npmFileMap": [
+        {
+            "basePath": "/src/",
+            "files": [
+                "mojio-js.js",
+                "mojio-js.min.js",
+                "mojio-js-models.js",
+                "mojio-js-models.min.js"
+            ]
+        }
+    ]
+}
