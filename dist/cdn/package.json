@@ -10,22 +10,21 @@
         "car",
         "connected"
     ],
+    "autoupdate": {
+        "source": "git",
+        "target": "https://github.com/mojio/mojio-js.git",
+        "basePath": "/dist/cdn/",
+        "files": [
+            "mojio-js.js",
+            "mojio-js.min.js",
+            "mojio-js-models.js",
+            "mojio-js-models.min.js"
+        ]
+    },
     "repositories": [
         {
             "type": "git",
             "url": "https://github.com/mojio/mojio-js"
-        }
-    ],
-    "npmName": "mojio-js",
-    "npmFileMap": [
-        {
-            "basePath": "/src/",
-            "files": [
-                "mojio-js.js",
-                "mojio-js.min.js",
-                "mojio-js-models.js",
-                "mojio-js-models.min.js"
-            ]
         }
     ]
 }
