@@ -53,12 +53,12 @@ Mojio = @Mojio
 config = {
     application: 'YOUR APPLICATION KEY',
     secret: 'YOUR SECRET KEY',
-    hostname: 'sandbox.api.moj.io',
+    hostname: 'api.moj.io',
     version: 'v1',
     port: '80'
 }
 
-mojio = new Mojio(config);
+mojio = new MojioClient(config);
 
 mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
     if (error)
