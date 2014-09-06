@@ -1,4 +1,4 @@
-# mojio-js
+﻿# mojio-js
 
 Mojio javascript REST client.  Mojio provides a standard REST platform for writing connected car applications.
 
@@ -53,7 +53,7 @@ Mojio = @Mojio
 config = {
     application: 'YOUR APPLICATION KEY',
     secret: 'YOUR SECRET KEY',
-    hostname: 'sandbox.api.moj.io',
+    hostname: 'api.moj.io',
     version: 'v1',
     port: '80'
 }
@@ -91,7 +91,7 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
         config = {
             application: 'YOUR APPLICATION KEY',
             secret: 'YOUR SECRET KEY',
-            hostname: 'sandbox.api.moj.io',
+            hostname: 'api.moj.io',
             version: 'v1',
             port: '80'
         };
@@ -121,7 +121,7 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
 config = {
            application: 'YOUR APPLICATION KEY',
            secret: 'YOUR SECRET KEY',
-           hostname: 'sandbox.api.moj.io',
+           hostname: 'api.moj.io',
            version: 'v1',
            port:'80'
          }
@@ -139,7 +139,7 @@ var Mojio, mojio, config;
 config = {
   application: 'YOUR APPLICATION KEY',
   secret: 'YOUR SECRET KEY',
-  hostname: 'sandbox.api.moj.io',
+  hostname: 'api.moj.io',
   version: 'v1',
   port: '80'
 };
