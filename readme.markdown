@@ -2,10 +2,33 @@
 
 Mojio javascript REST client.  Mojio provides a standard REST platform for writing connected car applications.
 
-This repository contains a node js client and a browser js client.
+This repository contains a Node-js client and a Browser based js client.
 
-The client is built from mustache files using combyne.  The builder generates coffeescript files which are then compiled to js for use in the browser and node-js environments.  Built code
-is in the /dist directory.
+For browser based HTML applications you get this client via Bower:
+
+```
+bower install mojio-js
+```
+
+Or via the Mojio CDN at https://djaqzxyxnyyiy.cloudfront.net
+
+```
+<script src="https://djaqzxyxnyyiy.cloudfront.net/mojio-js.js"></script>
+```
+
+If you are in a node envirionment, use npm:
+
+```
+npm install mojio-js
+```
+
+You can always checkout this repo and use the code directly.
+All distributions for the browser are in the "dist" directory.
+All distributions for Node-js are in the "lib" directory.
+
+The client is built from mustache files using combyne.
+The builder generates coffeescript files which are then compiled to js for use in the browser
+in the /dist directory and for use in node-js environments in the /lib directory.
 
 The browser client needs jquery to work properly.  See the example and test directories for how to use this client.
 
