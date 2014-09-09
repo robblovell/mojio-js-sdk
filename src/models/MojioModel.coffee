@@ -45,10 +45,18 @@ module.exports = class MojioModel
             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null)
             return
         if (criteria instanceof Object)
-            @_client.request({ method: 'GET',  resource: @resource(), parameters: criteria }, (error, result) =>
+            # convert criteria to a semicolon separated list of property values.
+            if (!criteria.criteria?)
+                query_criteria = ""
+                for property, value of criteria
+                    query_criteria += "#{property}=#{value};"
+                criteria = { criteria:  query_criteria }
+
+            @_client.request({ method: 'GET',  resource: @resource(), parameters: criteria}, (error, result) =>
                 callback(error, @_client.model(@model(), result))
             )
         else if (typeof criteria == "string") # instanceof only works for coffeescript classes.
+
             @_client.request({ method: 'GET',  resource: @resource(), parameters: {id: criteria} }, (error, result) =>
                 callback(error, @_client.model(@model(), result))
             )

@@ -18,29 +18,49 @@ describe 'Event', ->
     )
 
     # test Event
-#    it 'can get Events from Model', (done) ->
-#        event = new Event({})
-#        event.authorization(mojio_client)
-#
-#        event.query({}, (error, result) ->
-#            (error==null).should.be.true
-#            mojio_client.should.be.an.instanceOf(MojioClient)
-#            result.should.be.an.instanceOf(Array)
-#            if (result instanceof (Array))
-#                instance.should.be.an.instanceOf(Event) for instance in result
-#                testObject = instance  # save for later reference.
-#            else
-#                result.should.be.an.instanceOf(Event)
-#                testObject = result
-#            done()
-#        )
-#
-#    it 'can get Events', (done) ->
-#
-#        mojio_client.query(Event, {}, (error, result) ->
-#            (error==null).should.be.true
-#            mojio_client.should.be.an.instanceOf(MojioClient)
-#            result.should.be.an.instanceOf(Array)
-#            instance.should.be.an.instanceOf(Event) for instance in result
-#            done()
-#        )
+    it 'can get Events from Model', (done) ->
+        event = new Event({})
+        event.authorization(mojio_client)
+
+        event.query({}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            if (result instanceof (Array))
+                instance.should.be.an.instanceOf(Event) for instance in result
+                testObject = instance  # save for later reference.
+            else
+                result.should.be.an.instanceOf(Event)
+                testObject = result
+            done()
+        )
+
+    it 'can get Events', (done) ->
+
+        mojio_client.query(Event, {}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(Event) for instance in result
+            done()
+        )
+
+    # test Event
+    it 'can get Events from Model with criteria', (done) ->
+        event = new Event({})
+        event.authorization(mojio_client)
+
+        event.query({EventType: "TripStatus", FuelLevel: ""}, (error, result) ->
+            (error==null).should.be.true
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.should.be.an.instanceOf(Array)
+            if (result instanceof (Array))
+                instance.should.be.an.instanceOf(Event) for instance in result
+                testObject = instance  # save for later reference.
+                for event in result
+                    event.EventType.should.be.equal("TripStatus")
+            else
+                result.should.be.an.instanceOf(Event)
+                testObject = result
+            done()
+        )
