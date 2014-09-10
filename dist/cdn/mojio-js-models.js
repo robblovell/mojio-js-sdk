@@ -115,12 +115,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -385,12 +395,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -615,7 +635,8 @@
                         MovingTime: "Float",
                         IdleTime: "Float",
                         StopTime: "Float",
-                        MaxRPM: "Float"
+                        MaxRPM: "Float",
+                        Accelerometer: "Object"
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
@@ -678,12 +699,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -944,12 +975,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -1213,12 +1254,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -1436,12 +1487,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -1711,12 +1772,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -1984,12 +2055,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -2257,12 +2338,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -2544,12 +2635,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
@@ -2818,12 +2919,22 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
                         }
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this._client.request({
                                 method: "GET",
                                 resource: this.resource(),
