@@ -8,7 +8,7 @@ should = require('should')
 
 testObject = null
 
-describe 'Event', ->
+describe 'Event2', ->
 
     before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
