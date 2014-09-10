@@ -34,7 +34,8 @@ module.exports = class Event extends MojioModel
                 "MovingTime": "Float",
                 "IdleTime": "Float",
                 "StopTime": "Float",
-                "MaxRPM": "Float"
+                "MaxRPM": "Float",
+                "Accelerometer": "Object"
             }
 
 
