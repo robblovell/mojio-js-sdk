@@ -36,4 +36,4 @@ script:
   - ../../node_modules/.bin/browserify -r ./Vehicle.js --standalone App > ../../dist/browser/Vehicle.js
   - cd ../../
   - coffee --map --compile test
-  - mocha -t 30000 test
+  - mocha -t 45000 test
