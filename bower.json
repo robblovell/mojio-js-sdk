@@ -1,6 +1,6 @@
 {
   "name": "mojio-js",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "main": "dist/MojioClient.js",
   "ignore": [
     ".gitignore",
@@ -19,7 +19,7 @@
     "test"
   ],
   "dependencies": {
-    "jquery": "1.11.0",
+    "jquery": "2.1.1",
     "signalr": "2.0.2"
   },
   "devDependencies": {

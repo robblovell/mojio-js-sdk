@@ -616,6 +616,7 @@
                         ConnectionLost: "Boolean",
                         _id: "String",
                         _deleted: "Boolean",
+                        Accelerometer: "Object",
                         TripId: "String",
                         Altitude: "Float",
                         Heading: "Integer",
@@ -635,8 +636,7 @@
                         MovingTime: "Float",
                         IdleTime: "Float",
                         StopTime: "Float",
-                        MaxRPM: "Float",
-                        Accelerometer: "Object"
+                        MaxRPM: "Float"
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
