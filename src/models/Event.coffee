@@ -15,6 +15,7 @@ module.exports = class Event extends MojioModel
                 "ConnectionLost": "Boolean",
                 "_id": "String",
                 "_deleted": "Boolean",
+                "Accelerometer": "Object",
                 "TripId": "String",
                 "Altitude": "Float",
                 "Heading": "Integer",
@@ -34,8 +35,7 @@ module.exports = class Event extends MojioModel
                 "MovingTime": "Float",
                 "IdleTime": "Float",
                 "StopTime": "Float",
-                "MaxRPM": "Float",
-                "Accelerometer": "Object"
+                "MaxRPM": "Float"
             }
 
 

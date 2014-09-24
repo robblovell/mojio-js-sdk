@@ -182,10 +182,18 @@ module.exports = class MojioClient
     # query: (model, criteria=null, limit=null, offset=null, sortby="", desc=false, callback) ->
     query: (model, criteria, callback) ->
         if (criteria instanceof Object)
-            @request({ method: 'GET',  resource: model.resource(), parameters: criteria }, (error, result) =>
+            # convert criteria to a semicolon separated list of property values.
+            if (!criteria.criteria?)
+                query_criteria = ""
+                for property, value of criteria
+                    query_criteria += "#{property}=#{value};"
+                criteria = { criteria:  query_criteria }
+
+            @request({ method: 'GET',  resource: model.resource(), parameters: criteria}, (error, result) =>
                 callback(error, @model(model.model(), result))
             )
         else if (typeof criteria == "string") # instanceof only works for coffeescript classes.
+
             @request({ method: 'GET',  resource: model.resource(), parameters: {id: criteria} }, (error, result) =>
                 callback(error, @model(model.model(), result))
             )

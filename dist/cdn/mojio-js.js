@@ -288,8 +288,18 @@
                         return object;
                     };
                     MojioClient.prototype.query = function(model, criteria, callback) {
-                        var _this = this;
+                        var property, query_criteria, value, _this = this;
                         if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
+                                query_criteria = "";
+                                for (property in criteria) {
+                                    value = criteria[property];
+                                    query_criteria += "" + property + "=" + value + ";";
+                                }
+                                criteria = {
+                                    criteria: query_criteria
+                                };
+                            }
                             return this.request({
                                 method: "GET",
                                 resource: model.resource(),
@@ -718,6 +728,7 @@
                         ConnectionLost: "Boolean",
                         _id: "String",
                         _deleted: "Boolean",
+                        Accelerometer: "Object",
                         TripId: "String",
                         Altitude: "Float",
                         Heading: "Integer",
@@ -737,8 +748,7 @@
                         MovingTime: "Float",
                         IdleTime: "Float",
                         StopTime: "Float",
-                        MaxRPM: "Float",
-                        Accelerometer: "Object"
+                        MaxRPM: "Float"
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
