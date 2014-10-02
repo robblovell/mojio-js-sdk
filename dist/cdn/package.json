@@ -1,7 +1,7 @@
 {
     "name": "mojio-js",
     "filename": "mojio.min.js",
-    "version": "1.4.1",
+    "version": "1.5.1",
     "description": "Mojio's mojio-js is a client to Mojio's connected car API.",
     "homepage": "https://github.com/mojio/mojio-js",
     "keywords": [
