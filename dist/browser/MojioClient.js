@@ -15,6 +15,7 @@
         data: data,
         headers: headers,
         contentType: "application/json",
+        dataType: "json",
         type: method,
         cache: false,
         error: function(obj, status, error) {
@@ -315,33 +316,33 @@
       return object;
     };
 
-    MojioClient.prototype.query = function(model, criteria, callback) {
+    MojioClient.prototype.query = function(model, parameters, callback) {
       var property, query_criteria, value,
         _this = this;
-      if (criteria instanceof Object) {
-        if (criteria.criteria == null) {
+      if (parameters instanceof Object) {
+        if (parameters.criteria == null) {
           query_criteria = "";
-          for (property in criteria) {
-            value = criteria[property];
+          for (property in parameters) {
+            value = parameters[property];
             query_criteria += "" + property + "=" + value + ";";
           }
-          criteria = {
+          parameters = {
             criteria: query_criteria
           };
         }
         return this.request({
           method: 'GET',
           resource: model.resource(),
-          parameters: criteria
+          parameters: parameters
         }, function(error, result) {
           return callback(error, _this.model(model.model(), result));
         });
-      } else if (typeof criteria === "string") {
+      } else if (typeof parameters === "string") {
         return this.request({
           method: 'GET',
           resource: model.resource(),
           parameters: {
-            id: criteria
+            id: parameters
           }
         }, function(error, result) {
           return callback(error, _this.model(model.model(), result));
