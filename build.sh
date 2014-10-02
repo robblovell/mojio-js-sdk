@@ -1,10 +1,10 @@
 #!/bin/sh
 bower install
-coffee --map --compile src/nodejs
-coffee --map --compile src/models
+coffee --compile src/nodejs
+coffee --compile src/models
 cp src/nodejs/*.js lib/nodejs
 cp src/models/*.js lib/models
-coffee --map --compile src/browser
+coffee --compile src/browser
 cd src/browser
 ../../node_modules/.bin/browserify -r ./HttpBrowserWrapper.js --standalone HttpBrowserWrapper > ../../dist/browser/HttpBrowserWrapper.js
 ../../node_modules/.bin/browserify -r ./MojioClient.js --standalone MojioClient > ../../dist/browser/MojioClient.js

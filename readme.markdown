@@ -192,6 +192,7 @@ the REST endpoints in the client, and tests for those calls.
 cd src
 coffee generate.coffee
 ```
+You can run "make.sh" to generate the coffeescript files from the templates.  Note that this also builds the javascript from the coffeescript and browserfies the code by calling build.sh.
 
 This creates:
 ```
@@ -240,6 +241,12 @@ cd src/browser
 browserify -r ./HttpBrowserWrapper.js --standalone HttpBrowserWrapper > ../../dist/browser/HttpBrowserWrapper.js
 browserify -r ./MojioClient.js --standalone Mojio > ../../dist/browser/MojioClient.js
 ```
+
+You can also just run the builder by typing:
+```
+./build.sh
+```
+This will build the javascript and browserfy code.
 
 ## Todo:
 
