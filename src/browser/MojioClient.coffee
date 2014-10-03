@@ -247,22 +247,28 @@ module.exports = class MojioClient
         return object
 
     # Model CRUD
-    # query: (model, criteria=null, limit=null, offset=null, sortby="", desc=false, callback) ->
-    query: (model, criteria, callback) ->
-        if (criteria instanceof Object)
+    # query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
+    # query(model, { criteria="name=blah; field=blah", limit=10, offset=0, sortby="name", desc=false }, callback)
+    # query(model, { name: "blah", field: blah"}, callback)
+    query: (model, parameters, callback) ->
+        if (parameters instanceof Object)
             # convert criteria to a semicolon separated list of property values.
-            if (!criteria.criteria?)
+            if (!parameters.criteria?) # if the list doesn't contain "Criteria" convert it to a string based criteria list.
+                # version: query(model, { name: "blah", field: blah"}, callback)
                 query_criteria = ""
-                for property, value of criteria
+                for property, value of parameters
                     query_criteria += "#{property}=#{value};"
-                criteria = { criteria:  query_criteria }
+                parameters = { criteria:  query_criteria }
+            # otherwise, take the parameters as they are:
+            # query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
+            # query(model, { criteria="name=blah; field=blah", limit=10, offset=0, sortby="name", desc=false }, callback)
 
-            @request({ method: 'GET',  resource: model.resource(), parameters: criteria}, (error, result) =>
+            @request({ method: 'GET',  resource: model.resource(), parameters: parameters}, (error, result) =>
                 callback(error, @model(model.model(), result))
             )
-        else if (typeof criteria == "string") # instanceof only works for coffeescript classes.
+        else if (typeof parameters == "string") # instanceof only works for coffeescript classes.
 
-            @request({ method: 'GET',  resource: model.resource(), parameters: {id: criteria} }, (error, result) =>
+            @request({ method: 'GET',  resource: model.resource(), parameters: {id: parameters} }, (error, result) =>
                 callback(error, @model(model.model(), result))
             )
         else

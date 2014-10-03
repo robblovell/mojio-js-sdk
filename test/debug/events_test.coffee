@@ -1,9 +1,9 @@
-MojioClient = require '../lib/nodejs/MojioClient'
-Event = require '../lib/models/Event'
-config = require './config/mojio-config.coffee'
+MojioClient = require '../../src/nodejs/MojioClient'
+Event = require '../../src/models/Event'
+config = require '../config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
-testdata = require('./data/mojio-test-data')
+testdata = require('../data/mojio-test-data')
 should = require('should')
 
 testObject = null
@@ -21,6 +21,7 @@ describe 'Event2', ->
     it 'can get Events from Model with criteria', (done) ->
         event = new Event({})
         event.authorization(mojio_client)
+        # { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }
         event.query({criteria: "EventType=Acceleration", limit: 10}, (error, result) ->
             console.log("error:"+error)
             (error==null).should.be.true

@@ -82,7 +82,7 @@ config = {
     port: '80'
 }
 
-mojio = new Mojio(config);
+mojio = new MojioClient(config);
 
 mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
     if (error)

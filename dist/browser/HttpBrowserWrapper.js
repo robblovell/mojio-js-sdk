@@ -15,6 +15,7 @@
         data: data,
         headers: headers,
         contentType: "application/json",
+        dataType: "json",
         type: method,
         cache: false,
         error: function(obj, status, error) {

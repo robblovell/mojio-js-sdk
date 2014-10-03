@@ -8,6 +8,7 @@ module.exports = class HttpBrowserWrapper
             data: data,
             headers: headers,
             contentType: "application/json",
+            dataType: "json",
             type: method,
             cache: false,
             error: (obj, status, error) ->

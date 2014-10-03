@@ -42,7 +42,6 @@
                             data: data,
                             headers: headers,
                             contentType: "application/json",
-                            dataType: "json",
                             type: method,
                             cache: false,
                             error: function(obj, status, error) {
@@ -288,32 +287,32 @@
                         object._client = this;
                         return object;
                     };
-                    MojioClient.prototype.query = function(model, parameters, callback) {
+                    MojioClient.prototype.query = function(model, criteria, callback) {
                         var property, query_criteria, value, _this = this;
-                        if (parameters instanceof Object) {
-                            if (parameters.criteria == null) {
+                        if (criteria instanceof Object) {
+                            if (criteria.criteria == null) {
                                 query_criteria = "";
-                                for (property in parameters) {
-                                    value = parameters[property];
+                                for (property in criteria) {
+                                    value = criteria[property];
                                     query_criteria += "" + property + "=" + value + ";";
                                 }
-                                parameters = {
+                                criteria = {
                                     criteria: query_criteria
                                 };
                             }
                             return this.request({
                                 method: "GET",
                                 resource: model.resource(),
-                                parameters: parameters
+                                parameters: criteria
                             }, function(error, result) {
                                 return callback(error, _this.model(model.model(), result));
                             });
-                        } else if (typeof parameters === "string") {
+                        } else if (typeof criteria === "string") {
                             return this.request({
                                 method: "GET",
                                 resource: model.resource(),
                                 parameters: {
-                                    id: parameters
+                                    id: criteria
                                 }
                             }, function(error, result) {
                                 return callback(error, _this.model(model.model(), result));
