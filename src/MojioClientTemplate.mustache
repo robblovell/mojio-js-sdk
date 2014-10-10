@@ -147,9 +147,10 @@ module.exports = class MojioClient
     model: (type, json=null) ->
         if (json == null)
             return mojio_models[type]
-        else if (json.Data instanceof Array)
-            object = new Array()
-            object.push(new mojio_models[type](data)) for data in json.Data
+        else if (json.Data? and json.Data instanceof Array)
+            object = json
+            object.Objects = new Array()
+            object.Objects.push(new mojio_models[type](data)) for data in json.Data
         else if (json.Data?)
             object = new mojio_models[type](json.Data)
         else
