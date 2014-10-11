@@ -3,7 +3,7 @@ SignalR = require './SignalRBrowserWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1', scheme: 'https' }
+    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1' }
 
     constructor: (@options) ->
         @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme }
@@ -73,12 +73,11 @@ module.exports = class MojioClient
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
-            scheme: @options.scheme
             path: '/'+@options.version
             method: request.method,
             withCredentials: false
         }
-        parts.path += @getPath(request.resource, request.id, request.action, request.key)
+        parts.path = '/'+@options.version + @getPath(request.resource, request.id, request.action, request.key)
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += MojioClient._makeParameters(request.parameters)
@@ -93,6 +92,7 @@ module.exports = class MojioClient
 
         http = new Http($)
         http.request(parts, callback)
+
 
     ###
         Authorize and Login
@@ -120,7 +120,6 @@ module.exports = class MojioClient
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
         window.location = url
 
-
     token: (callback) ->
         @user = null
 
@@ -138,14 +137,15 @@ module.exports = class MojioClient
                             id: token
                         }
                 },
-                (error, result) =>
-                    if error
-                        callback(error, null)
-                    else
-                        # set the @auth_token
-                        @auth_token = result
-                        callback(null, @auth_token)
+            (error, result) =>
+                if error
+                    callback(error, null)
+                else
+                    # set the @auth_token
+                    @auth_token = result
+                    callback(null, @auth_token)
             )
+
     unauthorize: (callback) ->
         parts = {
             hostname: @options.hostname
@@ -164,6 +164,7 @@ module.exports = class MojioClient
 
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
         window.location = url
+
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
@@ -372,9 +373,8 @@ module.exports = class MojioClient
             )
 
     ###
-        User
+        Token/User
     ###
-
 
     getTokenId:  () ->
         return @auth_token._id if @auth_token?
