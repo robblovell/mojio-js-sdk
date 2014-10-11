@@ -29,7 +29,6 @@ mojio_client = new MojioClient(config)
 App = mojio_client.model('App')
 
 $( () ->
-
     if (config.application == 'Your-Sandbox-Application-Key-Here')
         div = document.getElementById('result')
         div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.js.  <br>'
