@@ -94,7 +94,8 @@
                     defaults = {
                         hostname: "api.moj.io",
                         port: "80",
-                        version: "v1"
+                        version: "v1",
+                        scheme: "https"
                     };
                     function MojioClient(options) {
                         var _base, _base1, _base2, _base3;
@@ -193,6 +194,7 @@
                             hostname: this.options.hostname,
                             host: this.options.hostname,
                             port: this.options.port,
+                            scheme: this.options.scheme,
                             path: "/" + this.options.version,
                             method: request.method,
                             withCredentials: false

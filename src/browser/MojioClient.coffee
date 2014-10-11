@@ -3,7 +3,7 @@ SignalR = require './SignalRBrowserWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1' }
+    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1', scheme: 'https' }
 
     constructor: (@options) ->
         @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme }
@@ -73,6 +73,7 @@ module.exports = class MojioClient
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
+            scheme: @options.scheme
             path: '/'+@options.version
             method: request.method,
             withCredentials: false
@@ -92,7 +93,6 @@ module.exports = class MojioClient
 
         http = new Http($)
         http.request(parts, callback)
-
 
     ###
         Authorize and Login
@@ -164,7 +164,6 @@ module.exports = class MojioClient
 
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
         window.location = url
-
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(

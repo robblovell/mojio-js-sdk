@@ -3,7 +3,7 @@ SignalR = require './SignalRNodeWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1' }
+    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1', scheme: 'https' }
 
     constructor: (@options) ->
         @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme }
@@ -73,6 +73,7 @@ module.exports = class MojioClient
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
+            scheme: @options.scheme
             path: '/'+@options.version
             method: request.method,
             withCredentials: false
@@ -92,7 +93,6 @@ module.exports = class MojioClient
 
         http = new Http()
         http.request(parts, callback)
-
 
     ###
         Authorize and Login
@@ -146,7 +146,7 @@ module.exports = class MojioClient
                     callback(null, @auth_token)
             )
 
-    unauthorize: (callback) ->
+    unauthorize: (redirect_url, callback) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
@@ -157,14 +157,14 @@ module.exports = class MojioClient
             withCredentials: false
         }
         parts.path += "?Guid=" + @getTokenId()
-
+        parts.path += "&client_id=" + @options.application
+        parts.path += "&redirect_uri="+redirect_url
         parts.headers = {}
         parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
         parts.headers["Content-Type"] = 'application/json'
 
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
         window.location = url
-
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
