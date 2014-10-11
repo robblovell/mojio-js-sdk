@@ -269,7 +269,7 @@
       }
     };
 
-    MojioClient.prototype.unauthorize = function(callback) {
+    MojioClient.prototype.unauthorize = function(redirect_url, callback) {
       var parts, url;
       parts = {
         hostname: this.options.hostname,
@@ -281,6 +281,8 @@
         withCredentials: false
       };
       parts.path += "?Guid=" + this.getTokenId();
+      parts.path += "&client_id=" + this.options.application;
+      parts.path += "&redirect_uri=" + redirect_url;
       parts.headers = {};
       if (this.getTokenId() != null) {
         parts.headers["MojioAPIToken"] = this.getTokenId();

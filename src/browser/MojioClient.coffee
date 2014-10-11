@@ -146,7 +146,7 @@ module.exports = class MojioClient
                     callback(null, @auth_token)
             )
 
-    unauthorize: (callback) ->
+    unauthorize: (redirect_url, callback) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
@@ -157,7 +157,8 @@ module.exports = class MojioClient
             withCredentials: false
         }
         parts.path += "?Guid=" + @getTokenId()
-
+        parts.path += "&client_id=" + @options.application
+        parts.path += "&redirect_uri="+redirect_url
         parts.headers = {}
         parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
         parts.headers["Content-Type"] = 'application/json'

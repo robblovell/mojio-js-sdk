@@ -22,7 +22,7 @@ config = {
     scheme: 'https',
     login: 'anonymous@moj.io',
     password: 'Password007',
-    redirect_uri: 'http://localhost:63344/mojio-js/example/authorize_complete.html'
+    redirect_uri: 'http://localhost:63344/mojio-js/example/authorize.html'
 }
 
 mojio_client = new MojioClient(config)
@@ -59,7 +59,7 @@ $( () ->
                     div = document.getElementById('result2')
                     div.innerHTML += 'Query /App<br>'
                     div.innerHTML += JSON.stringify(result)
-                    mojio_client.unauthorize((error, result) ->
+                    mojio_client.unauthorize(config.redirect_uri, (error, result) ->
                         if (error)
                             div = document.getElementById('result3')
                             div.innerHTML += 'Logout Error'+error+'<br>'
