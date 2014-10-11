@@ -1,10 +1,10 @@
-MojioClient = require '../lib/nodejs/MojioClient'
-Observer = require '../lib/models/Observer'
-App = require '../lib/models/App'
-config = require './config/mojio-config.coffee'
+MojioClient = require '../../src/nodejs/MojioClient'
+Observer = require '../../src/models/Observer'
+App = require '../../src/models/App'
+config = require '../config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
-testdata = require('./data/mojio-test-data')
+testdata = require('../data/mojio-test-data')
 should = require('should')
 count = [0,0]
 app1=null
@@ -66,30 +66,31 @@ describe 'Observer', ->
             console.log("retreived app")
 
             mojio_client.observe(app, null,
-            (entity) ->
-                entity.should.be.an.instanceOf(Object)
-                console.log("Observed change seen.")
-                mojio_client.unobserve(observer, app, null, (error, result) ->
+                (entity) ->
+                    entity.should.be.an.instanceOf(Object)
+                    console.log("Observed change seen.")
+                    mojio_client.unobserve(observer, app, null, (error, result) ->
+                        result.should.be.an.instanceOf(Observer)
+                        done()
+                    )
+                ,
+                (error, result) ->
+                    (error==null).should.be.true
+                    app.Description = "Changed"
+                    console.log("changing app...")
                     result.should.be.an.instanceOf(Observer)
-                    done()
-                )
-            ,
-            (error, result) ->
-                app.Description = "Changed"
-                console.log("changing app...")
-                result.should.be.an.instanceOf(Observer)
-                observer = result
+                    observer = result
 
-                mojio_client.put(app, (error, result) ->
-                    (error==null).should.be.true
-                    console.log("App changed.")
-                )
-                app.Description = "An Anonymous Application"
+                    mojio_client.put(app, (error, result) ->
+                        (error==null).should.be.true
+                        console.log("App changed.")
+                    )
+                    app.Description = "An Anonymous Application"
 
-                mojio_client.put(app, (error, result) ->
-                    (error==null).should.be.true
-                    console.log("App changed back.")
-                )
+                    mojio_client.put(app, (error, result) ->
+                        (error==null).should.be.true
+                        console.log("App changed back.")
+                    )
             )
         )
 

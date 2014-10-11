@@ -25,9 +25,9 @@ describe 'App', ->
         app.get({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            if (result instanceof (Array))
-                instance.should.be.an.instanceOf(App) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            if (result.Objects? and result.Objects instanceof (Array))
+                instance.should.be.an.instanceOf(App) for instance in result.Objects
                 testObject = instance  # save for later reference.
             else
                 result.should.be.an.instanceOf(App)
@@ -40,8 +40,8 @@ describe 'App', ->
         mojio_client.get(App, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(App) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(App) for instance in result.Objects
             done()
         )
 

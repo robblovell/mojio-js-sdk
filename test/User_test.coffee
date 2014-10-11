@@ -25,9 +25,9 @@ describe 'User', ->
         user.query({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            if (result instanceof (Array))
-                instance.should.be.an.instanceOf(User) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            if (result.Objects? and result.Objects instanceof (Array))
+                instance.should.be.an.instanceOf(User) for instance in result.Objects
                 testObject = instance  # save for later reference.
             else
                 result.should.be.an.instanceOf(User)
@@ -40,7 +40,7 @@ describe 'User', ->
         mojio_client.query(User, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(User) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(User) for instance in result.Objects
             done()
         )
