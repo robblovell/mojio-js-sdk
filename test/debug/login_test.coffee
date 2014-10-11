@@ -1,10 +1,10 @@
-MojioClient = require '../lib/nodejs/MojioClient'
-config = require './config/mojio-config.coffee'
+MojioClient = require '../../src/nodejs/MojioClient'
+config = require '../config/mojio-config.coffee'
 
 mojio_client = new MojioClient(config)
 
 assert = require("assert")
-testdata = require('./data/mojio-test-data')
+testdata = require('../data/mojio-test-data')
 should = require('should')
 
 describe 'Login', ->
