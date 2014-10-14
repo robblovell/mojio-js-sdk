@@ -298,8 +298,6 @@ This will build the javascript and browserfy code.
 
 ## Todo:
 
-* Needs all the models, missing event.coffee
-* POST, PUT, DELETE for resources.
+
 * Hyperlinks for resources
-* Observer and Subscription endpoints
-* Fix mocha test on travis CI
+* NodeJS OAuth2 implementation and documentation
