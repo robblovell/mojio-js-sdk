@@ -188,7 +188,10 @@ $( () ->
 
 ## Node JS Example
 
+Any OAuth2 implementation for node js should probably work.  TODO: write example using https://www.npmjs.org/package/simple-oauth2
+
 ### CoffeeScript:
+The old login is deprecated and will be removed in a few months:
 ```
 config = {
            application: 'YOUR APPLICATION KEY',
@@ -300,4 +303,4 @@ This will build the javascript and browserfy code.
 
 
 * Hyperlinks for resources
-* NodeJS OAuth2 implementation and documentation
+* NodeJS OAuth2 implementation and documentation: https://www.npmjs.org/package/simple-oauth2
