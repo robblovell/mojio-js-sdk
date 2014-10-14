@@ -99,7 +99,7 @@ module.exports = class MojioClient
     ###
     login_resource: 'Login'
 
-    authorize: (username, password, scope, redirect_url, callback) ->
+    authorize: (redirect_url, scope='full') ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
@@ -146,7 +146,7 @@ module.exports = class MojioClient
                     callback(null, @auth_token)
             )
 
-    unauthorize: (redirect_url, callback) ->
+    unauthorize: (redirect_url) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname

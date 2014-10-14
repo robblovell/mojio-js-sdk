@@ -218,8 +218,11 @@
                         return http.request(parts, callback);
                     };
                     MojioClient.prototype.login_resource = "Login";
-                    MojioClient.prototype.authorize = function(username, password, scope, redirect_url, callback) {
+                    MojioClient.prototype.authorize = function(redirect_url, scope) {
                         var parts, url;
+                        if (scope == null) {
+                            scope = "full";
+                        }
                         parts = {
                             hostname: this.options.hostname,
                             host: this.options.hostname,
@@ -266,7 +269,7 @@
                             });
                         }
                     };
-                    MojioClient.prototype.unauthorize = function(redirect_url, callback) {
+                    MojioClient.prototype.unauthorize = function(redirect_url) {
                         var parts, url;
                         parts = {
                             hostname: this.options.hostname,
