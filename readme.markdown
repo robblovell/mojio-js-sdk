@@ -55,6 +55,8 @@ npm install -g mocha
 ## HTML Example
 
 ### CoffeeScript:
+
+authorize.html
 ```
 <!DOCTYPE html>
 <html>
@@ -63,37 +65,50 @@ npm install -g mocha
     <title>title</title>
 </head>
 <body>
+
 <div id="result"></div>
-<script src="./bower_components/jquery/dist/jquery.js"></script>
-<script src="./dist/browser/HttpBrowserWrapper.js"></script>
-<script src="./dist/browser/MojioClient.js"></script>
-<script src="./login.js"></script>
+<br/>
+
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/signalr/jquery.signalR-2.0.2.js"></script>
+<script src="../dist/browser/MojioClient.js"></script>
+<script src="authorize.js"></script>
+
 </body>
 ```
-login.coffee (compiles to login.js included in the html above)
+authorize.coffee (compiles to authorize.js included in the html above)
 ```
 Mojio = @Mojio
 
 config = {
-    application: 'YOUR APPLICATION KEY',
-    secret: 'YOUR SECRET KEY',
+    application: 'Your-Application-Key-Here',
     hostname: 'api.moj.io',
     version: 'v1',
-    port: '80'
+    port:'443',
+    scheme: 'https',
+    redirect_uri: 'Your-Login-redirect_url-Here'
 }
 
-mojio = new MojioClient(config);
+mojio_client = new MojioClient(config)
 
-mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
-    if (error)
-        alert("error:"+error)
-    else
+$( () ->
+
+    if (config.application == 'Your-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'POST /login<br>'
-        div.innerHTML += JSON.stringify(result)
+        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        return
+
+    if (config.application == 'Your-Login-redirect_url-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set the login redirect url in authorize.js and register it in your application at the developer center.  <br>'
+        return
+        
+    mojio_client.authorize(config.redirect_uri)
 )
 ```
-### JavaScript:
+On completion of the oauth login, the browser will be redirected to the given redirect_url on the host server or application.  The example's implementation which contains how to retrieve the logged in user and the authorization token is below: 
+
+authorize_complete.html
 ```
 <!DOCTYPE html>
 <html>
@@ -102,42 +117,75 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
     <title>title</title>
 </head>
 <body>
+
 <div id="result"></div>
-<script src="./bower_components/jquery/dist/jquery.js"></script>
-<script src="./dist/browser/HttpBrowserWrapper.js"></script>
-<script src="./dist/browser/MojioClient.js"></script>
-<script type="text/javascript">
-    (function() {
-        var Mojio, config, mojio;
+<br/>
+<div id="result2"></div>
+<br/>
+<div id="result3"></div>
+<br/>
 
-        Mojio = this.Mojio;
-
-        config = {
-            application: 'YOUR APPLICATION KEY',
-            secret: 'YOUR SECRET KEY',
-            hostname: 'api.moj.io',
-            version: 'v1',
-            port: '80'
-        };
-
-        mojio = new Mojio(config);
-
-        mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
-            var div;
-            if (error) {
-                return alert("error:" + error);
-            } else {
-                div = document.getElementById('result');
-                div.innerHTML += 'POST /login<br>';
-                return div.innerHTML += JSON.stringify(result);
-            }
-        });
-
-    }).call(this);
-</script>
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/signalr/jquery.signalR-2.0.2.js"></script>
+<script src="../dist/browser/MojioClient.js"></script>
+<script src="authorize_complete.js"></script>
 
 </body>
 ```
+authorize_complete.coffee (compiles to authorize.js included in the html above)
+```
+MojioClient = @MojioClient
+
+config = {
+    application: 'Your-Application-Key-Here',
+    hostname: 'api.moj.io',
+    version: 'v1',
+    port:'443',
+    scheme: 'https',
+    redirect_uri: 'Your-Logout-redirect_url-Here'
+}
+
+mojio_client = new MojioClient(config)
+App = mojio_client.model('App')
+
+$( () ->
+    if (config.application == 'Your-Application-Key-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        return
+
+    if (config.application == 'Your-Logout-redirect_url-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set the logout redirect url in authorize.js and register it in your application at the developer center.  <br>'
+        return
+
+    mojio_client.token((error, result) ->
+        if (error)
+            alert("Authorize Redirect, token could not be retreived:"+error)
+        else
+            alert("Authorization Successful.")
+
+            div = document.getElementById('result')
+            div.innerHTML += 'POST /login<br>'
+            div.innerHTML += JSON.stringify(result)
+            mojio_client.query(App, {}, (error, result) ->
+                if (error)
+                    div = document.getElementById('result2')
+                    div.innerHTML += 'Get Apps Error'+error+'<br>'
+                else
+                    apps = mojio_client.getResults(App, result)
+
+                    app = apps[0]
+                    div = document.getElementById('result2')
+                    div.innerHTML += 'Query /App<br>'
+                    div.innerHTML += JSON.stringify(result)
+                    alert("Hit Ok to log out and return to the authorization page.")
+                    mojio_client.unauthorize(config.redirect_uri)
+            )
+    )
+)
+```
+
 ## Node JS Example
 
 ### CoffeeScript:
