@@ -369,17 +369,16 @@
                         return object;
                     };
                     MojioClient.prototype.query = function(model, parameters, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value, _ref, _this = this;
                         if (parameters instanceof Object) {
-                            if (parameters.criteria == null) {
+                            if (parameters.criteria instanceof Object) {
                                 query_criteria = "";
-                                for (property in parameters) {
-                                    value = parameters[property];
+                                _ref = parameters.criteria;
+                                for (property in _ref) {
+                                    value = _ref[property];
                                     query_criteria += "" + property + "=" + value + ";";
                                 }
-                                parameters = {
-                                    criteria: query_criteria
-                                };
+                                parameters.criteria = query_criteria;
                             }
                             return this.request({
                                 method: "GET",
