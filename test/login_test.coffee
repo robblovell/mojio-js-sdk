@@ -13,7 +13,7 @@ describe 'Login', ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            mojio_client.token.should.be.ok
+            mojio_client.auth_token.should.be.ok
             result.should.be.an.instanceOf(Object)
             result._id.should.be.an.instanceOf(String)
             done()
@@ -26,7 +26,7 @@ describe 'Logout', ->
             mojio_client.logout((error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
-                (mojio_client.token==null).should.be.true
+                (mojio_client.auth_token==null).should.be.true
                 done()
             )
         )

@@ -61,10 +61,6 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=HttpBrowserWrapper.map
-*/
-
 },{}]},{},[1])
 (1)
 });

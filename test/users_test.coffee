@@ -1,5 +1,5 @@
 MojioClient = require '../lib/nodejs/MojioClient'
-Trip = require '../lib/models/Trip'
+User = require '../lib/models/User'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
@@ -8,7 +8,7 @@ should = require('should')
 
 testObject = null
 
-describe 'Trip', ->
+describe 'User', ->
 
     before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
@@ -17,30 +17,26 @@ describe 'Trip', ->
         )
     )
 
-    # test Trip
-    it 'can get Trips from Model', (done) ->
-        trip = new Trip({})
-        trip.authorization(mojio_client)
+    # test User
 
-        trip.query({}, (error, result) ->
+    it 'can query Users by UserName', (done) ->
+
+        mojio_client.query(User, {criteria: {UserName: 'anonymous'}, limit: 10}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.Objects.should.be.an.instanceOf(Array)
-            if (result.Objects? and result.Objects instanceof (Array))
-                instance.should.be.an.instanceOf(Trip) for instance in result.Objects
-                testObject = instance  # save for later reference.
-            else
-                result.should.be.an.instanceOf(Trip)
-                testObject = result
+            for instance in result.Objects
+                instance.should.be.an.instanceOf(User)
+                instance.UserName.should.equal("anonymous")
             done()
         )
 
-    it 'can get Trips', (done) ->
+    it "can't query Users by non-accesible UserName", (done) ->
 
-        mojio_client.query(Trip, {}, (error, result) ->
+        mojio_client.query(User, {criteria: {UserName: 'robblovell'}, limit: 10}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.Objects.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(Trip) for instance in result.Objects
+            result.Objects.length.should.equal(0);
             done()
         )

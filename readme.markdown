@@ -39,6 +39,8 @@ test/login_test.coffee
 ## HTML Example
 
 ### CoffeeScript:
+
+authorize.html
 ```
 <!DOCTYPE html>
 <html>
@@ -47,37 +49,50 @@ test/login_test.coffee
     <title>title</title>
 </head>
 <body>
+
 <div id="result"></div>
-<script src="./bower_components/jquery/dist/jquery.js"></script>
-<script src="./dist/browser/HttpBrowserWrapper.js"></script>
-<script src="./dist/browser/MojioClient.js"></script>
-<script src="./login.js"></script>
+<br/>
+
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/signalr/jquery.signalR-2.0.2.js"></script>
+<script src="../dist/browser/MojioClient.js"></script>
+<script src="authorize.js"></script>
+
 </body>
 ```
-login.coffee (compiles to login.js included in the html above)
+authorize.coffee (compiles to authorize.js included in the html above)
 ```
 Mojio = @Mojio
 
 config = {
-    application: 'YOUR APPLICATION KEY',
-    secret: 'YOUR SECRET KEY',
+    application: 'Your-Application-Key-Here',
     hostname: 'api.moj.io',
     version: 'v1',
-    port: '80'
+    port:'443',
+    scheme: 'https',
+    redirect_uri: 'Your-Login-redirect_url-Here'
 }
 
-mojio = new MojioClient(config);
+mojio_client = new MojioClient(config)
 
-mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
-    if (error)
-        alert("error:"+error)
-    else
+$( () ->
+
+    if (config.application == 'Your-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'POST /login<br>'
-        div.innerHTML += JSON.stringify(result)
+        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        return
+
+    if (config.application == 'Your-Login-redirect_url-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set the login redirect url in authorize.js and register it in your application at the developer center.  <br>'
+        return
+        
+    mojio_client.authorize(config.redirect_uri)
 )
 ```
-### JavaScript:
+On completion of the oauth login, the browser will be redirected to the given redirect_url on the host server or application.  The example's implementation which contains how to retrieve the logged in user and the authorization token is below: 
+
+authorize_complete.html
 ```
 <!DOCTYPE html>
 <html>
@@ -86,45 +101,81 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', (error, result) ->
     <title>title</title>
 </head>
 <body>
+
 <div id="result"></div>
-<script src="./bower_components/jquery/dist/jquery.js"></script>
-<script src="./dist/browser/HttpBrowserWrapper.js"></script>
-<script src="./dist/browser/MojioClient.js"></script>
-<script type="text/javascript">
-    (function() {
-        var Mojio, config, mojio;
+<br/>
+<div id="result2"></div>
+<br/>
+<div id="result3"></div>
+<br/>
 
-        Mojio = this.Mojio;
-
-        config = {
-            application: 'YOUR APPLICATION KEY',
-            secret: 'YOUR SECRET KEY',
-            hostname: 'api.moj.io',
-            version: 'v1',
-            port: '80'
-        };
-
-        mojio = new Mojio(config);
-
-        mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
-            var div;
-            if (error) {
-                return alert("error:" + error);
-            } else {
-                div = document.getElementById('result');
-                div.innerHTML += 'POST /login<br>';
-                return div.innerHTML += JSON.stringify(result);
-            }
-        });
-
-    }).call(this);
-</script>
+<script src="../bower_components/jquery/dist/jquery.js"></script>
+<script src="../bower_components/signalr/jquery.signalR-2.0.2.js"></script>
+<script src="../dist/browser/MojioClient.js"></script>
+<script src="authorize_complete.js"></script>
 
 </body>
 ```
+authorize_complete.coffee (compiles to authorize.js included in the html above)
+```
+MojioClient = @MojioClient
+
+config = {
+    application: 'Your-Application-Key-Here',
+    hostname: 'api.moj.io',
+    version: 'v1',
+    port:'443',
+    scheme: 'https',
+    redirect_uri: 'Your-Logout-redirect_url-Here'
+}
+
+mojio_client = new MojioClient(config)
+App = mojio_client.model('App')
+
+$( () ->
+    if (config.application == 'Your-Application-Key-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        return
+
+    if (config.application == 'Your-Logout-redirect_url-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set the logout redirect url in authorize.js and register it in your application at the developer center.  <br>'
+        return
+
+    mojio_client.token((error, result) ->
+        if (error)
+            alert("Authorize Redirect, token could not be retreived:"+error)
+        else
+            alert("Authorization Successful.")
+
+            div = document.getElementById('result')
+            div.innerHTML += 'POST /login<br>'
+            div.innerHTML += JSON.stringify(result)
+            mojio_client.query(App, {}, (error, result) ->
+                if (error)
+                    div = document.getElementById('result2')
+                    div.innerHTML += 'Get Apps Error'+error+'<br>'
+                else
+                    apps = mojio_client.getResults(App, result)
+
+                    app = apps[0]
+                    div = document.getElementById('result2')
+                    div.innerHTML += 'Query /App<br>'
+                    div.innerHTML += JSON.stringify(result)
+                    alert("Hit Ok to log out and return to the authorization page.")
+                    mojio_client.unauthorize(config.redirect_uri)
+            )
+    )
+)
+```
+
 ## Node JS Example
 
+Any OAuth2 implementation for node js should probably work.  TODO: write example using https://www.npmjs.org/package/simple-oauth2
+
 ### CoffeeScript:
+The old login is deprecated and will be removed in a few months:
 ```
 config = {
            application: 'YOUR APPLICATION KEY',
@@ -165,25 +216,28 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
 });
 ```
 
-## Notes, for further development of this code:
-### Build, Install and Test. 
+### Query/Get
 
-The client is built from mustache files using combyne.
-The builder generates coffeescript files which are then compiled to js for use in the browser
-in the /dist directory and for use in node-js environments in the /lib directory.
+Queries can be accomplished by supplying an object with these properties: criteria, limit, offset, sortby, desc.
+Normally criteria is supplied to the API as a semicolon separated list of field/value pairs, but in the Javascript
+SDK you can supply an object and it will convert it for you to the proper format.  This is encouraged because
+the API will be migrating to OData style queries eventually and the SDK will adapt when this happens.
 
+Examples:
+No criteria-
 ```
-npm install
-bower install
-mocha
+query(model, { limit=10, offset=0, sortby="name", desc=false }, callback)
+ ```
+object based criteria-
 ```
-You may need to install coffeescript, bower, browserify, and mocha:
+query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback)
 ```
-npm install -g coffee
-npm install -g bower
-npm install -g browserify
-npm install -g mocha
+string based field/value list criteria-
 ```
+query(model, { criteria="name=blah; field=blah;", limit=10, offset=0, sortby="name", desc=false }, callback)
+```
+
+## Build
 All javascript client code is in the 'dist' directory.
 
 Code is generate first by running the generator in /src/generate.coffee. The generator makes a request to the schema
@@ -194,6 +248,7 @@ the REST endpoints in the client, and tests for those calls.
 cd src
 coffee generate.coffee
 ```
+You can run "make.sh" to generate the coffeescript files from the templates.  Note that this also builds the javascript from the coffeescript and browserfies the code by calling build.sh.
 
 This creates:
 ```
@@ -243,6 +298,14 @@ browserify -r ./HttpBrowserWrapper.js --standalone HttpBrowserWrapper > ../../di
 browserify -r ./MojioClient.js --standalone Mojio > ../../dist/browser/MojioClient.js
 ```
 
+You can also just run the builder by typing:
+```
+./build.sh
+```
+This will build the javascript and browserfy code.
+
 ## Todo:
 
+
 * Hyperlinks for resources
+* NodeJS OAuth2 implementation and documentation: https://www.npmjs.org/package/simple-oauth2

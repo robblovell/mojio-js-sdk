@@ -25,9 +25,9 @@ describe 'Subscription', ->
         subscription.query({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            if (result instanceof (Array))
-                instance.should.be.an.instanceOf(Subscription) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            if (result.Objects? and result.Objects instanceof (Array))
+                instance.should.be.an.instanceOf(Subscription) for instance in result.Objects
                 testObject = instance  # save for later reference.
             else
                 result.should.be.an.instanceOf(Subscription)
@@ -40,7 +40,7 @@ describe 'Subscription', ->
         mojio_client.query(Subscription, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(Subscription) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(Subscription) for instance in result.Objects
             done()
         )

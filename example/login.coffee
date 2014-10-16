@@ -34,8 +34,13 @@ $( () ->
         if (error)
             alert("Login Error:"+error)
         else
+            extractToken = (hash) ->
+                match = hash.match(/access_token=([0-9a-f-]{36})/)
+                return !!match && match[1]
+            token = extractToken(document.location.hash)
             div = document.getElementById('result')
             div.innerHTML += 'POST /login<br>'
+            div.innerHTML += '<br>Token: '+token+'<br>'
             div.innerHTML += JSON.stringify(result)
             mojio_client.query(App, {}, (error, result) ->
                 if (error)

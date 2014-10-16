@@ -59,10 +59,10 @@ describe 'Observer', ->
         mojio_client.get(App, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(App) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(App) for instance in result.Objects
 
-            app = new App(result[0])
+            app = new App(result.Objects[0])
             console.log("retreived app")
 
             mojio_client.observe(app, null,
@@ -106,12 +106,10 @@ describe 'Observer', ->
         mojio_client.get(App, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(App) for instance in result
-
-            app1 = new App(result[0])
-            app2 = new App(result[1])
-            console.log("retreived app")
+            result.Objects.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(App) for instance in result.Objects
+            app1 = new App(result.Objects[0])
+            app2 = new App(result.Objects[1])
 
             mojio_client.observe(app2, null,
                 # Callback for app1.

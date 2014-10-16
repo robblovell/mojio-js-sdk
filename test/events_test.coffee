@@ -25,11 +25,11 @@ describe 'Event2', ->
             console.log("error:"+error)
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
-            result.should.be.an.instanceOf(Array)
-            if (result instanceof (Array))
-                instance.should.be.an.instanceOf(Event) for instance in result
+            result.Objects.should.be.an.instanceOf(Array)
+            if (result.Objects? and result.Objects instanceof (Array))
+                instance.should.be.an.instanceOf(Event) for instance in result.Objects
                 testObject = instance  # save for later reference.
-                for event in result
+                for event in result.Objects
                     event.EventType.should.be.equal("Acceleration")
             else
                 result.should.be.an.instanceOf(Event)

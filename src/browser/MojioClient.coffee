@@ -3,20 +3,22 @@ SignalR = require './SignalRBrowserWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'sandbox.api.moj.io', port: '80', version: 'v1' }
+    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1', scheme: 'https' }
 
     constructor: (@options) ->
-        @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version }
+        @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme }
         @options.hostname ?= defaults.hostname
         @options.port ?= defaults.port
         @options.version ?= defaults.version
+        @options.scheme ?= defaults.scheme
+
         @options.application = @options.application
-        @options.secret = @options.secret  # TODO:: header and https only
+        @options.secret = @options.secret  # TODO:: https only
         @options.observerTransport = 'SingalR'
         @conn = null
         @hub = null
         @connStatus = null
-        @token = null
+        @auth_token = null
 
         @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'], $)
 
@@ -71,6 +73,7 @@ module.exports = class MojioClient
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
+            scheme: @options.scheme
             path: '/'+@options.version
             method: request.method,
             withCredentials: false
@@ -91,11 +94,77 @@ module.exports = class MojioClient
         http = new Http($)
         http.request(parts, callback)
 
-
     ###
-        Login
+        Authorize and Login
     ###
     login_resource: 'Login'
+
+    authorize: (redirect_url, scope='full') ->
+        parts = {
+            hostname: @options.hostname
+            host: @options.hostname
+            port: @options.port
+            scheme: @options.scheme
+            path: '/OAuth2/authorize'
+            method: 'Get'
+            withCredentials: false
+        }
+        parts.path += "?response_type=token"
+        parts.path += "&client_id=" + @options.application
+        parts.path += "&redirect_uri="+redirect_url
+        parts.path += "&scope="+scope
+        parts.headers = {}
+        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+        parts.headers["Content-Type"] = 'application/json'
+
+        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        window.location = url
+
+    token: (callback) ->
+        @user = null
+
+        match = document.location.hash.match(/access_token=([0-9a-f-]{36})/)
+        token = !!match && match[1]
+        if (!token)
+            callback("token for authorization not found.", null)
+        else
+            # get the user id by requesting login information, then set the auth_token:
+            @request(
+                {
+                    method: 'GET', resource: @login_resource, id: @options.application,
+                    parameters:
+                        {
+                            id: token
+                        }
+                },
+            (error, result) =>
+                if error
+                    callback(error, null)
+                else
+                    # set the @auth_token
+                    @auth_token = result
+                    callback(null, @auth_token)
+            )
+
+    unauthorize: (redirect_url) ->
+        parts = {
+            hostname: @options.hostname
+            host: @options.hostname
+            port: @options.port
+            scheme: @options.scheme
+            path: '/account/logout'
+            method: 'Get'
+            withCredentials: false
+        }
+        parts.path += "?Guid=" + @getTokenId()
+        parts.path += "&client_id=" + @options.application
+        parts.path += "&redirect_uri="+redirect_url
+        parts.headers = {}
+        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+        parts.headers["Content-Type"] = 'application/json'
+
+        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        window.location = url
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
@@ -114,7 +183,7 @@ module.exports = class MojioClient
     login: (username, password, callback) ->
         @_login(username, password, (error, result) =>
             if (result?)
-                @token = result
+                @auth_token = result
             callback(error, result)
         )
 
@@ -129,7 +198,7 @@ module.exports = class MojioClient
     # Logout
     logout: (callback) ->
         @_logout((error, result) =>
-            @token = null
+            @auth_token = null
             callback(error, result)
         )
 
@@ -168,9 +237,10 @@ module.exports = class MojioClient
     model: (type, json=null) ->
         if (json == null)
             return mojio_models[type]
-        else if (json.Data instanceof Array)
-            object = new Array()
-            object.push(new mojio_models[type](data)) for data in json.Data
+        else if (json.Data? and json.Data instanceof Array)
+            object = json
+            object.Objects = new Array()
+            object.Objects.push(new mojio_models[type](data)) for data in json.Data
         else if (json.Data?)
             object = new mojio_models[type](json.Data)
         else
@@ -179,21 +249,19 @@ module.exports = class MojioClient
         return object
 
     # Model CRUD
+    # query(model, { criteria={ }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
     # query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
     # query(model, { criteria="name=blah; field=blah", limit=10, offset=0, sortby="name", desc=false }, callback)
-    # query(model, { name: "blah", field: blah"}, callback)
+    # query(model, { limit=10, offset=0, sortby="name", desc=false }, callback)
     query: (model, parameters, callback) ->
         if (parameters instanceof Object)
-            # convert criteria to a semicolon separated list of property values.
-            if (!parameters.criteria?) # if the list doesn't contain "Criteria" convert it to a string based criteria list.
-                # version: query(model, { name: "blah", field: blah"}, callback)
+            # convert criteria to a semicolon separated list of property values if it's an object.
+            if (parameters.criteria instanceof Object) # if the list contain "Criteria" as an object
+                # convert to semicolon separated list.
                 query_criteria = ""
-                for property, value of parameters
+                for property, value of parameters.criteria
                     query_criteria += "#{property}=#{value};"
-                parameters = { criteria:  query_criteria }
-            # otherwise, take the parameters as they are:
-            # query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
-            # query(model, { criteria="name=blah; field=blah", limit=10, offset=0, sortby="name", desc=false }, callback)
+                parameters.criteria = query_criteria;
 
             @request({ method: 'GET',  resource: model.resource(), parameters: parameters}, (error, result) =>
                 callback(error, @model(model.model(), result))
@@ -205,6 +273,7 @@ module.exports = class MojioClient
             )
         else
             callback("criteria given is not in understood format, string or object.",null)
+
 
     get: (model, criteria, callback) ->
         @query(model, criteria, callback)
@@ -310,27 +379,29 @@ module.exports = class MojioClient
             )
 
     ###
-        Signal R
+        Token/User
     ###
 
     getTokenId:  () ->
-        return if @token? then @token._id else null
+        return @auth_token._id if @auth_token?
+        return null;
 
     getUserId:  () ->
-        return if @token? then @token.UserId else null
+        return @auth_token.UserId if @auth_token?
+        return null
 
     isLoggedIn: () ->
         return getUserId() != null
 
-    getCurrentUser: (func) ->
+    getCurrentUser: (callback) ->
         if (@user?)
-            func(@user)
+            callback(@user)
         else if (isLoggedIn())
             get('users', getUserId())
             .done( (user) ->
                     return unless (user?)
                     @user = user if (getUserId() == @user._id)
-                    func(@user)
+                    callback(@user)
                 )
         else
             return false
