@@ -232,6 +232,27 @@ mojio.login('YOUR USERNAME', 'YOUR PASSWORD', function(error, result) {
 });
 ```
 
+### Query/Get
+
+Queries can be accomplished by supplying an object with these properties: criteria, limit, offset, sortby, desc.
+Normally criteria is supplied to the API as a semicolon separated list of field/value pairs, but in the Javascript
+SDK you can supply an object and it will convert it for you to the proper format.  This is encouraged because
+the API will be migrating to OData style queries eventually and the SDK will adapt when this happens.
+
+Examples:
+No criteria-
+```
+query(model, { limit=10, offset=0, sortby="name", desc=false }, callback)
+ ```
+object based criteria-
+```
+query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback)
+```
+string based field/value list criteria-
+```
+query(model, { criteria="name=blah; field=blah;", limit=10, offset=0, sortby="name", desc=false }, callback)
+```
+
 ## Build
 All javascript client code is in the 'dist' directory.
 

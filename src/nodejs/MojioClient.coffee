@@ -249,21 +249,19 @@ module.exports = class MojioClient
         return object
 
     # Model CRUD
+    # query(model, { criteria={ }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
     # query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
     # query(model, { criteria="name=blah; field=blah", limit=10, offset=0, sortby="name", desc=false }, callback)
-    # query(model, { name: "blah", field: blah"}, callback)
+    # query(model, { limit=10, offset=0, sortby="name", desc=false }, callback)
     query: (model, parameters, callback) ->
         if (parameters instanceof Object)
-            # convert criteria to a semicolon separated list of property values.
-            if (!parameters.criteria?) # if the list doesn't contain "Criteria" convert it to a string based criteria list.
-                # version: query(model, { name: "blah", field: blah"}, callback)
+            # convert criteria to a semicolon separated list of property values if it's an object.
+            if (parameters.criteria instanceof Object) # if the list contain "Criteria" as an object
+                # convert to semicolon separated list.
                 query_criteria = ""
-                for property, value of parameters
+                for property, value of parameters.criteria
                     query_criteria += "#{property}=#{value};"
-                parameters = { criteria:  query_criteria }
-            # otherwise, take the parameters as they are:
-            # query(model, { criteria={ name="blah", field="blah" }, limit=10, offset=0, sortby="name", desc=false }, callback) # take parameters as parameters.
-            # query(model, { criteria="name=blah; field=blah", limit=10, offset=0, sortby="name", desc=false }, callback)
+                parameters.criteria = query_criteria;
 
             @request({ method: 'GET',  resource: model.resource(), parameters: parameters}, (error, result) =>
                 callback(error, @model(model.model(), result))
@@ -275,6 +273,7 @@ module.exports = class MojioClient
             )
         else
             callback("criteria given is not in understood format, string or object.",null)
+
 
     get: (model, criteria, callback) ->
         @query(model, criteria, callback)

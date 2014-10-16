@@ -289,10 +289,6 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=Vehicle.map
-*/
-
 },{"./MojioModel":1}]},{},[2])
 (2)
 });
