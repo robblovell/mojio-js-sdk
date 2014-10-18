@@ -481,6 +481,7 @@
                             body: observer.stringify()
                         }, function(error, result) {
                             if (error) {
+                                console.log("error"+error);
                                 return callback(error, null);
                             } else {
                                 observer = new Observer(result);
