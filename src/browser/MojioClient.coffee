@@ -20,7 +20,7 @@ module.exports = class MojioClient
         @connStatus = null
         @auth_token = null
 
-        @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'], $)
+        @signalr = new SignalR("http://"+@options.hostname+":80"+"/v1/signalr",['ObserverHub'], $)
 
     ###
         Helpers
@@ -319,7 +319,8 @@ module.exports = class MojioClient
         else
             observer = new Observer(
                 {
-                    ObserverType: "Generic", Subject: subject.model(), SubjectId: subject.id(),
+                    ObserverType: "Event", Status: "Approved", Name: "Test"+Math.random(),
+                    Subject: subject.model(), SubjectId: null,
                     Parent: object.model(), ParentId: object.id(), "Transports": "SignalR"
                 }
             )
@@ -329,7 +330,7 @@ module.exports = class MojioClient
                 callback(error, null)
             else
                 observer = new Observer(result)
-                @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, (error, result) ->
+                @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.Id(), observer_callback, (error, result) ->
                     callback(null, observer)
                 )
         )

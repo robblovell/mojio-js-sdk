@@ -127,7 +127,7 @@
                         this.hub = null;
                         this.connStatus = null;
                         this.auth_token = null;
-                        this.signalr = new SignalR("http://" + this.options.hostname + ":" + this.options.port + "/v1/signalr", [ "ObserverHub" ], $);
+                        this.signalr = new SignalR("http://" + this.options.hostname + ":80" + "/v1/signalr", [ "ObserverHub" ], $);
                     }
                     MojioClient.prototype.getResults = function(type, results) {
                         var arrlength, objects, result, _i, _j, _len, _len1, _ref;
@@ -463,14 +463,17 @@
                                 Transports: "SignalR"
                             });
                         } else {
-                            observer = new Observer({
-                                ObserverType: "Generic",
-                                Subject: subject.model(),
-                                SubjectId: subject.id(),
-                                Parent: object.model(),
-                                ParentId: object.id(),
-                                Transports: "SignalR"
-                            });
+
+                                observer = new Observer({
+                                    ObserverType: "Event",
+                                    Status: "Approved",
+                                    Name: "Test" + Math.random(),
+                                    Subject: subject,
+                                    Parent: object.model(),
+                                    ParentId: object.id(),
+                                    Transports: "SignalR"
+                                });
+
                         }
                         return this.request({
                             method: "PUT",
@@ -908,7 +911,7 @@
                             this[field] = value;
                             return this[field];
                         }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
+                        if (!(field === "_client" || field === "EventTypes" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
                             throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
                         }
                     };
@@ -1053,7 +1056,10 @@
                         return this;
                     };
                     MojioModel.prototype.id = function() {
-                        return this._id;
+                        if (this != null && this._id != null)
+                            return this._id;
+                        return null;
+
                     };
                     MojioModel.prototype.mock = function(type, withid) {
                         var field, value, _ref;
