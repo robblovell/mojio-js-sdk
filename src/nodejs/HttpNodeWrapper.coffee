@@ -1,8 +1,19 @@
 Http = require 'http'
+Https = require 'https'
+constants = require 'constants'
 module.exports = class HttpNodeWrapper
 
     request: (params, callback) ->
-        action = Http.request params
+#        params.agent = false
+#        #params.rejectUnauthorized = false
+#        params.secureOptions = constants.SSL_OP_NO_TLSv1_2
+#        params.secureProtocol = 'SSLv3_method'
+#        params.strictSSL = false
+
+        if (params.scheme == 'https')
+            action = Https.request params
+        else
+            action = Http.request params
 
         action.on('response', (response) ->
             if (response.statusCode > 299)
@@ -26,6 +37,9 @@ module.exports = class HttpNodeWrapper
             else
                 callback(null, response)
         )
+        action.on 'close', () ->
+            action.emit('end')
+
         action.on 'error', (error) ->
             callback(error,null)
 
