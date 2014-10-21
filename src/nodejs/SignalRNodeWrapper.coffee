@@ -4,8 +4,12 @@ module.exports = class SignalRNodeWrapper
     observer_callbacks:  {}
 
     observer_registry: (entity) =>
+        # need to have the observer id to look this up here.
+        # could use the entity type
         if @observer_callbacks[entity._id]
             callback(entity) for callback in @observer_callbacks[entity._id]
+        else if @observer_callbacks[entity.model()]
+            callback(entity) for callback in @observer_callbacks[entity.model()]
 
     constructor: (url, hubNames, jquery) ->
         @url = url

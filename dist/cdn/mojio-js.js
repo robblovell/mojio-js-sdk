@@ -465,7 +465,7 @@
                         } else {
 
                                 observer = new Observer({
-                                    ObserverType: "Event",
+                                    ObserverType: "Generic",
                                     Status: "Approved",
                                     Name: "Test" + Math.random(),
                                     Subject: subject,
