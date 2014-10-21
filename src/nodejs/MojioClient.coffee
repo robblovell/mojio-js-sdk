@@ -20,7 +20,7 @@ module.exports = class MojioClient
         @connStatus = null
         @auth_token = null
 
-        @signalr = new SignalR(@options.scheme+"://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
+        @signalr = new SignalR("http://"+@options.hostname+":80/v1/signalr",['ObserverHub'])
 
     ###
         Helpers

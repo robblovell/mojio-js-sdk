@@ -44,13 +44,3 @@ describe 'User', ->
             instance.should.be.an.instanceOf(User) for instance in result.Objects
             done()
         )
-
-    it 'can query Users', (done) ->
-
-        mojio_client.query(User, {criteria: {name: 'robb'}, limit: 10}, (error, result) ->
-            (error==null).should.be.true
-            mojio_client.should.be.an.instanceOf(MojioClient)
-            result.Objects.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(User) for instance in result.Objects
-            done()
-        )

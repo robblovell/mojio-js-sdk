@@ -604,7 +604,7 @@
                 module.exports = Event = function(_super) {
                     __extends(Event, _super);
                     Event.prototype._schema = {
-                        Type: "String",
+                        Type: "Integer",
                         MojioId: "String",
                         VehicleId: "String",
                         OwnerId: "String",
@@ -619,7 +619,7 @@
                         Accelerometer: "Object",
                         TripId: "String",
                         Altitude: "Float",
-                        Heading: "Integer",
+                        Heading: "Float",
                         Distance: "Float",
                         FuelLevel: "Float",
                         FuelEfficiency: "Float",
