@@ -3,7 +3,7 @@ SignalR = require './SignalRNodeWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '80', version: 'v1', scheme: 'https' }
+    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https' }
 
     constructor: (@options) ->
         @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme }
@@ -20,7 +20,7 @@ module.exports = class MojioClient
         @connStatus = null
         @auth_token = null
 
-        @signalr = new SignalR("http://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
+        @signalr = new SignalR(@options.scheme+"://"+@options.hostname+":"+@options.port+"/v1/signalr",['ObserverHub'])
 
     ###
         Helpers
