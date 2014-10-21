@@ -75,7 +75,7 @@
 
     defaults = {
       hostname: 'api.moj.io',
-      port: '80',
+      port: '443',
       version: 'v1',
       scheme: 'https'
     };
@@ -110,7 +110,7 @@
       this.hub = null;
       this.connStatus = null;
       this.auth_token = null;
-      this.signalr = new SignalR("http://" + this.options.hostname + ":" + this.options.port + "/v1/signalr", ['ObserverHub'], $);
+      this.signalr = new SignalR("http://" + this.options.hostname + ":80/v1/signalr", ['ObserverHub'], $);
     }
 
     /*
@@ -859,7 +859,7 @@
     __extends(Event, _super);
 
     Event.prototype._schema = {
-      "Type": "String",
+      "Type": "Integer",
       "MojioId": "String",
       "VehicleId": "String",
       "OwnerId": "String",
@@ -874,7 +874,7 @@
       "Accelerometer": "Object",
       "TripId": "String",
       "Altitude": "Float",
-      "Heading": "Integer",
+      "Heading": "Float",
       "Distance": "Float",
       "FuelLevel": "Float",
       "FuelEfficiency": "Float",

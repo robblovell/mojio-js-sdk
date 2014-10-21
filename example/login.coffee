@@ -6,9 +6,9 @@ config =     {
     hostname: 'api.moj.io',
     version: 'v1',
     port:'443',
+    schema:'https',
     login: 'anonymous@moj.io',
-    password: 'Password007',
-    scheme: 'https'
+    password: 'Password007'
 }
 
 mojio_client = new MojioClient(config)

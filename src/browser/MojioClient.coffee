@@ -20,7 +20,7 @@ module.exports = class MojioClient
         @connStatus = null
         @auth_token = null
 
-        @signalr = new SignalR("http://"+@options.hostname+":80"+"/v1/signalr",['ObserverHub'], $)
+        @signalr = new SignalR("http://"+@options.hostname+":80/v1/signalr",['ObserverHub'], $)
 
     ###
         Helpers
@@ -315,33 +315,24 @@ module.exports = class MojioClient
                     Subject: object.model(), SubjectId: object.id(), "Transports": "SignalR"
                 }
             )
-            @request({ method: 'PUT', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
-                if error
-                    callback(error, null)
-                else
-                    observer = new Observer(result)
-                    @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.Id(), observer_callback, (error, result) ->
-                        callback(null, observer)
-                    )
-            )
+
         else
             observer = new Observer(
                 {
-                    ObserverType: "Event", Status: "Approved", Name: "Test"+Math.random(),
-                    Subject: subject.model(),
+                    ObserverType: "Generic", Subject: subject.model(), SubjectId: subject.id(),
                     Parent: object.model(), ParentId: object.id(), "Transports": "SignalR"
                 }
             )
-            @request({ method: 'PUT', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
-                if error
-                    callback(error, null)
-                else
-                    observer = new Observer(result)
-                    @signalr.subscribe('ObserverHub', 'Subscribe', subject.model(), observer.Id(), observer_callback, (error, result) ->
-                        callback(null, observer)
-                    )
-            )
 
+        @request({ method: 'PUT', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
+            if error
+                callback(error, null)
+            else
+                observer = new Observer(result)
+                @signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, (error, result) ->
+                    callback(null, observer)
+                )
+        )
 
     unobserve: (observer, subject, observer_callback=null, callback) ->
         if !observer || !subject?
