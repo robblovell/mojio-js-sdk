@@ -6,7 +6,7 @@ module.exports = class Observer extends MojioModel
                 "Type": "String",
                 "Name": "String",
                 "ObserverType": "String",
-                "EventTypes" : "Array",
+                "EventTypes": "Array",
                 "AppId": "String",
                 "OwnerId": "String",
                 "Parent": "String",

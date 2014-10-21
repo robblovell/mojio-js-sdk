@@ -677,7 +677,7 @@
     SignalRBrowserWrapper.prototype.observer_callbacks = {};
 
     SignalRBrowserWrapper.prototype.observer_registry = function(entity) {
-      var callback, _i, _len, _ref, _results;
+      var callback, _i, _j, _len, _len1, _ref, _ref1, _results, _results1;
       if (this.observer_callbacks[entity._id]) {
         _ref = this.observer_callbacks[entity._id];
         _results = [];
@@ -686,6 +686,14 @@
           _results.push(callback(entity));
         }
         return _results;
+      } else if (this.observer_callbacks[entity.model()]) {
+        _ref1 = this.observer_callbacks[entity.model()];
+        _results1 = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          callback = _ref1[_j];
+          _results1.push(callback(entity));
+        }
+        return _results1;
       }
     };
 
@@ -760,19 +768,19 @@
       }
     };
 
-    SignalRBrowserWrapper.prototype.subscribe = function(hubName, method, subject, object, futureCallback, callback) {
+    SignalRBrowserWrapper.prototype.subscribe = function(hubName, method, subject, observerId, futureCallback, callback) {
       this.setCallback(subject, futureCallback);
       return this.getHub(hubName, function(error, hub) {
         if (error != null) {
           return callback(error, null);
         } else {
-          hub.invoke(method, object);
+          hub.invoke(method, observerId);
           return callback(null, hub);
         }
       });
     };
 
-    SignalRBrowserWrapper.prototype.unsubscribe = function(hubName, method, subject, object, pastCallback, callback) {
+    SignalRBrowserWrapper.prototype.unsubscribe = function(hubName, method, subject, observerId, pastCallback, callback) {
       this.removeCallback(subject, pastCallback);
       if (this.observer_callbacks[subject].length === 0) {
         return this.getHub(hubName, function(error, hub) {
@@ -780,7 +788,7 @@
             return callback(error, null);
           } else {
             if (hub != null) {
-              hub.invoke(method, object);
+              hub.invoke(method, observerId);
             }
             return callback(null, hub);
           }
@@ -1214,6 +1222,7 @@
       "Type": "String",
       "Name": "String",
       "ObserverType": "String",
+      "EventTypes": "Array",
       "AppId": "String",
       "OwnerId": "String",
       "Parent": "String",

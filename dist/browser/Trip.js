@@ -294,6 +294,10 @@
 
 }).call(this);
 
+/*
+//@ sourceMappingURL=Trip.map
+*/
+
 },{"./MojioModel":1}]},{},[2])
 (2)
 });

@@ -243,6 +243,7 @@
       "Type": "String",
       "Name": "String",
       "ObserverType": "String",
+      "EventTypes": "Array",
       "AppId": "String",
       "OwnerId": "String",
       "Parent": "String",
@@ -281,6 +282,10 @@
   })(MojioModel);
 
 }).call(this);
+
+/*
+//@ sourceMappingURL=Observer.map
+*/
 
 },{"./MojioModel":1}]},{},[2])
 (2)

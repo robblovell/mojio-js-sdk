@@ -200,7 +200,8 @@ config = {
   secret: 'YOUR SECRET KEY',
   hostname: 'api.moj.io',
   version: 'v1',
-  port: '80'
+  port: '443',
+  scheme: 'https'
 };
 
 Mojio = require('./lib/MojioClient.js');
