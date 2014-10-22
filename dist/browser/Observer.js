@@ -283,10 +283,6 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=Observer.map
-*/
-
 },{"./MojioModel":1}]},{},[2])
 (2)
 });

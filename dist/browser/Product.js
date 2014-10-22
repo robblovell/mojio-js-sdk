@@ -280,10 +280,6 @@
 
 }).call(this);
 
-/*
-//@ sourceMappingURL=Product.map
-*/
-
 },{"./MojioModel":1}]},{},[2])
 (2)
 });

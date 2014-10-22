@@ -305,7 +305,7 @@ module.exports = class MojioClient
         @_schema((error, result) => callback(error, result))
 
     ###
-            Observer
+            Observers
     ###
 
     observe: (subject, parent=null, observer_callback, callback) ->
@@ -344,8 +344,6 @@ module.exports = class MojioClient
                         callback(null, observer)
                     )
             )
-
-
 
     unobserve: (observer, subject, parent, observer_callback, callback) ->
         if !observer || !subject?

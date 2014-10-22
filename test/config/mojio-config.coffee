@@ -5,7 +5,7 @@ module.exports =
         hostname: 'develop.api.moj.io',
         version: 'v1',
         port:'80',
-        scheme:'http'
-        signalr_port:'80',
+        scheme:'http',
+        signalr_port:'80'
 
     }
