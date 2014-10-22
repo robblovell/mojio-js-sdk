@@ -4,6 +4,8 @@ Mojio javascript REST client.  Mojio provides a standard REST platform for writi
 
 This repository contains a Node-js client and a Browser based js client.
 
+(NOTE: the signature for observe and unobserve have changed from version 2.0.1 to 2.1.0)
+
 For browser based HTML applications you get this client via Bower: (you will also need jquery)
 
 ```
@@ -17,7 +19,7 @@ Or via the Mojio CDN at https://djaqzxyxnyyiy.cloudfront.net
 <script src="https://djaqzxyxnyyiy.cloudfront.net/mojio-js.js"></script>
 ```
 
-If you are in a node envirionment, use npm:
+If you are in a node environment, use npm:
 
 ```
 npm install mojio-js
