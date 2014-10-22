@@ -3,7 +3,7 @@ SignalR = require './SignalRNodeWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_port: '80' }
+    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'http', signalr_port: '80', signalr_hub: 'ObserverHub' }
 
     constructor: (@options) ->
         @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme }
@@ -11,16 +11,18 @@ module.exports = class MojioClient
         @options.port ?= defaults.port
         @options.version ?= defaults.version
         @options.scheme ?= defaults.scheme
-
+        @options.signalr_port ?= defaults.signalr_port
+        @options.signalr_scheme ?= defaults.signalr_scheme
+        @options.signalr_hub ?= defaults.signalr_hub
         @options.application = @options.application
-        @options.secret = @options.secret  # TODO:: https only
+        @options.secret = @options.secret
         @options.observerTransport = 'SingalR'
         @conn = null
         @hub = null
         @connStatus = null
         @auth_token = null
 
-        @signalr = new SignalR("http://"+@options.hostname+":2006/v1/signalr",['ObserverHub'])
+        @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub])
 
     ###
         Helpers
@@ -320,7 +322,7 @@ module.exports = class MojioClient
                     callback(error, null)
                 else
                     observer = new Observer(result)
-                    @signalr.subscribe('ObserverHub', 'Subscribe', observer.id(), observer.SubjectId, observer_callback, (error, result) ->
+                    @signalr.subscribe(@options.signalr_hub, 'Subscribe', observer.id(), observer.SubjectId, observer_callback, (error, result) ->
                         callback(null, observer)
                     )
             )
@@ -338,7 +340,7 @@ module.exports = class MojioClient
                     callback(error, null)
                 else
                     observer = new Observer(result)
-                    @signalr.subscribe('ObserverHub', 'Subscribe', observer.id(), subject.model(), observer_callback, (error, result) ->
+                    @signalr.subscribe(@options.signalr_hub, 'Subscribe', observer.id(), subject.model(), observer_callback, (error, result) ->
                         callback(null, observer)
                     )
             )
@@ -349,9 +351,9 @@ module.exports = class MojioClient
         if !observer || !subject?
             callback("Observer and subject required.")
         else if (parent == null)
-            @signalr.unsubscribe('ObserverHub', 'Unsubscribe', observer.id(), subject.id(), observer_callback, callback)
+            @signalr.unsubscribe(@options.signalr_hub, 'Unsubscribe', observer.id(), subject.id(), observer_callback, callback)
         else
-            @signalr.unsubscribe('ObserverHub', 'Unsubscribe', observer.id(), subject.model(), observer_callback, callback)
+            @signalr.unsubscribe(@options.signalr_hub, 'Unsubscribe', observer.id(), subject.model(), observer_callback, callback)
 
     ###
         Storage

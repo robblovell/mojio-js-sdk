@@ -45,21 +45,25 @@ module.exports = class SignalRNodeWrapper
             @observer_callbacks[id] = temp
         return
 
-    subscribe: (hubName, method, observer, subject, futureCallback, callback) ->
+    subscribe: (hubName, method, observerId, subject, futureCallback, callback) ->
         @setCallback(subject, futureCallback)
         @getHub(hubName, (error, hub) ->
-            callback(error, null) if error?
-            hub.invoke(method, observer) if hub?
-            callback(null, hub)
+            if error?
+                callback(error, null)
+            else
+                hub.invoke(method, observerId) if hub?
+                callback(null, hub)
         )
 
-    unsubscribe: (hubName, method, observer, subject, pastCallback, callback) ->
+    unsubscribe: (hubName, method, observerId, subject, pastCallback, callback) ->
         @removeCallback(subject, pastCallback)
         if (@observer_callbacks[subject].length == 0)
             @getHub(hubName, (error, hub) ->
-                callback(error, null) if error?
-                hub.invoke(method, observer) if hub?
-                callback(null, hub)
+                if error?
+                    callback(error, null)
+                else
+                    hub.invoke(method, observerId) if hub?
+                    callback(null, hub)
             )
         else
             callback(null, true)
