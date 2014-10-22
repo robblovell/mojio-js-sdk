@@ -27,10 +27,6 @@ You can always checkout this repo and use the code directly.
 All distributions for the browser are in the "dist" directory.
 All distributions for Node-js are in the "lib" directory.
 
-The client is built from mustache files using combyne.
-The builder generates coffeescript files which are then compiled to js for use in the browser
-in the /dist directory and for use in node-js environments in the /lib directory.
-
 The browser client needs jquery to work properly.  See the example and test directories for how to use this client.
 
 Look here in the repository:
@@ -39,19 +35,7 @@ example/login.html
 test/login_test.coffee
 ```
 [![build status](https://travis-ci.org/mojio/mojio-js.svg?branch=master)](https://travis-ci.org/mojio/mojio-js)
-## Install and Test:
-```
-npm install
-bower install
-mocha
-```
-You may need to install coffeescript, bower, browserify, and mocha:
-```
-npm install -g coffee
-npm install -g bower
-npm install -g browserify
-npm install -g mocha
-```
+
 ## HTML Example
 
 ### CoffeeScript:
@@ -196,9 +180,7 @@ The old login is deprecated and will be removed in a few months:
 config = {
            application: 'YOUR APPLICATION KEY',
            secret: 'YOUR SECRET KEY',
-           hostname: 'api.moj.io',
-           version: 'v1',
-           port:'80'
+           hostname: 'api.moj.io'
          }
 Mojio = require './lib/MojioClient.js'
 mojio = new Mojio(config)
@@ -216,7 +198,8 @@ config = {
   secret: 'YOUR SECRET KEY',
   hostname: 'api.moj.io',
   version: 'v1',
-  port: '80'
+  port: '443',
+  scheme: 'https'
 };
 
 Mojio = require('./lib/MojioClient.js');

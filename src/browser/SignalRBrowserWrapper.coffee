@@ -4,8 +4,12 @@ module.exports = class SignalRBrowserWrapper
     observer_callbacks:  {}
 
     observer_registry: (entity) =>
+        # need to have the observer id to look this up here.
+        # could use the entity type
         if @observer_callbacks[entity._id]
             callback(entity) for callback in @observer_callbacks[entity._id]
+        else if @observer_callbacks[entity.Type]
+            callback(entity) for callback in @observer_callbacks[entity.Type]
 
     constructor: (url, hubNames, jquery) ->  # hubNames not used.
         @$ = jquery
@@ -66,24 +70,24 @@ module.exports = class SignalRBrowserWrapper
             @observer_callbacks[id] = temp
         return
 
-    subscribe: (hubName, method, subject, object, futureCallback, callback) ->
+    subscribe: (hubName, method, observerId, subject, futureCallback, callback) ->
         @setCallback(subject, futureCallback)
         @getHub(hubName, (error, hub) ->
             if error?
                 callback(error, null)
             else
-                hub.invoke(method, object)
+                hub.invoke(method, observerId) if hub?
                 callback(null, hub)
         )
 
-    unsubscribe: (hubName, method, subject, object, pastCallback, callback) ->
+    unsubscribe: (hubName, method, observerId, subject, pastCallback, callback) ->
         @removeCallback(subject, pastCallback)
         if (@observer_callbacks[subject].length == 0)
             @getHub(hubName, (error, hub) ->
                 if error?
                     callback(error, null)
                 else
-                    hub.invoke(method, object) if hub?
+                    hub.invoke(method, observerId) if hub?
                     callback(null, hub)
             )
         else

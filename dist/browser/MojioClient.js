@@ -77,11 +77,14 @@
       hostname: 'api.moj.io',
       port: '443',
       version: 'v1',
-      scheme: 'https'
+      scheme: 'https',
+      signalr_scheme: 'http',
+      signalr_port: '80',
+      signalr_hub: 'ObserverHub'
     };
 
     function MojioClient(options) {
-      var _base, _base1, _base2, _base3;
+      var _base, _base1, _base2, _base3, _base4, _base5, _base6;
       this.options = options;
       if (this.options == null) {
         this.options = {
@@ -103,6 +106,15 @@
       if ((_base3 = this.options).scheme == null) {
         _base3.scheme = defaults.scheme;
       }
+      if ((_base4 = this.options).signalr_port == null) {
+        _base4.signalr_port = defaults.signalr_port;
+      }
+      if ((_base5 = this.options).signalr_scheme == null) {
+        _base5.signalr_scheme = defaults.signalr_scheme;
+      }
+      if ((_base6 = this.options).signalr_hub == null) {
+        _base6.signalr_hub = defaults.signalr_hub;
+      }
       this.options.application = this.options.application;
       this.options.secret = this.options.secret;
       this.options.observerTransport = 'SingalR';
@@ -110,7 +122,7 @@
       this.hub = null;
       this.connStatus = null;
       this.auth_token = null;
-      this.signalr = new SignalR("http://" + this.options.hostname + ":80/v1/signalr", ['ObserverHub'], $);
+      this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [this.options.signalr_hub]);
     }
 
     /*
@@ -492,61 +504,73 @@
     };
 
     /*
-            Observer
+            Observers
     */
 
 
-    MojioClient.prototype.observe = function(object, subject, observer_callback, callback) {
+    MojioClient.prototype.observe = function(subject, parent, observer_callback, callback) {
       var observer,
         _this = this;
-      if (subject == null) {
-        subject = null;
+      if (parent == null) {
+        parent = null;
       }
-      if (subject === null) {
+      if (parent === null) {
         observer = new Observer({
           ObserverType: "Generic",
           Status: "Approved",
           Name: "Test" + Math.random(),
-          Subject: object.model(),
-          SubjectId: object.id(),
+          Subject: subject.model(),
+          SubjectId: subject.id(),
           "Transports": "SignalR"
+        });
+        return this.request({
+          method: 'PUT',
+          resource: Observer.resource(),
+          body: observer.stringify()
+        }, function(error, result) {
+          if (error) {
+            return callback(error, null);
+          } else {
+            observer = new Observer(result);
+            return _this.signalr.subscribe(_this.options.signalr_hub, 'Subscribe', observer.id(), observer.SubjectId, observer_callback, function(error, result) {
+              return callback(null, observer);
+            });
+          }
         });
       } else {
         observer = new Observer({
           ObserverType: "Generic",
+          Status: null,
+          Name: "Test" + Math.random(),
           Subject: subject.model(),
-          SubjectId: subject.id(),
-          Parent: object.model(),
-          ParentId: object.id(),
+          Parent: parent.model(),
+          ParentId: parent.id(),
           "Transports": "SignalR"
         });
+        return this.request({
+          method: 'PUT',
+          resource: Observer.resource(),
+          body: observer.stringify()
+        }, function(error, result) {
+          if (error) {
+            return callback(error, null);
+          } else {
+            observer = new Observer(result);
+            return _this.signalr.subscribe(_this.options.signalr_hub, 'Subscribe', observer.id(), subject.model(), observer_callback, function(error, result) {
+              return callback(null, observer);
+            });
+          }
+        });
       }
-      return this.request({
-        method: 'PUT',
-        resource: Observer.resource(),
-        body: observer.stringify()
-      }, function(error, result) {
-        if (error) {
-          return callback(error, null);
-        } else {
-          observer = new Observer(result);
-          return _this.signalr.subscribe('ObserverHub', 'Subscribe', observer.SubjectId, observer.id(), observer_callback, function(error, result) {
-            return callback(null, observer);
-          });
-        }
-      });
     };
 
-    MojioClient.prototype.unobserve = function(observer, subject, observer_callback, callback) {
-      if (observer_callback == null) {
-        observer_callback = null;
-      }
+    MojioClient.prototype.unobserve = function(observer, subject, parent, observer_callback, callback) {
       if (!observer || (subject == null)) {
         return callback("Observer and subject required.");
+      } else if (parent === null) {
+        return this.signalr.unsubscribe(this.options.signalr_hub, 'Unsubscribe', observer.id(), subject.id(), observer_callback, callback);
       } else {
-        return this.signalr.unsubscribe('ObserverHub', 'Unsubscribe', subject.id(), observer.id(), observer_callback, function(error, result) {
-          return callback(null, observer);
-        });
+        return this.signalr.unsubscribe(this.options.signalr_hub, 'Unsubscribe', observer.id(), subject.model(), observer_callback, callback);
       }
     };
 
@@ -677,7 +701,7 @@
     SignalRBrowserWrapper.prototype.observer_callbacks = {};
 
     SignalRBrowserWrapper.prototype.observer_registry = function(entity) {
-      var callback, _i, _len, _ref, _results;
+      var callback, _i, _j, _len, _len1, _ref, _ref1, _results, _results1;
       if (this.observer_callbacks[entity._id]) {
         _ref = this.observer_callbacks[entity._id];
         _results = [];
@@ -686,6 +710,14 @@
           _results.push(callback(entity));
         }
         return _results;
+      } else if (this.observer_callbacks[entity.Type]) {
+        _ref1 = this.observer_callbacks[entity.Type];
+        _results1 = [];
+        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+          callback = _ref1[_j];
+          _results1.push(callback(entity));
+        }
+        return _results1;
       }
     };
 
@@ -760,19 +792,21 @@
       }
     };
 
-    SignalRBrowserWrapper.prototype.subscribe = function(hubName, method, subject, object, futureCallback, callback) {
+    SignalRBrowserWrapper.prototype.subscribe = function(hubName, method, observerId, subject, futureCallback, callback) {
       this.setCallback(subject, futureCallback);
       return this.getHub(hubName, function(error, hub) {
         if (error != null) {
           return callback(error, null);
         } else {
-          hub.invoke(method, object);
+          if (hub != null) {
+            hub.invoke(method, observerId);
+          }
           return callback(null, hub);
         }
       });
     };
 
-    SignalRBrowserWrapper.prototype.unsubscribe = function(hubName, method, subject, object, pastCallback, callback) {
+    SignalRBrowserWrapper.prototype.unsubscribe = function(hubName, method, observerId, subject, pastCallback, callback) {
       this.removeCallback(subject, pastCallback);
       if (this.observer_callbacks[subject].length === 0) {
         return this.getHub(hubName, function(error, hub) {
@@ -780,7 +814,7 @@
             return callback(error, null);
           } else {
             if (hub != null) {
-              hub.invoke(method, object);
+              hub.invoke(method, observerId);
             }
             return callback(null, hub);
           }
@@ -1214,6 +1248,7 @@
       "Type": "String",
       "Name": "String",
       "ObserverType": "String",
+      "EventTypes": "Array",
       "AppId": "String",
       "OwnerId": "String",
       "Parent": "String",
