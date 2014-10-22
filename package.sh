@@ -18,3 +18,10 @@
 # now register the bower package:
 #
 #       bower register mojio-js https://github.com/mojio/mojio-js.git
+#
+# CDN
+#   update package.json
+#   update index.html
+#   create a directory under dist/cdn/[version] and copy the most recent version there.
+#   commit and copy those same files to the cdn along with the new directory,
+
