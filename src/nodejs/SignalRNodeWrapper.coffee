@@ -8,8 +8,8 @@ module.exports = class SignalRNodeWrapper
         # could use the entity type
         if @observer_callbacks[entity._id]
             callback(entity) for callback in @observer_callbacks[entity._id]
-        else if @observer_callbacks[entity.model()]
-            callback(entity) for callback in @observer_callbacks[entity.model()]
+        else if @observer_callbacks[entity.Type]
+            callback(entity) for callback in @observer_callbacks[entity.Type]
 
     constructor: (url, hubNames, jquery) ->
         @url = url
@@ -45,20 +45,20 @@ module.exports = class SignalRNodeWrapper
             @observer_callbacks[id] = temp
         return
 
-    subscribe: (hubName, method, subject, object, futureCallback, callback) ->
+    subscribe: (hubName, method, observer, subject, futureCallback, callback) ->
         @setCallback(subject, futureCallback)
         @getHub(hubName, (error, hub) ->
             callback(error, null) if error?
-            hub.invoke(method, object) if hub?
+            hub.invoke(method, observer) if hub?
             callback(null, hub)
         )
 
-    unsubscribe: (hubName, method, subject, object, pastCallback, callback) ->
+    unsubscribe: (hubName, method, observer, subject, pastCallback, callback) ->
         @removeCallback(subject, pastCallback)
         if (@observer_callbacks[subject].length == 0)
             @getHub(hubName, (error, hub) ->
                 callback(error, null) if error?
-                hub.invoke(method, object) if hub?
+                hub.invoke(method, observer) if hub?
                 callback(null, hub)
             )
         else

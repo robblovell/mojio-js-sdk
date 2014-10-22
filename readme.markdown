@@ -180,9 +180,7 @@ The old login is deprecated and will be removed in a few months:
 config = {
            application: 'YOUR APPLICATION KEY',
            secret: 'YOUR SECRET KEY',
-           hostname: 'api.moj.io',
-           version: 'v1',
-           port:'80'
+           hostname: 'api.moj.io'
          }
 Mojio = require './lib/MojioClient.js'
 mojio = new Mojio(config)
