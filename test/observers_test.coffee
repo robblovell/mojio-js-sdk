@@ -1,15 +1,21 @@
 MojioClient = require '../lib/nodejs/MojioClient'
 Observer = require '../lib/models/Observer'
 App = require '../lib/models/App'
+Mojio = require '../lib/models/Mojio'
+Vehicle = require '../lib/models/Vehicle'
+Event = require '../lib/models/Event'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
 testdata = require('./data/mojio-test-data')
 should = require('should')
 count = [0,0]
-app1=null
+app1=null   
 app2=null
 observer = null
+theevent = null
+vehicle = null
+
 describe 'Observer', ->
 
     before( (done) ->
@@ -19,9 +25,10 @@ describe 'Observer', ->
         )
     )
 
-    # test Observer
+    #    # test Observer
     it 'can Observe Newly Created Object', (done) ->
         app = new App().mock()
+
 
         mojio_client.post(app, (error, result) ->
             (error==null).should.be.true
@@ -31,8 +38,8 @@ describe 'Observer', ->
             (entity) ->
                 entity.should.be.an.instanceOf(Object)
                 console.log("Observed change seen.")
-                mojio_client.unobserve(observer, app, null, (error, result) ->
-                    result.should.be.an.instanceOf(Observer)
+                mojio_client.unobserve(observer, app, null, null, (error, result) ->
+#                    result.should.be.an.instanceOf(Observer)
                     mojio_client.delete(app, (error, result) ->
                         (error==null).should.be.true
                         console.log("App deleted.")
@@ -55,6 +62,67 @@ describe 'Observer', ->
             )
         )
 
+    # test Observer
+    it 'can Observe Events of Vehicle', (done) ->
+        mojio = new Mojio().mock()
+        mojio_client.create(mojio, (error, result) ->
+            (error==null).should.be.true
+            mojio = new Mojio(result)
+            vehicle = new Vehicle().mock()
+            vehicle.MojioId = mojio.id()
+
+            mojio_client.create(vehicle, (error, result) ->
+                (error==null).should.be.true
+                vehicle = new Vehicle(result)
+                console.log("created vehicle")
+
+                mojio_client.observe(Event, vehicle,
+                    (entity) ->
+                        entity.should.be.an.instanceOf(Object)
+                        console.log("Observed change seen.")
+                        if (entity.Type == 'Vehicle')
+                            console.log("Vehicle Changed")
+                        else
+                            console.log("Event Added to Vehicle.")
+
+                            mojio_client.unobserve(observer, Event, vehicle, null, (error, result) ->
+#                                result.should.be.an.instanceOf(Observer)
+                                mojio_client.delete(theevent, (error, result) ->
+                                    (error==null).should.be.true
+                                    console.log("Event deleted.")
+                                    mojio_client.delete(vehicle, (error, result) ->
+                                        (error==null).should.be.true
+                                        console.log("Vehicle deleted.")
+                                        done()
+                                    )
+                                )
+                            )
+                    ,
+                    (error, result) ->
+                        #result.Status.should.equal("Approved")
+                        result.should.be.an.instanceOf(Observer)
+                        observer = result
+                        event = new Event().mock()
+                        event.Type = 'Event'
+                        event.EventType = 'TripEvent'
+                        event.VehicleId = vehicle.id()
+                        event.MojioId = mojio.id()
+                        event.Time = new Date()
+                        event.Location = { Lat: 49.8, Lng: 112.0}
+
+                        console.log("creating event")
+                        mojio_client.create(event, (error, result) ->
+                            theevent = new Event(result)
+                            (error==null).should.be.true
+                            console.log("event created.")
+                        )
+                )
+            )
+        )
+
+
+
+
     it 'can Observe Object', (done) ->
         mojio_client.get(App, {}, (error, result) ->
             (error==null).should.be.true
@@ -69,8 +137,8 @@ describe 'Observer', ->
             (entity) ->
                 entity.should.be.an.instanceOf(Object)
                 console.log("Observed change seen.")
-                mojio_client.unobserve(observer, app, null, (error, result) ->
-                    result.should.be.an.instanceOf(Observer)
+                mojio_client.unobserve(observer, app, null, null, (error, result) ->
+#                    result.should.be.an.instanceOf(Observer)
                     done()
                 )
             ,
