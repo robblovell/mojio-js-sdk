@@ -308,6 +308,32 @@ module.exports = class MojioClient
             Observers
     ###
 
+    watch: (observer, observer_callback, callback) ->
+        @request({ method: 'POST', resource: Observer.resource(), body: observer.stringify()}, (error, result) =>
+            if error
+                callback(error, null)
+            else
+                observer = new Observer(result)
+                @signalr.subscribe(@options.signalr_hub, 'Subscribe', observer.id(), observer.Subject, observer_callback, (error, result) ->
+                    callback(null, observer)
+                )
+                return observer
+        )
+
+    ignore: (observer, observer_callback, callback) ->
+        if !observer
+            callback("Observer required.")
+        if (observer['subject']?)
+            if (observer.parent == null)
+                @signalr.unsubscribe(@options.signalr_hub, 'Unsubscribe', observer.id(), observer.subject.id(), observer_callback, callback)
+            else
+                @signalr.unsubscribe(@options.signalr_hub, 'Unsubscribe', observer.id(), observer.subject.model(), observer_callback, callback)
+        else
+            if (observer.parent == null)
+                @signalr.unsubscribe(@options.signalr_hub, 'Unsubscribe', observer.id(), observer.SubjectId, observer_callback, callback)
+            else
+                @signalr.unsubscribe(@options.signalr_hub, 'Unsubscribe', observer.id(), observer.Subject, observer_callback, callback)
+
     observe: (subject, parent=null, observer_callback, callback) ->
         # subject is { model: type, _id: id }
         if (parent == null)

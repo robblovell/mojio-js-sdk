@@ -19,7 +19,14 @@ fs.readFile('./models/schema.coffee', (err, data) ->
 
                     continue if (model != "App" && model != "Address" && model != "Location" && model != "Trip" &&
                         model != "User" && model != "Vehicle"  && model != "Event" && model != "Mojio" &&
-                        model != "Subscription" && model != "Product" && model != "Observer")
+                        model != "Subscription" && model != "Product" && model != "Observer" &&
+                        model != "AccelerationObserver" && model != "AccelerometerObserver" &&
+                        model != "AltitudeObserver" && model != "BatteryVoltageObserver" &&
+                        model != "ConditionalObserver" && model != "DiagnosticCodeObserver" &&
+                        model != "DistanceObserver" && model != "EventObserver" &&
+                        model != "FuelLevelObserver" && model != "GeoFenceObserver" &&
+                        model != "HeadingObserver" && model != "OdometerObserver" &&
+                        model != "RPMObserver" && model != "ScriptObserver" && model != "SpeedObserver")
 
                     console.log("Processing "+model)
 
@@ -37,7 +44,6 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                                 for field, type of event_schema
                                     schema[field] = type
 
-
                     str = JSON.stringify(schema,null,4)
                     spl = str.split('\n')
                     for s in spl
@@ -48,7 +54,14 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     wstream.write(output)
                     wstream.end()
 
-                    continue if (model == "Address" || model == "Location" || model == "Observer")
+                    continue if (model == "Address" || model == "Location" || model == "Observer" ||
+                        model == "AccelerationObserver" || model == "AccelerometerObserver" ||
+                        model == "AltitudeObserver" || model == "BatteryVoltageObserver" ||
+                        model == "ConditionalObserver" || model == "DiagnosticCodeObserver" ||
+                        model == "DistanceObserver" || model == "EventObserver" ||
+                        model == "FuelLevelObserver" || model == "GeoFenceObserver" ||
+                        model == "HeadingObserver" || model == "OdometerObserver" ||
+                        model == "RPMObserver" || model == "ScriptObserver" || model == "SpeedObserver")
 
                     # these models have problems with put, post delete.
                     if (model == "Event" || model == "Subscription" || model == "Trip" || model == "User")
@@ -59,7 +72,6 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     wstream.write(output)
                     wstream.end()
                     models[i++] = view
-
 
                 fs.readFile('./MojioClientTemplate.mustache', (err, data) ->
                     client_template = Combyne(data.toString())

@@ -8,13 +8,13 @@ module.exports = class MojioModel
         @validate(json)
 
     setField: (field, value) ->
-        if (@schema()[field]? || typeof value == "function")
+#        if (@schema()[field]? || typeof value == "function")
             @[field] = value
             return @[field]
-        unless (field=="_client" || field=="_schema" || field == "_resource" || field == "_model" ||
-                field=="_AuthenticationType" || field=="AuthenticationType" ||
-                field=="_IsAuthenticated" || field=="IsAuthenticated")
-            throw "Field '"+field+"' not in model '"+@constructor.name+"'."
+#        unless (field=="_client" || field=="_schema" || field == "_resource" || field == "_model" ||
+#                field=="_AuthenticationType" || field=="AuthenticationType" ||
+#                field=="_IsAuthenticated" || field=="IsAuthenticated")
+#            throw "Field '"+field+"' not in model '"+@constructor.name+"'."
 
     getField: (field) ->
         return @[field]

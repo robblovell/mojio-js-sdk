@@ -238,6 +238,60 @@ string based field/value list criteria-
 query(model, { criteria="name=blah; field=blah;", limit=10, offset=0, sortby="name", desc=false }, callback)
 ```
 
+### Observers
+
+You can observe changes to entities in the Mojio system and have the system push those changes to your application through SignalR or through REST Post callbacks.  For client side applications, SignalR is the preferred technology, where as a sever based application would probably prefer POST callbacks.
+
+There are two main methods available in the javascript client, "watch" and "observe".  For "watch", construct the observer based on one of the observer schema types.  
+
+Optionally, for Vehicles and Events, conditional observers can be created that deliver changes to you only if a particular measurement has satisfied a condition.  For instance, "Speed" is a measurement available on events and stored as "LastSpeed" on vehicles.  A conditional "Speed" observer with a SpeedLow value of 80 will fire if the speed is greator than 80 (as you have guessed already, SpeedHigh can be set to restrict the upper bound too.
+
+See src/models/schema.coffee or try out the Mojio API endpoint https://api.moj.io/schema or more specifically: https://api.moj.io/v1/Schema?entityType=observers)
+
+The objects that can be observed are enumerated here: https://api.moj.io/v1/Schema?entityType=cannon and here: https://api.moj.io/v1/Schema?entityType=events
+
+See the test folder, test/observers_Test.coffee and test/conditional_observer_test.coffee for examples of the "observe" and "watch" methods respectively. Conditional observers can only be created with the "watch" call.
+
+Example of the "observe" method of vehicles:
+```
+mojio_client.observe(vehicle, null,
+    (entity) ->
+        entity.should.be.an.instanceOf(Object)
+        console.log("Observed change seen.")
+        mojio_client.unobserve(observer, vehicle, null, null, (error, result) ->
+            result.should.be.an.instanceOf(Observer)
+        )
+    ,
+    (error, result) ->
+        result.Status.should.equal("Approved")
+    )
+```
+Example of the "watch" method with a conditional observer.
+```
+observer = new Observer(
+    {
+        ObserverType: "Speed", Status: "Approved", SpeedLow: 80.0, Name: "Test"+Math.random(),
+        Subject: vehicle.model(), SubjectId: vehicle.id(), "Transports": "SignalR"
+    }
+)
+mojio_client.watch(observer,
+    (entity) ->
+        entity.should.be.an.instanceOf(Object)
+        console.log("Observed change seen.")
+        mojio_client.ignore(observer, (error, result) ->
+            mojio_client.delete(vehicle, (error, result) ->
+                (error==null).should.be.true
+                console.log("Vehicle deleted.")
+                done()
+            )
+        )
+    ,
+    (error, result) ->
+        result.should.be.an.instanceOf(Observer)
+        result.Status.should.equal("Approved")
+    )
+```
+
 ## Build
 All javascript client code is in the 'dist' directory.
 

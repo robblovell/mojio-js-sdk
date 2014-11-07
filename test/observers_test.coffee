@@ -35,31 +35,31 @@ describe 'Observer', ->
             app = new App(result)
             console.log("created app")
             mojio_client.observe(app, null,
-            (entity) ->
-                entity.should.be.an.instanceOf(Object)
-                console.log("Observed change seen.")
-                mojio_client.unobserve(observer, app, null, null, (error, result) ->
-#                    result.should.be.an.instanceOf(Observer)
-                    mojio_client.delete(app, (error, result) ->
+                (entity) ->
+                    entity.should.be.an.instanceOf(Object)
+                    console.log("Observed change seen.")
+                    mojio_client.unobserve(observer, app, null, null, (error, result) ->
+    #                    result.should.be.an.instanceOf(Observer)
+                        mojio_client.delete(app, (error, result) ->
+                            (error==null).should.be.true
+                            console.log("App deleted.")
+                            done()
+                        )
+                    )
+                ,
+                (error, result) ->
+                    result.Status.should.equal("Approved")
+
+                    app.Description = "Changed"
+                    console.log("changing app...")
+                    result.should.be.an.instanceOf(Observer)
+                    observer = result
+
+                    mojio_client.put(app, (error, result) ->
                         (error==null).should.be.true
-                        console.log("App deleted.")
-                        done()
+                        console.log("App changed.")
                     )
                 )
-            ,
-            (error, result) ->
-                result.Status.should.equal("Approved")
-
-                app.Description = "Changed"
-                console.log("changing app...")
-                result.should.be.an.instanceOf(Observer)
-                observer = result
-
-                mojio_client.put(app, (error, result) ->
-                    (error==null).should.be.true
-                    console.log("App changed.")
-                )
-            )
         )
 
     # test Observer

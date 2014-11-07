@@ -35,7 +35,19 @@ module.exports = class Event extends MojioModel
                 "MovingTime": "Float",
                 "IdleTime": "Float",
                 "StopTime": "Float",
-                "MaxRPM": "Float"
+                "MaxRPM": "Float",
+                "EventTypes": "Array",
+                "Timing": "Integer",
+                "Name": "String",
+                "ObserverType": "Integer",
+                "AppId": "String",
+                "Parent": "String",
+                "ParentId": "String",
+                "Subject": "String",
+                "SubjectId": "String",
+                "Transports": "Integer",
+                "Status": "Integer",
+                "Tokens": "Array"
             }
 
 
