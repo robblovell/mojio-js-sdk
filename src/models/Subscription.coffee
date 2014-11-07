@@ -3,7 +3,7 @@ MojioModel = require('./MojioModel')
 module.exports = class Subscription extends MojioModel
     # instance variables
     _schema:             {
-                "Type": "String",
+                "Type": "Integer",
                 "ChannelType": "Integer",
                 "ChannelTarget": "String",
                 "AppId": "String",

@@ -84,13 +84,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -115,7 +110,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -135,9 +130,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -145,9 +142,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -364,13 +363,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -395,7 +389,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -415,9 +409,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -425,9 +421,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -636,7 +634,19 @@
                         MovingTime: "Float",
                         IdleTime: "Float",
                         StopTime: "Float",
-                        MaxRPM: "Float"
+                        MaxRPM: "Float",
+                        EventTypes: "Array",
+                        Timing: "Integer",
+                        Name: "String",
+                        ObserverType: "Integer",
+                        AppId: "String",
+                        Parent: "String",
+                        ParentId: "String",
+                        Subject: "String",
+                        SubjectId: "String",
+                        Transports: "Integer",
+                        Status: "Integer",
+                        Tokens: "Array"
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
@@ -668,13 +678,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -699,7 +704,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -719,9 +724,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -729,9 +736,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -944,13 +953,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -975,7 +979,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -995,9 +999,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -1005,9 +1011,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -1223,13 +1231,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -1254,7 +1257,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -1274,9 +1277,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -1284,9 +1289,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -1456,13 +1463,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -1487,7 +1489,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -1507,9 +1509,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -1517,9 +1521,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -1742,13 +1748,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -1773,7 +1774,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -1793,9 +1794,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -1803,9 +1806,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -2025,13 +2030,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -2056,7 +2056,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -2076,9 +2076,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -2086,9 +2088,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -2231,7 +2235,7 @@
                 module.exports = Subscription = function(_super) {
                     __extends(Subscription, _super);
                     Subscription.prototype._schema = {
-                        Type: "String",
+                        Type: "Integer",
                         ChannelType: "Integer",
                         ChannelTarget: "String",
                         AppId: "String",
@@ -2308,13 +2312,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -2339,7 +2338,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -2359,9 +2358,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -2369,9 +2370,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -2605,13 +2608,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -2636,7 +2634,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -2656,9 +2654,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -2666,9 +2666,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -2889,13 +2891,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -2920,7 +2917,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -2940,9 +2937,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -2950,9 +2949,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }

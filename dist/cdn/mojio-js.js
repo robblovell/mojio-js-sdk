@@ -257,7 +257,7 @@
                         return window.location = url;
                     };
                     MojioClient.prototype.token = function(callback) {
-                        var match, token, _this = this;
+                        var match, token;
                         this.user = null;
                         match = document.location.hash.match(/access_token=([0-9a-f-]{36})/);
                         token = !!match && match[1];
@@ -271,14 +271,16 @@
                                 parameters: {
                                     id: token
                                 }
-                            }, function(error, result) {
-                                if (error) {
-                                    return callback(error, null);
-                                } else {
-                                    _this.auth_token = result;
-                                    return callback(null, _this.auth_token);
-                                }
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    if (error) {
+                                        return callback(error, null);
+                                    } else {
+                                        _this.auth_token = result;
+                                        return callback(null, _this.auth_token);
+                                    }
+                                };
+                            }(this));
                         }
                     };
                     MojioClient.prototype.unauthorize = function(redirect_url) {
@@ -316,13 +318,14 @@
                         }, callback);
                     };
                     MojioClient.prototype.login = function(username, password, callback) {
-                        var _this = this;
-                        return this._login(username, password, function(error, result) {
-                            if (result != null) {
-                                _this.auth_token = result;
-                            }
-                            return callback(error, result);
-                        });
+                        return this._login(username, password, function(_this) {
+                            return function(error, result) {
+                                if (result != null) {
+                                    _this.auth_token = result;
+                                }
+                                return callback(error, result);
+                            };
+                        }(this));
                     };
                     MojioClient.prototype._logout = function(callback) {
                         return this.request({
@@ -332,11 +335,12 @@
                         }, callback);
                     };
                     MojioClient.prototype.logout = function(callback) {
-                        var _this = this;
-                        return this._logout(function(error, result) {
-                            _this.auth_token = null;
-                            return callback(error, result);
-                        });
+                        return this._logout(function(_this) {
+                            return function(error, result) {
+                                _this.auth_token = null;
+                                return callback(error, result);
+                            };
+                        }(this));
                     };
                     mojio_models = {};
                     App = _dereq_("../models/App");
@@ -381,7 +385,7 @@
                         return object;
                     };
                     MojioClient.prototype.query = function(model, parameters, callback) {
-                        var property, query_criteria, value, _ref, _this = this;
+                        var property, query_criteria, value, _ref;
                         if (parameters instanceof Object) {
                             if (parameters.criteria instanceof Object) {
                                 query_criteria = "";
@@ -396,9 +400,11 @@
                                 method: "GET",
                                 resource: model.resource(),
                                 parameters: parameters
-                            }, function(error, result) {
-                                return callback(error, _this.model(model.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this.model(model.model(), result));
+                                };
+                            }(this));
                         } else if (typeof parameters === "string") {
                             return this.request({
                                 method: "GET",
@@ -406,9 +412,11 @@
                                 parameters: {
                                     id: parameters
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this.model(model.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this.model(model.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -455,13 +463,51 @@
                         }, callback);
                     };
                     MojioClient.prototype.schema = function(callback) {
-                        var _this = this;
-                        return this._schema(function(error, result) {
-                            return callback(error, result);
-                        });
+                        return this._schema(function(_this) {
+                            return function(error, result) {
+                                return callback(error, result);
+                            };
+                        }(this));
+                    };
+                    MojioClient.prototype.watch = function(observer, observer_callback, callback) {
+                        return this.request({
+                            method: "POST",
+                            resource: Observer.resource(),
+                            body: observer.stringify()
+                        }, function(_this) {
+                            return function(error, result) {
+                                if (error) {
+                                    return callback(error, null);
+                                } else {
+                                    observer = new Observer(result);
+                                    _this.signalr.subscribe(_this.options.signalr_hub, "Subscribe", observer.id(), observer.Subject, observer_callback, function(error, result) {
+                                        return callback(null, observer);
+                                    });
+                                    return observer;
+                                }
+                            };
+                        }(this));
+                    };
+                    MojioClient.prototype.ignore = function(observer, observer_callback, callback) {
+                        if (!observer) {
+                            callback("Observer required.");
+                        }
+                        if (observer["subject"] != null) {
+                            if (observer.parent === null) {
+                                return this.signalr.unsubscribe(this.options.signalr_hub, "Unsubscribe", observer.id(), observer.subject.id(), observer_callback, callback);
+                            } else {
+                                return this.signalr.unsubscribe(this.options.signalr_hub, "Unsubscribe", observer.id(), observer.subject.model(), observer_callback, callback);
+                            }
+                        } else {
+                            if (observer.parent === null) {
+                                return this.signalr.unsubscribe(this.options.signalr_hub, "Unsubscribe", observer.id(), observer.SubjectId, observer_callback, callback);
+                            } else {
+                                return this.signalr.unsubscribe(this.options.signalr_hub, "Unsubscribe", observer.id(), observer.Subject, observer_callback, callback);
+                            }
+                        }
                     };
                     MojioClient.prototype.observe = function(subject, parent, observer_callback, callback) {
-                        var observer, _this = this;
+                        var observer;
                         if (parent == null) {
                             parent = null;
                         }
@@ -478,16 +524,18 @@
                                 method: "PUT",
                                 resource: Observer.resource(),
                                 body: observer.stringify()
-                            }, function(error, result) {
-                                if (error) {
-                                    return callback(error, null);
-                                } else {
-                                    observer = new Observer(result);
-                                    return _this.signalr.subscribe(_this.options.signalr_hub, "Subscribe", observer.id(), observer.SubjectId, observer_callback, function(error, result) {
-                                        return callback(null, observer);
-                                    });
-                                }
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    if (error) {
+                                        return callback(error, null);
+                                    } else {
+                                        observer = new Observer(result);
+                                        return _this.signalr.subscribe(_this.options.signalr_hub, "Subscribe", observer.id(), observer.SubjectId, observer_callback, function(error, result) {
+                                            return callback(null, observer);
+                                        });
+                                    }
+                                };
+                            }(this));
                         } else {
                             observer = new Observer({
                                 ObserverType: "Generic",
@@ -502,16 +550,18 @@
                                 method: "PUT",
                                 resource: Observer.resource(),
                                 body: observer.stringify()
-                            }, function(error, result) {
-                                if (error) {
-                                    return callback(error, null);
-                                } else {
-                                    observer = new Observer(result);
-                                    return _this.signalr.subscribe(_this.options.signalr_hub, "Subscribe", observer.id(), subject.model(), observer_callback, function(error, result) {
-                                        return callback(null, observer);
-                                    });
-                                }
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    if (error) {
+                                        return callback(error, null);
+                                    } else {
+                                        observer = new Observer(result);
+                                        return _this.signalr.subscribe(_this.options.signalr_hub, "Subscribe", observer.id(), subject.model(), observer_callback, function(error, result) {
+                                            return callback(null, observer);
+                                        });
+                                    }
+                                };
+                            }(this));
                         }
                     };
                     MojioClient.prototype.unobserve = function(observer, subject, parent, observer_callback, callback) {
@@ -524,7 +574,6 @@
                         }
                     };
                     MojioClient.prototype.store = function(model, key, value, callback) {
-                        var _this = this;
                         if (!model || !model._id) {
                             return callback("Storage requires an object with a valid id.");
                         } else {
@@ -535,17 +584,18 @@
                                 action: "store",
                                 key: key,
                                 body: JSON.stringify(value)
-                            }, function(error, result) {
-                                if (error) {
-                                    return callback(error, null);
-                                } else {
-                                    return callback(null, result);
-                                }
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    if (error) {
+                                        return callback(error, null);
+                                    } else {
+                                        return callback(null, result);
+                                    }
+                                };
+                            }(this));
                         }
                     };
                     MojioClient.prototype.storage = function(model, key, callback) {
-                        var _this = this;
                         if (!model || !model._id) {
                             return callback("Get of storage requires an object with a valid id.");
                         } else {
@@ -555,17 +605,18 @@
                                 id: model.id(),
                                 action: "store",
                                 key: key
-                            }, function(error, result) {
-                                if (error) {
-                                    return callback(error, null);
-                                } else {
-                                    return callback(null, result);
-                                }
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    if (error) {
+                                        return callback(error, null);
+                                    } else {
+                                        return callback(null, result);
+                                    }
+                                };
+                            }(this));
                         }
                     };
                     MojioClient.prototype.unstore = function(model, key, callback) {
-                        var _this = this;
                         if (!model || !model._id) {
                             return callback("Storage requires an object with a valid id.");
                         } else {
@@ -575,13 +626,15 @@
                                 id: model.id(),
                                 action: "store",
                                 key: key
-                            }, function(error, result) {
-                                if (error) {
-                                    return callback(error, null);
-                                } else {
-                                    return callback(null, result);
-                                }
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    if (error) {
+                                        return callback(error, null);
+                                    } else {
+                                        return callback(null, result);
+                                    }
+                                };
+                            }(this));
                         }
                     };
                     MojioClient.prototype.getTokenId = function() {
@@ -671,7 +724,6 @@
                         this.connectionStatus = false;
                     }
                     SignalRBrowserWrapper.prototype.getHub = function(which, callback) {
-                        var _this = this;
                         if (this.hubs[which]) {
                             return callback(null, this.hubs[which]);
                         } else {
@@ -691,16 +743,20 @@
                             this.hubs[which].on("UpdateEntity", this.observer_registry);
                             if (this.hubs[which].connection.state !== 1) {
                                 if (!this.connectionStatus) {
-                                    return this.signalr.start().done(function() {
-                                        _this.connectionStatus = true;
-                                        return _this.hubs[which].connection.start().done(function() {
-                                            return callback(null, _this.hubs[which]);
-                                        });
-                                    });
+                                    return this.signalr.start().done(function(_this) {
+                                        return function() {
+                                            _this.connectionStatus = true;
+                                            return _this.hubs[which].connection.start().done(function() {
+                                                return callback(null, _this.hubs[which]);
+                                            });
+                                        };
+                                    }(this));
                                 } else {
-                                    return this.hubs[which].connection.start().done(function() {
-                                        return callback(null, _this.hubs[which]);
-                                    });
+                                    return this.hubs[which].connection.start().done(function(_this) {
+                                        return function() {
+                                            return callback(null, _this.hubs[which]);
+                                        };
+                                    }(this));
                                 }
                             } else {
                                 return callback(null, this.hubs[which]);
@@ -860,7 +916,19 @@
                         MovingTime: "Float",
                         IdleTime: "Float",
                         StopTime: "Float",
-                        MaxRPM: "Float"
+                        MaxRPM: "Float",
+                        EventTypes: "Array",
+                        Timing: "Integer",
+                        Name: "String",
+                        ObserverType: "Integer",
+                        AppId: "String",
+                        Parent: "String",
+                        ParentId: "String",
+                        Subject: "String",
+                        SubjectId: "String",
+                        Transports: "Integer",
+                        Status: "Integer",
+                        Tokens: "Array"
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
@@ -938,13 +1006,8 @@
                         this.validate(json);
                     }
                     MojioModel.prototype.setField = function(field, value) {
-                        if (this.schema()[field] != null || typeof value === "function") {
-                            this[field] = value;
-                            return this[field];
-                        }
-                        if (!(field === "_client" || field === "_schema" || field === "_resource" || field === "_model" || field === "_AuthenticationType" || field === "AuthenticationType" || field === "_IsAuthenticated" || field === "IsAuthenticated")) {
-                            throw "Field '" + field + "' not in model '" + this.constructor.name + "'.";
-                        }
+                        this[field] = value;
+                        return this[field];
                     };
                     MojioModel.prototype.getField = function(field) {
                         return this[field];
@@ -969,7 +1032,7 @@
                         }
                     };
                     MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value, _this = this;
+                        var property, query_criteria, value;
                         if (this._client === null) {
                             callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
                             return;
@@ -989,9 +1052,11 @@
                                 method: "GET",
                                 resource: this.resource(),
                                 parameters: criteria
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else if (typeof criteria === "string") {
                             return this._client.request({
                                 method: "GET",
@@ -999,9 +1064,11 @@
                                 parameters: {
                                     id: criteria
                                 }
-                            }, function(error, result) {
-                                return callback(error, _this._client.model(_this.model(), result));
-                            });
+                            }, function(_this) {
+                                return function(error, result) {
+                                    return callback(error, _this._client.model(_this.model(), result));
+                                };
+                            }(this));
                         } else {
                             return callback("criteria given is not in understood format, string or object.", null);
                         }
@@ -1247,7 +1314,7 @@
                 module.exports = Subscription = function(_super) {
                     __extends(Subscription, _super);
                     Subscription.prototype._schema = {
-                        Type: "String",
+                        Type: "Integer",
                         ChannelType: "Integer",
                         ChannelTarget: "String",
                         AppId: "String",
