@@ -14,9 +14,12 @@ module.exports = class SignalRNodeWrapper
     constructor: (url, hubNames, jquery) ->
         @url = url
         @hubs = {}
-        @signalr = new SignalR.client(url, hubNames, null) # query not used.
+        @availableHubs = hubNames
 
     getHub: (which, callback) ->
+        if !@signalr?
+          @signalr = new SignalR.client(@url, @availableHubs, null) # don't initialize signalR until we want it
+
         if @hubs[which]?
             callback(null, @hubs[which])
         else
