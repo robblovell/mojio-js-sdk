@@ -428,16 +428,16 @@ module.exports = class MojioClient
         return null
 
     isLoggedIn: () ->
-        return getUserId() != null
+        return @getUserId() != null
 
     getCurrentUser: (callback) ->
         if (@user?)
             callback(@user)
-        else if (isLoggedIn())
-            get('users', getUserId())
+        else if (@isLoggedIn())
+            get('users', @getUserId())
             .done( (user) ->
                     return unless (user?)
-                    @user = user if (getUserId() == @user._id)
+                    @user = user if (@getUserId() == @user._id)
                     callback(@user)
                 )
         else
