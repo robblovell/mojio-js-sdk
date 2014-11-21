@@ -26,8 +26,6 @@ cd ../../
 # cp example/*.html dist/example
 coffee --map --compile test
 
-mocha -t 30000 test
-
 cd dist/browser
 uglifyjs Address.js App.js Event.js Location.js Mojio.js Observer.js Product.js \
     Subscription.js Trip.js User.js Vehicle.js -p relative -o ../cdn/mojio-js-models.min.js
@@ -37,3 +35,4 @@ uglifyjs mojio-js-models.min.js -b -o ../cdn/mojio-js-models.js
 uglifyjs mojio-js.min.js -b -o ../cdn/mojio-js.js
 cd ../../
 
+mocha -t 30000 test

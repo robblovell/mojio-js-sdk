@@ -11,25 +11,30 @@ module.exports = class SignalRNodeWrapper
         else if @observer_callbacks[entity.Type]
             callback(entity) for callback in @observer_callbacks[entity.Type]
 
-    constructor: (url, hubNames, jquery) ->
+    constructor: (url, hubNames, jquery = null) ->
         @url = url
         @hubs = {}
-        @availableHubs = hubNames
 
-    getHub: (which, callback) ->
-        if !@signalr?
-          @signalr = new SignalR.client(@url, @availableHubs, null) # don't initialize signalR until we want it
+        @available_hubs = hubNames
+            
+    getHub: (which, callback, retries = 10) ->
+        @signalr ?= new SignalR.client(@url, @available_hubs, null)
 
-        if @hubs[which]?
-            callback(null, @hubs[which])
+        return callback(null, @hubs[which]) if @hubs[which]?
+        
+        if @hubs[which] = @signalr.hub(which)
+            @hubs[which].on 'error', (data) -> log data
+            @hubs[which].on 'UpdateEntity', @observer_registry
+
+            return callback null, @hubs[which]
+        else if retries-- > 0
+            _this = @
+            retry = () ->
+                _this.getHub which, callback, retries
+            setTimeout retry, 1000
         else
-            @hubs[which] = @signalr.hub(which);
-            @hubs[which].on("Error", (data) ->
-                log(data)
-            )
-            @hubs[which].on("UpdateEntity", @observer_registry) # observer_callback(entity)
-            callback(null, @hubs[which])
-
+            callback "Timed out.", null
+              
     # TODO:: move callback list maintenance to separate class.
     setCallback: (id, futureCallback) ->
         if (!@observer_callbacks[id]?)
