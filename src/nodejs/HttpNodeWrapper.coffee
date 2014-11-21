@@ -16,17 +16,20 @@ module.exports = class HttpNodeWrapper
             action = Http.request params
 
         action.on('response', (response) ->
-            data = null
             response.setEncoding 'utf8' if !window?
             
-            response.on 'data', (chunk) -> data += chunk
+            data = ""
+            response.on 'data', (chunk) -> data += chunk if chunk
             response.on 'end', () ->
                 if response.statusCode > 299
-                    callback response, null
-                else if data
-                    callback null, JSON.parse data
+                    callback(response, null)
+                else if data.length > 0
+                    try
+                        callback(null, JSON.parse data)
+                    catch error
+                        callback(data, null)
                 else
-                    callback null, response
+                    callback null, { result: "ok" }
         )
 
         action.on 'error', (error) ->
