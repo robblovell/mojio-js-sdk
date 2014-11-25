@@ -39,7 +39,6 @@ describe 'Observer', ->
                     entity.should.be.an.instanceOf(Object)
                     console.log("Observed change seen.")
                     mojio_client.unobserve(observer, app, null, null, (error, result) ->
-    #                    result.should.be.an.instanceOf(Observer)
                         mojio_client.delete(app, (error, result) ->
                             (error==null).should.be.true
                             console.log("App deleted.")
