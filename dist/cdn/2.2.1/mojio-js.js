@@ -650,17 +650,17 @@
                         return null;
                     };
                     MojioClient.prototype.isLoggedIn = function() {
-                        return this.getUserId() !== null;
+                        return getUserId() !== null;
                     };
                     MojioClient.prototype.getCurrentUser = function(callback) {
                         if (this.user != null) {
                             callback(this.user);
-                        } else if (this.isLoggedIn()) {
-                            get("users", this.getUserId()).done(function(user) {
+                        } else if (isLoggedIn()) {
+                            get("users", getUserId()).done(function(user) {
                                 if (!(user != null)) {
                                     return;
                                 }
-                                if (this.getUserId() === this.user._id) {
+                                if (getUserId() === this.user._id) {
                                     this.user = user;
                                 }
                                 return callback(this.user);

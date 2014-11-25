@@ -8,3 +8,5 @@ test/**/*.map
 example/**/*.js
 example/**/*.map
 npm-debug.log
+test/*.js
+test/*.map
