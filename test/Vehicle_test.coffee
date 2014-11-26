@@ -1,5 +1,6 @@
 MojioClient = require '../lib/nodejs/MojioClient'
 Vehicle = require '../lib/models/Vehicle'
+Mojio = require '../lib/models/Mojio'
 config = require './config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
@@ -46,60 +47,90 @@ describe 'Vehicle', ->
         )
 
     it 'can create, find, save, and delete Vehicle', (done) ->
-        vehicle = new Vehicle().mock()
-
-        mojio_client.post(vehicle, (error, result) ->
+        mojio_client.get(Mojio, {}, (error, result) ->
             (error==null).should.be.true
-            vehicle = new Vehicle(result)
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.Objects.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(Mojio) for instance in result.Objects
+            mojio = new Mojio(result.Objects[0])
 
-            mojio_client.get(Vehicle, vehicle.id(), (error, result) ->
+            vehicle = new Vehicle({
+                "Type": "Vehicle",
+                "MojioId": mojio.id(),
+                "Name": "String",
+                "VIN": "String",
+                "LicensePlate": "String"
+            })
+
+            vehicle.authorization(mojio_client)
+            vehicle._id = null;
+            mojio_client.post(vehicle, (error, result) ->
                 (error==null).should.be.true
-                mojio_client.should.be.an.instanceOf(MojioClient)
-                result.should.be.an.instanceOf(Vehicle)
+                vehicle = new Vehicle(result)
 
-                mojio_client.put(result, (error, result) ->
+                mojio_client.get(Vehicle, vehicle.id(), (error, result) ->
                     (error==null).should.be.true
-                    result.should.be.an.instanceOf(Object)
-                    vehicle = new Vehicle(result)
+                    mojio_client.should.be.an.instanceOf(MojioClient)
+                    result.should.be.an.instanceOf(Vehicle)
 
-                    mojio_client.delete(vehicle, (error, result) ->
+                    mojio_client.put(result, (error, result) ->
                         (error==null).should.be.true
-                        (result.result == "ok").should.be.true
-                        done()
+                        result.should.be.an.instanceOf(Object)
+                        vehicle = new Vehicle(result)
+
+                        mojio_client.delete(vehicle, (error, result) ->
+                            (error==null).should.be.true
+                            (result.result == "ok").should.be.true
+                            done()
+                        )
                     )
                 )
             )
         )
 
     it 'can create, save, and delete Vehicle from model', (done) ->
-        # todo define entityType as an enum to be used here.
-        vehicle = new Vehicle().mock()
-        vehicle.authorization(mojio_client)
-        vehicle._id = null;
-
-        vehicle.post((error, result) ->
+        mojio_client.get(Mojio, {}, (error, result) ->
             (error==null).should.be.true
-            result.should.be.an.instanceOf(Object)
-            vehicle = new Vehicle(result)
-            vehicle.authorization(mojio_client)
+            mojio_client.should.be.an.instanceOf(MojioClient)
+            result.Objects.should.be.an.instanceOf(Array)
+            instance.should.be.an.instanceOf(Mojio) for instance in result.Objects
+            mojio = new Mojio(result.Objects[0])
 
-            vehicle.get(vehicle.id(), (error, result) ->
-                result.should.be.an.instanceOf(Vehicle)
+            vehicle = new Vehicle({
+                "Type": "Vehicle",
+                "MojioId": mojio.id(),
+                "Name": "String",
+                "VIN": "String",
+                "LicensePlate": "String"
+            })
+
+            vehicle.authorization(mojio_client)
+            vehicle._id = null;
+
+            vehicle.post((error, result) ->
+                (error==null).should.be.true
+                result.should.be.an.instanceOf(Object)
                 vehicle = new Vehicle(result)
                 vehicle.authorization(mojio_client)
 
-                vehicle.put((error, result) ->
-                    (error==null).should.be.true
-                    result.should.be.an.instanceOf(Object)
+                vehicle.get(vehicle.id(), (error, result) ->
+                    result.should.be.an.instanceOf(Vehicle)
                     vehicle = new Vehicle(result)
                     vehicle.authorization(mojio_client)
 
-                    vehicle.delete((error, result) ->
+                    vehicle.put((error, result) ->
                         (error==null).should.be.true
-                        (result.result == "ok").should.be.true
-                        done()
-                    )
-                )
+                        result.should.be.an.instanceOf(Object)
+                        vehicle = new Vehicle(result)
+                        vehicle.authorization(mojio_client)
 
+                        vehicle.delete((error, result) ->
+                            (error==null).should.be.true
+                            (result.result == "ok").should.be.true
+                            done()
+                        )
+                    )
+
+                )
             )
         )
