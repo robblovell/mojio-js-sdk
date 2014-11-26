@@ -20,72 +20,92 @@ describe 'Vehicle', ->
         )
     )
 
-#    it 'can create, find, save, and delete Vehicle', (done) ->
-#        vehicle = new Vehicle().mock()
-#        mojio_client.post(vehicle, (error, result) ->
-#            (error==null).should.be.true
-#            vehicle = new Vehicle(result)
-#        )
+    # test Vehicle
+    it 'can get Vehicles from Model', (done) ->
+        vehicle = new Vehicle({})
+        vehicle.authorization(mojio_client)
 
-    it 'can create, find, save, and delete Vehicle', (done) ->
-
-        mojio_client.get(Mojio, {}, (error, result) ->
+        vehicle.get({}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.Objects.should.be.an.instanceOf(Array)
-            instance.should.be.an.instanceOf(Mojio) for instance in result.Objects
-            mojio = new Mojio(result.Objects[0])
-
-            vehicle = new Vehicle({
-                "Type": "Vehicle",
-                "MojioId": mojio.id(),
-                "Name": "String",
-                "VIN": "String",
-                "LicensePlate": "String"
-            })
-            mojio_client.create(vehicle, (error, result) ->
-                (error==null).should.be.true
-                vehicle = new Vehicle(result)
-
-                mojio_client.get(Vehicle, result._id, (error, result) ->
-                    (error==null).should.be.true
-                    mojio_client.should.be.an.instanceOf(MojioClient)
-                    result.should.be.an.instanceOf(Vehicle)
-                    vehicle = new Vehicle(result)
-
-                    mojio_client.observe(vehicle, null,
-                        (entity) ->
-                            entity.should.be.an.instanceOf(Object)
-                            console.log("Observed change seen.")
-                            mojio_client.unobserve(observer, vehicle, null, null, (error, result) ->
-                                mojio_client.delete(vehicle, (error, result) ->
-                                    (error==null).should.be.true
-                                    (result.result == "ok").should.be.true
-                                    console.log("Vehicle deleted.")
-                                    mojio_client.delete(mojio, (error, result) ->
-                                        (error==null).should.be.true
-                                        (result.result == "ok").should.be.true
-                                        console.log("Mojio deleted.")
-                                        done()
-                                    )
-                                )
-                            )
-                        ,
-                        (error, result) ->
-                            result.Status.should.equal("Approved")
-
-                            vehicle.Name = "Changed"
-                            console.log("changing vehicle...")
-                            result.should.be.an.instanceOf(Observer)
-                            observer = result
-
-                            mojio_client.save(vehicle, (error, result) ->
-                                (error==null).should.be.true
-                                console.log("Vehicle changed.")
-                            )
-                    )
-                )
-            )
+            if (result.Objects? and result.Objects instanceof (Array))
+                instance.should.be.an.instanceOf(Vehicle) for instance in result.Objects
+                testObject = instance  # save for later reference.
+            else
+                result.should.be.an.instanceOf(Vehicle)
+                testObject = result
+            done()
         )
 
-
+#    it 'can get Vehicles', (done) ->
+#
+#        mojio_client.get(Vehicle, {}, (error, result) ->
+#            (error==null).should.be.true
+#            mojio_client.should.be.an.instanceOf(MojioClient)
+#            result.Objects.should.be.an.instanceOf(Array)
+#            instance.should.be.an.instanceOf(Vehicle) for instance in result.Objects
+#            done()
+#        )
+#
+#    it 'can create, find, save, and delete Vehicle', (done) ->
+#        mojio_client.get(Mojio, {}, (error, result) ->
+#            (error==null).should.be.true
+#            mojio_client.should.be.an.instanceOf(MojioClient)
+#            result.Objects.should.be.an.instanceOf(Array)
+#            instance.should.be.an.instanceOf(Mojio) for instance in result.Objects
+#            mojio = new Mojio(result.Objects[0])
+#
+#            vehicle = new Vehicle({
+#                "Type": "Vehicle",
+#                "MojioId": mojio.id(),
+#                "Name": "String",
+#                "VIN": "String",
+#                "LicensePlate": "String"
+#            })
+#            mojio_client.create(vehicle, (error, result) ->
+#                (error==null).should.be.true
+#                vehicle = new Vehicle(result)
+#
+#                mojio_client.get(Vehicle, result._id, (error, result) ->
+#                    (error==null).should.be.true
+#                    mojio_client.should.be.an.instanceOf(MojioClient)
+#                    result.should.be.an.instanceOf(Vehicle)
+#                    vehicle = new Vehicle(result)
+#
+#                    mojio_client.observe(vehicle, null,
+#                        (entity) ->
+#                            entity.should.be.an.instanceOf(Object)
+#                            console.log("Observed change seen.")
+#                            mojio_client.unobserve(observer, vehicle, null, null, (error, result) ->
+#                                mojio_client.delete(vehicle, (error, result) ->
+#                                    (error==null).should.be.true
+#                                    (result.result == "ok").should.be.true
+#                                    console.log("Vehicle deleted.")
+#                                    mojio_client.delete(mojio, (error, result) ->
+#                                        (error==null).should.be.true
+#                                        (result.result == "ok").should.be.true
+#                                        console.log("Mojio deleted.")
+#                                        done()
+#                                    )
+#                                )
+#                            )
+#                        ,
+#                        (error, result) ->
+#                            result.Status.should.equal("Approved")
+#
+#                            vehicle.Name = "Changed"
+#                            console.log("changing vehicle...")
+#                            result.should.be.an.instanceOf(Observer)
+#                            observer = result
+#
+#                            mojio_client.save(vehicle, (error, result) ->
+#                                (error==null).should.be.true
+#                                console.log("Vehicle changed.")
+#                            )
+#                    )
+#                )
+#            )
+#        )
+#
+#

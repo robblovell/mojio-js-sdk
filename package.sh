@@ -1,3 +1,7 @@
+# run make.sh
+# make sure all tests pass.
+#
+
 # npm
 # update the version in the package.json file.
 # authorize via npm adduser
