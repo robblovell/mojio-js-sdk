@@ -63,14 +63,16 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                         model == "HeadingObserver" || model == "OdometerObserver" ||
                         model == "RPMObserver" || model == "ScriptObserver" || model == "SpeedObserver")
 
-                    # these models have problems with put, post delete.
-                    if (model == "Event" || model == "Subscription" || model == "Trip" || model == "User")
-                        output = short_test_template.render(view)
-                    else
-                        output = test_template.render(view)
-                    wstream = fs.createWriteStream("../test/"+model+"_test.coffee")
-                    wstream.write(output)
-                    wstream.end()
+                    if (model != "Vehicle")
+                        # these models have problems with put, post delete.
+                        if (model == "Event" || model == "Subscription" || model == "Trip" || model == "User")
+                            output = short_test_template.render(view)
+                        else
+                            output = test_template.render(view)
+                        wstream = fs.createWriteStream("../test/"+model+"_test.coffee")
+                        wstream.write(output)
+                        wstream.end()
+
                     models[i++] = view
 
                 fs.readFile('./MojioClientTemplate.mustache', (err, data) ->
