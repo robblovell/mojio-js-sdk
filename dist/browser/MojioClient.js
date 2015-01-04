@@ -122,7 +122,7 @@
       this.hub = null;
       this.connStatus = null;
       this.auth_token = null;
-      this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [this.options.signalr_hub]);
+      this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [this.options.signalr_hub], $);
     }
 
 
