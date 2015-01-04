@@ -1,12 +1,22 @@
 MojioClient = @MojioClient
 
+#config = {
+#    application: 'f201b929-d28c-415d-9b71-8112532301cb',
+#    hostname: 'api.moj.io',
+#    version: 'v1',
+#    port:'443',
+#    scheme: 'https',
+#    redirect_uri: 'http://localhost:63342/mojio-js/example/authorize.html'
+#}
+
 config = {
     application: 'f201b929-d28c-415d-9b71-8112532301cb',
-    hostname: 'api.moj.io',
+    secret: 'f0927a0a-386b-4148-be8d-5ffd7468ea6b',
+    hostname: '10.211.55.3',
     version: 'v1',
-    port:'443',
-    scheme: 'https',
-    redirect_uri: 'http://localhost:63342/mojio-js/example/authorize.html'
+    port:'2006',
+    scheme: 'http',
+    redirect_uri: 'http://localhost:63342/mojio-js/example/authorize_finish.html'
 }
 
 mojio_client = new MojioClient(config)
@@ -17,8 +27,9 @@ $( () ->
         div = document.getElementById('result')
         div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
         return
+    code = mojio_client.access_code()
 
-    mojio_client.token((error, result) ->
+    mojio_client.request_token(code, (error, result) ->
         if (error)
             alert("Authorize Redirect, token could not be retreived:"+error)
         else
@@ -38,8 +49,8 @@ $( () ->
                     div = document.getElementById('result2')
                     div.innerHTML += 'Query /App<br>'
                     div.innerHTML += JSON.stringify(result)
-                    alert("Hit Ok to log out and return to the authorization page.")
-                    mojio_client.unauthorize(config.redirect_uri)
+                    #alert("Hit Ok to log out and return to the authorization page.")
+                    #mojio_client.unauthorize(config.redirect_uri)
             )
     )
 )

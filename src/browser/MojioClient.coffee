@@ -101,6 +101,27 @@ module.exports = class MojioClient
     ###
     login_resource: 'Login'
 
+    authenticate: (redirect_url, scope='full') ->
+        parts = {
+            hostname: @options.hostname
+            host: @options.hostname
+            port: @options.port
+            scheme: @options.scheme
+            path: '/OAuth2/authorize'
+            method: 'Get'
+            withCredentials: false
+        }
+        parts.path += "?response_type=code"
+        parts.path += "&client_id=" + @options.application
+        parts.path += "&redirect_uri="+redirect_url
+        parts.path += "&scope="+scope
+        parts.headers = {}
+        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+        parts.headers["Content-Type"] = 'application/json'
+
+        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        window.location = url
+
     authorize: (redirect_url, scope='full') ->
         parts = {
             hostname: @options.hostname
@@ -115,6 +136,38 @@ module.exports = class MojioClient
         parts.path += "&client_id=" + @options.application
         parts.path += "&redirect_uri="+redirect_url
         parts.path += "&scope="+scope
+        parts.headers = {}
+        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+        parts.headers["Content-Type"] = 'application/json'
+
+        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        window.location = url
+
+    access_code: () ->
+        match = document.location.hash.match(/access_code=([0-9a-f-]{36})/)
+        code = !!match && match[1]
+        return code
+
+    access_token: () ->
+        match = document.location.hash.match(/access_toekn=([0-9a-f-]{36})/)
+        token = !!match && match[1]
+        return token
+
+    request_token: (code, callback) ->
+        parts = {
+            hostname: @options.hostname
+            host: @options.hostname
+            port: @options.port
+            scheme: @options.scheme
+            path: '/OAuth2/token'
+            method: 'Get'
+            withCredentials: false
+        }
+        parts.path += "?response_type=token"
+        parts.path += "&client_id=" + @options.application
+        parts.path += "&client_secret=" + @options.secret
+        parts.path += "&code="+code
+        parts.path += "&grant_type=authorization_code"
         parts.headers = {}
         parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
         parts.headers["Content-Type"] = 'application/json'

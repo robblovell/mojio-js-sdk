@@ -1,11 +1,12 @@
 MojioClient = @MojioClient
 
 config = {
-    application: '71dfc7e2-b1e1-4d32-9d35-abc86404de25',
-    hostname: 'api.moj.io',
+    application: 'f201b929-d28c-415d-9b71-8112532301cb',
+    secret: 'f0927a0a-386b-4148-be8d-5ffd7468ea6b',
+    hostname: '10.211.55.3',
     version: 'v1',
-    port:'443',
-    scheme: 'https',
+    port:'2006',
+    scheme: 'http',
     redirect_uri: 'http://localhost:63342/mojio-js/example/authorize_complete.html'
 }
 
@@ -18,5 +19,5 @@ $( () ->
         div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.js.  <br>'
         return
 
-    mojio_client.authorize(config.redirect_uri)
+    mojio_client.authenticate(config.redirect_uri)
 )
