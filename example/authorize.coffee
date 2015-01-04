@@ -1,12 +1,12 @@
 MojioClient = @MojioClient
 
 config = {
-    application: 'f201b929-d28c-415d-9b71-8112532301cb',
-    hostname: 'develop.api.moj.io',
+    application: '71dfc7e2-b1e1-4d32-9d35-abc86404de25',
+    hostname: 'api.moj.io',
     version: 'v1',
     port:'443',
     scheme: 'https',
-    redirect_uri: 'http://localhost:63344/mojio-js/example/authorize_complete.html'
+    redirect_uri: 'http://localhost:63342/mojio-js/example/authorize_complete.html'
 }
 
 mojio_client = new MojioClient(config)
