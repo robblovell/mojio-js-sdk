@@ -257,11 +257,17 @@
       return window.location = url;
     };
 
-    MojioClient.prototype.token = function(callback) {
+    MojioClient.prototype.access_token = function() {
       var match, token;
-      this.user = null;
       match = document.location.hash.match(/access_token=([0-9a-f-]{36})/);
       token = !!match && match[1];
+      return token;
+    };
+
+    MojioClient.prototype.token = function(callback) {
+      var token;
+      this.user = null;
+      token = this.access_token();
       if (!token) {
         return callback("token for authorization not found.", null);
       } else {
