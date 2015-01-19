@@ -78,13 +78,11 @@ config = {
 mojio_client = new MojioClient(config)
 
 $( () ->
-
-    if (config.application == 'Your-Application-Key-Here')
+	if (config.application == 'Your-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        div.innerHTML += 'Mojio Error:: Set your application key in authorize.js.  <br>'
         return
-
-    if (config.application == 'Your-Login-redirect_url-Here')
+	if (config.application == 'Your-Logout-redirect_url-Here')
         div = document.getElementById('result')
         div.innerHTML += 'Mojio Error:: Set the login redirect url in authorize.js and register it in your application at the developer center.  <br>'
         return
@@ -135,19 +133,18 @@ mojio_client = new MojioClient(config)
 App = mojio_client.model('App')
 
 $( () ->
-    if (config.application == 'Your-Application-Key-Here')
+	if (config.application == 'Your-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        div.innerHTML += 'Mojio Error:: Set your application key in authorize.js.  <br>'
         return
-
-    if (config.application == 'Your-Logout-redirect_url-Here')
+	if (config.application == 'Your-Logout-redirect_url-Here')
         div = document.getElementById('result')
         div.innerHTML += 'Mojio Error:: Set the logout redirect url in authorize.js and register it in your application at the developer center.  <br>'
         return
 
     mojio_client.token((error, result) ->
         if (error)
-            alert("Authorize Redirect, token could not be retreived:"+error)
+            alert("Authorize Redirect, token could not be retrieved:"+error)
         else
             alert("Authorization Successful.")
 

@@ -13,14 +13,14 @@ mojio_client = new MojioClient(config)
 App = mojio_client.model('App')
 
 $( () ->
-    if (config.application == 'Your-Sandbox-Application-Key-Here')
+    if (config.application == 'Your-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        div.innerHTML += 'Mojio Error:: Set your application key in authorize_complete.js.  <br>'
         return
 
     mojio_client.token((error, result) ->
         if (error)
-            alert("Authorize Redirect, token could not be retreived:"+error)
+            alert("Authorize Redirect, token could not be retrieved:"+error)
         else
             alert("Authorization Successful.")
 
