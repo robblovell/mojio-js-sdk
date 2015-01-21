@@ -12,7 +12,12 @@ module.exports = class Vehicle extends MojioModel
                 "IgnitionOn": "Boolean",
                 "LastTripEvent": "String",
                 "LastLocationTime": "String",
-                "LastLocation": "Object",
+                "LastLocation": {
+                    "Lat": "Float",
+                    "Lng": "Float",
+                    "FromLockedGPS": "Boolean",
+                    "Dilution": "Float"
+                },
                 "LastSpeed": "Float",
                 "FuelLevel": "Float",
                 "LastFuelEfficiency": "Float",

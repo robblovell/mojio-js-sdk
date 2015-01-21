@@ -91,11 +91,17 @@ module.exports = class MojioModel
         @_client.request({ method: 'DELETE',  resource: @resource(), parameters: {id: @_id} }, callback)
 
     # OBSERVER
-    observe: (object, subject=null, observer_callback, callback) ->
-        @_client.observe(object, subject, observer_callback, callback)
+    observe: (parent = null, observer_callback, callback, options) ->
+        if (parent?)
+            @_client.observe(@.resource, parent, observer_callback, callback, options={})
+        else
+            @_client.observe(@, null, observer_callback, callback, options)
 
-    unobserve: (object, subject=null, observer_callback, callback) ->
-        @_client.observe(object, subject, observer_callback, callback)
+    unobserve: (parent = null, observer_callback, callback) ->
+        if (parent?)
+            @_client.unobserve(@.resource, parent, observer_callback, callback)
+        else
+            @_client.unobserve(@, null, observer_callback, callback)
 
     # STORAGE
     store: (model, key, value, callback) ->

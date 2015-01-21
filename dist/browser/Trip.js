@@ -136,18 +136,26 @@
       }, callback);
     };
 
-    MojioModel.prototype.observe = function(object, subject, observer_callback, callback) {
-      if (subject == null) {
-        subject = null;
+    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
+      if (parent == null) {
+        parent = null;
       }
-      return this._client.observe(object, subject, observer_callback, callback);
+      if ((parent != null)) {
+        return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+      } else {
+        return this._client.observe(this, null, observer_callback, callback, options);
+      }
     };
 
-    MojioModel.prototype.unobserve = function(object, subject, observer_callback, callback) {
-      if (subject == null) {
-        subject = null;
+    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
+      if (parent == null) {
+        parent = null;
       }
-      return this._client.observe(object, subject, observer_callback, callback);
+      if ((parent != null)) {
+        return this._client.unobserve(this.resource, parent, observer_callback, callback);
+      } else {
+        return this._client.unobserve(this, null, observer_callback, callback);
+      }
     };
 
     MojioModel.prototype.store = function(model, key, value, callback) {
@@ -254,11 +262,40 @@
       "MovingTime": "Float",
       "IdleTime": "Float",
       "StopTime": "Float",
-      "StartLocation": "Object",
-      "LastKnownLocation": "Object",
-      "EndLocation": "Object",
-      "StartAddress": "Object",
-      "EndAddress": "Object",
+      "StartLocation": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
+      "LastKnownLocation": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
+      "EndLocation": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
+      "StartAddress": {
+        "Address1": "String",
+        "Address2": "String",
+        "City": "String",
+        "State": "String",
+        "Zip": "String",
+        "Country": "String"
+      },
+      "EndAddress": {
+        "Address1": "String",
+        "Address2": "String",
+        "City": "String",
+        "State": "String",
+        "Zip": "String",
+        "Country": "String"
+      },
       "ForcefullyEnded": "Boolean",
       "StartMilage": "Float",
       "EndMilage": "Float",

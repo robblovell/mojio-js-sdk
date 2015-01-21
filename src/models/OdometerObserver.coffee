@@ -18,6 +18,10 @@ module.exports = class OdometerObserver extends MojioModel
                 "Transports": "Integer",
                 "Status": "Integer",
                 "Tokens": "Array",
+                "TimeWindow": "String",
+                "BroadcastOnlyRecent": "Boolean",
+                "Throttle": "String",
+                "NextAllowedBroadcast": "String",
                 "_id": "String",
                 "_deleted": "Boolean"
             }

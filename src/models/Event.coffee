@@ -9,13 +9,22 @@ module.exports = class Event extends MojioModel
                 "OwnerId": "String",
                 "EventType": "Integer",
                 "Time": "String",
-                "Location": "Object",
+                "Location": {
+                    "Lat": "Float",
+                    "Lng": "Float",
+                    "FromLockedGPS": "Boolean",
+                    "Dilution": "Float"
+                },
                 "TimeIsApprox": "Boolean",
                 "BatteryVoltage": "Float",
                 "ConnectionLost": "Boolean",
                 "_id": "String",
                 "_deleted": "Boolean",
-                "Accelerometer": "Object",
+                "Accelerometer": {
+                    "X": "Float",
+                    "Y": "Float",
+                    "Z": "Float"
+                },
                 "TripId": "String",
                 "Altitude": "Float",
                 "Heading": "Float",
@@ -47,7 +56,11 @@ module.exports = class Event extends MojioModel
                 "SubjectId": "String",
                 "Transports": "Integer",
                 "Status": "Integer",
-                "Tokens": "Array"
+                "Tokens": "Array",
+                "TimeWindow": "String",
+                "BroadcastOnlyRecent": "Boolean",
+                "Throttle": "String",
+                "NextAllowedBroadcast": "String"
             }
 
 

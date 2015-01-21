@@ -3,7 +3,12 @@ MojioModel = require('./MojioModel')
 module.exports = class GeoFenceObserver extends MojioModel
     # instance variables
     _schema:             {
-                "Location": "Object",
+                "Location": {
+                    "Lat": "Float",
+                    "Lng": "Float",
+                    "FromLockedGPS": "Boolean",
+                    "Dilution": "Float"
+                },
                 "Radius": "Float",
                 "Timing": "Integer",
                 "Type": "Integer",
@@ -18,6 +23,10 @@ module.exports = class GeoFenceObserver extends MojioModel
                 "Transports": "Integer",
                 "Status": "Integer",
                 "Tokens": "Array",
+                "TimeWindow": "String",
+                "BroadcastOnlyRecent": "Boolean",
+                "Throttle": "String",
+                "NextAllowedBroadcast": "String",
                 "_id": "String",
                 "_deleted": "Boolean"
             }
