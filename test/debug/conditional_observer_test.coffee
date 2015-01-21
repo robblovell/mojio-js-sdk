@@ -17,7 +17,7 @@ theevent = null
 vehicle = null
 user = null
 
-describe 'Smooth Observer', ->
+describe 'Observer', ->
 
     before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
@@ -26,7 +26,7 @@ describe 'Smooth Observer', ->
         )
     )
     #
-    it 'Can Smooth Observe Vehicles', (done) ->
+    it 'Can Conditionally Observe Speed', (done) ->
         user = new User({})
         user.authorization(mojio_client)
 
@@ -53,7 +53,7 @@ describe 'Smooth Observer', ->
                     console.log("created vehicle"+vehicle)
                     observer = new Observer(
                         {
-                            ObserverType: "SmoothVehicle", Status: "Approved", SpeedLow: 80.0, Name: "Test"+Math.random(),
+                            ObserverType: "Speed", Status: "Approved", SpeedLow: 80.0, Name: "Test"+Math.random(),
                             Subject: vehicle.model(), SubjectId: vehicle.id(), "Transports": "SignalR"
                         }
                     )
