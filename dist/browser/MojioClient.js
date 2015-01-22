@@ -80,11 +80,12 @@
       scheme: 'https',
       signalr_scheme: 'http',
       signalr_port: '80',
-      signalr_hub: 'ObserverHub'
+      signalr_hub: 'ObserverHub',
+	  live: true
     };
 
     function MojioClient(options) {
-      var _base, _base1, _base2, _base3, _base4, _base5, _base6;
+      var _base, _base1, _base2, _base3, _base4, _base5, _base6, _base7;
       this.options = options;
       if (this.options == null) {
         this.options = {
@@ -114,6 +115,9 @@
       }
       if ((_base6 = this.options).signalr_hub == null) {
         _base6.signalr_hub = defaults.signalr_hub;
+      }
+	  if ((_base7 = this.options).live == null) {
+        _base7.live = defaults.live;
       }
       this.options.application = this.options.application;
       this.options.secret = this.options.secret;
@@ -244,6 +248,9 @@
         method: 'Get',
         withCredentials: false
       };
+	  if (!this.options.live){
+		  parts.path = '/OAuth2Sandbox/authorize'; 
+	  }
       parts.path += "?response_type=token";
       parts.path += "&client_id=" + this.options.application;
       parts.path += "&redirect_uri=" + redirect_url;
