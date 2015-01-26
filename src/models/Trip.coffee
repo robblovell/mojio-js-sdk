@@ -3,7 +3,7 @@ MojioModel = require('./MojioModel')
 module.exports = class Trip extends MojioModel
     # instance variables
     _schema:             {
-                "Type": "String",
+                "Type": "Integer",
                 "MojioId": "String",
                 "VehicleId": "String",
                 "StartTime": "String",
@@ -16,9 +16,6 @@ module.exports = class Trip extends MojioModel
                 "FuelLevel": "Float",
                 "FuelEfficiency": "Float",
                 "Distance": "Float",
-                "MovingTime": "Float",
-                "IdleTime": "Float",
-                "StopTime": "Float",
                 "StartLocation": "Object",
                 "LastKnownLocation": "Object",
                 "EndLocation": "Object",
@@ -27,6 +24,7 @@ module.exports = class Trip extends MojioModel
                 "ForcefullyEnded": "Boolean",
                 "StartMilage": "Float",
                 "EndMilage": "Float",
+                "StartOdometer": "Float",
                 "_id": "String",
                 "_deleted": "Boolean"
             }

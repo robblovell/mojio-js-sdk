@@ -961,12 +961,12 @@
       "EventType": "Integer",
       "Time": "String",
       "Location": "Object",
+      "Accelerometer": "Object",
       "TimeIsApprox": "Boolean",
       "BatteryVoltage": "Float",
       "ConnectionLost": "Boolean",
       "_id": "String",
       "_deleted": "Boolean",
-      "Accelerometer": "Object",
       "TripId": "String",
       "Altitude": "Float",
       "Heading": "Float",
@@ -1040,7 +1040,7 @@
     __extends(Mojio, _super);
 
     Mojio.prototype._schema = {
-      "Type": "String",
+      "Type": "Integer",
       "OwnerId": "String",
       "Name": "String",
       "Imei": "String",
@@ -1478,7 +1478,7 @@
     __extends(Trip, _super);
 
     Trip.prototype._schema = {
-      "Type": "String",
+      "Type": "Integer",
       "MojioId": "String",
       "VehicleId": "String",
       "StartTime": "String",
@@ -1491,9 +1491,6 @@
       "FuelLevel": "Float",
       "FuelEfficiency": "Float",
       "Distance": "Float",
-      "MovingTime": "Float",
-      "IdleTime": "Float",
-      "StopTime": "Float",
       "StartLocation": "Object",
       "LastKnownLocation": "Object",
       "EndLocation": "Object",
@@ -1502,6 +1499,7 @@
       "ForcefullyEnded": "Boolean",
       "StartMilage": "Float",
       "EndMilage": "Float",
+      "StartOdometer": "Float",
       "_id": "String",
       "_deleted": "Boolean"
     };
@@ -1545,8 +1543,7 @@
     __extends(User, _super);
 
     User.prototype._schema = {
-      "Type": "String",
-      "Name": "String",
+      "Type": "Integer",
       "UserName": "String",
       "FirstName": "String",
       "LastName": "String",
@@ -1556,6 +1553,7 @@
       "CreationDate": "String",
       "LastActivityDate": "String",
       "LastLoginDate": "String",
+      "Locale": "String",
       "_id": "String",
       "_deleted": "Boolean"
     };
@@ -1599,24 +1597,40 @@
     __extends(Vehicle, _super);
 
     Vehicle.prototype._schema = {
-      "Type": "String",
+      "Type": "Integer",
       "OwnerId": "String",
       "MojioId": "String",
       "Name": "String",
       "VIN": "String",
       "LicensePlate": "String",
       "IgnitionOn": "Boolean",
+      "VehicleTime": "String",
       "LastTripEvent": "String",
       "LastLocationTime": "String",
       "LastLocation": "Object",
       "LastSpeed": "Float",
       "FuelLevel": "Float",
+      "LastAcceleration": "Float",
+      "LastAccelerometer": "Object",
+      "LastAltitude": "Float",
+      "LastBatteryVoltage": "Float",
+      "LastDistance": "Float",
+      "LastHeading": "Float",
+      "LastVirtualOdometer": "Float",
+      "LastOdometer": "Float",
+      "LastRpm": "Float",
       "LastFuelEfficiency": "Float",
       "CurrentTrip": "String",
       "LastTrip": "String",
       "LastContactTime": "String",
       "MilStatus": "Boolean",
+      "DiagnosticCodes": "Object",
       "FaultsDetected": "Boolean",
+      "LastLocationTimes": "Array",
+      "LastLocations": "Array",
+      "LastSpeeds": "Array",
+      "LastHeadings": "Array",
+      "LastAltitudes": "Array",
       "Viewers": "Array",
       "_id": "String",
       "_deleted": "Boolean"
