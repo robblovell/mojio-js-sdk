@@ -3,8 +3,7 @@ MojioModel = require('./MojioModel')
 module.exports = class User extends MojioModel
     # instance variables
     _schema:             {
-                "Type": "String",
-                "Name": "String",
+                "Type": "Integer",
                 "UserName": "String",
                 "FirstName": "String",
                 "LastName": "String",
@@ -14,6 +13,7 @@ module.exports = class User extends MojioModel
                 "CreationDate": "String",
                 "LastActivityDate": "String",
                 "LastLoginDate": "String",
+                "Locale": "String",
                 "_id": "String",
                 "_deleted": "Boolean"
             }

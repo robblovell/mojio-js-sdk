@@ -238,7 +238,7 @@
     __extends(Trip, _super);
 
     Trip.prototype._schema = {
-      "Type": "String",
+      "Type": "Integer",
       "MojioId": "String",
       "VehicleId": "String",
       "StartTime": "String",
@@ -251,9 +251,6 @@
       "FuelLevel": "Float",
       "FuelEfficiency": "Float",
       "Distance": "Float",
-      "MovingTime": "Float",
-      "IdleTime": "Float",
-      "StopTime": "Float",
       "StartLocation": "Object",
       "LastKnownLocation": "Object",
       "EndLocation": "Object",
@@ -262,6 +259,7 @@
       "ForcefullyEnded": "Boolean",
       "StartMilage": "Float",
       "EndMilage": "Float",
+      "StartOdometer": "Float",
       "_id": "String",
       "_deleted": "Boolean"
     };

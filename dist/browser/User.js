@@ -238,8 +238,7 @@
     __extends(User, _super);
 
     User.prototype._schema = {
-      "Type": "String",
-      "Name": "String",
+      "Type": "Integer",
       "UserName": "String",
       "FirstName": "String",
       "LastName": "String",
@@ -249,6 +248,7 @@
       "CreationDate": "String",
       "LastActivityDate": "String",
       "LastLoginDate": "String",
+      "Locale": "String",
       "_id": "String",
       "_deleted": "Boolean"
     };
