@@ -11,7 +11,7 @@
     __extends(Mojio, _super);
 
     Mojio.prototype._schema = {
-      "Type": "String",
+      "Type": "Integer",
       "OwnerId": "String",
       "Name": "String",
       "Imei": "String",

@@ -3,7 +3,7 @@ MojioModel = require('./MojioModel')
 module.exports = class Mojio extends MojioModel
     # instance variables
     _schema:             {
-                "Type": "String",
+                "Type": "Integer",
                 "OwnerId": "String",
                 "Name": "String",
                 "Imei": "String",
