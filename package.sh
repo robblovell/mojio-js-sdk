@@ -2,7 +2,8 @@
 # make sure all tests pass.
 #
 
-# npm
+#### npm
+#
 # update the version in the package.json file.
 # authorize via npm adduser
 # then publish with the command:
@@ -11,7 +12,8 @@
 #       npm publish
 #
 #
-# bower
+#### bower
+#
 # update the bower.json file with the version.
 #
 # tag the repo with the correct version and push the tags to origin.
@@ -23,7 +25,8 @@
 #
 #       bower register mojio-js https://github.com/mojio/mojio-js.git
 #
-# CDN
+#### CDN
+#
 #   update package.json
 #   update index.html
 #   create a directory under dist/cdn/[version] and copy the most recent version there.

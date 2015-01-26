@@ -122,11 +122,15 @@ module.exports = class MojioClient
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
         window.location = url
 
+    access_token: () ->
+        match = document.location.hash.match(/access_token=([0-9a-f-]{36})/)
+        token = !!match && match[1]
+        return token
+
     token: (callback) ->
         @user = null
 
-        match = document.location.hash.match(/access_token=([0-9a-f-]{36})/)
-        token = !!match && match[1]
+        token = @access_token()
         if (!token)
             callback("token for authorization not found.", null)
         else
