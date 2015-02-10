@@ -67,24 +67,24 @@ authorize.coffee (compiles to authorize.js included in the html above)
 Mojio = @Mojio
 
 config = {
-    application: 'Your-Application-Key-Here',
+    application: 'Your-Application-Key-Here', # Fill in your application key here
     hostname: 'api.moj.io',
     version: 'v1',
     port:'443',
     scheme: 'https',
-    redirect_uri: 'Your-Login-redirect_url-Here'
+    redirect_uri: 'Your-Login-redirect_url-Here', # Fill in your redirect url here (Ex. 'http://localhost:63342/mojio-js/example/authorize_complete.html')
+	live: false # Set to true if using the live environment 
+
 }
 
 mojio_client = new MojioClient(config)
 
 $( () ->
-
-    if (config.application == 'Your-Application-Key-Here')
+	if (config.application == 'Your-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        div.innerHTML += 'Mojio Error:: Set your application key in authorize.js.  <br>'
         return
-
-    if (config.application == 'Your-Login-redirect_url-Here')
+	if (config.application == 'Your-Logout-redirect_url-Here')
         div = document.getElementById('result')
         div.innerHTML += 'Mojio Error:: Set the login redirect url in authorize.js and register it in your application at the developer center.  <br>'
         return
@@ -118,36 +118,36 @@ authorize_complete.html
 
 </body>
 ```
-authorize_complete.coffee (compiles to authorize.js included in the html above)
+authorize_complete.coffee (compiles to authorize_complete.js included in the html above)
 ```
 MojioClient = @MojioClient
 
 config = {
-    application: 'Your-Application-Key-Here',
+    application: 'Your-Application-Key-Here', # Fill in your application key here
     hostname: 'api.moj.io',
     version: 'v1',
     port:'443',
     scheme: 'https',
-    redirect_uri: 'Your-Logout-redirect_url-Here'
+    redirect_uri: 'Your-Logout-redirect_url-Here', # Fill in your redirect url here (Ex. 'http://localhost:63342/mojio-js/example/authorize.html')
+	live: false # Set to true if using the live environment 
 }
 
 mojio_client = new MojioClient(config)
 App = mojio_client.model('App')
 
 $( () ->
-    if (config.application == 'Your-Application-Key-Here')
+	if (config.application == 'Your-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'Mojio Error:: Set your application and secret keys in authorize.js.  <br>'
+        div.innerHTML += 'Mojio Error:: Set your application key in authorize_complete.js.  <br>'
         return
-
-    if (config.application == 'Your-Logout-redirect_url-Here')
+	if (config.redirect_uri == 'Your-Logout-redirect_url-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'Mojio Error:: Set the logout redirect url in authorize.js and register it in your application at the developer center.  <br>'
+        div.innerHTML += 'Mojio Error:: Set the logout redirect url in authorize_complete.js and register it in your application at the developer center.  <br>'
         return
 
     mojio_client.token((error, result) ->
         if (error)
-            alert("Authorize Redirect, token could not be retreived:"+error)
+            alert("Authorize Redirect, token could not be retrieved:"+error)
         else
             alert("Authorization Successful.")
 
