@@ -22,6 +22,7 @@ module.exports = class HttpNodeWrapper
             response.on 'data', (chunk) -> data += chunk if chunk
             response.on 'end', () ->
                 if response.statusCode > 299
+                    response.content = data
                     callback(response, null)
                 else if data.length > 0
                     try
@@ -31,6 +32,11 @@ module.exports = class HttpNodeWrapper
                 else
                     callback null, { result: "ok" }
         )
+
+        if params?.timeout? then action.on 'socket', (socket) ->
+          socket.setTimeout params.timeout
+          socket.on 'timeout', () ->
+            callback socket, null
 
         action.on 'error', (error) ->
             callback(error,null)
