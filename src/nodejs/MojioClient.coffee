@@ -3,10 +3,10 @@ SignalR = require './SignalRNodeWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'http', signalr_port: '80', signalr_hub: 'ObserverHub' }
+    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'http', signalr_port: '80', signalr_hub: 'ObserverHub', live: true }
 
     constructor: (@options) ->
-        @options ?= { hostname: defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme }
+        @options ?= { hostname: @defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme, live: @defaults.live }
         @options.hostname ?= defaults.hostname
         @options.port ?= defaults.port
         @options.version ?= defaults.version
@@ -47,7 +47,7 @@ module.exports = class MojioClient
         '' if params.length==0
         query = '?'
         for property, value of params
-            query += "#{property}=#{value}&"
+            query += "#{encodeURIComponent property}=#{encodeURIComponent value}&"
         return query.slice(0,-1)
 
     getPath: (resource, id, action, key) ->
@@ -107,7 +107,7 @@ module.exports = class MojioClient
             host: @options.hostname
             port: @options.port
             scheme: @options.scheme
-            path: '/OAuth2/authorize'
+            path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
             method: 'Get'
             withCredentials: false
         }
