@@ -5,9 +5,9 @@
     MojioClient = this.MojioClient;
 
     config = {
-        application: 'f201b929-d28c-415d-9b71-8112532301cb',
-        secret: '2ef80a7a-780d-41c1-8a02-13a286f11a23',
-        hostname: 'staging.api.moj.io',
+        application: 'bcafb90b-95b5-406f-8d2a-ad2cb7401df6',
+        secret: '1e877bcf-3274-4ce9-8a16-7880dff3b3a3',
+        hostname: 'api.moj.io',
         version: 'v1',
         port: '80',
         login: 'anonymous@moj.io',
