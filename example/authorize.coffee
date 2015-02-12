@@ -1,7 +1,7 @@
 MojioClient = @MojioClient
 
 config = {
-    application: 'f201b929-d28c-415d-9b71-8112532301cb',
+    application: 'bcafb90b-95b5-406f-8d2a-ad2cb7401df6',
     hostname: 'api.moj.io',
     version: 'v1',
     port:'443',
