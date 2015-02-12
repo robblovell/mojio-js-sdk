@@ -17,7 +17,7 @@ theevent = null
 vehicle = null
 user = null
 
-describe 'Observer', ->
+describe 'Conditional Observer', ->
 
     before( (done) ->
         mojio_client.login(testdata.username, testdata.password, (error, result) ->
@@ -58,34 +58,34 @@ describe 'Observer', ->
                         }
                     )
                     mojio_client.watch(observer,
-                    (entity) ->
-                        entity.should.be.an.instanceOf(Object)
-                        console.log("Observed change seen.")
-                        mojio_client.unobserve(observer, vehicle, null, null, (error, result) ->
-                            mojio_client.delete(vehicle, (error, result) ->
-                                (error==null).should.be.true
-                                console.log("Vehicle deleted.")
-                                done()
+                        (entity) ->
+                            entity.should.be.an.instanceOf(Object)
+                            console.log("Observed change seen.")
+                            mojio_client.unobserve(observer, vehicle, null, null, (error, result) ->
+                                mojio_client.delete(vehicle, (error, result) ->
+                                    (error==null).should.be.true
+                                    console.log("Vehicle deleted.")
+                                    done()
+                                )
                             )
-                        )
-                    ,
-                    (error, result) ->
-                        result.should.be.an.instanceOf(Observer)
-                        result.Status.should.equal("Approved")
+                        ,
+                        (error, result) ->
+                            result.should.be.an.instanceOf(Observer)
+                            result.Status.should.equal("Approved")
 
-                        vehicle.LastSpeed = 90.0
-                        console.log("changing vehicle speed...")
-                        observer = result
-                        event = new Event({})
-                        event.authorization(mojio_client)
-                        event.EventType = "TripEvent"
-                        event.VehicleId = vehicle._id
-                        event.MojioId = mojio._id
-                        event.Speed = 90.0
-                        mojio_client.post(event, (error, result) ->
-                            (error==null).should.be.true
-                            console.log("Event at speed 90.0 added.")
-                        )
+                            vehicle.LastSpeed = 90.0
+                            console.log("changing vehicle speed...")
+                            observer = result
+                            event = new Event({})
+                            event.authorization(mojio_client)
+                            event.EventType = "TripEvent"
+                            event.VehicleId = vehicle._id
+                            event.MojioId = mojio._id
+                            event.Speed = 90.0
+                            mojio_client.post(event, (error, result) ->
+                                (error==null).should.be.true
+                                console.log("Event at speed 90.0 added.")
+                            )
                     )
                 )
             )
