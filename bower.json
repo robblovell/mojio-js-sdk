@@ -1,6 +1,6 @@
 {
   "name": "mojio-js",
-  "version": "2.2.8",
+  "version": "2.2.9",
   "main": "dist/MojioClient.js",
   "ignore": [
     ".gitignore",
