@@ -50,7 +50,7 @@
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState === 4) {
           if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
-            return callback(null, xmlhttp.responseText);
+            return callback(null, JSON.parse(xmlhttp.responseText));
           } else {
             return callback(xmlhttp.statusText, null);
           }
@@ -278,10 +278,7 @@
         return this.request({
           method: 'GET',
           resource: this.login_resource,
-          id: this.options.application,
-          parameters: {
-            id: token
-          }
+          id: token
         }, (function(_this) {
           return function(error, result) {
             if (error) {

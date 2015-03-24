@@ -21,7 +21,7 @@ config =
 
 
 mojio_client = new MojioClient(config)
-App = mojio_client.model('App')
+User = mojio_client.model('User')
 
 (() ->
     if (config.application == 'Your-Application-Key-Here')
@@ -36,25 +36,25 @@ App = mojio_client.model('App')
 
     mojio_client.token((error, result) ->
         if (error)
-            alert("Authorize Redirect, token could not be retrieved:"+error)
+            alert("Authorize Redirect, token could not be retrieved, you are logged out.")
         else
             alert("Authorization Successful.")
 
             div = document.getElementById('result')
             div.innerHTML += 'POST /login<br>'
             div.innerHTML += JSON.stringify(result)
-            mojio_client.query(App, {}, (error, result) ->
+            mojio_client.get(User, {}, (error, result) ->
                 if (error)
                     div = document.getElementById('result2')
-                    div.innerHTML += 'Get Apps Error'+error+'<br>'
+                    div.innerHTML += 'Get User Error'+error+'<br>'
                 else
-                    apps = mojio_client.getResults(App, result)
+                    users = mojio_client.getResults(User, result)
 
-                    app = apps[0]
+                    user = users[0]
                     div = document.getElementById('result2')
-                    div.innerHTML += 'Query /App<br>'
+                    div.innerHTML += 'Query /User<br>'
                     div.innerHTML += JSON.stringify(result)
-                    alert("Hit Ok to log out and return to the authorization page.")
+                    alert("Hit Ok to log out.")
                     mojio_client.unauthorize(config.redirect_uri)
             )
     )

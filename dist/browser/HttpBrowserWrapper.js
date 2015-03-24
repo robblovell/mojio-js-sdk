@@ -50,7 +50,7 @@
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState === 4) {
           if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
-            return callback(null, xmlhttp.responseText);
+            return callback(null, JSON.parse(xmlhttp.responseText));
           } else {
             return callback(xmlhttp.statusText, null);
           }

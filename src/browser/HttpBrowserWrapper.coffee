@@ -65,7 +65,7 @@ module.exports = class HttpBrowserWrapper
         xmlhttp.onreadystatechange=() ->
             if xmlhttp.readyState==4
                 if (xmlhttp.status >= 200 and xmlhttp.status <= 299)
-                    callback(null,xmlhttp.responseText)
+                    callback(null,JSON.parse xmlhttp.responseText)
                 else
                     callback(xmlhttp.statusText,null)
 
