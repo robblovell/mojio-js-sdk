@@ -4,9 +4,7 @@
   var HttpBrowserWrapper;
 
   module.exports = HttpBrowserWrapper = (function() {
-    function HttpBrowserWrapper($) {
-      this.$ = $;
-    }
+    function HttpBrowserWrapper() {}
 
     HttpBrowserWrapper.prototype.request = function(params, callback) {
       var k, url, v, xmlhttp, _ref;

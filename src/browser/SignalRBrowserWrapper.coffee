@@ -11,8 +11,8 @@ module.exports = class SignalRBrowserWrapper
         else if @observer_callbacks[entity.Type]
             callback(entity) for callback in @observer_callbacks[entity.Type]
 
-    constructor: (url, hubNames) ->  # hubNames not used.
-#        @$ = jquery
+    constructor: (url, hubNames, jquery) ->  # hubNames not used.
+        @$ = jquery
         @url = url
         @hubs = {}
         @signalr = null

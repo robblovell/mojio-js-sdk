@@ -1,7 +1,7 @@
 # assume's jQuery. (bower install jquery)
 module.exports = class HttpBrowserWrapper
 
-    constructor: (@$) ->
+    constructor: () ->
 
 #    sendRequest = (url, data, method, headers) ->
 #        return @$.ajax(url, {

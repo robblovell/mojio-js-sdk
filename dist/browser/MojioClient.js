@@ -4,9 +4,7 @@
   var HttpBrowserWrapper;
 
   module.exports = HttpBrowserWrapper = (function() {
-    function HttpBrowserWrapper($) {
-      this.$ = $;
-    }
+    function HttpBrowserWrapper() {}
 
     HttpBrowserWrapper.prototype.request = function(params, callback) {
       var k, url, v, xmlhttp, _ref;
@@ -231,7 +229,7 @@
       if (request.body != null) {
         parts.body = request.body;
       }
-      http = new Http($);
+      http = new Http();
       return http.request(parts, callback);
     };
 
@@ -785,8 +783,9 @@
       }
     };
 
-    function SignalRBrowserWrapper(url, hubNames) {
+    function SignalRBrowserWrapper(url, hubNames, jquery) {
       this.observer_registry = __bind(this.observer_registry, this);
+      this.$ = jquery;
       this.url = url;
       this.hubs = {};
       this.signalr = null;
