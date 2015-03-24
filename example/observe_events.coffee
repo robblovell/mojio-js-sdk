@@ -1,15 +1,28 @@
 MojioClient = @MojioClient
 
-config =     {
-    application: 'bcafb90b-95b5-406f-8d2a-ad2cb7401df6',
-    secret: '1e877bcf-3274-4ce9-8a16-7880dff3b3a3',
-    hostname: 'api.moj.io',
-    version: 'v1',
-    port:'443',
-    login: 'anonymous@moj.io',
-    password: 'Password007',
+###
+
+    Below, fill in your application specific details to make this code work
+
+config =
+    application: 'Your-Application-Key-Here' # Fill in your application key here (replace Your-Application-Key-Here)
+    secret: 'Your-Secret-Key-Here' # Fill in your secret key here. (replace Your-Secret-Key-Here)
+    login: 'Your-Username' <-- Replace
+    password: 'Your-Password' <-- Replace
+    live: false # Set to true if using the live environment
+
+###
+config =
+    application: 'Your-Application-Key-Here'
+    secret: 'Your-Secret-Key-Here'
+    hostname: 'api.moj.io'
+    version: 'v1'
+    port: '443'
     scheme: 'https'
-}
+    live: false
+    login: 'Your-Username'
+    password: 'Your-Password'
+    live: false
 
 mojio_client = new MojioClient(config)
 App = mojio_client.model('App')

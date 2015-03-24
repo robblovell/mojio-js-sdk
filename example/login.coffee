@@ -1,15 +1,30 @@
 MojioClient = @MojioClient
 
-config =     {
-    application: 'bcafb90b-95b5-406f-8d2a-ad2cb7401df6',
-    secret: '1e877bcf-3274-4ce9-8a16-7880dff3b3a3',
-    hostname: 'api.moj.io',
-    version: 'v1',
-    port:'443',
-    schema:'https',
-    login: 'anonymous@moj.io',
-    password: 'Password007'
-}
+
+###
+
+    Below, fill in your application specific details to make this code work
+
+config =
+    application: 'Your-Application-Key-Here' # Fill in your application key here (replace Your-Application-Key-Here)
+    secret: 'Your-Secret-Key-Here' # Fill in your secret key here. (replace Your-Secret-Key-Here)
+    login: 'Your-Username' <-- Replace
+    password: 'Your-Password' <-- Replace
+    live: false # Set to true if using the live environment
+
+###
+config =
+    application: 'Your-Application-Key-Here'
+    secret: 'Your-Secret-Key-Here'
+    hostname: 'api.moj.io'
+    version: 'v1'
+    port: '443'
+    scheme: 'https'
+    live: false
+    login: 'Your-Username'
+    password: 'Your-Password'
+    live: false
+
 
 mojio_client = new MojioClient(config)
 App = mojio_client.model('App')
@@ -23,12 +38,22 @@ $( () ->
 
     if (config.application == 'Your-Sandbox-Application-Key-Here')
         div = document.getElementById('result')
-        div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.js.  <br>'
+        div.innerHTML += 'Mojio Error:: Set your application and secret keys in login.coffee or js.  <br>'
+        return
+
+    if (config.application == 'Your-Secret-Key-Here')
+        div = document.getElementById('result')
+        div.innerHTML += 'Mojio Error:: Set your secret keys in login.coffee or js.  <br>'
         return
 
     if (config.login == 'Your-Username')
         div = document.getElementById('result2')
-        div.innerHTML += 'Mojio Error:: Set a username and password in login.js.  <br>'
+        div.innerHTML += 'Mojio Error:: Set a username and password in login.coffee or js.  <br>'
+        return
+
+    if (config.password == 'Your-Password')
+        div = document.getElementById('result2')
+        div.innerHTML += 'Mojio Error:: Set a password in login.coffee or js.  <br>'
         return
 
     mojio_client.login(config.login, config.password, (error, result) ->
