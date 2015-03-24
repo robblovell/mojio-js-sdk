@@ -4,39 +4,28 @@
   var HttpBrowserWrapper;
 
   module.exports = HttpBrowserWrapper = (function() {
-    var sendRequest;
-
-    function HttpBrowserWrapper($) {
-      this.$ = $;
+    function HttpBrowserWrapper(requester) {
+      if (requester == null) {
+        requester = null;
+      }
+      if (requester != null) {
+        this.requester = requester;
+      }
     }
 
-    sendRequest = function(url, data, method, headers) {
-      return this.$.ajax(url, {
-        data: data,
-        headers: headers,
-        contentType: "application/json",
-        dataType: "json",
-        type: method,
-        cache: false,
-        error: function(obj, status, error) {
-          return console.log('Error during request: (' + status + ') ' + error);
-        }
-      });
-    };
-
     HttpBrowserWrapper.prototype.request = function(params, callback) {
-      var url;
+      var k, url, v, xmlhttp, _ref;
       if (params.method == null) {
         params.method = "GET";
       }
       if ((params.host == null) && (params.hostname != null)) {
         params.host = params.hostname;
       }
-      if (params.scheme == null) {
+      if (!((params.scheme != null) || (typeof window === "undefined" || window === null))) {
         params.scheme = window.location.protocol.split(':')[0];
       }
-      if (params.scheme === 'file') {
-        params.scheme = 'http';
+      if (!params.scheme || params.scheme === 'file') {
+        params.scheme = 'https';
       }
       if (params.data == null) {
         params.data = {};
@@ -44,15 +33,41 @@
       if (params.body != null) {
         params.data = params.body;
       }
+      params.data = Object.keys(params.data).map(function(k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(params.data[k]);
+      }).join('&');
       if (params.headers == null) {
         params.headers = {};
       }
       url = params.scheme + "://" + params.host + ":" + params.port + params.path;
-      return sendRequest(url, params.data, params.method, params.headers).done(function(result) {
-        return callback(null, result);
-      }).fail(function() {
-        return callback("Failed", null);
-      });
+      if (params.method === "GET") {
+        url += '?' + params.data;
+      }
+      if ((typeof XMLHttpRequest !== "undefined" && XMLHttpRequest !== null)) {
+        xmlhttp = new XMLHttpRequest;
+      } else {
+        xmlhttp = this.requester;
+      }
+      xmlhttp.open(params.method, url, true);
+      _ref = params.headers;
+      for (k in _ref) {
+        v = _ref[k];
+        xmlhttp.setRequestHeader(k, v);
+      }
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState === 4) {
+          if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
+            return callback(null, JSON.parse(xmlhttp.responseText));
+          } else {
+            return callback(xmlhttp.statusText, null);
+          }
+        }
+      };
+      if (params.method === "GET") {
+        return xmlhttp.send();
+      } else {
+        return xmlhttp.send(params.data);
+      }
     };
 
     return HttpBrowserWrapper;
@@ -85,7 +100,7 @@
     };
 
     function MojioClient(options) {
-      var _base, _base1, _base2, _base3, _base4, _base5, _base6;
+      var _base, _base1, _base2, _base3, _base4, _base5, _base6, _base7;
       this.options = options;
       if (this.options == null) {
         this.options = {
@@ -124,6 +139,11 @@
       this.hub = null;
       this.connStatus = null;
       this.auth_token = null;
+      if ((_base7 = this.options).tokenRequester == null) {
+        _base7.tokenRequester = (function() {
+          return document.location.hash.match(/access_token=([0-9a-f-]{36})/);
+        });
+      }
       this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [this.options.signalr_hub], $);
     }
 
@@ -221,7 +241,7 @@
       if (request.body != null) {
         parts.body = request.body;
       }
-      http = new Http($);
+      http = new Http();
       return http.request(parts, callback);
     };
 
@@ -262,7 +282,7 @@
     MojioClient.prototype.token = function(callback) {
       var match, token;
       this.user = null;
-      match = document.location.hash.match(/access_token=([0-9a-f-]{36})/);
+      match = this.options.tokenRequester();
       token = !!match && match[1];
       if (!token) {
         return callback("token for authorization not found.", null);
@@ -270,10 +290,7 @@
         return this.request({
           method: 'GET',
           resource: this.login_resource,
-          id: this.options.application,
-          parameters: {
-            id: token
-          }
+          id: token
         }, (function(_this) {
           return function(error, result) {
             if (error) {

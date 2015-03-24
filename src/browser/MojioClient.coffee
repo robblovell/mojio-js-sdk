@@ -21,6 +21,7 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @auth_token = null
+        @options.tokenRequester ?= (() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))
 
         @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub], $)
 
@@ -93,7 +94,7 @@ module.exports = class MojioClient
 
         parts.body = request.body if request.body?
 
-        http = new Http($)
+        http = new Http()
         http.request(parts, callback)
 
     ###
@@ -125,7 +126,7 @@ module.exports = class MojioClient
     token: (callback) ->
         @user = null
 
-        match = document.location.hash.match(/access_token=([0-9a-f-]{36})/)
+        match = @options.tokenRequester()
         token = !!match && match[1]
         if (!token)
             callback("token for authorization not found.", null)
@@ -133,11 +134,7 @@ module.exports = class MojioClient
             # get the user id by requesting login information, then set the auth_token:
             @request(
                 {
-                    method: 'GET', resource: @login_resource, id: @options.application,
-                    parameters:
-                        {
-                            id: token
-                        }
+                    method: 'GET', resource: @login_resource, id: token
                 },
             (error, result) =>
                 if error
