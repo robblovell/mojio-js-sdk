@@ -33,7 +33,14 @@
             (function() {
                 var HttpBrowserWrapper;
                 module.exports = HttpBrowserWrapper = function() {
-                    function HttpBrowserWrapper() {}
+                    function HttpBrowserWrapper(requester) {
+                        if (requester == null) {
+                            requester = null;
+                        }
+                        if (requester != null) {
+                            this.requester = requester;
+                        }
+                    }
                     HttpBrowserWrapper.prototype.request = function(params, callback) {
                         var k, url, v, xmlhttp, _ref;
                         if (params.method == null) {
@@ -67,7 +74,7 @@
                         if (typeof XMLHttpRequest !== "undefined" && XMLHttpRequest !== null) {
                             xmlhttp = new XMLHttpRequest();
                         } else {
-                            xmlhttp = this.$;
+                            xmlhttp = this.requester;
                         }
                         xmlhttp.open(params.method, url, true);
                         _ref = params.headers;

@@ -1,8 +1,7 @@
-# assume's jQuery. (bower install jquery)
 module.exports = class HttpBrowserWrapper
 
-    constructor: () ->
-
+    constructor: (requester=null) ->
+        @requester = requester if requester?
 #    sendRequest = (url, data, method, headers) ->
 #        return @$.ajax(url, {
 #            data: data,
@@ -56,7 +55,7 @@ module.exports = class HttpBrowserWrapper
         if (XMLHttpRequest?)
             xmlhttp = new XMLHttpRequest
         else
-            xmlhttp = @.$
+            xmlhttp = @requester
         xmlhttp.open params.method , url ,true
 
         for k,v of params.headers
