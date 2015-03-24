@@ -4,39 +4,23 @@
   var HttpBrowserWrapper;
 
   module.exports = HttpBrowserWrapper = (function() {
-    var sendRequest;
-
     function HttpBrowserWrapper($) {
       this.$ = $;
     }
 
-    sendRequest = function(url, data, method, headers) {
-      return this.$.ajax(url, {
-        data: data,
-        headers: headers,
-        contentType: "application/json",
-        dataType: "json",
-        type: method,
-        cache: false,
-        error: function(obj, status, error) {
-          return console.log('Error during request: (' + status + ') ' + error);
-        }
-      });
-    };
-
     HttpBrowserWrapper.prototype.request = function(params, callback) {
-      var url;
+      var k, url, v, xmlhttp, _ref;
       if (params.method == null) {
         params.method = "GET";
       }
       if ((params.host == null) && (params.hostname != null)) {
         params.host = params.hostname;
       }
-      if (params.scheme == null) {
+      if (!((params.scheme != null) || (typeof window === "undefined" || window === null))) {
         params.scheme = window.location.protocol.split(':')[0];
       }
-      if (params.scheme === 'file') {
-        params.scheme = 'http';
+      if (!params.scheme || params.scheme === 'file') {
+        params.scheme = 'https';
       }
       if (params.data == null) {
         params.data = {};
@@ -44,15 +28,41 @@
       if (params.body != null) {
         params.data = params.body;
       }
+      params.data = Object.keys(params.data).map(function(k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(params.data[k]);
+      }).join('&');
       if (params.headers == null) {
         params.headers = {};
       }
       url = params.scheme + "://" + params.host + ":" + params.port + params.path;
-      return sendRequest(url, params.data, params.method, params.headers).done(function(result) {
-        return callback(null, result);
-      }).fail(function() {
-        return callback("Failed", null);
-      });
+      if (params.method === "GET") {
+        url += '?' + params.data;
+      }
+      if ((typeof XMLHttpRequest !== "undefined" && XMLHttpRequest !== null)) {
+        xmlhttp = new XMLHttpRequest;
+      } else {
+        xmlhttp = this.$;
+      }
+      xmlhttp.open(params.method, url, true);
+      _ref = params.headers;
+      for (k in _ref) {
+        v = _ref[k];
+        xmlhttp.setRequestHeader(k, v);
+      }
+      xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState === 4) {
+          if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
+            return callback(null, xmlhttp.responseText);
+          } else {
+            return callback(xmlhttp.statusText, null);
+          }
+        }
+      };
+      if (params.method === "GET") {
+        return xmlhttp.send();
+      } else {
+        return xmlhttp.send(params.data);
+      }
     };
 
     return HttpBrowserWrapper;
