@@ -89,8 +89,8 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     wstream.end()
 
                     view['http_require'] = "Http = require './HttpBrowserWrapper'"
-                    view['http_request'] = "http = new Http($)"
-                    view['extra_signalr_params'] = ", $"
+                    view['http_request'] = "http = new Http()"
+                    view['extra_signalr_params'] = ""
                     view['signalr_require'] = "SignalR = require './SignalRBrowserWrapper'"
                     output = client_template.render(view)
 

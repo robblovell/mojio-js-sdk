@@ -785,9 +785,8 @@
       }
     };
 
-    function SignalRBrowserWrapper(url, hubNames, jquery) {
+    function SignalRBrowserWrapper(url, hubNames) {
       this.observer_registry = __bind(this.observer_registry, this);
-      this.$ = jquery;
       this.url = url;
       this.hubs = {};
       this.signalr = null;
