@@ -34,5 +34,7 @@ cd ../cdn
 uglifyjs mojio-js-models.min.js -b -o ../cdn/mojio-js-models.js
 uglifyjs mojio-js.min.js -b -o ../cdn/mojio-js.js
 cd ../../
+cp package.json ./dist/cdn/package.json
+
 
 mocha -t 30000 test
