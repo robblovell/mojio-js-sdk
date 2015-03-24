@@ -133,11 +133,7 @@ module.exports = class MojioClient
             # get the user id by requesting login information, then set the auth_token:
             @request(
                 {
-                    method: 'GET', resource: @login_resource, id: @options.application,
-                    parameters:
-                        {
-                            id: token
-                        }
+                    method: 'GET', resource: @login_resource, id: token
                 },
             (error, result) =>
                 if error
