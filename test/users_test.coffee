@@ -31,12 +31,12 @@ describe 'User', ->
             done()
         )
 
-    it "can't query Users by non-accesible UserName", (done) ->
-
-        mojio_client.query(User, {criteria: {UserName: 'robblovell'}, limit: 10}, (error, result) ->
-            (error==null).should.be.true
-            mojio_client.should.be.an.instanceOf(MojioClient)
-            result.Objects.should.be.an.instanceOf(Array)
-            result.Objects.length.should.equal(0);
-            done()
-        )
+#    it "can't query Users by non-accesible UserName", (done) ->
+#
+#        mojio_client.query(User, {criteria: {UserName: 'robblovell'}, limit: 10}, (error, result) ->
+#            (error==null).should.be.true
+#            mojio_client.should.be.an.instanceOf(MojioClient)
+#            result.Objects.should.be.an.instanceOf(Array)
+#            result.Objects.length.should.equal(0);
+#            done()
+#        )

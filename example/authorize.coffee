@@ -1,14 +1,23 @@
 MojioClient = @MojioClient
 
-config = {
-    application: 'Your-Application-Key-Here', # Fill in your application key here
-    hostname: 'api.moj.io',
-    version: 'v1',
-    port:'443',
-    scheme: 'https',
-    redirect_uri: 'Your-Login-redirect_url-Here', # Fill in your redirect url here (Ex. 'http://localhost:63342/mojio-js/example/authorize_complete.html')
-	live: false # Set to true if using the live environment 
-}
+###
+
+    Below, fill in your application specific details to make this code work
+
+config =
+    application: 'Your-Application-Key-Here' # Fill in your application key here
+    redirect_uri: 'Your-Logout-redirect_url-Here' # Fill in your redirect url here (Ex. 'http://localhost:63342/mojio-js/example/authorize_complete.html')
+    live: false # Set to true if using the live environment
+
+###
+config =
+    application: 'Your-Application-Key-Here'
+    hostname: 'api.moj.io'
+    version: 'v1'
+    port: '443'
+    scheme: 'https'
+    redirect_uri: 'Your-Login-redirect_url-Here'
+    live: false
 
 mojio_client = new MojioClient(config)
 
