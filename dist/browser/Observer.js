@@ -281,6 +281,8 @@
 
 }).call(this);
 
+//# sourceMappingURL=Observer.js.map
+
 },{"./MojioModel":1}]},{},[2])
 (2)
 });

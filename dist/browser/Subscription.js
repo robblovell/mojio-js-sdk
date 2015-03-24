@@ -278,6 +278,8 @@
 
 }).call(this);
 
+//# sourceMappingURL=Subscription.js.map
+
 },{"./MojioModel":1}]},{},[2])
 (2)
 });

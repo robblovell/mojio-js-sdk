@@ -9,7 +9,8 @@
         "url": "https://github.com/mojio/mojio-js"
     },
     "dependencies": {
-        "signalr-client": "0.0.5"
+        "signalr-client": "0.0.5",
+        "xmlhttprequest": "1.7.0"
     },
     "devDependencies": {
         "mocha": "1.18.2",
