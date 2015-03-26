@@ -17,6 +17,7 @@ config =
     port: '443'
     scheme: 'https'
     redirect_uri: 'Your-Logout-redirect_url-Here'
+#    redirect_uri: 'http://localhost:63342/mojio-js/example/authorize_complete.html'
     live: false
 
 mojio_client = new MojioClient(config)
@@ -35,7 +36,8 @@ User = mojio_client.model('User')
 
     mojio_client.token((error, result) ->
         if (error)
-            alert("Authorize Redirect, token could not be retrieved, you are logged out.")
+            if confirm("Authorize Redirect, token could not be retrieved, you are logged out. Try again?")
+                mojio_client.authorize(config.redirect_uri)
         else
             alert("Authorization Successful.")
 
@@ -53,8 +55,8 @@ User = mojio_client.model('User')
                     div = document.getElementById('result2')
                     div.innerHTML += 'Query /User<br>'
                     div.innerHTML += JSON.stringify(result)
-                    alert("Hit Ok to log out.")
-                    mojio_client.unauthorize(config.redirect_uri)
+                    if confirm('You are logged in, logout and try again?')
+                        mojio_client.unauthorize(config.redirect_uri)
             )
     )
 )()
