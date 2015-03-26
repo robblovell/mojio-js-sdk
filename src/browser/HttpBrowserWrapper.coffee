@@ -20,7 +20,7 @@ module.exports = class HttpBrowserWrapper
         params.headers = {} unless params.headers?
 
         url = params.scheme+"://"+params.host+":"+params.port+params.path
-        if params.method == "GET"
+        if params.method == "GET" and params.data? and params.data.length > 0
             url +='?' + params.data
 
         if (XMLHttpRequest?)
