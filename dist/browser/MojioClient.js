@@ -40,7 +40,7 @@
         params.headers = {};
       }
       url = params.scheme + "://" + params.host + ":" + params.port + params.path;
-      if (params.method === "GET") {
+      if (params.method === "GET" && (params.data != null) && params.data.length > 0) {
         url += '?' + params.data;
       }
       if ((typeof XMLHttpRequest !== "undefined" && XMLHttpRequest !== null)) {

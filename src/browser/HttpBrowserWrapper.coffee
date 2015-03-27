@@ -18,10 +18,12 @@ module.exports = class HttpBrowserWrapper
         params.headers = {} unless params.headers?
 
         url = params.scheme+"://"+params.host+":"+params.port+params.path
-        if params.method == "GET" && params.data.length!=0
+
+        if params.method == "GET" and params.data? and params.data.length > 0
           url +='?' + Object.keys(params.data).map( (k) ->
             return encodeURIComponent(k) + '=' + encodeURIComponent(params.data[k])
           ).join('&')
+
 
         if (XMLHttpRequest?)
             xmlhttp = new XMLHttpRequest
