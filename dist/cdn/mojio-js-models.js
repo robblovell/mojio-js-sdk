@@ -31,9 +31,9 @@
     }({
         1: [ function(_dereq_, module, exports) {
             (function() {
-                var Address, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var Address, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -42,10 +42,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Address = function(_super) {
-                    __extends(Address, _super);
+                module.exports = Address = function(superClass) {
+                    extend(Address, superClass);
                     Address.prototype._schema = {
                         Address1: "String",
                         Address2: "String",
@@ -91,13 +91,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -120,7 +120,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -235,13 +235,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -307,9 +307,9 @@
     }({
         1: [ function(_dereq_, module, exports) {
             (function() {
-                var App, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var App, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -318,10 +318,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = App = function(_super) {
-                    __extends(App, _super);
+                module.exports = App = function(superClass) {
+                    extend(App, superClass);
                     App.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -370,13 +370,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -399,7 +399,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -514,13 +514,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -586,9 +586,9 @@
     }({
         1: [ function(_dereq_, module, exports) {
             (function() {
-                var Event, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var Event, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -597,10 +597,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Event = function(_super) {
-                    __extends(Event, _super);
+                module.exports = Event = function(superClass) {
+                    extend(Event, superClass);
                     Event.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -685,13 +685,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -714,7 +714,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -829,13 +829,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -901,9 +901,9 @@
     }({
         1: [ function(_dereq_, module, exports) {
             (function() {
-                var Location, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var Location, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -912,10 +912,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Location = function(_super) {
-                    __extends(Location, _super);
+                module.exports = Location = function(superClass) {
+                    extend(Location, superClass);
                     Location.prototype._schema = {
                         Lat: "Float",
                         Lng: "Float",
@@ -960,13 +960,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -989,7 +989,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -1104,13 +1104,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -1176,9 +1176,9 @@
     }({
         1: [ function(_dereq_, module, exports) {
             (function() {
-                var Mojio, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var Mojio, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1187,10 +1187,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Mojio = function(_super) {
-                    __extends(Mojio, _super);
+                module.exports = Mojio = function(superClass) {
+                    extend(Mojio, superClass);
                     Mojio.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",
@@ -1238,13 +1238,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -1267,7 +1267,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -1382,13 +1382,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -1470,13 +1470,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -1499,7 +1499,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -1614,13 +1614,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -1652,9 +1652,9 @@
         }, {} ],
         2: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Observer, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Observer, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1663,10 +1663,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Observer = function(_super) {
-                    __extends(Observer, _super);
+                module.exports = Observer = function(superClass) {
+                    extend(Observer, superClass);
                     Observer.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -1755,13 +1755,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -1784,7 +1784,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -1899,13 +1899,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -1937,9 +1937,9 @@
         }, {} ],
         2: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Product, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Product, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1948,10 +1948,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Product = function(_super) {
-                    __extends(Product, _super);
+                module.exports = Product = function(superClass) {
+                    extend(Product, superClass);
                     Product.prototype._schema = {
                         Type: "String",
                         AppId: "String",
@@ -2037,13 +2037,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -2066,7 +2066,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -2181,13 +2181,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -2219,9 +2219,9 @@
         }, {} ],
         2: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Subscription, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Subscription, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -2230,10 +2230,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Subscription = function(_super) {
-                    __extends(Subscription, _super);
+                module.exports = Subscription = function(superClass) {
+                    extend(Subscription, superClass);
                     Subscription.prototype._schema = {
                         Type: "Integer",
                         ChannelType: "Integer",
@@ -2319,13 +2319,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -2348,7 +2348,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -2463,13 +2463,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -2501,9 +2501,9 @@
         }, {} ],
         2: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Trip, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Trip, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -2512,10 +2512,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Trip = function(_super) {
-                    __extends(Trip, _super);
+                module.exports = Trip = function(superClass) {
+                    extend(Trip, superClass);
                     Trip.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -2613,13 +2613,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -2642,7 +2642,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -2757,13 +2757,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -2795,9 +2795,9 @@
         }, {} ],
         2: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, User, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, User, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -2806,10 +2806,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = User = function(_super) {
-                    __extends(User, _super);
+                module.exports = User = function(superClass) {
+                    extend(User, superClass);
                     User.prototype._schema = {
                         Type: "Integer",
                         UserName: "String",
@@ -2896,13 +2896,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -2925,7 +2925,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -3040,13 +3040,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -3078,9 +3078,9 @@
         }, {} ],
         2: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Vehicle, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Vehicle, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -3089,10 +3089,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Vehicle = function(_super) {
-                    __extends(Vehicle, _super);
+                module.exports = Vehicle = function(superClass) {
+                    extend(Vehicle, superClass);
                     Vehicle.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",

@@ -332,7 +332,7 @@ module.exports = class MojioClient
         else
             observer = new Observer(
                 {
-                    ObserverType: "Generic", Status: null, Name: "Test"+Math.random(),
+                    ObserverType: "Generic", Status: "Approved", Name: "Test"+Math.random(),
                     Subject: subject.model(),
                     Parent: parent.model(), ParentId: parent.id(), "Transports": "SignalR"
                 }
