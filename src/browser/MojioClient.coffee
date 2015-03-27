@@ -3,7 +3,7 @@ SignalR = require './SignalRBrowserWrapper'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'http', signalr_port: '80', signalr_hub: 'ObserverHub', live: true }
+    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'https', signalr_port: '443', signalr_hub: 'ObserverHub', live: true }
 
     constructor: (@options) ->
         @options ?= { hostname: @defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme, live: @defaults.live }

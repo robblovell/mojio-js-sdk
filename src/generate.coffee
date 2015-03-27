@@ -77,9 +77,12 @@ fs.readFile('./models/schema.coffee', (err, data) ->
 
                 fs.readFile('./MojioClientTemplate.mustache', (err, data) ->
                     client_template = Combyne(data.toString())
+                    # node js.
                     view['models'] = models
                     view['http_require'] = "Http = require './HttpNodeWrapper'"
                     view['http_request'] = "http = new Http()"
+                    view['signalr_default_scheme'] = 'http'
+                    view['signalr_default_port'] = '80'
                     view['extra_signalr_params'] = "" # none.
                     view['signalr_require'] = "SignalR = require './SignalRNodeWrapper'"
                     output = client_template.render(view)
@@ -87,10 +90,12 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     wstream = fs.createWriteStream("./nodejs/MojioClient.coffee")
                     wstream.write(output)
                     wstream.end()
-
+                    # browser
                     view['http_require'] = "Http = require './HttpBrowserWrapper'"
                     view['http_request'] = "http = new Http()"
                     view['extra_signalr_params'] = ", $"
+                    view['signalr_default_scheme'] = 'https'
+                    view['signalr_default_port'] = '443'
                     view['signalr_require'] = "SignalR = require './SignalRBrowserWrapper'"
                     output = client_template.render(view)
 
