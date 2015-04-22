@@ -166,14 +166,19 @@ module.exports = class MojioClient
         window.location = url
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
+         # https://api.moj.io/OAuth2/token?grant_type=password&client_id=087b6073-74a4-4708-aa2f-4899ac414b98&
+         # client_secret=fab4f7dd-32d8-4259-8882-aabe99d3d217&username=anonymous&password=Password007
+
         @request(
             {
-                method: 'POST', resource: @login_resource, id: @options.application,
+                method: 'POST', resource: 'OAuth2/token',
                 parameters:
                     {
-                        userOrEmail: username
+                        username: username
                         password: password
-                        secretKey: @options.secret
+                        client_id: @options.application
+                        client_secret: @options.secret
+                        grant_type: 'password'
                     }
             }, callback
         )
