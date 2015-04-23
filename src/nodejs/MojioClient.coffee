@@ -167,8 +167,8 @@ module.exports = class MojioClient
         window.location = url
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
-         # https://api.moj.io/OAuth2/token?grant_type=password&client_id=087b6073-74a4-4708-aa2f-4899ac414b98&
-         # client_secret=fab4f7dd-32d8-4259-8882-aabe99d3d217&username=anonymous&password=Password007
+        # https://api.moj.io/OAuth2/token?grant_type=password&client_id=087b6073-74a4-4708-aa2f-4899ac414b98&
+        # client_secret=fab4f7dd-32d8-4259-8882-aabe99d3d217&username=anonymous&password=Password007
 
         @request(
             {
@@ -436,11 +436,11 @@ module.exports = class MojioClient
         return null;
 
     getUserId:  () ->
-        return @auth_token.UserId if @auth_token?
+        return @auth_token.UserId if @auth_token? and @auth_token.UserId
         return null
 
     isLoggedIn: () ->
-        return @getUserId() != null
+        return @getUserId() != null || typeof(@auth_token) is String
 
     getCurrentUser: (callback) ->
         if (@user?)
