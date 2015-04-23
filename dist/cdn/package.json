@@ -10,7 +10,8 @@
     },
     "dependencies": {
         "signalr-client": "0.0.5",
-        "xmlhttprequest": "1.7.0"
+        "xmlhttprequest": "1.7.0",
+        "form-urlencoded": "0.0.7"
     },
     "devDependencies": {
         "mocha": "1.18.2",

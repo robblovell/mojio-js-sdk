@@ -1,5 +1,6 @@
 {{http_require}}
 {{signalr_require}}
+FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class MojioClient
 
@@ -71,17 +72,18 @@ module.exports = class MojioClient
     stringify: (data) ->
         return JSON.stringify(data)
 
-    request: (request, callback) ->
+    request: (request, callback, isOauth = false) ->
+        version = if isOauth then "" else @options.version
         parts = {
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
             scheme: @options.scheme
-            path: '/'+@options.version
+            path: '/'+version
             method: request.method,
             withCredentials: false
         }
-        parts.path = '/'+@options.version + @getPath(request.resource, request.id, request.action, request.key)
+        parts.path = '/'+version + @getPath(request.resource, request.id, request.action, request.key)
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += MojioClient._makeParameters(request.parameters)
@@ -92,7 +94,11 @@ module.exports = class MojioClient
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
         parts.headers["Content-Type"] = 'application/json'
 
-        parts.body = request.body if request.body?
+        if (request.body?)
+            if (isOauth)
+                parts.body = FormUrlencoded.encode(request.body)
+            else
+                parts.body = request.body
 
         {{http_request}}
         http.request(parts, callback)
@@ -166,23 +172,36 @@ module.exports = class MojioClient
         window.location = url
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
+        # https://api.moj.io/OAuth2/token?grant_type=password&client_id=087b6073-74a4-4708-aa2f-4899ac414b98&
+        # client_secret=fab4f7dd-32d8-4259-8882-aabe99d3d217&username=anonymous&password=Password007
+
         @request(
             {
-                method: 'POST', resource: @login_resource, id: @options.application,
-                parameters:
+#                method: 'POST', resource: @login_resource, id: @options.application, #'OAuth2/token',
+                method: 'POST', resource: 'OAuth2/token',
+                body:
                     {
-                        userOrEmail: username
+                        username: username
                         password: password
-                        secretKey: @options.secret
+                        client_id: @options.application
+                        client_secret: @options.secret
+                        grant_type: 'password'
                     }
-            }, callback
+#                parameters:
+#                    {
+#                        userOrEmail: username
+#                        password: password
+#                        secretKey: @options.secret
+#
+#                    }
+            }, callback, true
         )
 
     # Login
     login: (username, password, callback) ->
         @_login(username, password, (error, result) =>
             if (result?)
-                @auth_token = result
+                @auth_token = if result.access_token then result.access_token else result
             callback(error, result)
         )
 
@@ -396,15 +415,16 @@ module.exports = class MojioClient
     ###
 
     getTokenId:  () ->
-        return @auth_token._id if @auth_token?
+        return @auth_token._id if @auth_token? and @auth_token._id?
+        return @auth_token if @auth_token?
         return null;
 
     getUserId:  () ->
-        return @auth_token.UserId if @auth_token?
+        return @auth_token.UserId if @auth_token? and @auth_token.UserId
         return null
 
     isLoggedIn: () ->
-        return @getUserId() != null
+        return @getUserId() != null || typeof(@auth_token) is String
 
     getCurrentUser: (callback) ->
         if (@user?)

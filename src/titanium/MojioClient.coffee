@@ -1,5 +1,5 @@
-Http = require './HttpBrowserWrapper'
-SignalR = require './SignalRBrowserWrapper'
+Http = require './HttpTitaniumWrapper'
+SignalR = require './SignalRTitaniumWrapper'
 FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class MojioClient
@@ -24,7 +24,7 @@ module.exports = class MojioClient
         @auth_token = null
         @options.tokenRequester ?= (() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))
 
-        @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub], $)
+        @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub])
 
     ###
         Helpers

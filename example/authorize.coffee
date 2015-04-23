@@ -36,7 +36,7 @@ User = mojio_client.model('User')
 
     mojio_client.token((error, result) ->
         if (error)
-            if confirm("Authorize Redirect, token could not be retrieved, you are logged out. Try again?")
+            if confirm("Authorize Redirect, You are logged out right now (a Token doesn't exist yet). Try to log in?")
                 mojio_client.authorize(config.redirect_uri)
         else
             alert("Authorization Successful.")
