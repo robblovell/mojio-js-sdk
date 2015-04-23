@@ -1,5 +1,6 @@
 Http = require './HttpNodeWrapper'
 SignalR = require './SignalRNodeWrapper'
+FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class MojioClient
 
@@ -71,8 +72,8 @@ module.exports = class MojioClient
     stringify: (data) ->
         return JSON.stringify(data)
 
-    request: (request, callback, noversion = false) ->
-        version = if noversion then "" else @options.version
+    request: (request, callback, isOauth = false) ->
+        version = if isOauth then "" else @options.version
         parts = {
             hostname: @options.hostname
             host: @options.hostname
@@ -93,7 +94,11 @@ module.exports = class MojioClient
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
         parts.headers["Content-Type"] = 'application/json'
 
-        parts.body = request.body if request.body?
+        if (request.body?)
+            if (isOauth)
+                parts.body = FormUrlencoded.encode(request.body)
+            else
+                parts.body = request.body
 
         http = new Http()
         http.request(parts, callback)

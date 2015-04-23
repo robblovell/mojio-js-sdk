@@ -30,6 +30,62 @@
         return s;
     }({
         1: [ function(_dereq_, module, exports) {
+            var formurlencoded = (typeof module === "object" ? module : {}).exports = {
+                encode: function(data, options) {
+                    function getNestValsArrAsStr(arr) {
+                        return arr.filter(function(e) {
+                            return typeof e === "string" && e.length;
+                        }).join("&");
+                    }
+                    function getKeys(obj) {
+                        var keys = Object.keys(obj);
+                        return options && options.sorted ? keys.sort() : keys;
+                    }
+                    function getObjNestVals(name, obj) {
+                        var objKeyStr = ":name[:prop]";
+                        return getNestValsArrAsStr(getKeys(obj).map(function(key) {
+                            return getNestVals(objKeyStr.replace(/:name/, name).replace(/:prop/, key), obj[key]);
+                        }));
+                    }
+                    function getArrNestVals(name, arr) {
+                        var arrKeyStr = ":name[]";
+                        return getNestValsArrAsStr(arr.map(function(elem) {
+                            return getNestVals(arrKeyStr.replace(/:name/, name), elem);
+                        }));
+                    }
+                    function getNestVals(name, value) {
+                        var whitespaceRe = /%20/g, type = typeof value, f = null;
+                        if (type === "string") {
+                            f = encodeURIComponent(name) + "=" + formEncodeString(value);
+                        } else if (type === "number") {
+                            f = encodeURIComponent(name) + "=" + encodeURIComponent(value).replace(whitespaceRe, "+");
+                        } else if (type === "boolean") {
+                            f = encodeURIComponent(name) + "=" + value;
+                        } else if (Array.isArray(value)) {
+                            f = getArrNestVals(name, value);
+                        } else if (type === "object") {
+                            f = getObjNestVals(name, value);
+                        }
+                        return f;
+                    }
+                    function manuallyEncodeChar(ch) {
+                        return "%" + ("0" + ch.charCodeAt(0).toString(16)).slice(-2).toUpperCase();
+                    }
+                    function formEncodeString(value) {
+                        return value.replace(/[^ !'()~\*]*/g, encodeURIComponent).replace(/ /g, "+").replace(/[!'()~\*]/g, manuallyEncodeChar);
+                    }
+                    return getNestValsArrAsStr(getKeys(data).map(function(key) {
+                        return getNestVals(key, data[key]);
+                    }));
+                }
+            };
+        }, {} ],
+        2: [ function(_dereq_, module, exports) {
+            module.exports = _dereq_("./form-urlencoded");
+        }, {
+            "./form-urlencoded": 1
+        } ],
+        3: [ function(_dereq_, module, exports) {
             (function() {
                 var HttpBrowserWrapper;
                 module.exports = HttpBrowserWrapper = function() {
@@ -100,11 +156,12 @@
                 }();
             }).call(this);
         }, {} ],
-        2: [ function(_dereq_, module, exports) {
+        4: [ function(_dereq_, module, exports) {
             (function() {
-                var Http, MojioClient, SignalR;
+                var FormUrlencoded, Http, MojioClient, SignalR;
                 Http = _dereq_("./HttpBrowserWrapper");
                 SignalR = _dereq_("./SignalRBrowserWrapper");
+                FormUrlencoded = _dereq_("form-urlencoded");
                 module.exports = MojioClient = function() {
                     var App, Event, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
                     defaults = {
@@ -223,18 +280,22 @@
                     MojioClient.prototype.stringify = function(data) {
                         return JSON.stringify(data);
                     };
-                    MojioClient.prototype.request = function(request, callback) {
-                        var http, parts;
+                    MojioClient.prototype.request = function(request, callback, isOauth) {
+                        var http, parts, version;
+                        if (isOauth == null) {
+                            isOauth = false;
+                        }
+                        version = isOauth ? "" : this.options.version;
                         parts = {
                             hostname: this.options.hostname,
                             host: this.options.hostname,
                             port: this.options.port,
                             scheme: this.options.scheme,
-                            path: "/" + this.options.version,
+                            path: "/" + version,
                             method: request.method,
                             withCredentials: false
                         };
-                        parts.path = "/" + this.options.version + this.getPath(request.resource, request.id, request.action, request.key);
+                        parts.path = "/" + version + this.getPath(request.resource, request.id, request.action, request.key);
                         if (request.parameters != null && Object.keys(request.parameters).length > 0) {
                             parts.path += MojioClient._makeParameters(request.parameters);
                         }
@@ -247,7 +308,11 @@
                         }
                         parts.headers["Content-Type"] = "application/json";
                         if (request.body != null) {
-                            parts.body = request.body;
+                            if (isOauth) {
+                                parts.body = FormUrlencoded.encode(request.body);
+                            } else {
+                                parts.body = request.body;
+                            }
                         }
                         http = new Http();
                         return http.request(parts, callback);
@@ -328,20 +393,21 @@
                     MojioClient.prototype._login = function(username, password, callback) {
                         return this.request({
                             method: "POST",
-                            resource: this.login_resource,
-                            id: this.options.application,
-                            parameters: {
-                                userOrEmail: username,
+                            resource: "OAuth2/token",
+                            body: {
+                                username: username,
                                 password: password,
-                                secretKey: this.options.secret
+                                client_id: this.options.application,
+                                client_secret: this.options.secret,
+                                grant_type: "password"
                             }
-                        }, callback);
+                        }, callback, true);
                     };
                     MojioClient.prototype.login = function(username, password, callback) {
                         return this._login(username, password, function(_this) {
                             return function(error, result) {
                                 if (result != null) {
-                                    _this.auth_token = result;
+                                    _this.auth_token = result.access_token ? result.access_token : result;
                                 }
                                 return callback(error, result);
                             };
@@ -658,19 +724,22 @@
                         }
                     };
                     MojioClient.prototype.getTokenId = function() {
-                        if (this.auth_token != null) {
+                        if (this.auth_token != null && this.auth_token._id != null) {
                             return this.auth_token._id;
+                        }
+                        if (this.auth_token != null) {
+                            return this.auth_token;
                         }
                         return null;
                     };
                     MojioClient.prototype.getUserId = function() {
-                        if (this.auth_token != null) {
+                        if (this.auth_token != null && this.auth_token.UserId) {
                             return this.auth_token.UserId;
                         }
                         return null;
                     };
                     MojioClient.prototype.isLoggedIn = function() {
-                        return this.getUserId() !== null;
+                        return this.getUserId() !== null || typeof this.auth_token === String;
                     };
                     MojioClient.prototype.getCurrentUser = function(callback) {
                         if (this.user != null) {
@@ -694,19 +763,20 @@
                 }();
             }).call(this);
         }, {
-            "../models/App": 4,
-            "../models/Event": 5,
-            "../models/Mojio": 6,
-            "../models/Observer": 8,
-            "../models/Product": 9,
-            "../models/Subscription": 10,
-            "../models/Trip": 11,
-            "../models/User": 12,
-            "../models/Vehicle": 13,
-            "./HttpBrowserWrapper": 1,
-            "./SignalRBrowserWrapper": 3
+            "../models/App": 6,
+            "../models/Event": 7,
+            "../models/Mojio": 8,
+            "../models/Observer": 10,
+            "../models/Product": 11,
+            "../models/Subscription": 12,
+            "../models/Trip": 13,
+            "../models/User": 14,
+            "../models/Vehicle": 15,
+            "./HttpBrowserWrapper": 3,
+            "./SignalRBrowserWrapper": 5,
+            "form-urlencoded": 2
         } ],
-        3: [ function(_dereq_, module, exports) {
+        5: [ function(_dereq_, module, exports) {
             (function() {
                 var SignalRBrowserWrapper, __bind = function(fn, me) {
                     return function() {
@@ -839,7 +909,7 @@
                 }();
             }).call(this);
         }, {} ],
-        4: [ function(_dereq_, module, exports) {
+        6: [ function(_dereq_, module, exports) {
             (function() {
                 var App, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -884,9 +954,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        5: [ function(_dereq_, module, exports) {
+        7: [ function(_dereq_, module, exports) {
             (function() {
                 var Event, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -967,9 +1037,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        6: [ function(_dereq_, module, exports) {
+        8: [ function(_dereq_, module, exports) {
             (function() {
                 var Mojio, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1013,9 +1083,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        7: [ function(_dereq_, module, exports) {
+        9: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
@@ -1213,7 +1283,7 @@
                 }();
             }).call(this);
         }, {} ],
-        8: [ function(_dereq_, module, exports) {
+        10: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Observer, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1264,9 +1334,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        9: [ function(_dereq_, module, exports) {
+        11: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Product, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1314,9 +1384,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        10: [ function(_dereq_, module, exports) {
+        12: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Subscription, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1364,9 +1434,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        11: [ function(_dereq_, module, exports) {
+        13: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Trip, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1426,9 +1496,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        12: [ function(_dereq_, module, exports) {
+        14: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, User, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1477,9 +1547,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ],
-        13: [ function(_dereq_, module, exports) {
+        15: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Vehicle, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1552,7 +1622,7 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 9
         } ]
-    }, {}, [ 2 ])(2);
+    }, {}, [ 4 ])(4);
 });
