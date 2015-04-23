@@ -71,17 +71,18 @@ module.exports = class MojioClient
     stringify: (data) ->
         return JSON.stringify(data)
 
-    request: (request, callback) ->
+    request: (request, callback, noversion = false) ->
+        version = if noversion then "" else @options.version
         parts = {
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
             scheme: @options.scheme
-            path: '/'+@options.version
+            path: '/'+version
             method: request.method,
             withCredentials: false
         }
-        parts.path = '/'+@options.version + @getPath(request.resource, request.id, request.action, request.key)
+        parts.path = '/'+version + @getPath(request.resource, request.id, request.action, request.key)
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += MojioClient._makeParameters(request.parameters)
@@ -171,8 +172,9 @@ module.exports = class MojioClient
 
         @request(
             {
+#                method: 'POST', resource: @login_resource, id: @options.application, #'OAuth2/token',
                 method: 'POST', resource: 'OAuth2/token',
-                parameters:
+                body:
                     {
                         username: username
                         password: password
@@ -180,14 +182,21 @@ module.exports = class MojioClient
                         client_secret: @options.secret
                         grant_type: 'password'
                     }
-            }, callback
+#                parameters:
+#                    {
+#                        userOrEmail: username
+#                        password: password
+#                        secretKey: @options.secret
+#
+#                    }
+            }, callback, true
         )
 
     # Login
     login: (username, password, callback) ->
         @_login(username, password, (error, result) =>
             if (result?)
-                @auth_token = result
+                @auth_token = if result.access_token then result.access_token else result
             callback(error, result)
         )
 
@@ -422,7 +431,8 @@ module.exports = class MojioClient
     ###
 
     getTokenId:  () ->
-        return @auth_token._id if @auth_token?
+        return @auth_token._id if @auth_token? and @auth_token._id?
+        return @auth_token if @auth_token?
         return null;
 
     getUserId:  () ->

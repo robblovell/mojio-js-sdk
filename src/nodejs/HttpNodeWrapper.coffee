@@ -1,5 +1,6 @@
 Http = require 'http'
 Https = require 'https'
+FormUrlencoded = require 'form-urlencoded'
 constants = require 'constants'
 module.exports = class HttpNodeWrapper
 
@@ -40,6 +41,7 @@ module.exports = class HttpNodeWrapper
 
         action.on 'error', (error) ->
             callback(error,null)
-
+        if (params.body? and typeof(params.body ) isnt String)
+            params.body = FormUrlencoded.encode(params.body)
         action.write(params.body) if (params.body?)
         action.end()
