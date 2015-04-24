@@ -1,6 +1,11 @@
 # run make.sh
 # make sure all tests pass.
 #
+# make sure all version notes are updated:
+# package.json
+# bower.json
+# build.sh (--preamble of uglifyjs command)
+# MojioClientTemplate.mustache.
 
 #### npm
 #
