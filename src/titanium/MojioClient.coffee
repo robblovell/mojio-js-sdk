@@ -1,11 +1,11 @@
 # version 3.2.0
-{{http_require}}
-{{signalr_require}}
+Http = require './HttpTitaniumWrapper'
+SignalR = require './SignalRTitaniumWrapper'
 FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: '{{signalr_default_scheme}}', signalr_port: '{{signalr_default_port}}', signalr_hub: 'ObserverHub', live: true }
+    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'https', signalr_port: '443', signalr_hub: 'ObserverHub', live: true }
 
     constructor: (@options) ->
         @options ?= { hostname: @defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme, live: @defaults.live }
@@ -25,7 +25,7 @@ module.exports = class MojioClient
         @auth_token = null
         @options.tokenRequester ?= (() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))
 
-        @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub]{{extra_signalr_params}})
+        @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub])
 
     ###
         Helpers
@@ -101,7 +101,7 @@ module.exports = class MojioClient
             else
                 parts.body = request.body
 
-        {{http_request}}
+        http = new Http()
         http.request(parts, callback)
 
     ###
@@ -223,10 +223,31 @@ module.exports = class MojioClient
 
     mojio_models = {}  # this is so model can use a string to constuct the model.
 
-{%each models%}
-    {{Model}} = require('../models/{{Model}}');
-    mojio_models['{{Model}}'] = {{Model}}
-{%endeach%}
+
+    App = require('../models/App');
+    mojio_models['App'] = App
+
+    Mojio = require('../models/Mojio');
+    mojio_models['Mojio'] = Mojio
+
+    Trip = require('../models/Trip');
+    mojio_models['Trip'] = Trip
+
+    User = require('../models/User');
+    mojio_models['User'] = User
+
+    Vehicle = require('../models/Vehicle');
+    mojio_models['Vehicle'] = Vehicle
+
+    Product = require('../models/Product');
+    mojio_models['Product'] = Product
+
+    Subscription = require('../models/Subscription');
+    mojio_models['Subscription'] = Subscription
+
+    Event = require('../models/Event');
+    mojio_models['Event'] = Event
+
 
     Observer = require('../models/Observer');
     mojio_models['Observer'] = Observer

@@ -16,7 +16,6 @@ describe 'User', ->
             done()
         )
     )
-
     # test User
 
 #    it 'can query Users by UserName', (done) ->

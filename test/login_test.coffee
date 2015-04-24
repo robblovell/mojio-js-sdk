@@ -15,7 +15,7 @@ describe 'Login', ->
             mojio_client.should.be.an.instanceOf(MojioClient)
             mojio_client.auth_token.should.be.ok
             result.should.be.an.instanceOf(Object)
-            result._id.should.be.an.instanceOf(String)
+            result.access_token.should.be.an.instanceOf(String)
             done()
         )
 

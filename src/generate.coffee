@@ -90,6 +90,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     wstream = fs.createWriteStream("./nodejs/MojioClient.coffee")
                     wstream.write(output)
                     wstream.end()
+
                     # browser
                     view['http_require'] = "Http = require './HttpBrowserWrapper'"
                     view['http_request'] = "http = new Http()"
@@ -100,6 +101,19 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     output = client_template.render(view)
 
                     wstream = fs.createWriteStream("./browser/MojioClient.coffee")
+                    wstream.write(output)
+                    wstream.end()
+
+                    # titanium
+                    view['http_require'] = "Http = require './HttpTitaniumWrapper'"
+                    view['http_request'] = "http = new Http()"
+                    view['extra_signalr_params'] = ""
+                    view['signalr_default_scheme'] = 'https'
+                    view['signalr_default_port'] = '443'
+                    view['signalr_require'] = "SignalR = require './SignalRTitaniumWrapper'"
+                    output = client_template.render(view)
+
+                    wstream = fs.createWriteStream("./titanium/MojioClient.coffee")
                     wstream.write(output)
                     wstream.end()
                 )
