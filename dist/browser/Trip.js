@@ -290,8 +290,6 @@
 
 }).call(this);
 
-//# sourceMappingURL=Trip.js.map
-
 },{"./MojioModel":1}]},{},[2])
 (2)
 });
