@@ -425,18 +425,19 @@ module.exports = class MojioClient
         return null
 
     isLoggedIn: () ->
-        return @getUserId() != null || typeof(@auth_token) is String
+        return @getUserId() != null || typeof(@auth_token) is "string"
 
     getCurrentUser: (callback) ->
         if (@user?)
-            callback(@user)
+            callback(null, @user)
         else if (@isLoggedIn())
             get('users', @getUserId())
             .done( (user) ->
                     return unless (user?)
                     @user = user if (@getUserId() == @user._id)
-                    callback(@user)
+                    callback(null, @user)
                 )
         else
+            callback("User not found", null)
             return false
         return true

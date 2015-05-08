@@ -25,10 +25,7 @@ module.exports = class HttpNodeWrapper
                     response.content = data
                     callback(response, null)
                 else if data.length > 0
-                    try
-                        callback(null, JSON.parse data)
-                    catch error
-                        callback(data, null)
+                    callback(null, JSON.parse data)
                 else
                     callback null, { result: "ok" }
         )
