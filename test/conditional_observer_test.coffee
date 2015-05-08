@@ -40,7 +40,7 @@ describe 'Conditional Observer', ->
             mojio.OwnerId = user.id
             mojio_client.post(mojio, (error, result) ->
                 (error==null).should.be.true
-                mojio = new Vehicle(result)
+                mojio = new Mojio(result)
 
                 vehicle = new Vehicle().mock()
                 vehicle.MojioId = mojio._id
