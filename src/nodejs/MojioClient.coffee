@@ -1,4 +1,4 @@
-# version 3.3.0
+# version 3.4.0
 Http = require './HttpNodeWrapper'
 SignalR = require './SignalRNodeWrapper'
 FormUrlencoded = require 'form-urlencoded'
