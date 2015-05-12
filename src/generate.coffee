@@ -17,7 +17,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                 for model, schema of result
                     console.log("Looking at "+model)
 
-                    continue if (model != "App" && model != "Address" && model != "Location" && model != "Trip" &&
+                    continue if (model != "App" && model != "Login" && model != "Address" && model != "Location" && model != "Trip" &&
                         model != "User" && model != "Vehicle"  && model != "Event" && model != "Mojio" &&
                         model != "Subscription" && model != "Product" && model != "Observer" &&
                         model != "AccelerationObserver" && model != "AccelerometerObserver" &&
@@ -36,6 +36,8 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                         model: model.toLowerCase()
                         schema: ""
                     }
+                    if model == "Login"
+                        view.Resource = model
 
                     if (model == "Event")
                         # agregate all the Event based objects into one schema.
@@ -54,7 +56,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     wstream.write(output)
                     wstream.end()
 
-                    continue if (model == "Address" || model == "Location" || model == "Observer" ||
+                    continue if ( model == "Address" || model == "Location" || model == "Observer" ||
                         model == "AccelerationObserver" || model == "AccelerometerObserver" ||
                         model == "AltitudeObserver" || model == "BatteryVoltageObserver" ||
                         model == "ConditionalObserver" || model == "DiagnosticCodeObserver" ||
@@ -63,7 +65,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                         model == "HeadingObserver" || model == "OdometerObserver" ||
                         model == "RPMObserver" || model == "ScriptObserver" || model == "SpeedObserver")
 
-                    if (model != "Vehicle")
+                    if (model != "Vehicle" && model != "Login")
                         # these models have problems with put, post delete.
                         if (model == "Event" || model == "Subscription" || model == "Trip" || model == "User")
                             output = short_test_template.render(view)

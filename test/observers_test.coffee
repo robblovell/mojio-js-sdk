@@ -64,6 +64,7 @@ describe 'Observer', ->
     # test Observer
     it 'can Observe Events of Vehicle', (done) ->
         mojio = new Mojio().mock()
+
         mojio_client.create(mojio, (error, result) ->
             (error==null).should.be.true
             mojio = new Mojio(result)
@@ -74,7 +75,7 @@ describe 'Observer', ->
                 (error==null).should.be.true
                 vehicle = new Vehicle(result)
                 console.log("created vehicle")
-
+                theevent = null
                 mojio_client.observe(Event, vehicle,
                     (entity) ->
                         entity.should.be.an.instanceOf(Object)

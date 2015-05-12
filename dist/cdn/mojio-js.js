@@ -164,7 +164,7 @@
                 SignalR = _dereq_("./SignalRBrowserWrapper");
                 FormUrlencoded = _dereq_("form-urlencoded");
                 module.exports = MojioClient = function() {
-                    var App, Event, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
+                    var App, Event, Login, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
                     defaults = {
                         hostname: "api.moj.io",
                         port: "443",
@@ -432,6 +432,8 @@
                     mojio_models = {};
                     App = _dereq_("../models/App");
                     mojio_models["App"] = App;
+                    Login = _dereq_("../models/Login");
+                    mojio_models["Login"] = Login;
                     Mojio = _dereq_("../models/Mojio");
                     mojio_models["Mojio"] = Mojio;
                     Trip = _dereq_("../models/Trip");
@@ -746,15 +748,24 @@
                         if (this.user != null) {
                             callback(null, this.user);
                         } else if (this.isLoggedIn()) {
-                            get("users", this.getUserId()).done(function(user) {
-                                if (!(user != null)) {
-                                    return;
-                                }
-                                if (this.getUserId() === this.user._id) {
-                                    this.user = user;
-                                }
-                                return callback(null, this.user);
-                            });
+                            this.get(Login, this.auth_token, function(_this) {
+                                return function(error, result) {
+                                    if (error != null) {
+                                        return callback(error, null);
+                                    } else if (result.UserId != null) {
+                                        return _this.get(User, result.UserId, function(error, result) {
+                                            if (error != null) {
+                                                return callback(error, null);
+                                            } else {
+                                                _this.user = result;
+                                                return callback(null, _this.user);
+                                            }
+                                        });
+                                    } else {
+                                        return callback("User not found", null);
+                                    }
+                                };
+                            }(this));
                         } else {
                             callback("User not found", null);
                             return false;
@@ -767,13 +778,14 @@
         }, {
             "../models/App": 6,
             "../models/Event": 7,
-            "../models/Mojio": 8,
-            "../models/Observer": 10,
-            "../models/Product": 11,
-            "../models/Subscription": 12,
-            "../models/Trip": 13,
-            "../models/User": 14,
-            "../models/Vehicle": 15,
+            "../models/Login": 8,
+            "../models/Mojio": 9,
+            "../models/Observer": 11,
+            "../models/Product": 12,
+            "../models/Subscription": 13,
+            "../models/Trip": 14,
+            "../models/User": 15,
+            "../models/Vehicle": 16,
             "./HttpBrowserWrapper": 3,
             "./SignalRBrowserWrapper": 5,
             "form-urlencoded": 2
@@ -956,7 +968,7 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
         7: [ function(_dereq_, module, exports) {
             (function() {
@@ -1039,9 +1051,56 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
         8: [ function(_dereq_, module, exports) {
+            (function() {
+                var Login, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                    for (var key in parent) {
+                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                    }
+                    function ctor() {
+                        this.constructor = child;
+                    }
+                    ctor.prototype = parent.prototype;
+                    child.prototype = new ctor();
+                    child.__super__ = parent.prototype;
+                    return child;
+                };
+                MojioModel = _dereq_("./MojioModel");
+                module.exports = Login = function(_super) {
+                    __extends(Login, _super);
+                    Login.prototype._schema = {
+                        Type: "String",
+                        AppId: "String",
+                        UserId: "String",
+                        ValidUntil: "String",
+                        Scopes: "String",
+                        Sandboxed: "Boolean",
+                        Depricated: "Boolean",
+                        _id: "String",
+                        _deleted: "Boolean"
+                    };
+                    Login.prototype._resource = "Login";
+                    Login.prototype._model = "Login";
+                    function Login(json) {
+                        Login.__super__.constructor.call(this, json);
+                    }
+                    Login._resource = "Login";
+                    Login._model = "Login";
+                    Login.resource = function() {
+                        return Login._resource;
+                    };
+                    Login.model = function() {
+                        return Login._model;
+                    };
+                    return Login;
+                }(MojioModel);
+            }).call(this);
+        }, {
+            "./MojioModel": 10
+        } ],
+        9: [ function(_dereq_, module, exports) {
             (function() {
                 var Mojio, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1085,9 +1144,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
-        9: [ function(_dereq_, module, exports) {
+        10: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
@@ -1285,7 +1344,7 @@
                 }();
             }).call(this);
         }, {} ],
-        10: [ function(_dereq_, module, exports) {
+        11: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Observer, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1336,9 +1395,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
-        11: [ function(_dereq_, module, exports) {
+        12: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Product, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1386,9 +1445,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
-        12: [ function(_dereq_, module, exports) {
+        13: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Subscription, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1436,9 +1495,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
-        13: [ function(_dereq_, module, exports) {
+        14: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Trip, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1498,9 +1557,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
-        14: [ function(_dereq_, module, exports) {
+        15: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, User, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1549,9 +1608,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ],
-        15: [ function(_dereq_, module, exports) {
+        16: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Vehicle, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
                     for (var key in parent) {
@@ -1624,7 +1683,7 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 9
+            "./MojioModel": 10
         } ]
     }, {}, [ 4 ])(4);
 });
