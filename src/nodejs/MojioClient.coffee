@@ -1,4 +1,4 @@
-# version 3.3.0
+# version 3.4.0
 Http = require './HttpNodeWrapper'
 SignalR = require './SignalRNodeWrapper'
 FormUrlencoded = require 'form-urlencoded'
@@ -227,6 +227,9 @@ module.exports = class MojioClient
     App = require('../models/App');
     mojio_models['App'] = App
 
+    Login = require('../models/Login');
+    mojio_models['Login'] = Login
+
     Mojio = require('../models/Mojio');
     mojio_models['Mojio'] = Mojio
 
@@ -452,12 +455,20 @@ module.exports = class MojioClient
         if (@user?)
             callback(null, @user)
         else if (@isLoggedIn())
-            get('users', @getUserId())
-            .done( (user) ->
-                    return unless (user?)
-                    @user = user if (@getUserId() == @user._id)
-                    callback(null, @user)
-                )
+            @get(Login, @auth_token, (error, result) =>
+                if error?
+                    callback(error, null)
+                else if (result.UserId?)
+                    @get(User, result.UserId, (error, result) =>
+                        if error?
+                            callback(error, null)
+                        else
+                            @user = result
+                            callback(null, @user)
+                    )
+                else
+                    callback("User not found", null)
+            )
         else
             callback("User not found", null)
             return false
