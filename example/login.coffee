@@ -1,6 +1,5 @@
 MojioClient = @MojioClient
 
-
 ###
 
     Below, fill in your application specific details to make this code work
