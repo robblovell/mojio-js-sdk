@@ -1,4 +1,4 @@
-// version 3.3.0
+// version 3.4.0
 !function(e) {
     if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
         var f;
