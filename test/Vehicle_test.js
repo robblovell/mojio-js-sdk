@@ -62,7 +62,8 @@
           instance.should.be.an.instanceOf(Vehicle);
         }
         return mojio_client.get(Vehicle, Vehicle.id(), function(error, result) {
-          return result.should.be.an.instanceOf(Vehicle);
+          result.should.be.an.instanceOf(Vehicle);
+          return done();
         });
       });
     });

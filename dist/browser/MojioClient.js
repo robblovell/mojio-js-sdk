@@ -426,7 +426,7 @@ module.exports = _dereq_('./form-urlencoded');
     MojioClient.prototype._login = function(username, password, callback) {
       return this.request({
         method: 'POST',
-        resource: this.options.live ? '/OAuth2/token' : '/OAuth2Sandbox/token',
+        resource: 'OAuth2/token',
         body: {
           username: username,
           password: password,
