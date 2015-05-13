@@ -77,4 +77,4 @@
 
 }).call(this);
 
-//# sourceMappingURL=Vehicle_test.js.map
+//# sourceMappingURL=get_test.js.map

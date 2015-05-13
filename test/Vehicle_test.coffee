@@ -43,10 +43,7 @@ describe 'Vehicle', ->
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.Objects.should.be.an.instanceOf(Array)
             instance.should.be.an.instanceOf(Vehicle) for instance in result.Objects
-            mojio_client.get(Vehicle, Vehicle.id(), (error, result) ->
-                result.should.be.an.instanceOf(Vehicle)
-                done()
-            )
+            done()
         )
 
 

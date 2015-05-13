@@ -61,10 +61,7 @@
           instance = _ref[_i];
           instance.should.be.an.instanceOf(Vehicle);
         }
-        return mojio_client.get(Vehicle, Vehicle.id(), function(error, result) {
-          result.should.be.an.instanceOf(Vehicle);
-          return done();
-        });
+        return done();
       });
     });
     it('can create, find, save, and delete Vehicle', function(done) {
