@@ -1,4 +1,4 @@
-# version 3.4.0
+# version 3.4.1
 Http = require './HttpBrowserWrapper'
 SignalR = require './SignalRBrowserWrapper'
 FormUrlencoded = require 'form-urlencoded'
@@ -175,8 +175,8 @@ module.exports = class MojioClient
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
             {
-                # method: 'POST', resource: if @options.live then 'OAuth2/token' else 'OAuth2Sandbox/token',
-                method: 'POST', resource: 'OAuth2/token',
+                method: 'POST', resource: if @options.live then 'OAuth2/token' else 'OAuth2Sandbox/token',
+                # method: 'POST', resource: 'OAuth2/token',
                 body:
                     {
                         username: username
