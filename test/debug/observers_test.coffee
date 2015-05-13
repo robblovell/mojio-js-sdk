@@ -1,13 +1,13 @@
-MojioClient = require '../lib/nodejs/MojioClient'
-Observer = require '../lib/models/Observer'
-App = require '../lib/models/App'
-Mojio = require '../lib/models/Mojio'
-Vehicle = require '../lib/models/Vehicle'
-Event = require '../lib/models/Event'
-config = require './config/mojio-config.coffee'
+MojioClient = require '../../lib/nodejs/MojioClient'
+Observer = require '../../lib/models/Observer'
+App = require '../../lib/models/App'
+Mojio = require '../../lib/models/Mojio'
+Vehicle = require '../../lib/models/Vehicle'
+Event = require '../../lib/models/Event'
+config = require '../config/mojio-config.coffee'
 mojio_client = new MojioClient(config)
 assert = require('assert')
-testdata = require('./data/mojio-test-data')
+testdata = require('../data/mojio-test-data')
 should = require('should')
 count = [0,0]
 app1=null
@@ -28,6 +28,7 @@ describe 'Observer', ->
     #    # test Observer
     it 'can Observe Newly Created Object', (done) ->
         app = new App().mock()
+
 
         mojio_client.post(app, (error, result) ->
             (error==null).should.be.true
@@ -63,7 +64,7 @@ describe 'Observer', ->
     # test Observer
     it 'can Observe Events of Vehicle', (done) ->
         mojio = new Mojio().mock()
-
+        event = null
         mojio_client.create(mojio, (error, result) ->
             (error==null).should.be.true
             mojio = new Mojio(result)
@@ -74,7 +75,7 @@ describe 'Observer', ->
                 (error==null).should.be.true
                 vehicle = new Vehicle(result)
                 console.log("created vehicle")
-                theevent = null
+
                 mojio_client.observe(Event, vehicle,
                     (entity) =>
                         entity.should.be.an.instanceOf(Object)
