@@ -36,15 +36,18 @@ describe 'Vehicle', ->
             done()
         )
 
-    it 'can get Vehicles', (done) ->
+    it 'can get Vehicles and get a vehicle', (done) ->
 
         mojio_client.get(Vehicle, {}, (error, result) ->
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             result.Objects.should.be.an.instanceOf(Array)
             instance.should.be.an.instanceOf(Vehicle) for instance in result.Objects
-            done()
+            mojio_client.get(Vehicle, Vehicle.id(), (error, result) ->
+                result.should.be.an.instanceOf(Vehicle)
+            )
         )
+
 
     it 'can create, find, save, and delete Vehicle', (done) ->
         mojio_client.get(Mojio, {}, (error, result) ->

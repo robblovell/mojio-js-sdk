@@ -394,7 +394,7 @@
                     MojioClient.prototype._login = function(username, password, callback) {
                         return this.request({
                             method: "POST",
-                            resource: "OAuth2/token",
+                            resource: this.options.live ? "/OAuth2/token" : "/OAuth2Sandbox/token",
                             body: {
                                 username: username,
                                 password: password,

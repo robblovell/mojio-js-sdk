@@ -7,6 +7,5 @@ module.exports =
         port:'443',
         scheme:'https',
         signalr_port:'80',
-        signalr_scheme:'http',
-        live: true
+        signalr_scheme:'http'
     }
