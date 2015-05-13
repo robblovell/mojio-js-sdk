@@ -1,10 +1,10 @@
 {
   "version": 3,
   "file": "get_test.js",
-  "sourceRoot": "",
+  "sourceRoot": "../..",
   "sources": [
-    "get_test.coffee"
+    "test/debug/get_test.coffee"
   ],
   "names": [],
-  "mappings": ";AAAA;AAAA;AAAA"
+  "mappings": ";AAE4B;AAAA;AAAA"
 }
