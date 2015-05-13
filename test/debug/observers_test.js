@@ -2,25 +2,25 @@
 (function() {
   var App, Event, Mojio, MojioClient, Observer, Vehicle, app1, app2, assert, config, count, mojio_client, observer, should, testdata, theevent, vehicle;
 
-  MojioClient = require('../lib/nodejs/MojioClient');
+  MojioClient = require('../../lib/nodejs/MojioClient');
 
-  Observer = require('../lib/models/Observer');
+  Observer = require('../../lib/models/Observer');
 
-  App = require('../lib/models/App');
+  App = require('../../lib/models/App');
 
-  Mojio = require('../lib/models/Mojio');
+  Mojio = require('../../lib/models/Mojio');
 
-  Vehicle = require('../lib/models/Vehicle');
+  Vehicle = require('../../lib/models/Vehicle');
 
-  Event = require('../lib/models/Event');
+  Event = require('../../lib/models/Event');
 
-  config = require('./config/mojio-config.coffee');
+  config = require('../config/mojio-config.coffee');
 
   mojio_client = new MojioClient(config);
 
   assert = require('assert');
 
-  testdata = require('./data/mojio-test-data');
+  testdata = require('../data/mojio-test-data');
 
   should = require('should');
 
@@ -74,8 +74,9 @@
       });
     });
     it('can Observe Events of Vehicle', function(done) {
-      var mojio;
+      var event, mojio;
       mojio = new Mojio().mock();
+      event = null;
       return mojio_client.create(mojio, function(error, result) {
         (error === null).should.be["true"];
         mojio = new Mojio(result);
@@ -85,7 +86,6 @@
           (error === null).should.be["true"];
           vehicle = new Vehicle(result);
           console.log("created vehicle");
-          theevent = null;
           return mojio_client.observe(Event, vehicle, (function(_this) {
             return function(entity) {
               entity.should.be.an.instanceOf(Object);
@@ -109,7 +109,6 @@
             };
           })(this), (function(_this) {
             return function(error, result) {
-              var event;
               result.should.be.an.instanceOf(Observer);
               observer = result;
               event = new Event().mock();
