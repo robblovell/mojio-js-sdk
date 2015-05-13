@@ -8,7 +8,8 @@
     port: '443',
     scheme: 'https',
     signalr_port: '80',
-    signalr_scheme: 'http'
+    signalr_scheme: 'http',
+    live: true
   };
 
 }).call(this);
