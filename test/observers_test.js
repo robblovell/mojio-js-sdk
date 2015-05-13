@@ -86,46 +86,50 @@
           vehicle = new Vehicle(result);
           console.log("created vehicle");
           theevent = null;
-          return mojio_client.observe(Event, vehicle, function(entity) {
-            entity.should.be.an.instanceOf(Object);
-            console.log("Observed change seen.");
-            if (entity.Type === 'Vehicle') {
-              return console.log("Vehicle Changed");
-            } else {
-              console.log("Event Added to Vehicle.");
-              return mojio_client.unobserve(observer, Event, vehicle, null, function(error, result) {
-                return mojio_client["delete"](theevent, function(error, result) {
-                  (error === null).should.be["true"];
-                  console.log("Event deleted.");
-                  return mojio_client["delete"](vehicle, function(error, result) {
+          return mojio_client.observe(Event, vehicle, (function(_this) {
+            return function(entity) {
+              entity.should.be.an.instanceOf(Object);
+              console.log("Observed change seen.");
+              if (entity.Type === 'Vehicle') {
+                return console.log("Vehicle Changed");
+              } else {
+                console.log("Event Added to Vehicle.");
+                return mojio_client.unobserve(observer, Event, vehicle, null, function(error, result) {
+                  return mojio_client["delete"](theevent, function(error, result) {
                     (error === null).should.be["true"];
-                    console.log("Vehicle deleted.");
-                    return done();
+                    console.log("Event deleted.");
+                    return mojio_client["delete"](vehicle, function(error, result) {
+                      (error === null).should.be["true"];
+                      console.log("Vehicle deleted.");
+                      return done();
+                    });
                   });
                 });
-              });
-            }
-          }, function(error, result) {
-            var event;
-            result.should.be.an.instanceOf(Observer);
-            observer = result;
-            event = new Event().mock();
-            event.Type = 'Event';
-            event.EventType = 'TripEvent';
-            event.VehicleId = vehicle.id();
-            event.MojioId = mojio.id();
-            event.Time = new Date();
-            event.Location = {
-              Lat: 49.8,
-              Lng: 112.0
+              }
             };
-            console.log("creating event");
-            return mojio_client.create(event, function(error, result) {
-              theevent = new Event(result);
-              (error === null).should.be["true"];
-              return console.log("event created.");
-            });
-          });
+          })(this), (function(_this) {
+            return function(error, result) {
+              var event;
+              result.should.be.an.instanceOf(Observer);
+              observer = result;
+              event = new Event().mock();
+              event.Type = 'Event';
+              event.EventType = 'TripEvent';
+              event.VehicleId = vehicle.id();
+              event.MojioId = mojio.id();
+              event.Time = new Date();
+              event.Location = {
+                Lat: 49.8,
+                Lng: 112.0
+              };
+              console.log("creating event");
+              return mojio_client.create(event, function(error, result) {
+                theevent = new Event(result);
+                (error === null).should.be["true"];
+                return console.log("event created.");
+              });
+            };
+          })(this));
         });
       });
     });

@@ -1,4 +1,4 @@
-# version 3.4.0
+# version 3.4.1
 Http = require './HttpNodeWrapper'
 SignalR = require './SignalRNodeWrapper'
 FormUrlencoded = require 'form-urlencoded'
@@ -173,13 +173,10 @@ module.exports = class MojioClient
         window.location = url
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
-        # https://api.moj.io/OAuth2/token?grant_type=password&client_id=087b6073-74a4-4708-aa2f-4899ac414b98&
-        # client_secret=fab4f7dd-32d8-4259-8882-aabe99d3d217&username=anonymous&password=Password007
-
         @request(
             {
-#                method: 'POST', resource: @login_resource, id: @options.application, #'OAuth2/token',
-                method: 'POST', resource: 'OAuth2/token',
+                method: 'POST', resource: if @options.live then 'OAuth2/token' else 'OAuth2Sandbox/token',
+                # method: 'POST', resource: 'OAuth2/token',
                 body:
                     {
                         username: username
@@ -188,13 +185,7 @@ module.exports = class MojioClient
                         client_secret: @options.secret
                         grant_type: 'password'
                     }
-#                parameters:
-#                    {
-#                        userOrEmail: username
-#                        password: password
-#                        secretKey: @options.secret
-#
-#                    }
+
             }, callback, true
         )
 

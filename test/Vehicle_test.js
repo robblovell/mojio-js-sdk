@@ -50,7 +50,7 @@
         return done();
       });
     });
-    it('can get Vehicles', function(done) {
+    it('can get Vehicles and get a vehicle', function(done) {
       return mojio_client.get(Vehicle, {}, function(error, result) {
         var instance, _i, _len, _ref;
         (error === null).should.be["true"];
