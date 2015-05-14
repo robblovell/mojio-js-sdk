@@ -1,4 +1,4 @@
-# version 3.4.1
+# version 3.4.2
 Http = require './HttpBrowserWrapper'
 SignalR = require './SignalRBrowserWrapper'
 FormUrlencoded = require 'form-urlencoded'
