@@ -304,21 +304,20 @@ module.exports = _dereq_('./form-urlencoded');
     };
 
     MojioClient.prototype.request = function(request, callback, isOauth) {
-      var http, parts, version;
+      var http, parts;
       if (isOauth == null) {
         isOauth = false;
       }
-      version = isOauth ? "" : this.options.version;
       parts = {
         hostname: this.options.hostname,
         host: this.options.hostname,
         port: this.options.port,
         scheme: this.options.scheme,
-        path: '/' + version,
+        path: (isOauth ? '' : '/' + this.options.version),
         method: request.method,
         withCredentials: false
       };
-      parts.path = '/' + version + this.getPath(request.resource, request.id, request.action, request.key);
+      parts.path = parts.path + this.getPath(request.resource, request.id, request.action, request.key);
       if ((request.parameters != null) && Object.keys(request.parameters).length > 0) {
         parts.path += MojioClient._makeParameters(request.parameters);
       }
@@ -426,7 +425,7 @@ module.exports = _dereq_('./form-urlencoded');
     MojioClient.prototype._login = function(username, password, callback) {
       return this.request({
         method: 'POST',
-        resource: this.options.live ? 'OAuth2/token' : 'OAuth2Sandbox/token',
+        resource: this.options.live ? '/OAuth2/token' : '/OAuth2Sandbox/token',
         body: {
           username: username,
           password: password,
