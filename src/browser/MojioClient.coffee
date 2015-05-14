@@ -74,17 +74,16 @@ module.exports = class MojioClient
         return JSON.stringify(data)
 
     request: (request, callback, isOauth = false) ->
-        version = if isOauth then "" else @options.version
         parts = {
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
             scheme: @options.scheme
-            path: '/'+version
+            path: (if isOauth then '' else '/' + @options.version)
             method: request.method,
             withCredentials: false
         }
-        parts.path = '/'+version + @getPath(request.resource, request.id, request.action, request.key)
+        parts.path = parts.path + @getPath(request.resource, request.id, request.action, request.key)
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += MojioClient._makeParameters(request.parameters)
@@ -175,8 +174,8 @@ module.exports = class MojioClient
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
             {
-                method: 'POST', resource: if @options.live then 'OAuth2/token' else 'OAuth2Sandbox/token',
-                # method: 'POST', resource: 'OAuth2/token',
+                method: 'POST', resource: if @options.live then '/OAuth2/token' else '/OAuth2Sandbox/token',
+                # method: 'POST', resource: '/OAuth2/token',
                 body:
                     {
                         username: username
