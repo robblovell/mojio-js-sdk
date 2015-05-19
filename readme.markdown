@@ -238,6 +238,11 @@ string based field/value list criteria-
 query(model, { criteria="name=blah; field=blah;", limit=10, offset=0, sortby="name", desc=false }, callback)
 ```
 
+When the data comes back from a get call, or from an observer (see below), it is returned in two formats within two fields.
+The first field is called "Data" and is a list of Objects directly parsed from the JSON.  
+The second field is called "Objects" and is a list of Mojio Models newed up from the parsed JSON.  
+The Objects array models is what the SDK uses in the observers and other calls that have as parameters retrieved objects.
+
 ### Observers
 
 You can observe changes to entities in the Mojio system and have the system push those changes to your application through SignalR or through REST Post callbacks.  For client side applications, SignalR is the preferred technology, where as a sever based application would probably prefer POST callbacks.
