@@ -231,3 +231,5 @@
   })();
 
 }).call(this);
+
+//# sourceMappingURL=MojioModel.js.map
