@@ -1,4 +1,4 @@
-# version 3.4.2
+# version 3.5.0
 Http = require './HttpTitaniumWrapper'
 SignalR = require './SignalRTitaniumWrapper'
 FormUrlencoded = require 'form-urlencoded'

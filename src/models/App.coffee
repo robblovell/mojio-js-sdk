@@ -14,7 +14,6 @@ module.exports = class App extends MojioModel
                 "_deleted": "Boolean"
             }
 
-
     _resource: 'Apps'
     _model: 'App'
 

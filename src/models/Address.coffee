@@ -11,7 +11,6 @@ module.exports = class Address extends MojioModel
                 "Country": "String"
             }
 
-
     _resource: 'Addresss'
     _model: 'Address'
 

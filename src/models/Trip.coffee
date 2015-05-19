@@ -16,11 +16,43 @@ module.exports = class Trip extends MojioModel
                 "FuelLevel": "Float",
                 "FuelEfficiency": "Float",
                 "Distance": "Float",
-                "StartLocation": "Object",
-                "LastKnownLocation": "Object",
-                "EndLocation": "Object",
-                "StartAddress": "Object",
-                "EndAddress": "Object",
+                "MovingTime": "Float",
+                "IdleTime": "Float",
+                "StopTime": "Float",
+                "StartLocation": {
+                    "Lat": "Float",
+                    "Lng": "Float",
+                    "FromLockedGPS": "Boolean",
+                    "Dilution": "Float"
+                },
+                "LastKnownLocation": {
+                    "Lat": "Float",
+                    "Lng": "Float",
+                    "FromLockedGPS": "Boolean",
+                    "Dilution": "Float"
+                },
+                "EndLocation": {
+                    "Lat": "Float",
+                    "Lng": "Float",
+                    "FromLockedGPS": "Boolean",
+                    "Dilution": "Float"
+                },
+                "StartAddress": {
+                    "Address1": "String",
+                    "Address2": "String",
+                    "City": "String",
+                    "State": "String",
+                    "Zip": "String",
+                    "Country": "String"
+                },
+                "EndAddress": {
+                    "Address1": "String",
+                    "Address2": "String",
+                    "City": "String",
+                    "State": "String",
+                    "Zip": "String",
+                    "Country": "String"
+                },
                 "ForcefullyEnded": "Boolean",
                 "StartMilage": "Float",
                 "EndMilage": "Float",
@@ -28,7 +60,6 @@ module.exports = class Trip extends MojioModel
                 "_id": "String",
                 "_deleted": "Boolean"
             }
-
 
     _resource: 'Trips'
     _model: 'Trip'

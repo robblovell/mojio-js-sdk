@@ -10,7 +10,6 @@ module.exports = class Location extends MojioModel
                 "IsValid": "Boolean"
             }
 
-
     _resource: 'Locations'
     _model: 'Location'
 

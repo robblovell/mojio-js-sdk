@@ -18,7 +18,6 @@ module.exports = class User extends MojioModel
                 "_deleted": "Boolean"
             }
 
-
     _resource: 'Users'
     _model: 'User'
 

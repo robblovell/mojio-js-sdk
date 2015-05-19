@@ -13,7 +13,12 @@ module.exports = class Vehicle extends MojioModel
                 "VehicleTime": "String",
                 "LastTripEvent": "String",
                 "LastLocationTime": "String",
-                "LastLocation": "Object",
+                "LastLocation": {
+                    "Lat": "Float",
+                    "Lng": "Float",
+                    "FromLockedGPS": "Boolean",
+                    "Dilution": "Float"
+                },
                 "LastSpeed": "Float",
                 "FuelLevel": "Float",
                 "LastAcceleration": "Float",
@@ -41,7 +46,6 @@ module.exports = class Vehicle extends MojioModel
                 "_id": "String",
                 "_deleted": "Boolean"
             }
-
 
     _resource: 'Vehicles'
     _model: 'Vehicle'

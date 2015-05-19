@@ -14,7 +14,6 @@ module.exports = class Login extends MojioModel
                 "_deleted": "Boolean"
             }
 
-
     _resource: 'Login'
     _model: 'Login'
 

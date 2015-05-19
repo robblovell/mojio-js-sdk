@@ -3,8 +3,16 @@ MojioModel = require('./MojioModel')
 module.exports = class AccelerometerObserver extends MojioModel
     # instance variables
     _schema:             {
-                "AccelerometerLow": "Object",
-                "AccelerometerHigh": "Object",
+                "AccelerometerLow": {
+                    "X": "Float",
+                    "Y": "Float",
+                    "Z": "Float"
+                },
+                "AccelerometerHigh": {
+                    "X": "Float",
+                    "Y": "Float",
+                    "Z": "Float"
+                },
                 "Timing": "Integer",
                 "Type": "Integer",
                 "Name": "String",
@@ -17,11 +25,14 @@ module.exports = class AccelerometerObserver extends MojioModel
                 "SubjectId": "String",
                 "Transports": "Integer",
                 "Status": "Integer",
+                "TimeWindow": "String",
+                "BroadcastOnlyRecent": "Boolean",
+                "Throttle": "String",
+                "NextAllowedBroadcast": "String",
                 "Tokens": "Array",
                 "_id": "String",
                 "_deleted": "Boolean"
             }
-
 
     _resource: 'AccelerometerObservers'
     _model: 'AccelerometerObserver'
