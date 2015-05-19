@@ -18,6 +18,11 @@ Or via the Mojio CDN at https://djaqzxyxnyyiy.cloudfront.net
 ```
 <script src="https://djaqzxyxnyyiy.cloudfront.net/mojio-js.js"></script>
 ```
+Note that on the CDN, you can link to specific versions of the application if you want to avoid any updates:
+```
+<script src="https://djaqzxyxnyyiy.cloudfront.net/3.5.0/mojio-js.js"></script>
+```
+
 
 If you are in a node environment, use npm:
 
