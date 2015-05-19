@@ -18,10 +18,13 @@ module.exports = class SpeedObserver extends MojioModel
                 "Transports": "Integer",
                 "Status": "Integer",
                 "Tokens": "Array",
+                "TimeWindow": "String",
+                "BroadcastOnlyRecent": "Boolean",
+                "Throttle": "String",
+                "NextAllowedBroadcast": "String",
                 "_id": "String",
                 "_deleted": "Boolean"
             }
-
 
     _resource: 'SpeedObservers'
     _model: 'SpeedObserver'

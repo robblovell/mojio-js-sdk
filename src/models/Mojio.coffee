@@ -13,7 +13,6 @@ module.exports = class Mojio extends MojioModel
                 "_deleted": "Boolean"
             }
 
-
     _resource: 'Mojios'
     _model: 'Mojio'
 

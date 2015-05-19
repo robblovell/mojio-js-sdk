@@ -17,10 +17,13 @@ module.exports = class ScriptObserver extends MojioModel
                 "Transports": "Integer",
                 "Status": "Integer",
                 "Tokens": "Array",
+                "TimeWindow": "String",
+                "BroadcastOnlyRecent": "Boolean",
+                "Throttle": "String",
+                "NextAllowedBroadcast": "String",
                 "_id": "String",
                 "_deleted": "Boolean"
             }
-
 
     _resource: 'ScriptObservers'
     _model: 'ScriptObserver'

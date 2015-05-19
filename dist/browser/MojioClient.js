@@ -1086,13 +1086,22 @@ module.exports = _dereq_('./form-urlencoded');
       "OwnerId": "String",
       "EventType": "Integer",
       "Time": "String",
-      "Location": "Object",
-      "Accelerometer": "Object",
+      "Location": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
       "TimeIsApprox": "Boolean",
       "BatteryVoltage": "Float",
       "ConnectionLost": "Boolean",
       "_id": "String",
       "_deleted": "Boolean",
+      "Accelerometer": {
+        "X": "Float",
+        "Y": "Float",
+        "Z": "Float"
+      },
       "TripId": "String",
       "Altitude": "Float",
       "Heading": "Float",
@@ -1124,7 +1133,11 @@ module.exports = _dereq_('./form-urlencoded');
       "SubjectId": "String",
       "Transports": "Integer",
       "Status": "Integer",
-      "Tokens": "Array"
+      "Tokens": "Array",
+      "TimeWindow": "String",
+      "BroadcastOnlyRecent": "Boolean",
+      "Throttle": "String",
+      "NextAllowedBroadcast": "String"
     };
 
     Event.prototype._resource = 'Events';
@@ -1390,18 +1403,26 @@ module.exports = _dereq_('./form-urlencoded');
       }, callback);
     };
 
-    MojioModel.prototype.observe = function(object, subject, observer_callback, callback) {
-      if (subject == null) {
-        subject = null;
+    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
+      if (parent == null) {
+        parent = null;
       }
-      return this._client.observe(object, subject, observer_callback, callback);
+      if ((parent != null)) {
+        return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+      } else {
+        return this._client.observe(this, null, observer_callback, callback, options);
+      }
     };
 
-    MojioModel.prototype.unobserve = function(object, subject, observer_callback, callback) {
-      if (subject == null) {
-        subject = null;
+    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
+      if (parent == null) {
+        parent = null;
       }
-      return this._client.observe(object, subject, observer_callback, callback);
+      if ((parent != null)) {
+        return this._client.unobserve(this.resource, parent, observer_callback, callback);
+      } else {
+        return this._client.unobserve(this, null, observer_callback, callback);
+      }
     };
 
     MojioModel.prototype.store = function(model, key, value, callback) {
@@ -1505,6 +1526,10 @@ module.exports = _dereq_('./form-urlencoded');
       "Transports": "Integer",
       "Status": "Integer",
       "Tokens": "Array",
+      "TimeWindow": "String",
+      "BroadcastOnlyRecent": "Boolean",
+      "Throttle": "String",
+      "NextAllowedBroadcast": "String",
       "_id": "String",
       "_deleted": "Boolean"
     };
@@ -1667,11 +1692,43 @@ module.exports = _dereq_('./form-urlencoded');
       "FuelLevel": "Float",
       "FuelEfficiency": "Float",
       "Distance": "Float",
-      "StartLocation": "Object",
-      "LastKnownLocation": "Object",
-      "EndLocation": "Object",
-      "StartAddress": "Object",
-      "EndAddress": "Object",
+      "MovingTime": "Float",
+      "IdleTime": "Float",
+      "StopTime": "Float",
+      "StartLocation": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
+      "LastKnownLocation": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
+      "EndLocation": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
+      "StartAddress": {
+        "Address1": "String",
+        "Address2": "String",
+        "City": "String",
+        "State": "String",
+        "Zip": "String",
+        "Country": "String"
+      },
+      "EndAddress": {
+        "Address1": "String",
+        "Address2": "String",
+        "City": "String",
+        "State": "String",
+        "Zip": "String",
+        "Country": "String"
+      },
       "ForcefullyEnded": "Boolean",
       "StartMilage": "Float",
       "EndMilage": "Float",
@@ -1783,7 +1840,12 @@ module.exports = _dereq_('./form-urlencoded');
       "VehicleTime": "String",
       "LastTripEvent": "String",
       "LastLocationTime": "String",
-      "LastLocation": "Object",
+      "LastLocation": {
+        "Lat": "Float",
+        "Lng": "Float",
+        "FromLockedGPS": "Boolean",
+        "Dilution": "Float"
+      },
       "LastSpeed": "Float",
       "FuelLevel": "Float",
       "LastAcceleration": "Float",

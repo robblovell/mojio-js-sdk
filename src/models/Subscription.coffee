@@ -17,7 +17,6 @@ module.exports = class Subscription extends MojioModel
                 "_deleted": "Boolean"
             }
 
-
     _resource: 'Subscriptions'
     _model: 'Subscription'
 

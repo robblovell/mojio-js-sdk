@@ -292,12 +292,62 @@ mojio_client.watch(observer,
     )
 ```
 
+There are some observer types that can be created:
+```
+       Observer types:
+           Generic = 0,
+           Script = 1, // not implemented
+           Event = 2, // not implemented
+```
+Conditional Observers on Vehicles:  Pass a vehicle object as the Subject or a Mojio as a parent to Vehicles and get information based on a conditional threshold.  Each Conditional Observer takes a "timing" which can take the values: always=0, low=1, high=2, edge=3, leading=5, trailing=6 which determines when data is sent.
+
+Timings:
+```
+Always is just a normal observer,
+Low sends data when the condition is false every time a notification comes from the Mojio.
+High sends data when the condition is true every time a notification comes from the Mojio.
+Edge sends data when the condition transitions from low to high or high to low.
+Leading sends data when the condition transitions from low to high only.
+Trailing sends data when the condition transitions from high to low only.
+```
+In addition to timing, the condition consists of a high and low value, or a location and radius test against data coming from the vehcile measures.
+```
+           GeoFence = 3,            if Vehicle Location within Location+Radius
+           Conditional = 4,         General condition based on:  Field, Threshold1, Threshold2, Operator1, Operator2, Conjunction
+           Speed = 5,               if Speed Low < data < Speed High
+           Rpm = 6,                 if RPM Low < data < RPM High
+           Acceleration = 7,        if Acceleration Low < data < Acceleration High
+           Accelerometer = 8,       if Accelerometer Low < data < Accelerometer High
+           BatteryVoltage = 9,      if BatteryVoltage Low < data < BatteryVoltage High
+           FuelLevel = 10,          if FuelLevel Low < data < FuelLevel High
+           Distance = 11,           if Distance Low < data < Distance High
+           Odometer = 12,           if Odometer Low < data < Odometer High
+           Altitude = 13,           if Altitude Low < data < Altitude High
+           Heading = 14,            if Heading Low < data < Heading High
+           Diagnostic = 15,
+```
+
+These observers are created as follows:
+```
+observer = new Observer(
+                        {
+                            ObserverType: "Speed", Status: "Approved", SpeedLow: 80.0, Name: "Test"+Math.random(),
+                            Subject: vehicle.model(), SubjectId: vehicle.id(), "Transports": "SignalR"
+                        }
+                    )
+```
+These are experimental "smooth" observer types: These observers fill in the gaps between sample points based on a time factor.  They each take a "InterpolationRate, and a MaximumTimeForInterpolation value.  The interpolation is the desired time between sample points. The Maximum Time for Interpolation is used to make sure that interpolation of data points is not attempted for long periods of time. The default is five minutes.  The default Interpolation Rate is 1 second.
+```
+           SmoothVehicle = 16,
+           SmoothEvent = 17,         // Not implemented
+           SmoothTrip = 18,
+           SmoothMojio = 19,         # observe Vehicles of a Mojio
+           SmoothChunkingMojio = 20  # Sends all interopolations in one message.  Observer vehicles of a mojio.
+```
 ## Build
 All javascript client code is in the 'dist' directory.
 
-Code is generate first by running the generator in /src/generate.coffee. The generator makes a request to the schema
-REST endpoint and retrieves all the schemas for objects stored in the database and creates model files, calls to
-the REST endpoints in the client, and tests for those calls.
+Code is generate first by running the generator in /src/generate.coffee. The generator makes a request to the schema REST endpoint and retrieves all the schemas for objects stored in the database and creates model files, calls to the REST endpoints in the client, and tests for those calls.
 
 ```
 cd src
