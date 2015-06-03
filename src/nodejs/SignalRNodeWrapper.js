@@ -128,5 +128,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=SignalRNodeWrapper.js.map

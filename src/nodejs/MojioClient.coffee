@@ -1,4 +1,4 @@
-# version 3.5.0
+# version 3.5.1
 Http = require './HttpNodeWrapper'
 SignalR = require './SignalRNodeWrapper'
 FormUrlencoded = require 'form-urlencoded'
@@ -108,40 +108,33 @@ module.exports = class MojioClient
     ###
     login_resource: 'Login'
 
-    authorize: (redirect_url, scope='full', callback) ->
-        if (token?)
-            @token(callback)
-        else
-            parts = {
-                hostname: @options.hostname
-                host: @options.hostname
-                port: @options.port
-                scheme: @options.scheme
-                path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
-                method: 'Get'
-                withCredentials: false
-            }
-            parts.path += "?response_type=token"
-            parts.path += "&client_id=" + @options.application
-            parts.path += "&redirect_uri="+redirect_url
-            parts.path += "&scope="+scope
-            parts.headers = {}
-            parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
-            parts.headers["Content-Type"] = 'application/json'
+    authorize: (redirect_url, scope='full') ->
+        parts = {
+            hostname: @options.hostname
+            host: @options.hostname
+            port: @options.port
+            scheme: @options.scheme
+            path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
+            method: 'Get'
+            withCredentials: false
+        }
+        parts.path += "?response_type=token"
+        parts.path += "&client_id=" + @options.application
+        parts.path += "&redirect_uri="+redirect_url
+        parts.path += "&scope="+scope
+        parts.headers = {}
+        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+        parts.headers["Content-Type"] = 'application/json'
 
-            url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-
-            window.location = url
-
-            wrapper.authorize(url, callback)
-
+        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        window.location = url
 
     token: (callback) ->
         @user = null
 
-        match = @options.tokenRequester()
-        token = !!match && match[1]
-        if (!token)
+        token = @options.tokenRequester()
+        match = !!token && token[1]
+        if (!match)
             callback("token for authorization not found.", null)
         else
             # get the user id by requesting login information, then set the auth_token:
@@ -176,7 +169,6 @@ module.exports = class MojioClient
         parts.headers["Content-Type"] = 'application/json'
 
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        token = null
         window.location = url
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.

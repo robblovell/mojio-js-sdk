@@ -27,12 +27,12 @@ cd ../../
 coffee --map --compile test
 
 cd dist/browser
-uglifyjs --preamble "// version 3.5.0" Address.js App.js Event.js Location.js Mojio.js Observer.js Product.js \
+uglifyjs --preamble "// version 3.5.1" Address.js App.js Event.js Location.js Mojio.js Observer.js Product.js \
     Subscription.js Trip.js User.js Vehicle.js -p relative -o ../cdn/mojio-js-models.min.js
-uglifyjs --preamble "// version 3.5.0" MojioClient.js -o ../cdn/mojio-js.min.js
+uglifyjs --preamble "// version 3.5.1" MojioClient.js -o ../cdn/mojio-js.min.js
 cd ../cdn
-uglifyjs --preamble "// version 3.5.0" mojio-js-models.min.js -b -o ../cdn/mojio-js-models.js
-uglifyjs --preamble "// version 3.5.0" mojio-js.min.js -b -o ../cdn/mojio-js.js
+uglifyjs --preamble "// version 3.5.1" mojio-js-models.min.js -b -o ../cdn/mojio-js-models.js
+uglifyjs --preamble "// version 3.5.1" mojio-js.min.js -b -o ../cdn/mojio-js.js
 cd ../../
 cp package.json ./dist/cdn/package.json
 
