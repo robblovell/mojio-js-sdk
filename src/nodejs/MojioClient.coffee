@@ -108,26 +108,33 @@ module.exports = class MojioClient
     ###
     login_resource: 'Login'
 
-    authorize: (redirect_url, scope='full') ->
-        parts = {
-            hostname: @options.hostname
-            host: @options.hostname
-            port: @options.port
-            scheme: @options.scheme
-            path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
-            method: 'Get'
-            withCredentials: false
-        }
-        parts.path += "?response_type=token"
-        parts.path += "&client_id=" + @options.application
-        parts.path += "&redirect_uri="+redirect_url
-        parts.path += "&scope="+scope
-        parts.headers = {}
-        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
-        parts.headers["Content-Type"] = 'application/json'
+    authorize: (redirect_url, scope='full', callback) ->
+        if (token?)
+            @token(callback)
+        else
+            parts = {
+                hostname: @options.hostname
+                host: @options.hostname
+                port: @options.port
+                scheme: @options.scheme
+                path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
+                method: 'Get'
+                withCredentials: false
+            }
+            parts.path += "?response_type=token"
+            parts.path += "&client_id=" + @options.application
+            parts.path += "&redirect_uri="+redirect_url
+            parts.path += "&scope="+scope
+            parts.headers = {}
+            parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+            parts.headers["Content-Type"] = 'application/json'
 
-        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        window.location = url
+            url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+
+            window.location = url
+
+            wrapper.authorize(url, callback)
+
 
     token: (callback) ->
         @user = null
@@ -169,6 +176,7 @@ module.exports = class MojioClient
         parts.headers["Content-Type"] = 'application/json'
 
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        token = null
         window.location = url
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
