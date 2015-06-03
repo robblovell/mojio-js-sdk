@@ -212,9 +212,9 @@
     MojioClient.prototype.token = function(callback) {
       var match, token;
       this.user = null;
-      match = this.options.tokenRequester();
-      token = !!match && match[1];
-      if (!token) {
+      token = this.options.tokenRequester();
+      match = !!token && token[1];
+      if (!match) {
         return callback("token for authorization not found.", null);
       } else {
         return this.request({

@@ -9,7 +9,6 @@ module.exports = class ConditionalObserver extends MojioModel
                 "Operator1": "String",
                 "Operator2": "String",
                 "Conjunction": "String",
-                "ConditionValue": "Boolean",
                 "Timing": "Integer",
                 "Type": "Integer",
                 "Name": "String",

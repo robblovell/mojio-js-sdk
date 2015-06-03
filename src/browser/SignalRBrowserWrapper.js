@@ -138,3 +138,5 @@
   })();
 
 }).call(this);
+
+//# sourceMappingURL=SignalRBrowserWrapper.js.map

@@ -1,4 +1,4 @@
-# version 3.5.0
+# version 3.5.1
 {{http_require}}
 {{signalr_require}}
 FormUrlencoded = require 'form-urlencoded'
@@ -132,9 +132,9 @@ module.exports = class MojioClient
     token: (callback) ->
         @user = null
 
-        match = @options.tokenRequester()
-        token = !!match && match[1]
-        if (!token)
+        token = @options.tokenRequester()
+        match = !!token && token[1]
+        if (!match)
             callback("token for authorization not found.", null)
         else
             # get the user id by requesting login information, then set the auth_token:
