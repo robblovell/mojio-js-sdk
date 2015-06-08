@@ -175,9 +175,9 @@
                         signalr_hub: "ObserverHub",
                         live: true
                     };
-                    function MojioClient(options) {
+                    function MojioClient(_at_options) {
                         var _base, _base1, _base2, _base3, _base4, _base5, _base6, _base7;
-                        this.options = options;
+                        this.options = _at_options;
                         if (this.options == null) {
                             this.options = {
                                 hostname: this.defaults.hostname,
@@ -253,7 +253,7 @@
                         query = "?";
                         for (property in params) {
                             value = params[property];
-                            query += "" + encodeURIComponent(property) + "=" + encodeURIComponent(value) + "&";
+                            query += encodeURIComponent(property) + "=" + encodeURIComponent(value) + "&";
                         }
                         return query.slice(0, -1);
                     };
@@ -355,7 +355,7 @@
                             return this.request({
                                 method: "GET",
                                 resource: this.login_resource,
-                                id: token
+                                id: match
                             }, function(_this) {
                                 return function(error, result) {
                                     if (error) {
@@ -480,7 +480,7 @@
                                 _ref = parameters.criteria;
                                 for (property in _ref) {
                                     value = _ref[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 parameters.criteria = query_criteria;
                             }
@@ -924,7 +924,7 @@
         }, {} ],
         6: [ function(_dereq_, module, exports) {
             (function() {
-                var App, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var App, MojioModel, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -935,7 +935,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = App = function(_super) {
                     __extends(App, _super);
@@ -971,7 +971,7 @@
         } ],
         7: [ function(_dereq_, module, exports) {
             (function() {
-                var Event, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var Event, MojioModel, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -982,7 +982,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Event = function(_super) {
                     __extends(Event, _super);
@@ -1067,7 +1067,7 @@
         } ],
         8: [ function(_dereq_, module, exports) {
             (function() {
-                var Login, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var Login, MojioModel, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1078,7 +1078,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Login = function(_super) {
                     __extends(Login, _super);
@@ -1114,7 +1114,7 @@
         } ],
         9: [ function(_dereq_, module, exports) {
             (function() {
-                var Mojio, MojioModel, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var Mojio, MojioModel, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1125,7 +1125,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Mojio = function(_super) {
                     __extends(Mojio, _super);
@@ -1205,7 +1205,7 @@
                                 query_criteria = "";
                                 for (property in criteria) {
                                     value = criteria[property];
-                                    query_criteria += "" + property + "=" + value + ";";
+                                    query_criteria += property + "=" + value + ";";
                                 }
                                 criteria = {
                                     criteria: query_criteria
@@ -1366,7 +1366,7 @@
         }, {} ],
         11: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Observer, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Observer, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1377,7 +1377,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Observer = function(_super) {
                     __extends(Observer, _super);
@@ -1423,7 +1423,7 @@
         } ],
         12: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Product, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Product, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1434,7 +1434,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Product = function(_super) {
                     __extends(Product, _super);
@@ -1473,7 +1473,7 @@
         } ],
         13: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Subscription, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Subscription, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1484,7 +1484,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Subscription = function(_super) {
                     __extends(Subscription, _super);
@@ -1523,7 +1523,7 @@
         } ],
         14: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Trip, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Trip, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1534,7 +1534,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Trip = function(_super) {
                     __extends(Trip, _super);
@@ -1617,7 +1617,7 @@
         } ],
         15: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, User, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, User, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1628,7 +1628,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = User = function(_super) {
                     __extends(User, _super);
@@ -1668,7 +1668,7 @@
         } ],
         16: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Vehicle, __hasProp = {}.hasOwnProperty, __extends = function(child, parent) {
+                var MojioModel, Vehicle, __extends = function(child, parent) {
                     for (var key in parent) {
                         if (__hasProp.call(parent, key)) child[key] = parent[key];
                     }
@@ -1679,7 +1679,7 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                };
+                }, __hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
                 module.exports = Vehicle = function(_super) {
                     __extends(Vehicle, _super);
