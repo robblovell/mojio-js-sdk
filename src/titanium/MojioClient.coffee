@@ -1,4 +1,4 @@
-# version 3.5.1
+# version 3.5.2
 Http = require './HttpTitaniumWrapper'
 SignalR = require './SignalRTitaniumWrapper'
 FormUrlencoded = require 'form-urlencoded'
@@ -140,7 +140,7 @@ module.exports = class MojioClient
             # get the user id by requesting login information, then set the auth_token:
             @request(
                 {
-                    method: 'GET', resource: @login_resource, id: token
+                    method: 'GET', resource: @login_resource, id: match
                 },
             (error, result) =>
                 if error
