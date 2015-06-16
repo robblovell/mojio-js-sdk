@@ -1,0 +1,33 @@
+"Window": {
+	backgroundColor:"#e8edaa"
+},
+"#l":{
+	bottom:20,
+	width: Ti.UI.SIZE,
+	height: Ti.UI.SIZE,
+	color:'#999'
+},
+"#imageView":{
+	image:"/images/welcome_mojio_logo.png",
+	width:Titanium.UI.SIZE,
+	height:"30%",
+	top:110
+}
+
+"#LoginButton":{
+	width: "35%", //Titanium.UI.SIZE,
+	height:40,
+	top:180
+}
+
+"#GetTokenButton":{
+	width:"35%",//Titanium.UI.SIZE,
+	height:40,
+	top:230 
+}
+
+"#ObtainDataButton":{
+	width:"35%",//Titanium.UI.SIZE,
+	height:40,
+	top:280 
+}
