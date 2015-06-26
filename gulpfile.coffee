@@ -25,7 +25,6 @@ gulp.task('touch', () ->
         )
 
     )
-
 )
 
 gulp.task('coffeescripts', () ->
