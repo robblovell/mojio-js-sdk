@@ -145,7 +145,7 @@ module.exports = class MojioClient
                     callback(null, @auth_token)
             )
 
-    unauthorize: (redirect_url, ) ->
+    unauthorize: (redirect_url) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
