@@ -8,8 +8,6 @@
     //----> zhe
     var appname = "";
     var accessToken = null;
-
-    Ti.API.info("DON\"T LOAD SingnalR!!");
     // zhe <--------
     module.exports = MojioClient = (function () {
         var App, Event, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models, authorized;
@@ -68,8 +66,8 @@
             this.hub = null;
             this.connStatus = null;
             this.auth_token = null;
-            //----> zhe
-            this.access_token = null; //tbd
+            
+            this.access_token = null; //  zhe <----
             if ((base7 = this.options).tokenRequester == null) {
                 base7.tokenRequester = (function () {
                     return document.location.hash.match(/access_token=([0-9a-f-]{36})/);
@@ -86,12 +84,6 @@
 
         MojioClient.prototype.getResults = function (type, results) {
             var arrlength, i, j, len, len1, objects, ref, result;
-            //----> zhe
-            var testresults;
-
-            Ti.API.info("test getResults, results is" + results);
-            // zhe <--------
-
             objects = [];
             if (results instanceof Array) {
                 arrlength = results.length;
@@ -104,14 +96,6 @@
                 ref = results.Data;
                 for (j = 0, len1 = ref.length; j < len1; j++) {
                     result = ref[j];
-                    // -----> zhe
-                    Ti.API.info("result is : " + result);
-                    Ti.API.info("ref is : " + JSON.stringify(result));
-                    LastLocation = result.LastLocation;
-                    Ti.API.info("LastLocation : " + LastLocation);
-                    Lat = LastLocation.Lat;
-                    Ti.API.info("Lat : " + Lat);
-                    // zhe <--------
                     objects.push(new type(result));
                 }
             } else if (result.Data !== null) {
@@ -231,28 +215,22 @@
                 }
                 parts.headers["Content-Type"] = 'application/json';
                 url = parts.scheme + "://" + parts.host + ":" + parts.port + parts.path;
+            	//return window.location = url;
                 //----> zhe
                 var webview = Titanium.UI.createWebView();
-                Ti.API.info("webview");
                 webview.setUrl(url);
                 webview.addEventListener('load', function (e) {
                     //TPD, detect the status
                     if (e.url.indexOf(appname) === 0) {
-
-
                         // stop the event
                         e.bubble = false;
                         // stop the url from loading
                         webview.stopLoading();
 
-                        //localize the accessToken from the redirected URL
+                        //get the accessToken from the redirected URL
                         var tokenIndex = e.url.indexOf("token");
                         accessToken = e.url.substring(tokenIndex + 6, tokenIndex + 42);    //e.url.toString();//
 
-                        // Titanium.UI.createAlertDialog({title:'AcessToken', message:accessToken}).show();
-
-                        //obtain
-                        //obtainData(accessToken);
                         Ti.API.info("obtained token: " + accessToken);
                         authorized = true;
 
@@ -265,7 +243,6 @@
                 return webview;
             }
             //<----- zhe
-            //return window.location = url;
         };
 
         // -----------> zhe
@@ -736,14 +713,6 @@
         /*
          Token/User
          */
-        // ----------> zhe
-        MojioClient.prototype.getToken = function () {
-            if (this.auth_token != null) {
-                return this.auth_token;
-            }
-            return null;
-        };
-        // zhe <------------
         MojioClient.prototype.getTokenId = function () {
             if (this.auth_token != null) {
                 return this.auth_token._id;

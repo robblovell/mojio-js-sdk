@@ -102,7 +102,7 @@ module.exports = class MojioClient
     ###
     login_resource: 'Login'
 
-    authorize: (redirect_url, scope='full') ->
+    authorize: (redirect_url, scope='full', callback) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
@@ -121,7 +121,7 @@ module.exports = class MojioClient
         parts.headers["Content-Type"] = 'application/json'
 
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        window.location = url
+        http.redirect(url, callback)
 
     token: (callback) ->
         @user = null
@@ -145,7 +145,7 @@ module.exports = class MojioClient
                     callback(null, @auth_token)
             )
 
-    unauthorize: (redirect_url) ->
+    unauthorize: (redirect_url, ) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname

@@ -1,7 +1,7 @@
 module.exports = class HttpTitaniumWrapper
 
-    constructor: (requester=null) ->
-        @requester = requester if requester?
+    constructor: (applicationName=null) ->
+        @applicationName = applicationName if applicationName?
 
     Http = Ti.Network.createHTTPClient(
         # function called when the response data is available
@@ -60,14 +60,13 @@ module.exports = class HttpTitaniumWrapper
         # Send the request.
         Http.send()
 
-    redirect: () ->
-
+    redirect: (url, callback) -> # @applicationName is appname
         webview = Titanium.UI.createWebView()
         Ti.API.info("webview")
         webview.setUrl(url)
         webview.addEventListener('load', (e)  ->
             #TPD, detect the status
-            if (e.url.indexOf(appname) == 0)
+            if (e.url.indexOf(@applicationName) == 0)
                 # stop the event
                 e.bubble = false
                 # stop the url from loading
@@ -77,16 +76,10 @@ module.exports = class HttpTitaniumWrapper
                 tokenIndex = e.url.indexOf("token")
                 accessToken = e.url.substring(tokenIndex+6,tokenIndex + 42)    #e.url.toString()#
 
-                # Titanium.UI.createAlertDialog(title:'AcessToken', message:accessToken).show()
-
-                #obtain
-                #obtainData(accessToken)
-                Ti.API.info("obtained token: " + accessToken)
-                authorized = true
-
                 webview.setVisible(false)
                 webview.hide()
                 window.remove(webview)
                 window.close()
+                callback(null, accessToken)
         )
         return webview

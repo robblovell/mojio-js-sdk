@@ -61,9 +61,7 @@
       this.connStatus = null;
       this.auth_token = null;
       if ((base7 = this.options).tokenRequester == null) {
-        base7.tokenRequester = (function() {
-          return document.location.hash.match(/access_token=([0-9a-f-]{36})/);
-        });
+        base7.tokenRequester = this.getTokenId();
       }
       this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [this.options.signalr_hub], $);
     }
@@ -173,7 +171,7 @@
 
     MojioClient.prototype.login_resource = 'Login';
 
-    MojioClient.prototype.authorize = function(redirect_url, scope) {
+    MojioClient.prototype.authorize = function(redirect_url, scope, callback) {
       var parts, url;
       if (scope == null) {
         scope = 'full';
@@ -197,7 +195,15 @@
       }
       parts.headers["Content-Type"] = 'application/json';
       url = parts.scheme + "://" + parts.host + ":" + parts.port + parts.path;
-      return window.location = url;
+      return http.redirect(url, function(error, result) {
+        if (error != null) {
+          callback(error, null);
+        }
+        this.auth_token = {
+          _id: result
+        };
+        return callback(null, result);
+      });
     };
 
     MojioClient.prototype.token = function(callback) {
@@ -639,6 +645,10 @@
     /*
         Token/User
      */
+
+    MojioClient.prototype.isAuthorized = function() {
+      return (this.auth_token != null) && this.auth_token._id;
+    };
 
     MojioClient.prototype.getTokenId = function() {
       if (this.auth_token != null) {

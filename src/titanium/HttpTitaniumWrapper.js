@@ -5,12 +5,12 @@
   module.exports = HttpTitaniumWrapper = (function() {
     var Http;
 
-    function HttpTitaniumWrapper(requester) {
-      if (requester == null) {
-        requester = null;
+    function HttpTitaniumWrapper(applicationName) {
+      if (applicationName == null) {
+        applicationName = null;
       }
-      if (requester != null) {
-        this.requester = requester;
+      if (applicationName != null) {
+        this.applicationName = applicationName;
       }
     }
 
@@ -63,24 +63,23 @@
       return Http.send();
     };
 
-    HttpTitaniumWrapper.prototype.redirect = function() {
+    HttpTitaniumWrapper.prototype.redirect = function(url, callback) {
       var webview;
       webview = Titanium.UI.createWebView();
       Ti.API.info("webview");
       webview.setUrl(url);
       webview.addEventListener('load', function(e) {
-        var accessToken, authorized, tokenIndex;
-        if (e.url.indexOf(appname) === 0) {
+        var accessToken, tokenIndex;
+        if (e.url.indexOf(this.applicationName) === 0) {
           e.bubble = false;
           webview.stopLoading();
           tokenIndex = e.url.indexOf("token");
           accessToken = e.url.substring(tokenIndex + 6, tokenIndex + 42);
-          Ti.API.info("obtained token: " + accessToken);
-          authorized = true;
           webview.setVisible(false);
           webview.hide();
           window.remove(webview);
-          return window.close();
+          window.close();
+          return callback(null, accessToken);
         }
       });
       return webview;

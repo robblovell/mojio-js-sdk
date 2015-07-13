@@ -21,7 +21,7 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @auth_token = null
-        @options.tokenRequester ?= (() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))
+        @options.tokenRequester ?= @getTokenId()
 
         @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub], $)
 
@@ -97,13 +97,12 @@ module.exports = class MojioClient
         http = new Http()
         http.request(parts, callback)
 
-
     ###
         Authorize and Login
     ###
     login_resource: 'Login'
 
-    authorize: (redirect_url, scope='full') ->
+    authorize: (redirect_url, scope='full', callback) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
@@ -122,7 +121,11 @@ module.exports = class MojioClient
         parts.headers["Content-Type"] = 'application/json'
 
         url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        window.location = url
+        http.redirect(url, (error, result) ->
+            callback(error, null) if error?
+            @auth_token = { _id: result }
+            callback(null, result)
+        )
 
     token: (callback) ->
         @user = null
@@ -416,6 +419,8 @@ module.exports = class MojioClient
     ###
         Token/User
     ###
+    isAuthorized: () ->
+        return @auth_token? and @auth_token._id
 
     getTokenId:  () ->
         return @auth_token._id if @auth_token?
