@@ -11,7 +11,7 @@ testObject = null
 describe 'Event', ->
 
     before( (done) ->
-        mojio_client.login(testdata.username, testdata.password, (error, result) ->
+        mojio_client._login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
             done()
         )

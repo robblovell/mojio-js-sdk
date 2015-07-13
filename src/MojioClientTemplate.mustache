@@ -104,17 +104,7 @@ module.exports = class MojioClient
 
     authorize: (redirect_url, scope='full', callback) ->
         if (@options? and @options.secret? and @options.username? and @options.password?)
-            @request(
-                {
-                    method: 'POST', resource: @login_resource, id: @options.application,
-                    parameters:
-                        {
-                            userOrEmail: @options.username
-                            password: @options.password
-                            secretKey: @options.secret
-                        }
-                }, callback
-            )
+            @_login(@options.username, @options.password, callback)
         else
             parts = {
                 hostname: @options.hostname
@@ -165,12 +155,8 @@ module.exports = class MojioClient
 
     unauthorize: (redirect_url, callback) ->
         if (@options? and @options.secret? and @options.username? and @options.password?)
-            @request(
-                {
-                    method: 'DELETE', resource: @login_resource,
-                    id: @getTokenId()
-                }, callback
-            )
+            @_logout(callback)
+
         else
             parts = {
                 hostname: @options.hostname
@@ -194,6 +180,31 @@ module.exports = class MojioClient
                 callback(error, null) if error?
                 callback(null, result)
             )
+
+    _login: (username, password, callback) -> # Use if you want the raw result of the call.
+        @request(
+            {
+                method: 'POST', resource: @login_resource, id: @options.application,
+                parameters:
+                    {
+                        userOrEmail: username
+                        password: password
+                        secretKey: @options.secret
+                    }
+            }, (error, result) =>
+                @auth_token = result if (result?)
+                callback(error, result)
+        )
+
+    _logout: (callback) ->
+        @request(
+            {
+                method: 'DELETE', resource: @login_resource,
+                id: if mojio_token? then mojio_token else @getTokenId()
+            }, (error, result) =>
+                @auth_token = null
+                callback(error, result)
+        )
 
     mojio_models = {}  # this is so model can use a string to constuct the model.
 

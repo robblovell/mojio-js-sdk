@@ -61,9 +61,7 @@
       this.connStatus = null;
       this.auth_token = null;
       if ((base7 = this.options).tokenRequester == null) {
-        base7.tokenRequester = (function() {
-          return document.location.hash.match(/access_token=([0-9a-f-]{36})/);
-        });
+        base7.tokenRequester = this.getTokenId();
       }
       this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [this.options.signalr_hub]);
     }
@@ -179,26 +177,17 @@
         scope = 'full';
       }
       if ((this.options != null) && (this.options.secret != null) && (this.options.username != null) && (this.options.password != null)) {
-        return this.request({
-          method: 'POST',
-          resource: this.login_resource,
-          id: this.options.application,
-          parameters: {
-            userOrEmail: this.options.username,
-            password: this.options.password,
-            secretKey: this.options.secret
-          }
-        }, callback);
+        return this._login(this.options.username, this.options.password, callback);
       } else {
         parts = {
           hostname: this.options.hostname,
           host: this.options.hostname,
           port: this.options.port,
           scheme: this.options.scheme,
+          path: this.options.live ? '/OAuth2/authorize' : '/OAuth2Sandbox/authorize',
           method: 'Get',
           withCredentials: false
         };
-        parts.path = this.options.live ? '/OAuth2/authorize' : '/OAuth2Sandbox/authorize';
         parts.path += "?response_type=token";
         parts.path += "&client_id=" + this.options.application;
         parts.path += "&redirect_uri=" + redirect_url;
@@ -252,37 +241,37 @@
 
     MojioClient.prototype.unauthorize = function(redirect_url, callback) {
       var parts;
-      parts = {
-        hostname: this.options.hostname,
-        host: this.options.hostname,
-        port: this.options.port,
-        scheme: this.options.scheme,
-        path: '/account/logout',
-        method: 'Get',
-        withCredentials: false
-      };
-      parts.path += "?Guid=" + this.getTokenId();
-      parts.path += "&client_id=" + this.options.application;
-      parts.path += "&redirect_uri=" + redirect_url;
-      parts.headers = {};
-      if (this.getTokenId() != null) {
-        parts.headers["MojioAPIToken"] = this.getTokenId();
+      if ((this.options != null) && (this.options.secret != null) && (this.options.username != null) && (this.options.password != null)) {
+        return this._logout(callback);
+      } else {
+        parts = {
+          hostname: this.options.hostname,
+          host: this.options.hostname,
+          port: this.options.port,
+          scheme: this.options.scheme,
+          path: '/account/logout',
+          method: 'Get',
+          withCredentials: false
+        };
+        parts.path += "?Guid=" + this.getTokenId();
+        parts.path += "&client_id=" + this.options.application;
+        parts.path += "&redirect_uri=" + redirect_url;
+        parts.headers = {};
+        if (this.getTokenId() != null) {
+          parts.headers["MojioAPIToken"] = this.getTokenId();
+        }
+        parts.headers["Content-Type"] = 'application/json';
+        return http.redirect(parts, function(error, result) {
+          this.auth_token = null;
+          if (callback == null) {
+            return;
+          }
+          if (error != null) {
+            callback(error, null);
+          }
+          return callback(null, result);
+        });
       }
-      parts.headers["Content-Type"] = 'application/json';
-      return http.redirect(parts, function(error, result) {
-        if (result != null) {
-          this.auth_token = {
-            _id: result
-          };
-        }
-        if (callback == null) {
-          return;
-        }
-        if (error != null) {
-          callback(error, null);
-        }
-        return callback(null, result);
-      });
     };
 
     MojioClient.prototype._login = function(username, password, callback) {
@@ -295,11 +284,7 @@
           password: password,
           secretKey: this.options.secret
         }
-      }, callback);
-    };
-
-    MojioClient.prototype.login = function(username, password, callback) {
-      return this._login(username, password, (function(_this) {
+      }, (function(_this) {
         return function(error, result) {
           if ((result != null)) {
             _this.auth_token = result;
@@ -314,11 +299,7 @@
         method: 'DELETE',
         resource: this.login_resource,
         id: typeof mojio_token !== "undefined" && mojio_token !== null ? mojio_token : this.getTokenId()
-      }, callback);
-    };
-
-    MojioClient.prototype.logout = function(callback) {
-      return this._logout((function(_this) {
+      }, (function(_this) {
         return function(error, result) {
           _this.auth_token = null;
           return callback(error, result);
@@ -676,6 +657,10 @@
     /*
         Token/User
      */
+
+    MojioClient.prototype.isAuthorized = function() {
+      return (this.auth_token != null) && this.auth_token._id;
+    };
 
     MojioClient.prototype.getTokenId = function() {
       if (this.auth_token != null) {

@@ -16,7 +16,7 @@
 
   describe('Get_CRUD', function() {
     return it('can get resource', function(done) {
-      return mojio_client.login(testdata.username, testdata.password, function(error, result) {
+      return mojio_client._login(testdata.username, testdata.password, function(error, result) {
         (error === null).should.be["true"];
         return mojio_client.request({
           resource: 'Apps',

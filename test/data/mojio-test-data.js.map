@@ -1,9 +1,9 @@
 {
   "version": 3,
   "file": "mojio-test-data.js",
-  "sourceRoot": "",
+  "sourceRoot": "../..",
   "sources": [
-    "mojio-test-data.coffee"
+    "test/data/mojio-test-data.coffee"
   ],
   "names": [],
   "mappings": ";AAAA;EAAA,MAAM,CAAC,OAAP,GACI;IAAA,QAAA,EAAU,kBAAV;IACA,QAAA,EAAU,aADV;;AADJ"
