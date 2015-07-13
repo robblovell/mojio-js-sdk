@@ -1,5 +1,5 @@
-Http = require './HttpBrowserWrapper'
-SignalR = require './SignalRBrowserWrapper'
+Http = require './HttpTitaniumWrapper'
+SignalR = require './SignalRTitaniumWrapper'
 
 module.exports = class MojioClient
 
