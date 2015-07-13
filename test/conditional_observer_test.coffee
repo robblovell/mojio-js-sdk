@@ -25,7 +25,7 @@ describe 'Conditional Observer', ->
             done()
         )
     )
-    #
+###
     it 'Can Conditionally Observe Speed', (done) ->
         user = new User({})
         user.authorization(mojio_client)
@@ -73,7 +73,6 @@ describe 'Conditional Observer', ->
                             result.should.be.an.instanceOf(Observer)
                             result.Status.should.equal("Approved")
 
-                            vehicle.LastSpeed = 90.0
                             console.log("changing vehicle speed...")
                             observer = result
                             event = new Event({})
@@ -81,12 +80,35 @@ describe 'Conditional Observer', ->
                             event.EventType = "TripEvent"
                             event.VehicleId = vehicle._id
                             event.MojioId = mojio._id
-                            event.Speed = 90.0
+                            event.Speed = 20.0
                             mojio_client.post(event, (error, result) ->
                                 (error==null).should.be.true
-                                console.log("Event at speed 90.0 added.")
+                                console.log("Event at speed 20.0 added.")
+                                event = new Event({})
+                                event.authorization(mojio_client)
+                                event.EventType = "TripEvent"
+                                event.VehicleId = vehicle._id
+                                event.MojioId = mojio._id
+                                event.Speed = 90.0
+                                mojio_client.post(event, (error, result) ->
+                                    (error==null).should.be.true
+                                    console.log("Event at speed 90.0 added.")
+                                    event = new Event({})
+                                    event.authorization(mojio_client)
+                                    event.EventType = "TripEvent"
+                                    event.VehicleId = vehicle._id
+                                    event.MojioId = mojio._id
+                                    event.Speed = 30.0
+                                    mojio_client.post(event, (error, result) ->
+                                        (error==null).should.be.true
+                                        console.log("Event at speed 30.0 added.")
+                                    )
+                                )
                             )
+
                     )
                 )
             )
         )
+
+###

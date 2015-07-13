@@ -14,32 +14,6 @@
 
   should = require('should');
 
-  describe('Login', function() {
-    return it('can login', function(done) {
-      return mojio_client.authorize(null, null, function(error, result) {
-        (error === null).should.be["true"];
-        mojio_client.should.be.an.instanceOf(MojioClient);
-        mojio_client.auth_token.should.be.ok;
-        result.should.be.an.instanceOf(Object);
-        result._id.should.be.an.instanceOf(String);
-        return done();
-      });
-    });
-  });
-
-  describe('Logout', function() {
-    return it('can logout', function(done) {
-      return mojio_client.authorize(null, function(error, result) {
-        return mojio_client.unauthorize(null, function(error, result) {
-          (error === null).should.be["true"];
-          mojio_client.should.be.an.instanceOf(MojioClient);
-          (mojio_client.auth_token === null).should.be["true"];
-          return done();
-        });
-      });
-    });
-  });
-
   describe('Authorize', function() {
     return it('can Authorize', function(done) {
       return mojio_client.authorize(null, null, function(error, result) {
@@ -55,7 +29,7 @@
 
   describe('UnAuthorize', function() {
     return it('can UnAuthorize', function(done) {
-      return mojio_client.authorize(null, function(error, result) {
+      return mojio_client.authorize(null, null, function(error, result) {
         return mojio_client.unauthorize(null, function(error, result) {
           (error === null).should.be["true"];
           mojio_client.should.be.an.instanceOf(MojioClient);

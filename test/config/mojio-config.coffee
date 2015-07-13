@@ -9,6 +9,6 @@ module.exports =
         signalr_port:'80',
         signalr_scheme:'http',
         username: 'anonymous@moj.io',
-        password: 'Password007'
-
+        password: 'Password007',
+        live: false
     }

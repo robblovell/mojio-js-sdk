@@ -64,6 +64,7 @@ describe 'Observer', ->
     # test Observer
     it 'can Observe Events of Vehicle', (done) ->
         mojio = new Mojio().mock()
+        theevent = null
         mojio_client.create(mojio, (error, result) ->
             (error==null).should.be.true
             mojio = new Mojio(result)

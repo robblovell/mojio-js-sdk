@@ -76,6 +76,7 @@
     it('can Observe Events of Vehicle', function(done) {
       var mojio;
       mojio = new Mojio().mock();
+      theevent = null;
       return mojio_client.create(mojio, function(error, result) {
         (error === null).should.be["true"];
         mojio = new Mojio(result);
