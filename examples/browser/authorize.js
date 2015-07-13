@@ -16,12 +16,11 @@
    */
 
   config = {
-    application: '087b6073-74a4-4708-aa2f-4899ac414b98',
+    application: 'Your-Application-Key-Here',
     hostname: 'api.moj.io',
     version: 'v1',
     port: '443',
     scheme: 'https',
-    redirect_uri: 'http://localhost:63342/mojio-js/examples/browser/authorize.html',
     live: false
   };
 
