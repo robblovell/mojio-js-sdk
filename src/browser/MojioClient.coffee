@@ -186,6 +186,7 @@ module.exports = class MojioClient
                 callback(error, null) if error?
                 callback(null, result)
             )
+
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
             {
@@ -199,7 +200,10 @@ module.exports = class MojioClient
                         client_secret: @options.secret
                         grant_type: 'password'
                     }
-            }, callback
+            }, (error, result) =>
+                @auth_token = result if (result?)
+                callback(error, result)
+             , true
         )
 
     # Login

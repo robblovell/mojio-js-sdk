@@ -1,3 +1,4 @@
+// version 3.5.1
 !function(e) {
     if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
         var o;
@@ -30,6 +31,62 @@
         return s;
     }({
         1: [ function(_dereq_, module, exports) {
+            var formurlencoded = (typeof module === "object" ? module : {}).exports = {
+                encode: function(data, options) {
+                    function getNestValsArrAsStr(arr) {
+                        return arr.filter(function(e) {
+                            return typeof e === "string" && e.length;
+                        }).join("&");
+                    }
+                    function getKeys(obj) {
+                        var keys = Object.keys(obj);
+                        return options && options.sorted ? keys.sort() : keys;
+                    }
+                    function getObjNestVals(name, obj) {
+                        var objKeyStr = ":name[:prop]";
+                        return getNestValsArrAsStr(getKeys(obj).map(function(key) {
+                            return getNestVals(objKeyStr.replace(/:name/, name).replace(/:prop/, key), obj[key]);
+                        }));
+                    }
+                    function getArrNestVals(name, arr) {
+                        var arrKeyStr = ":name[]";
+                        return getNestValsArrAsStr(arr.map(function(elem) {
+                            return getNestVals(arrKeyStr.replace(/:name/, name), elem);
+                        }));
+                    }
+                    function getNestVals(name, value) {
+                        var whitespaceRe = /%20/g, type = typeof value, f = null;
+                        if (type === "string") {
+                            f = encodeURIComponent(name) + "=" + formEncodeString(value);
+                        } else if (type === "number") {
+                            f = encodeURIComponent(name) + "=" + encodeURIComponent(value).replace(whitespaceRe, "+");
+                        } else if (type === "boolean") {
+                            f = encodeURIComponent(name) + "=" + value;
+                        } else if (Array.isArray(value)) {
+                            f = getArrNestVals(name, value);
+                        } else if (type === "object") {
+                            f = getObjNestVals(name, value);
+                        }
+                        return f;
+                    }
+                    function manuallyEncodeChar(ch) {
+                        return "%" + ("0" + ch.charCodeAt(0).toString(16)).slice(-2).toUpperCase();
+                    }
+                    function formEncodeString(value) {
+                        return value.replace(/[^ !'()~\*]*/g, encodeURIComponent).replace(/ /g, "+").replace(/[!'()~\*]/g, manuallyEncodeChar);
+                    }
+                    return getNestValsArrAsStr(getKeys(data).map(function(key) {
+                        return getNestVals(key, data[key]);
+                    }));
+                }
+            };
+        }, {} ],
+        2: [ function(_dereq_, module, exports) {
+            module.exports = _dereq_("./form-urlencoded");
+        }, {
+            "./form-urlencoded": 1
+        } ],
+        3: [ function(_dereq_, module, exports) {
             (function() {
                 var HttpBrowserWrapper;
                 module.exports = HttpBrowserWrapper = function() {
@@ -105,13 +162,14 @@
                 }();
             }).call(this);
         }, {} ],
-        2: [ function(_dereq_, module, exports) {
+        4: [ function(_dereq_, module, exports) {
             (function() {
-                var Http, MojioClient, SignalR;
+                var FormUrlencoded, Http, MojioClient, SignalR;
                 Http = _dereq_("./HttpBrowserWrapper");
                 SignalR = _dereq_("./SignalRBrowserWrapper");
+                FormUrlencoded = _dereq_("form-urlencoded");
                 module.exports = MojioClient = function() {
-                    var App, Event, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
+                    var App, Event, Login, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
                     defaults = {
                         hostname: "api.moj.io",
                         port: "443",
@@ -228,18 +286,21 @@
                     MojioClient.prototype.stringify = function(data) {
                         return JSON.stringify(data);
                     };
-                    MojioClient.prototype.request = function(request, callback) {
+                    MojioClient.prototype.request = function(request, callback, isOauth) {
                         var http, parts;
+                        if (isOauth == null) {
+                            isOauth = false;
+                        }
                         parts = {
                             hostname: this.options.hostname,
                             host: this.options.hostname,
                             port: this.options.port,
                             scheme: this.options.scheme,
-                            path: "/" + this.options.version,
+                            path: isOauth ? "" : "/" + this.options.version,
                             method: request.method,
                             withCredentials: false
                         };
-                        parts.path = "/" + this.options.version + this.getPath(request.resource, request.id, request.action, request.key);
+                        parts.path = parts.path + this.getPath(request.resource, request.id, request.action, request.key);
                         if (request.parameters != null && Object.keys(request.parameters).length > 0) {
                             parts.path += MojioClient._makeParameters(request.parameters);
                         }
@@ -252,7 +313,11 @@
                         }
                         parts.headers["Content-Type"] = "application/json";
                         if (request.body != null) {
-                            parts.body = request.body;
+                            if (isOauth) {
+                                parts.body = FormUrlencoded.encode(request.body);
+                            } else {
+                                parts.body = request.body;
+                            }
                         }
                         http = new Http();
                         return http.request(parts, callback);
@@ -303,15 +368,15 @@
                     MojioClient.prototype.token = function(callback) {
                         var match, token;
                         this.user = null;
-                        match = this.options.tokenRequester();
-                        token = !!match && match[1];
-                        if (!token) {
+                        token = this.options.tokenRequester();
+                        match = !!token && token[1];
+                        if (!match) {
                             return callback("token for authorization not found.", null);
                         } else {
                             return this.request({
                                 method: "GET",
                                 resource: this.login_resource,
-                                id: token
+                                id: match
                             }, function(_this) {
                                 return function(error, result) {
                                     if (error) {
@@ -361,14 +426,25 @@
                     MojioClient.prototype._login = function(username, password, callback) {
                         return this.request({
                             method: "POST",
-                            resource: this.login_resource,
-                            id: this.options.application,
-                            parameters: {
-                                userOrEmail: username,
+                            resource: this.options.live ? "/OAuth2/token" : "/OAuth2Sandbox/token",
+                            body: {
+                                username: username,
                                 password: password,
-                                secretKey: this.options.secret
+                                client_id: this.options.application,
+                                client_secret: this.options.secret,
+                                grant_type: "password"
                             }
                         }, function(_this) {
+                            return function(error, result) {
+                                if (result != null) {
+                                    _this.auth_token = result;
+                                }
+                                return callback(error, result);
+                            };
+                        }(this), true);
+                    };
+                    MojioClient.prototype.login = function(username, password, callback) {
+                        return this._login(username, password, function(_this) {
                             return function(error, result) {
                                 if (result != null) {
                                     _this.auth_token = result;
@@ -392,6 +468,8 @@
                     mojio_models = {};
                     App = _dereq_("../models/App");
                     mojio_models["App"] = App;
+                    Login = _dereq_("../models/Login");
+                    mojio_models["Login"] = Login;
                     Mojio = _dereq_("../models/Mojio");
                     mojio_models["Mojio"] = Mojio;
                     Trip = _dereq_("../models/Trip");
@@ -688,34 +766,47 @@
                         return this.auth_token != null && this.auth_token._id;
                     };
                     MojioClient.prototype.getTokenId = function() {
-                        if (this.auth_token != null) {
+                        if (this.auth_token != null && this.auth_token._id != null) {
                             return this.auth_token._id;
+                        }
+                        if (this.auth_token != null) {
+                            return this.auth_token;
                         }
                         return null;
                     };
                     MojioClient.prototype.getUserId = function() {
-                        if (this.auth_token != null) {
+                        if (this.auth_token != null && this.auth_token.UserId) {
                             return this.auth_token.UserId;
                         }
                         return null;
                     };
                     MojioClient.prototype.isLoggedIn = function() {
-                        return this.getUserId() !== null;
+                        return this.getUserId() !== null || typeof this.auth_token === "string";
                     };
                     MojioClient.prototype.getCurrentUser = function(callback) {
                         if (this.user != null) {
-                            callback(this.user);
+                            callback(null, this.user);
                         } else if (this.isLoggedIn()) {
-                            get("users", this.getUserId()).done(function(user) {
-                                if (!(user != null)) {
-                                    return;
-                                }
-                                if (this.getUserId() === this.user._id) {
-                                    this.user = user;
-                                }
-                                return callback(this.user);
-                            });
+                            this.get(Login, this.auth_token, function(_this) {
+                                return function(error, result) {
+                                    if (error != null) {
+                                        return callback(error, null);
+                                    } else if (result.UserId != null) {
+                                        return _this.get(User, result.UserId, function(error, result) {
+                                            if (error != null) {
+                                                return callback(error, null);
+                                            } else {
+                                                _this.user = result;
+                                                return callback(null, _this.user);
+                                            }
+                                        });
+                                    } else {
+                                        return callback("User not found", null);
+                                    }
+                                };
+                            }(this));
                         } else {
+                            callback("User not found", null);
                             return false;
                         }
                         return true;
@@ -724,19 +815,21 @@
                 }();
             }).call(this);
         }, {
-            "../models/App": 4,
-            "../models/Event": 5,
-            "../models/Mojio": 6,
-            "../models/Observer": 8,
-            "../models/Product": 9,
-            "../models/Subscription": 10,
-            "../models/Trip": 11,
-            "../models/User": 12,
-            "../models/Vehicle": 13,
-            "./HttpBrowserWrapper": 1,
-            "./SignalRBrowserWrapper": 3
+            "../models/App": 6,
+            "../models/Event": 7,
+            "../models/Login": 8,
+            "../models/Mojio": 9,
+            "../models/Observer": 11,
+            "../models/Product": 12,
+            "../models/Subscription": 13,
+            "../models/Trip": 14,
+            "../models/User": 15,
+            "../models/Vehicle": 16,
+            "./HttpBrowserWrapper": 3,
+            "./SignalRBrowserWrapper": 5,
+            "form-urlencoded": 2
         } ],
-        3: [ function(_dereq_, module, exports) {
+        5: [ function(_dereq_, module, exports) {
             (function() {
                 var SignalRBrowserWrapper, bind = function(fn, me) {
                     return function() {
@@ -869,7 +962,7 @@
                 }();
             }).call(this);
         }, {} ],
-        4: [ function(_dereq_, module, exports) {
+        6: [ function(_dereq_, module, exports) {
             (function() {
                 var App, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
@@ -914,9 +1007,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        5: [ function(_dereq_, module, exports) {
+        7: [ function(_dereq_, module, exports) {
             (function() {
                 var Event, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
@@ -940,13 +1033,22 @@
                         OwnerId: "String",
                         EventType: "Integer",
                         Time: "String",
-                        Location: "Object",
-                        Accelerometer: "Object",
+                        Location: {
+                            Lat: "Float",
+                            Lng: "Float",
+                            FromLockedGPS: "Boolean",
+                            Dilution: "Float"
+                        },
                         TimeIsApprox: "Boolean",
                         BatteryVoltage: "Float",
                         ConnectionLost: "Boolean",
                         _id: "String",
                         _deleted: "Boolean",
+                        Accelerometer: {
+                            X: "Float",
+                            Y: "Float",
+                            Z: "Float"
+                        },
                         TripId: "String",
                         Altitude: "Float",
                         Heading: "Float",
@@ -978,7 +1080,11 @@
                         SubjectId: "String",
                         Transports: "Integer",
                         Status: "Integer",
-                        Tokens: "Array"
+                        Tokens: "Array",
+                        TimeWindow: "String",
+                        BroadcastOnlyRecent: "Boolean",
+                        Throttle: "String",
+                        NextAllowedBroadcast: "String"
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
@@ -997,9 +1103,56 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        6: [ function(_dereq_, module, exports) {
+        8: [ function(_dereq_, module, exports) {
+            (function() {
+                var Login, MojioModel, extend = function(child, parent) {
+                    for (var key in parent) {
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
+                    }
+                    function ctor() {
+                        this.constructor = child;
+                    }
+                    ctor.prototype = parent.prototype;
+                    child.prototype = new ctor();
+                    child.__super__ = parent.prototype;
+                    return child;
+                }, hasProp = {}.hasOwnProperty;
+                MojioModel = _dereq_("./MojioModel");
+                module.exports = Login = function(superClass) {
+                    extend(Login, superClass);
+                    Login.prototype._schema = {
+                        Type: "String",
+                        AppId: "String",
+                        UserId: "String",
+                        ValidUntil: "String",
+                        Scopes: "String",
+                        Sandboxed: "Boolean",
+                        Depricated: "Boolean",
+                        _id: "String",
+                        _deleted: "Boolean"
+                    };
+                    Login.prototype._resource = "Login";
+                    Login.prototype._model = "Login";
+                    function Login(json) {
+                        Login.__super__.constructor.call(this, json);
+                    }
+                    Login._resource = "Login";
+                    Login._model = "Login";
+                    Login.resource = function() {
+                        return Login._resource;
+                    };
+                    Login.model = function() {
+                        return Login._model;
+                    };
+                    return Login;
+                }(MojioModel);
+            }).call(this);
+        }, {
+            "./MojioModel": 10
+        } ],
+        9: [ function(_dereq_, module, exports) {
             (function() {
                 var Mojio, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
@@ -1043,9 +1196,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        7: [ function(_dereq_, module, exports) {
+        10: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
@@ -1166,17 +1319,25 @@
                             }
                         }, callback);
                     };
-                    MojioModel.prototype.observe = function(object, subject, observer_callback, callback) {
-                        if (subject == null) {
-                            subject = null;
+                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
+                        if (parent == null) {
+                            parent = null;
                         }
-                        return this._client.observe(object, subject, observer_callback, callback);
+                        if (parent != null) {
+                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                        } else {
+                            return this._client.observe(this, null, observer_callback, callback, options);
+                        }
                     };
-                    MojioModel.prototype.unobserve = function(object, subject, observer_callback, callback) {
-                        if (subject == null) {
-                            subject = null;
+                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
+                        if (parent == null) {
+                            parent = null;
                         }
-                        return this._client.observe(object, subject, observer_callback, callback);
+                        if (parent != null) {
+                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                        } else {
+                            return this._client.unobserve(this, null, observer_callback, callback);
+                        }
                     };
                     MojioModel.prototype.store = function(model, key, value, callback) {
                         return this._client.store(model, key, value, callback);
@@ -1243,7 +1404,7 @@
                 }();
             }).call(this);
         }, {} ],
-        8: [ function(_dereq_, module, exports) {
+        11: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Observer, extend = function(child, parent) {
                     for (var key in parent) {
@@ -1274,6 +1435,10 @@
                         Transports: "Integer",
                         Status: "Integer",
                         Tokens: "Array",
+                        TimeWindow: "String",
+                        BroadcastOnlyRecent: "Boolean",
+                        Throttle: "String",
+                        NextAllowedBroadcast: "String",
                         _id: "String",
                         _deleted: "Boolean"
                     };
@@ -1294,9 +1459,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        9: [ function(_dereq_, module, exports) {
+        12: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Product, extend = function(child, parent) {
                     for (var key in parent) {
@@ -1344,9 +1509,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        10: [ function(_dereq_, module, exports) {
+        13: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Subscription, extend = function(child, parent) {
                     for (var key in parent) {
@@ -1394,9 +1559,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        11: [ function(_dereq_, module, exports) {
+        14: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Trip, extend = function(child, parent) {
                     for (var key in parent) {
@@ -1427,11 +1592,43 @@
                         FuelLevel: "Float",
                         FuelEfficiency: "Float",
                         Distance: "Float",
-                        StartLocation: "Object",
-                        LastKnownLocation: "Object",
-                        EndLocation: "Object",
-                        StartAddress: "Object",
-                        EndAddress: "Object",
+                        MovingTime: "Float",
+                        IdleTime: "Float",
+                        StopTime: "Float",
+                        StartLocation: {
+                            Lat: "Float",
+                            Lng: "Float",
+                            FromLockedGPS: "Boolean",
+                            Dilution: "Float"
+                        },
+                        LastKnownLocation: {
+                            Lat: "Float",
+                            Lng: "Float",
+                            FromLockedGPS: "Boolean",
+                            Dilution: "Float"
+                        },
+                        EndLocation: {
+                            Lat: "Float",
+                            Lng: "Float",
+                            FromLockedGPS: "Boolean",
+                            Dilution: "Float"
+                        },
+                        StartAddress: {
+                            Address1: "String",
+                            Address2: "String",
+                            City: "String",
+                            State: "String",
+                            Zip: "String",
+                            Country: "String"
+                        },
+                        EndAddress: {
+                            Address1: "String",
+                            Address2: "String",
+                            City: "String",
+                            State: "String",
+                            Zip: "String",
+                            Country: "String"
+                        },
                         ForcefullyEnded: "Boolean",
                         StartMilage: "Float",
                         EndMilage: "Float",
@@ -1456,9 +1653,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        12: [ function(_dereq_, module, exports) {
+        15: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, User, extend = function(child, parent) {
                     for (var key in parent) {
@@ -1507,9 +1704,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ],
-        13: [ function(_dereq_, module, exports) {
+        16: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel, Vehicle, extend = function(child, parent) {
                     for (var key in parent) {
@@ -1537,7 +1734,12 @@
                         VehicleTime: "String",
                         LastTripEvent: "String",
                         LastLocationTime: "String",
-                        LastLocation: "Object",
+                        LastLocation: {
+                            Lat: "Float",
+                            Lng: "Float",
+                            FromLockedGPS: "Boolean",
+                            Dilution: "Float"
+                        },
                         LastSpeed: "Float",
                         FuelLevel: "Float",
                         LastAcceleration: "Float",
@@ -1582,7 +1784,7 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 7
+            "./MojioModel": 10
         } ]
-    }, {}, [ 2 ])(2);
+    }, {}, [ 4 ])(4);
 });

@@ -1,5 +1,7 @@
+# version 3.5.2
 Http = require './HttpTitaniumWrapper'
 SignalR = require './SignalRTitaniumWrapper'
+FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class MojioClient
 
@@ -71,17 +73,17 @@ module.exports = class MojioClient
     stringify: (data) ->
         return JSON.stringify(data)
 
-    request: (request, callback) ->
+    request: (request, callback, isOauth = false) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
             scheme: @options.scheme
-            path: '/'+@options.version
+            path: (if isOauth then '' else '/' + @options.version)
             method: request.method,
             withCredentials: false
         }
-        parts.path = '/'+@options.version + @getPath(request.resource, request.id, request.action, request.key)
+        parts.path = parts.path + @getPath(request.resource, request.id, request.action, request.key)
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += MojioClient._makeParameters(request.parameters)
@@ -92,7 +94,11 @@ module.exports = class MojioClient
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
         parts.headers["Content-Type"] = 'application/json'
 
-        parts.body = request.body if request.body?
+        if (request.body?)
+            if (isOauth)
+                parts.body = FormUrlencoded.encode(request.body)
+            else
+                parts.body = request.body
 
         http = new Http()
         http.request(parts, callback)
@@ -134,15 +140,15 @@ module.exports = class MojioClient
     token: (callback) ->
         @user = null
 
-        match = @options.tokenRequester()
-        token = !!match && match[1]
-        if (!token)
+        token = @options.tokenRequester()
+        match = !!token && token[1]
+        if (!match)
             callback("token for authorization not found.", null)
         else
             # get the user id by requesting login information, then set the auth_token:
             @request(
                 {
-                    method: 'GET', resource: @login_resource, id: token
+                    method: 'GET', resource: @login_resource, id: match
                 },
             (error, result) =>
                 if error
@@ -180,19 +186,32 @@ module.exports = class MojioClient
                 callback(error, null) if error?
                 callback(null, result)
             )
+
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
             {
-                method: 'POST', resource: @login_resource, id: @options.application,
-                parameters:
+                method: 'POST', resource: if @options.live then '/OAuth2/token' else '/OAuth2Sandbox/token',
+                # method: 'POST', resource: '/OAuth2/token',
+                body:
                     {
-                        userOrEmail: username
+                        username: username
                         password: password
-                        secretKey: @options.secret
+                        client_id: @options.application
+                        client_secret: @options.secret
+                        grant_type: 'password'
                     }
             }, (error, result) =>
                 @auth_token = result if (result?)
                 callback(error, result)
+             , true
+        )
+
+    # Login
+    login: (username, password, callback) ->
+        @_login(username, password, (error, result) =>
+            if (result?)
+                @auth_token = result
+            callback(error, result)
         )
 
     _logout: (callback) ->
@@ -210,6 +229,9 @@ module.exports = class MojioClient
 
     App = require('../models/App');
     mojio_models['App'] = App
+
+    Login = require('../models/Login');
+    mojio_models['Login'] = Login
 
     Mojio = require('../models/Mojio');
     mojio_models['Mojio'] = Mojio
@@ -423,26 +445,36 @@ module.exports = class MojioClient
         return @auth_token? and @auth_token._id
 
     getTokenId:  () ->
-        return @auth_token._id if @auth_token?
+        return @auth_token._id if @auth_token? and @auth_token._id?
+        return @auth_token if @auth_token?
         return null;
 
     getUserId:  () ->
-        return @auth_token.UserId if @auth_token?
+        return @auth_token.UserId if @auth_token? and @auth_token.UserId
         return null
 
     isLoggedIn: () ->
-        return @getUserId() != null
+        return @getUserId() != null || typeof(@auth_token) is "string"
 
     getCurrentUser: (callback) ->
         if (@user?)
-            callback(@user)
+            callback(null, @user)
         else if (@isLoggedIn())
-            get('users', @getUserId())
-            .done( (user) ->
-                    return unless (user?)
-                    @user = user if (@getUserId() == @user._id)
-                    callback(@user)
-                )
+            @get(Login, @auth_token, (error, result) =>
+                if error?
+                    callback(error, null)
+                else if (result.UserId?)
+                    @get(User, result.UserId, (error, result) =>
+                        if error?
+                            callback(error, null)
+                        else
+                            @user = result
+                            callback(null, @user)
+                    )
+                else
+                    callback("User not found", null)
+            )
         else
+            callback("User not found", null)
             return false
         return true
