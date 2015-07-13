@@ -45,5 +45,7 @@ module.exports = class HttpBrowserWrapper
         else
             xmlhttp.send(params.data)
 
-    redirect: (url, callback) -> # callback is through a server call.
+    redirect: (params, callback) -> # callback is through a server call.
+        url = params.scheme+"://"+params.host+":"+params.port+params.path
+
         return window.location = url;

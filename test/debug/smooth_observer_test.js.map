@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "smooth_observer_test.js",
+  "sourceRoot": "",
+  "sources": [
+    "smooth_observer_test.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;;AAAA"
+}

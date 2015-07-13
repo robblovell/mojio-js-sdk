@@ -174,7 +174,7 @@
     MojioClient.prototype.login_resource = 'Login';
 
     MojioClient.prototype.authorize = function(redirect_url, scope, callback) {
-      var parts, url;
+      var parts;
       if (scope == null) {
         scope = 'full';
       }
@@ -196,8 +196,20 @@
         parts.headers["MojioAPIToken"] = this.getTokenId();
       }
       parts.headers["Content-Type"] = 'application/json';
-      url = parts.scheme + "://" + parts.host + ":" + parts.port + parts.path;
-      return http.redirect(url, callback);
+      return http.redirect(parts, function(error, result) {
+        if (result != null) {
+          this.auth_token = {
+            _id: result
+          };
+        }
+        if (callback == null) {
+          return;
+        }
+        if (error != null) {
+          callback(error, null);
+        }
+        return callback(null, result);
+      });
     };
 
     MojioClient.prototype.token = function(callback) {
@@ -226,7 +238,7 @@
     };
 
     MojioClient.prototype.unauthorize = function(redirect_url) {
-      var parts, url;
+      var parts;
       parts = {
         hostname: this.options.hostname,
         host: this.options.hostname,
@@ -244,8 +256,16 @@
         parts.headers["MojioAPIToken"] = this.getTokenId();
       }
       parts.headers["Content-Type"] = 'application/json';
-      url = parts.scheme + "://" + parts.host + ":" + parts.port + parts.path;
-      return window.location = url;
+      return http.redirect(parts, function(error, result) {
+        this.auth_token = null;
+        if (typeof callback === "undefined" || callback === null) {
+          return;
+        }
+        if (error != null) {
+          callback(error, null);
+        }
+        return callback(null, result);
+      });
     };
 
     MojioClient.prototype._login = function(username, password, callback) {

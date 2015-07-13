@@ -120,10 +120,11 @@ module.exports = class MojioClient
         parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
         parts.headers["Content-Type"] = 'application/json'
 
-        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        http.redirect(url, (error, result) ->
+        #url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        http.redirect(parts, (error, result) ->
+            @auth_token = { _id: result } if result?
+            return if (!callback?)
             callback(error, null) if error?
-            @auth_token = { _id: result }
             callback(null, result)
         )
 
@@ -149,7 +150,7 @@ module.exports = class MojioClient
                     callback(null, @auth_token)
             )
 
-    unauthorize: (redirect_url) ->
+    unauthorize: (redirect_url, callback) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
@@ -166,8 +167,13 @@ module.exports = class MojioClient
         parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
         parts.headers["Content-Type"] = 'application/json'
 
-        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        window.location = url
+        #url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+        http.redirect(parts, (error, result) ->
+            @auth_token = null
+            return if (!callback?)
+            callback(error, null) if error?
+            callback(null, result)
+        )
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(

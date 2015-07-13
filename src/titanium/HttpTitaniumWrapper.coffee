@@ -60,7 +60,9 @@ module.exports = class HttpTitaniumWrapper
         # Send the request.
         Http.send()
 
-    redirect: (url, callback) -> # @applicationName is appname
+    redirect: (params, callback) -> # @applicationName is appname
+        url = params.scheme+"://"+params.host+":"+params.port+params.path
+
         webview = Titanium.UI.createWebView()
         Ti.API.info("webview")
         webview.setUrl(url)

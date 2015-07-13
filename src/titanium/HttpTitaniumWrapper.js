@@ -63,8 +63,9 @@
       return Http.send();
     };
 
-    HttpTitaniumWrapper.prototype.redirect = function(url, callback) {
-      var webview;
+    HttpTitaniumWrapper.prototype.redirect = function(params, callback) {
+      var url, webview;
+      url = params.scheme + "://" + params.host + ":" + params.port + params.path;
       webview = Titanium.UI.createWebView();
       Ti.API.info("webview");
       webview.setUrl(url);

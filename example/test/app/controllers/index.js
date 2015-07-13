@@ -100,132 +100,59 @@ function ObtainDataButton() {
         if (e) {
         	Ti.API.info("get data returns error:" + e);
             console.log(error); // Some error occured.
-        } else {        	
-            var vehicle_data = mojio_client.getResults(Vehicle, result);  // Helper function to get the results.                    
-	        lat = parseFloat(vehicle_data[0].LastLocation.Lat);
-	        lng = parseFloat(vehicle_data[0].LastLocation.Lng);
-            Ti.API.info("lat is: " + lat);
-            Ti.API.info("lng is: " + lng);
-            loadmap();
-              
+        } else {    
+        	var lat = null;
+        	var lng = null;    	
+            var vehicle_data = mojio_client.getResults(Vehicle, result);  // Helper function to get the results.    
+            if (vehicle_data[0].LastLocation != null) {           
+	        	lat = parseFloat(vehicle_data[0].LastLocation.Lat);
+	        	lng = parseFloat(vehicle_data[0].LastLocation.Lng);
+            	Ti.API.info("lat is: " + lat);
+            	Ti.API.info("lng is: " + lng);
+            }
+            loadmap(lat, lng); 
         }
     });
-	
 }
-
-
 
 //load map and set the pin at the obtained latitude and longitude
-function loadmap() {
-	map1.region.latitude = lat;
-    map1.region.longitude = lng;
-    Ti.API.info("map LAT: " + map1.region.latitude);
- 
-	var anImageView = Ti.UI.createImageView({
-                image : '/images/pin.jpg', //setting label as a blob
-                width : '20',
-                height : 'auto',
-            });
-    
-    var random = MapModule.createAnnotation({
-    	latitude: lat,
-    	longitude: lng,	   
-    	image: anImageView,
-	    pincolor: MapModule.ANNOTATION_AZURE,
-	    draggable: false
-	});
-        
-    var mapview = MapModule.createView({
-    	mapType: MapModule.NORMAL_TYPE,
-    	region: {latitude: lat, longitude: lng, latitudeDelta: 0.1, longitudeDelta: 0.1 }
-	});
-    
-    mapview.addAnnotation(random);
-    window.add(mapview);     
-    window.open();
-    Ti.API.info("map LAT3: " + map1.region.latitude);
-    alert('last location obtained successfully!');
-}
+function loadmap(lat, lng) {
 
+	var anImageView = Ti.UI.createImageView({
+           image : '/images/pin.jpg', //setting label as a blob
+           width : '20',
+           height : 'auto',
+    });
+	if (lat != null && lng != null) {
+		map1.region.latitude = lat;
+    	map1.region.longitude = lng;
+    	Ti.API.info("map LAT: " + map1.region.latitude);
+ 
+	    var random = MapModule.createAnnotation({
+	    	latitude: lat,
+	    	longitude: lng,	   
+	    	image: anImageView,
+		    pincolor: MapModule.ANNOTATION_AZURE,
+		    draggable: false
+		});
+
+        
+	    var mapview = MapModule.createView({
+	    	mapType: MapModule.NORMAL_TYPE,
+	    	region: {latitude: lat, longitude: lng, latitudeDelta: 0.1, longitudeDelta: 0.1 }
+		});
+	    
+	    mapview.addAnnotation(random);
+	    window.add(mapview);     
+	    Ti.API.info("map LAT3: " + map1.region.latitude);
+    	window.open();
+    	alert("Location is: "+lat+", "+lng);
+    }
+	else {
+		alert('No Location Found.');
+
+	}
+
+}
 
 $.index.open();
-
-/*setclient ();
-	var webview = Titanium.UI.createWebView();
-	webview.setUrl(authURL);  
-      
-    webview.addEventListener('load',function(e) {
-    	//for debug
-    	// Titanium.UI.createAlertDialog({title:'url', message:e.url.toString()}).show();    	
-    	//TPD, detect the status
-    	if (e.url.indexOf("myfirstappeceleraterapp") === 0) {
-			
-			webview.setVisible(false);
-         	// stop the event
-        	e.bubble = false;
-                  
-         	// stop the url from loading        
-         	webview.stopLoading();     
-        	         
-         	window.remove(webview);
-         	//localize the accessToken from the redirected URL
-         	var tokenIndex = e.url.indexOf("token"); 
-         	accessToken = e.url.substring(tokenIndex+6,tokenIndex + 42);         
-         	// Titanium.UI.createAlertDialog({title:'AcessToken', message:accessToken}).show();         
-         	
-         	//obtain
-         	obtainData(accessToken);
-         	Ti.API.info("obtained LAT: " + lat);              
-    	}
-    });
-    
-    function setclient () {
-	//set your application ID 
-	var appID = '21de13d2-a016-4fed-8e5e-43f0432ea717';	
-	//set the OAuth URL and the redirect uri
-	authURL = "https://api.moj.io/OAuth2SandBox/authorize?response_type=token&client_id=";
-	authURL = authURL + appID+"&redirect_uri=myfirstappeceleraterapp://";	
-}
-
-
-
-function obtainData(accessToken) {
-	var url = "https://api.moj.io:443/v1/Vehicles?limit=10&offset=0&sortBy=Name&desc=false&criteria=";
- 	var client = Ti.Network.createHTTPClient({
-	     // function called when the response data is available
-	     onload : function(e) {
-	        
-	         var obj = JSON.parse(this.responseText);
-	       
-	         var Type = obj.Data[0].Type;
-	         lat = parseFloat(obj.Data[0].LastLocation.Lat);
-	         lng = parseFloat(obj.Data[0].LastLocation.Lng);	        
-	         Ti.API.info("Received LAT: " + lat);
-	         Ti.API.info("Received LNG: " + lng);
-	         Ti.API.info("Received pagesize: " + Type);
-	        if(lat!==0 && lng!==0) {
-	        	loadmap();	
-	        }	         
-	     },
-	     // function called when an error occurs, including a timeout
-	     onerror : function(e) {
-	         Ti.API.debug(e.error);
-	         alert('error');
-	     },
-	     timeout : 5000  // in milliseconds
- 	});
- 	 
- 	 client.setRequestHeader("MojioAPIToken",accessToken);
-	 url = "https://api.moj.io:443/v1/Vehicles";
- 	 Ti.API.info("old url:" + url);
-	 // Prepare the connection.
-	 client.open("GET", url);
-	 // Send the request.
-	 client.send();
-}
-    
-    
-    
-    * 
-    * */
-	

@@ -101,12 +101,14 @@
         ref = results.Data;
         for (j = 0, len1 = ref.length; j < len1; j++) {
           result = ref[j];
-          Ti.API.info("result is : " + result);
-          Ti.API.info("ref is : " + JSON.stringify(result));
-          LastLocation = result.LastLocation;
-          Ti.API.info("LastLocation : " + LastLocation);
-          Lat = LastLocation.Lat;
-          Ti.API.info("Lat : " + Lat);
+          if (result.LastLocation != null) {
+	          Ti.API.info("result is : " + result);
+	          Ti.API.info("ref is : " + JSON.stringify(result));
+	          LastLocation = result.LastLocation;
+	          Ti.API.info("LastLocation : " + LastLocation);
+	          Lat = LastLocation.Lat;
+	          Ti.API.info("Lat : " + Lat);
+          }
         
           objects.push(new type(result));
         }

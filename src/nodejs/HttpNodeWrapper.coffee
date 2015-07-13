@@ -43,3 +43,6 @@ module.exports = class HttpNodeWrapper
 
         action.write(params.body) if (params.body?)
         action.end()
+
+    redirect: (params, callback) -> # @applicationName is appname
+        @request(params, callback)
