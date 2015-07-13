@@ -99,7 +99,7 @@
                         }
                     }
                     HttpBrowserWrapper.prototype.request = function(params, callback) {
-                        var k, url, v, xmlhttp, _ref;
+                        var k, ref, url, v, xmlhttp;
                         if (params.method == null) {
                             params.method = "GET";
                         }
@@ -133,9 +133,9 @@
                             xmlhttp = this.requester;
                         }
                         xmlhttp.open(params.method, url, true);
-                        _ref = params.headers;
-                        for (k in _ref) {
-                            v = _ref[k];
+                        ref = params.headers;
+                        for (k in ref) {
+                            v = ref[k];
                             xmlhttp.setRequestHeader(k, v);
                         }
                         xmlhttp.onreadystatechange = function() {
@@ -175,9 +175,9 @@
                         signalr_hub: "ObserverHub",
                         live: true
                     };
-                    function MojioClient(_at_options) {
-                        var _base, _base1, _base2, _base3, _base4, _base5, _base6, _base7;
-                        this.options = _at_options;
+                    function MojioClient(options) {
+                        var base, base1, base2, base3, base4, base5, base6, base7;
+                        this.options = options;
                         if (this.options == null) {
                             this.options = {
                                 hostname: this.defaults.hostname,
@@ -187,26 +187,26 @@
                                 live: this.defaults.live
                             };
                         }
-                        if ((_base = this.options).hostname == null) {
-                            _base.hostname = defaults.hostname;
+                        if ((base = this.options).hostname == null) {
+                            base.hostname = defaults.hostname;
                         }
-                        if ((_base1 = this.options).port == null) {
-                            _base1.port = defaults.port;
+                        if ((base1 = this.options).port == null) {
+                            base1.port = defaults.port;
                         }
-                        if ((_base2 = this.options).version == null) {
-                            _base2.version = defaults.version;
+                        if ((base2 = this.options).version == null) {
+                            base2.version = defaults.version;
                         }
-                        if ((_base3 = this.options).scheme == null) {
-                            _base3.scheme = defaults.scheme;
+                        if ((base3 = this.options).scheme == null) {
+                            base3.scheme = defaults.scheme;
                         }
-                        if ((_base4 = this.options).signalr_port == null) {
-                            _base4.signalr_port = defaults.signalr_port;
+                        if ((base4 = this.options).signalr_port == null) {
+                            base4.signalr_port = defaults.signalr_port;
                         }
-                        if ((_base5 = this.options).signalr_scheme == null) {
-                            _base5.signalr_scheme = defaults.signalr_scheme;
+                        if ((base5 = this.options).signalr_scheme == null) {
+                            base5.signalr_scheme = defaults.signalr_scheme;
                         }
-                        if ((_base6 = this.options).signalr_hub == null) {
-                            _base6.signalr_hub = defaults.signalr_hub;
+                        if ((base6 = this.options).signalr_hub == null) {
+                            base6.signalr_hub = defaults.signalr_hub;
                         }
                         this.options.application = this.options.application;
                         this.options.secret = this.options.secret;
@@ -215,27 +215,27 @@
                         this.hub = null;
                         this.connStatus = null;
                         this.auth_token = null;
-                        if ((_base7 = this.options).tokenRequester == null) {
-                            _base7.tokenRequester = function() {
+                        if ((base7 = this.options).tokenRequester == null) {
+                            base7.tokenRequester = function() {
                                 return document.location.hash.match(/access_token=([0-9a-f-]{36})/);
                             };
                         }
                         this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [ this.options.signalr_hub ], $);
                     }
                     MojioClient.prototype.getResults = function(type, results) {
-                        var arrlength, objects, result, _i, _j, _len, _len1, _ref;
+                        var arrlength, i, j, len, len1, objects, ref, result;
                         objects = [];
                         if (results instanceof Array) {
                             arrlength = results.length;
-                            for (_i = 0, _len = results.length; _i < _len; _i++) {
-                                result = results[_i];
+                            for (i = 0, len = results.length; i < len; i++) {
+                                result = results[i];
                                 objects.push(new type(result));
                             }
                         } else if (results.Data instanceof Array) {
                             arrlength = results.Data.length;
-                            _ref = results.Data;
-                            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-                                result = _ref[_j];
+                            ref = results.Data;
+                            for (j = 0, len1 = ref.length; j < len1; j++) {
+                                result = ref[j];
                                 objects.push(new type(result));
                             }
                         } else if (result.Data !== null) {
@@ -450,7 +450,7 @@
                     Observer = _dereq_("../models/Observer");
                     mojio_models["Observer"] = Observer;
                     MojioClient.prototype.model = function(type, json) {
-                        var data, object, _i, _len, _ref;
+                        var data, i, len, object, ref;
                         if (json == null) {
                             json = null;
                         }
@@ -459,9 +459,9 @@
                         } else if (json.Data != null && json.Data instanceof Array) {
                             object = json;
                             object.Objects = new Array();
-                            _ref = json.Data;
-                            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                                data = _ref[_i];
+                            ref = json.Data;
+                            for (i = 0, len = ref.length; i < len; i++) {
+                                data = ref[i];
                                 object.Objects.push(new mojio_models[type](data));
                             }
                         } else if (json.Data != null) {
@@ -473,13 +473,13 @@
                         return object;
                     };
                     MojioClient.prototype.query = function(model, parameters, callback) {
-                        var property, query_criteria, value, _ref;
+                        var property, query_criteria, ref, value;
                         if (parameters instanceof Object) {
                             if (parameters.criteria instanceof Object) {
                                 query_criteria = "";
-                                _ref = parameters.criteria;
-                                for (property in _ref) {
-                                    value = _ref[property];
+                                ref = parameters.criteria;
+                                for (property in ref) {
+                                    value = ref[property];
                                     query_criteria += property + "=" + value + ";";
                                 }
                                 parameters.criteria = query_criteria;
@@ -791,7 +791,7 @@
         } ],
         5: [ function(_dereq_, module, exports) {
             (function() {
-                var SignalRBrowserWrapper, __bind = function(fn, me) {
+                var SignalRBrowserWrapper, bind = function(fn, me) {
                     return function() {
                         return fn.apply(me, arguments);
                     };
@@ -799,27 +799,27 @@
                 module.exports = SignalRBrowserWrapper = function() {
                     SignalRBrowserWrapper.prototype.observer_callbacks = {};
                     SignalRBrowserWrapper.prototype.observer_registry = function(entity) {
-                        var callback, _i, _j, _len, _len1, _ref, _ref1, _results, _results1;
+                        var callback, i, j, len, len1, ref, ref1, results, results1;
                         if (this.observer_callbacks[entity._id]) {
-                            _ref = this.observer_callbacks[entity._id];
-                            _results = [];
-                            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                                callback = _ref[_i];
-                                _results.push(callback(entity));
+                            ref = this.observer_callbacks[entity._id];
+                            results = [];
+                            for (i = 0, len = ref.length; i < len; i++) {
+                                callback = ref[i];
+                                results.push(callback(entity));
                             }
-                            return _results;
+                            return results;
                         } else if (this.observer_callbacks[entity.Type]) {
-                            _ref1 = this.observer_callbacks[entity.Type];
-                            _results1 = [];
-                            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-                                callback = _ref1[_j];
-                                _results1.push(callback(entity));
+                            ref1 = this.observer_callbacks[entity.Type];
+                            results1 = [];
+                            for (j = 0, len1 = ref1.length; j < len1; j++) {
+                                callback = ref1[j];
+                                results1.push(callback(entity));
                             }
-                            return _results1;
+                            return results1;
                         }
                     };
                     function SignalRBrowserWrapper(url, hubNames, jquery) {
-                        this.observer_registry = __bind(this.observer_registry, this);
+                        this.observer_registry = bind(this.observer_registry, this);
                         this.$ = jquery;
                         this.url = url;
                         this.hubs = {};
@@ -873,14 +873,14 @@
                         this.observer_callbacks[id].push(futureCallback);
                     };
                     SignalRBrowserWrapper.prototype.removeCallback = function(id, pastCallback) {
-                        var callback, temp, _i, _len, _ref;
+                        var callback, i, len, ref, temp;
                         if (pastCallback === null) {
                             this.observer_callbacks[id] = [];
                         } else {
                             temp = [];
-                            _ref = this.observer_callbacks[id];
-                            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                                callback = _ref[_i];
+                            ref = this.observer_callbacks[id];
+                            for (i = 0, len = ref.length; i < len; i++) {
+                                callback = ref[i];
                                 if (callback !== pastCallback) {
                                     temp.push(callback);
                                 }
@@ -924,9 +924,9 @@
         }, {} ],
         6: [ function(_dereq_, module, exports) {
             (function() {
-                var App, MojioModel, __extends = function(child, parent) {
+                var App, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -935,10 +935,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = App = function(_super) {
-                    __extends(App, _super);
+                module.exports = App = function(superClass) {
+                    extend(App, superClass);
                     App.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -971,9 +971,9 @@
         } ],
         7: [ function(_dereq_, module, exports) {
             (function() {
-                var Event, MojioModel, __extends = function(child, parent) {
+                var Event, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -982,10 +982,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Event = function(_super) {
-                    __extends(Event, _super);
+                module.exports = Event = function(superClass) {
+                    extend(Event, superClass);
                     Event.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -1067,9 +1067,9 @@
         } ],
         8: [ function(_dereq_, module, exports) {
             (function() {
-                var Login, MojioModel, __extends = function(child, parent) {
+                var Login, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1078,10 +1078,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Login = function(_super) {
-                    __extends(Login, _super);
+                module.exports = Login = function(superClass) {
+                    extend(Login, superClass);
                     Login.prototype._schema = {
                         Type: "String",
                         AppId: "String",
@@ -1114,9 +1114,9 @@
         } ],
         9: [ function(_dereq_, module, exports) {
             (function() {
-                var Mojio, MojioModel, __extends = function(child, parent) {
+                var Mojio, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1125,10 +1125,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Mojio = function(_super) {
-                    __extends(Mojio, _super);
+                module.exports = Mojio = function(superClass) {
+                    extend(Mojio, superClass);
                     Mojio.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",
@@ -1176,13 +1176,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -1328,13 +1328,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -1366,9 +1366,9 @@
         }, {} ],
         11: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Observer, __extends = function(child, parent) {
+                var MojioModel, Observer, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1377,10 +1377,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Observer = function(_super) {
-                    __extends(Observer, _super);
+                module.exports = Observer = function(superClass) {
+                    extend(Observer, superClass);
                     Observer.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -1423,9 +1423,9 @@
         } ],
         12: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Product, __extends = function(child, parent) {
+                var MojioModel, Product, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1434,10 +1434,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Product = function(_super) {
-                    __extends(Product, _super);
+                module.exports = Product = function(superClass) {
+                    extend(Product, superClass);
                     Product.prototype._schema = {
                         Type: "String",
                         AppId: "String",
@@ -1473,9 +1473,9 @@
         } ],
         13: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Subscription, __extends = function(child, parent) {
+                var MojioModel, Subscription, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1484,10 +1484,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Subscription = function(_super) {
-                    __extends(Subscription, _super);
+                module.exports = Subscription = function(superClass) {
+                    extend(Subscription, superClass);
                     Subscription.prototype._schema = {
                         Type: "Integer",
                         ChannelType: "Integer",
@@ -1523,9 +1523,9 @@
         } ],
         14: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Trip, __extends = function(child, parent) {
+                var MojioModel, Trip, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1534,10 +1534,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Trip = function(_super) {
-                    __extends(Trip, _super);
+                module.exports = Trip = function(superClass) {
+                    extend(Trip, superClass);
                     Trip.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -1617,9 +1617,9 @@
         } ],
         15: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, User, __extends = function(child, parent) {
+                var MojioModel, User, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1628,10 +1628,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = User = function(_super) {
-                    __extends(User, _super);
+                module.exports = User = function(superClass) {
+                    extend(User, superClass);
                     User.prototype._schema = {
                         Type: "Integer",
                         UserName: "String",
@@ -1668,9 +1668,9 @@
         } ],
         16: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Vehicle, __extends = function(child, parent) {
+                var MojioModel, Vehicle, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1679,10 +1679,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Vehicle = function(_super) {
-                    __extends(Vehicle, _super);
+                module.exports = Vehicle = function(superClass) {
+                    extend(Vehicle, superClass);
                     Vehicle.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",
