@@ -10,7 +10,7 @@ should = require('should')
 describe 'Get_CRUD', ->
 
     it 'can get resource', (done) ->
-        mojio_client.login(testdata.username, testdata.password, (error, result) ->
+        mojio_client._login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
             mojio_client.request(
                 {
@@ -34,7 +34,7 @@ describe 'Get_CRUD', ->
 #describe 'Post_CRUD', ->
 #
 #    it 'can post resource', (done) ->
-#        mojio.login(testdata.username, testdata.password, (error, result) ->
+#        mojio._login(testdata.username, testdata.password, (error, result) ->
 #            (error==null).should.be.true
 #            mojio.should.be.an.instanceOf(Mojio)
 #            mojio.token.should.be.ok
@@ -64,7 +64,7 @@ describe 'Get_CRUD', ->
 #describe 'Put_CRUD', ->
 #
 #    it 'can put resource', (done) ->
-#        mojio.login(testdata.username, testdata.password, (error, result) ->
+#        mojio._login(testdata.username, testdata.password, (error, result) ->
 #            (error==null).should.be.true
 #            mojio.should.be.an.instanceOf(Mojio)
 #            mojio.token.should.be.ok
@@ -94,7 +94,7 @@ describe 'Get_CRUD', ->
 #describe 'Delete_CRUD', ->
 #
 #    it 'can delete resource', (done) ->
-#        mojio.login(testdata.username, testdata.password, (error, result) ->
+#        mojio._login(testdata.username, testdata.password, (error, result) ->
 #            (error==null).should.be.true
 #            mojio.should.be.an.instanceOf(Mojio)
 #            mojio.token.should.be.ok

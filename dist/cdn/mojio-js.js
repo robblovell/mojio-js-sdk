@@ -1,4 +1,3 @@
-// version 3.5.1
 !function(e) {
     if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
         var o;
@@ -31,62 +30,6 @@
         return s;
     }({
         1: [ function(_dereq_, module, exports) {
-            var formurlencoded = (typeof module === "object" ? module : {}).exports = {
-                encode: function(data, options) {
-                    function getNestValsArrAsStr(arr) {
-                        return arr.filter(function(e) {
-                            return typeof e === "string" && e.length;
-                        }).join("&");
-                    }
-                    function getKeys(obj) {
-                        var keys = Object.keys(obj);
-                        return options && options.sorted ? keys.sort() : keys;
-                    }
-                    function getObjNestVals(name, obj) {
-                        var objKeyStr = ":name[:prop]";
-                        return getNestValsArrAsStr(getKeys(obj).map(function(key) {
-                            return getNestVals(objKeyStr.replace(/:name/, name).replace(/:prop/, key), obj[key]);
-                        }));
-                    }
-                    function getArrNestVals(name, arr) {
-                        var arrKeyStr = ":name[]";
-                        return getNestValsArrAsStr(arr.map(function(elem) {
-                            return getNestVals(arrKeyStr.replace(/:name/, name), elem);
-                        }));
-                    }
-                    function getNestVals(name, value) {
-                        var whitespaceRe = /%20/g, type = typeof value, f = null;
-                        if (type === "string") {
-                            f = encodeURIComponent(name) + "=" + formEncodeString(value);
-                        } else if (type === "number") {
-                            f = encodeURIComponent(name) + "=" + encodeURIComponent(value).replace(whitespaceRe, "+");
-                        } else if (type === "boolean") {
-                            f = encodeURIComponent(name) + "=" + value;
-                        } else if (Array.isArray(value)) {
-                            f = getArrNestVals(name, value);
-                        } else if (type === "object") {
-                            f = getObjNestVals(name, value);
-                        }
-                        return f;
-                    }
-                    function manuallyEncodeChar(ch) {
-                        return "%" + ("0" + ch.charCodeAt(0).toString(16)).slice(-2).toUpperCase();
-                    }
-                    function formEncodeString(value) {
-                        return value.replace(/[^ !'()~\*]*/g, encodeURIComponent).replace(/ /g, "+").replace(/[!'()~\*]/g, manuallyEncodeChar);
-                    }
-                    return getNestValsArrAsStr(getKeys(data).map(function(key) {
-                        return getNestVals(key, data[key]);
-                    }));
-                }
-            };
-        }, {} ],
-        2: [ function(_dereq_, module, exports) {
-            module.exports = _dereq_("./form-urlencoded");
-        }, {
-            "./form-urlencoded": 1
-        } ],
-        3: [ function(_dereq_, module, exports) {
             (function() {
                 var HttpBrowserWrapper;
                 module.exports = HttpBrowserWrapper = function() {
@@ -99,7 +42,7 @@
                         }
                     }
                     HttpBrowserWrapper.prototype.request = function(params, callback) {
-                        var k, url, v, xmlhttp, _ref;
+                        var k, ref, url, v, xmlhttp;
                         if (params.method == null) {
                             params.method = "GET";
                         }
@@ -133,9 +76,9 @@
                             xmlhttp = this.requester;
                         }
                         xmlhttp.open(params.method, url, true);
-                        _ref = params.headers;
-                        for (k in _ref) {
-                            v = _ref[k];
+                        ref = params.headers;
+                        for (k in ref) {
+                            v = ref[k];
                             xmlhttp.setRequestHeader(k, v);
                         }
                         xmlhttp.onreadystatechange = function() {
@@ -153,18 +96,22 @@
                             return xmlhttp.send(params.data);
                         }
                     };
+                    HttpBrowserWrapper.prototype.redirect = function(params, callback) {
+                        var url;
+                        url = params.scheme + "://" + params.host + ":" + params.port + params.path;
+                        return window.location = url;
+                    };
                     return HttpBrowserWrapper;
                 }();
             }).call(this);
         }, {} ],
-        4: [ function(_dereq_, module, exports) {
+        2: [ function(_dereq_, module, exports) {
             (function() {
-                var FormUrlencoded, Http, MojioClient, SignalR;
+                var Http, MojioClient, SignalR;
                 Http = _dereq_("./HttpBrowserWrapper");
                 SignalR = _dereq_("./SignalRBrowserWrapper");
-                FormUrlencoded = _dereq_("form-urlencoded");
                 module.exports = MojioClient = function() {
-                    var App, Event, Login, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
+                    var App, Event, Mojio, Observer, Product, Subscription, Trip, User, Vehicle, defaults, mojio_models;
                     defaults = {
                         hostname: "api.moj.io",
                         port: "443",
@@ -175,9 +122,9 @@
                         signalr_hub: "ObserverHub",
                         live: true
                     };
-                    function MojioClient(_at_options) {
-                        var _base, _base1, _base2, _base3, _base4, _base5, _base6, _base7;
-                        this.options = _at_options;
+                    function MojioClient(options) {
+                        var base, base1, base2, base3, base4, base5, base6, base7;
+                        this.options = options;
                         if (this.options == null) {
                             this.options = {
                                 hostname: this.defaults.hostname,
@@ -187,26 +134,26 @@
                                 live: this.defaults.live
                             };
                         }
-                        if ((_base = this.options).hostname == null) {
-                            _base.hostname = defaults.hostname;
+                        if ((base = this.options).hostname == null) {
+                            base.hostname = defaults.hostname;
                         }
-                        if ((_base1 = this.options).port == null) {
-                            _base1.port = defaults.port;
+                        if ((base1 = this.options).port == null) {
+                            base1.port = defaults.port;
                         }
-                        if ((_base2 = this.options).version == null) {
-                            _base2.version = defaults.version;
+                        if ((base2 = this.options).version == null) {
+                            base2.version = defaults.version;
                         }
-                        if ((_base3 = this.options).scheme == null) {
-                            _base3.scheme = defaults.scheme;
+                        if ((base3 = this.options).scheme == null) {
+                            base3.scheme = defaults.scheme;
                         }
-                        if ((_base4 = this.options).signalr_port == null) {
-                            _base4.signalr_port = defaults.signalr_port;
+                        if ((base4 = this.options).signalr_port == null) {
+                            base4.signalr_port = defaults.signalr_port;
                         }
-                        if ((_base5 = this.options).signalr_scheme == null) {
-                            _base5.signalr_scheme = defaults.signalr_scheme;
+                        if ((base5 = this.options).signalr_scheme == null) {
+                            base5.signalr_scheme = defaults.signalr_scheme;
                         }
-                        if ((_base6 = this.options).signalr_hub == null) {
-                            _base6.signalr_hub = defaults.signalr_hub;
+                        if ((base6 = this.options).signalr_hub == null) {
+                            base6.signalr_hub = defaults.signalr_hub;
                         }
                         this.options.application = this.options.application;
                         this.options.secret = this.options.secret;
@@ -215,27 +162,27 @@
                         this.hub = null;
                         this.connStatus = null;
                         this.auth_token = null;
-                        if ((_base7 = this.options).tokenRequester == null) {
-                            _base7.tokenRequester = function() {
+                        if ((base7 = this.options).tokenRequester == null) {
+                            base7.tokenRequester = function() {
                                 return document.location.hash.match(/access_token=([0-9a-f-]{36})/);
                             };
                         }
                         this.signalr = new SignalR(this.options.signalr_scheme + "://" + this.options.hostname + ":" + this.options.signalr_port + "/v1/signalr", [ this.options.signalr_hub ], $);
                     }
                     MojioClient.prototype.getResults = function(type, results) {
-                        var arrlength, objects, result, _i, _j, _len, _len1, _ref;
+                        var arrlength, i, j, len, len1, objects, ref, result;
                         objects = [];
                         if (results instanceof Array) {
                             arrlength = results.length;
-                            for (_i = 0, _len = results.length; _i < _len; _i++) {
-                                result = results[_i];
+                            for (i = 0, len = results.length; i < len; i++) {
+                                result = results[i];
                                 objects.push(new type(result));
                             }
                         } else if (results.Data instanceof Array) {
                             arrlength = results.Data.length;
-                            _ref = results.Data;
-                            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-                                result = _ref[_j];
+                            ref = results.Data;
+                            for (j = 0, len1 = ref.length; j < len1; j++) {
+                                result = ref[j];
                                 objects.push(new type(result));
                             }
                         } else if (result.Data !== null) {
@@ -281,21 +228,18 @@
                     MojioClient.prototype.stringify = function(data) {
                         return JSON.stringify(data);
                     };
-                    MojioClient.prototype.request = function(request, callback, isOauth) {
+                    MojioClient.prototype.request = function(request, callback) {
                         var http, parts;
-                        if (isOauth == null) {
-                            isOauth = false;
-                        }
                         parts = {
                             hostname: this.options.hostname,
                             host: this.options.hostname,
                             port: this.options.port,
                             scheme: this.options.scheme,
-                            path: isOauth ? "" : "/" + this.options.version,
+                            path: "/" + this.options.version,
                             method: request.method,
                             withCredentials: false
                         };
-                        parts.path = parts.path + this.getPath(request.resource, request.id, request.action, request.key);
+                        parts.path = "/" + this.options.version + this.getPath(request.resource, request.id, request.action, request.key);
                         if (request.parameters != null && Object.keys(request.parameters).length > 0) {
                             parts.path += MojioClient._makeParameters(request.parameters);
                         }
@@ -308,54 +252,66 @@
                         }
                         parts.headers["Content-Type"] = "application/json";
                         if (request.body != null) {
-                            if (isOauth) {
-                                parts.body = FormUrlencoded.encode(request.body);
-                            } else {
-                                parts.body = request.body;
-                            }
+                            parts.body = request.body;
                         }
                         http = new Http();
                         return http.request(parts, callback);
                     };
                     MojioClient.prototype.login_resource = "Login";
-                    MojioClient.prototype.authorize = function(redirect_url, scope) {
-                        var parts, url;
+                    MojioClient.prototype.authorize = function(redirect_url, scope, callback) {
+                        var parts;
                         if (scope == null) {
                             scope = "full";
                         }
-                        parts = {
-                            hostname: this.options.hostname,
-                            host: this.options.hostname,
-                            port: this.options.port,
-                            scheme: this.options.scheme,
-                            path: this.options.live ? "/OAuth2/authorize" : "/OAuth2Sandbox/authorize",
-                            method: "Get",
-                            withCredentials: false
-                        };
-                        parts.path += "?response_type=token";
-                        parts.path += "&client_id=" + this.options.application;
-                        parts.path += "&redirect_uri=" + redirect_url;
-                        parts.path += "&scope=" + scope;
-                        parts.headers = {};
-                        if (this.getTokenId() != null) {
-                            parts.headers["MojioAPIToken"] = this.getTokenId();
+                        if (this.options != null && this.options.secret != null && this.options.username != null && this.options.password != null) {
+                            return this._login(this.options.username, this.options.password, callback);
+                        } else {
+                            parts = {
+                                hostname: this.options.hostname,
+                                host: this.options.hostname,
+                                port: this.options.port,
+                                scheme: this.options.scheme,
+                                path: this.options.live ? "/OAuth2/authorize" : "/OAuth2Sandbox/authorize",
+                                method: "Get",
+                                withCredentials: false
+                            };
+                            parts.path += "?response_type=token";
+                            parts.path += "&client_id=" + this.options.application;
+                            parts.path += "&redirect_uri=" + redirect_url;
+                            parts.path += "&scope=" + scope;
+                            parts.headers = {};
+                            if (this.getTokenId() != null) {
+                                parts.headers["MojioAPIToken"] = this.getTokenId();
+                            }
+                            parts.headers["Content-Type"] = "application/json";
+                            return http.redirect(parts, function(error, result) {
+                                if (result != null) {
+                                    this.auth_token = {
+                                        _id: result
+                                    };
+                                }
+                                if (callback == null) {
+                                    return;
+                                }
+                                if (error != null) {
+                                    callback(error, null);
+                                }
+                                return callback(null, result);
+                            });
                         }
-                        parts.headers["Content-Type"] = "application/json";
-                        url = parts.scheme + "://" + parts.host + ":" + parts.port + parts.path;
-                        return window.location = url;
                     };
                     MojioClient.prototype.token = function(callback) {
                         var match, token;
                         this.user = null;
-                        token = this.options.tokenRequester();
-                        match = !!token && token[1];
-                        if (!match) {
+                        match = this.options.tokenRequester();
+                        token = !!match && match[1];
+                        if (!token) {
                             return callback("token for authorization not found.", null);
                         } else {
                             return this.request({
                                 method: "GET",
                                 resource: this.login_resource,
-                                id: match
+                                id: token
                             }, function(_this) {
                                 return function(error, result) {
                                     if (error) {
@@ -368,46 +324,54 @@
                             }(this));
                         }
                     };
-                    MojioClient.prototype.unauthorize = function(redirect_url) {
-                        var parts, url;
-                        parts = {
-                            hostname: this.options.hostname,
-                            host: this.options.hostname,
-                            port: this.options.port,
-                            scheme: this.options.scheme,
-                            path: "/account/logout",
-                            method: "Get",
-                            withCredentials: false
-                        };
-                        parts.path += "?Guid=" + this.getTokenId();
-                        parts.path += "&client_id=" + this.options.application;
-                        parts.path += "&redirect_uri=" + redirect_url;
-                        parts.headers = {};
-                        if (this.getTokenId() != null) {
-                            parts.headers["MojioAPIToken"] = this.getTokenId();
+                    MojioClient.prototype.unauthorize = function(redirect_url, callback) {
+                        var parts;
+                        if (this.options != null && this.options.secret != null && this.options.username != null && this.options.password != null) {
+                            return this._logout(callback);
+                        } else {
+                            parts = {
+                                hostname: this.options.hostname,
+                                host: this.options.hostname,
+                                port: this.options.port,
+                                scheme: this.options.scheme,
+                                path: "/account/logout",
+                                method: "Get",
+                                withCredentials: false
+                            };
+                            parts.path += "?Guid=" + this.getTokenId();
+                            parts.path += "&client_id=" + this.options.application;
+                            parts.path += "&redirect_uri=" + redirect_url;
+                            parts.headers = {};
+                            if (this.getTokenId() != null) {
+                                parts.headers["MojioAPIToken"] = this.getTokenId();
+                            }
+                            parts.headers["Content-Type"] = "application/json";
+                            return http.redirect(parts, function(error, result) {
+                                this.auth_token = null;
+                                if (callback == null) {
+                                    return;
+                                }
+                                if (error != null) {
+                                    callback(error, null);
+                                }
+                                return callback(null, result);
+                            });
                         }
-                        parts.headers["Content-Type"] = "application/json";
-                        url = parts.scheme + "://" + parts.host + ":" + parts.port + parts.path;
-                        return window.location = url;
                     };
                     MojioClient.prototype._login = function(username, password, callback) {
                         return this.request({
                             method: "POST",
-                            resource: this.options.live ? "/OAuth2/token" : "/OAuth2Sandbox/token",
-                            body: {
-                                username: username,
+                            resource: this.login_resource,
+                            id: this.options.application,
+                            parameters: {
+                                userOrEmail: username,
                                 password: password,
-                                client_id: this.options.application,
-                                client_secret: this.options.secret,
-                                grant_type: "password"
+                                secretKey: this.options.secret
                             }
-                        }, callback, true);
-                    };
-                    MojioClient.prototype.login = function(username, password, callback) {
-                        return this._login(username, password, function(_this) {
+                        }, function(_this) {
                             return function(error, result) {
                                 if (result != null) {
-                                    _this.auth_token = result.access_token ? result.access_token : result;
+                                    _this.auth_token = result;
                                 }
                                 return callback(error, result);
                             };
@@ -418,10 +382,7 @@
                             method: "DELETE",
                             resource: this.login_resource,
                             id: typeof mojio_token !== "undefined" && mojio_token !== null ? mojio_token : this.getTokenId()
-                        }, callback);
-                    };
-                    MojioClient.prototype.logout = function(callback) {
-                        return this._logout(function(_this) {
+                        }, function(_this) {
                             return function(error, result) {
                                 _this.auth_token = null;
                                 return callback(error, result);
@@ -431,8 +392,6 @@
                     mojio_models = {};
                     App = _dereq_("../models/App");
                     mojio_models["App"] = App;
-                    Login = _dereq_("../models/Login");
-                    mojio_models["Login"] = Login;
                     Mojio = _dereq_("../models/Mojio");
                     mojio_models["Mojio"] = Mojio;
                     Trip = _dereq_("../models/Trip");
@@ -450,7 +409,7 @@
                     Observer = _dereq_("../models/Observer");
                     mojio_models["Observer"] = Observer;
                     MojioClient.prototype.model = function(type, json) {
-                        var data, object, _i, _len, _ref;
+                        var data, i, len, object, ref;
                         if (json == null) {
                             json = null;
                         }
@@ -459,9 +418,9 @@
                         } else if (json.Data != null && json.Data instanceof Array) {
                             object = json;
                             object.Objects = new Array();
-                            _ref = json.Data;
-                            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                                data = _ref[_i];
+                            ref = json.Data;
+                            for (i = 0, len = ref.length; i < len; i++) {
+                                data = ref[i];
                                 object.Objects.push(new mojio_models[type](data));
                             }
                         } else if (json.Data != null) {
@@ -473,13 +432,13 @@
                         return object;
                     };
                     MojioClient.prototype.query = function(model, parameters, callback) {
-                        var property, query_criteria, value, _ref;
+                        var property, query_criteria, ref, value;
                         if (parameters instanceof Object) {
                             if (parameters.criteria instanceof Object) {
                                 query_criteria = "";
-                                _ref = parameters.criteria;
-                                for (property in _ref) {
-                                    value = _ref[property];
+                                ref = parameters.criteria;
+                                for (property in ref) {
+                                    value = ref[property];
                                     query_criteria += property + "=" + value + ";";
                                 }
                                 parameters.criteria = query_criteria;
@@ -725,48 +684,38 @@
                             }(this));
                         }
                     };
+                    MojioClient.prototype.isAuthorized = function() {
+                        return this.auth_token != null && this.auth_token._id;
+                    };
                     MojioClient.prototype.getTokenId = function() {
-                        if (this.auth_token != null && this.auth_token._id != null) {
-                            return this.auth_token._id;
-                        }
                         if (this.auth_token != null) {
-                            return this.auth_token;
+                            return this.auth_token._id;
                         }
                         return null;
                     };
                     MojioClient.prototype.getUserId = function() {
-                        if (this.auth_token != null && this.auth_token.UserId) {
+                        if (this.auth_token != null) {
                             return this.auth_token.UserId;
                         }
                         return null;
                     };
                     MojioClient.prototype.isLoggedIn = function() {
-                        return this.getUserId() !== null || typeof this.auth_token === "string";
+                        return this.getUserId() !== null;
                     };
                     MojioClient.prototype.getCurrentUser = function(callback) {
                         if (this.user != null) {
-                            callback(null, this.user);
+                            callback(this.user);
                         } else if (this.isLoggedIn()) {
-                            this.get(Login, this.auth_token, function(_this) {
-                                return function(error, result) {
-                                    if (error != null) {
-                                        return callback(error, null);
-                                    } else if (result.UserId != null) {
-                                        return _this.get(User, result.UserId, function(error, result) {
-                                            if (error != null) {
-                                                return callback(error, null);
-                                            } else {
-                                                _this.user = result;
-                                                return callback(null, _this.user);
-                                            }
-                                        });
-                                    } else {
-                                        return callback("User not found", null);
-                                    }
-                                };
-                            }(this));
+                            get("users", this.getUserId()).done(function(user) {
+                                if (!(user != null)) {
+                                    return;
+                                }
+                                if (this.getUserId() === this.user._id) {
+                                    this.user = user;
+                                }
+                                return callback(this.user);
+                            });
                         } else {
-                            callback("User not found", null);
                             return false;
                         }
                         return true;
@@ -775,23 +724,21 @@
                 }();
             }).call(this);
         }, {
-            "../models/App": 6,
-            "../models/Event": 7,
-            "../models/Login": 8,
-            "../models/Mojio": 9,
-            "../models/Observer": 11,
-            "../models/Product": 12,
-            "../models/Subscription": 13,
-            "../models/Trip": 14,
-            "../models/User": 15,
-            "../models/Vehicle": 16,
-            "./HttpBrowserWrapper": 3,
-            "./SignalRBrowserWrapper": 5,
-            "form-urlencoded": 2
+            "../models/App": 4,
+            "../models/Event": 5,
+            "../models/Mojio": 6,
+            "../models/Observer": 8,
+            "../models/Product": 9,
+            "../models/Subscription": 10,
+            "../models/Trip": 11,
+            "../models/User": 12,
+            "../models/Vehicle": 13,
+            "./HttpBrowserWrapper": 1,
+            "./SignalRBrowserWrapper": 3
         } ],
-        5: [ function(_dereq_, module, exports) {
+        3: [ function(_dereq_, module, exports) {
             (function() {
-                var SignalRBrowserWrapper, __bind = function(fn, me) {
+                var SignalRBrowserWrapper, bind = function(fn, me) {
                     return function() {
                         return fn.apply(me, arguments);
                     };
@@ -799,27 +746,27 @@
                 module.exports = SignalRBrowserWrapper = function() {
                     SignalRBrowserWrapper.prototype.observer_callbacks = {};
                     SignalRBrowserWrapper.prototype.observer_registry = function(entity) {
-                        var callback, _i, _j, _len, _len1, _ref, _ref1, _results, _results1;
+                        var callback, i, j, len, len1, ref, ref1, results, results1;
                         if (this.observer_callbacks[entity._id]) {
-                            _ref = this.observer_callbacks[entity._id];
-                            _results = [];
-                            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                                callback = _ref[_i];
-                                _results.push(callback(entity));
+                            ref = this.observer_callbacks[entity._id];
+                            results = [];
+                            for (i = 0, len = ref.length; i < len; i++) {
+                                callback = ref[i];
+                                results.push(callback(entity));
                             }
-                            return _results;
+                            return results;
                         } else if (this.observer_callbacks[entity.Type]) {
-                            _ref1 = this.observer_callbacks[entity.Type];
-                            _results1 = [];
-                            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-                                callback = _ref1[_j];
-                                _results1.push(callback(entity));
+                            ref1 = this.observer_callbacks[entity.Type];
+                            results1 = [];
+                            for (j = 0, len1 = ref1.length; j < len1; j++) {
+                                callback = ref1[j];
+                                results1.push(callback(entity));
                             }
-                            return _results1;
+                            return results1;
                         }
                     };
                     function SignalRBrowserWrapper(url, hubNames, jquery) {
-                        this.observer_registry = __bind(this.observer_registry, this);
+                        this.observer_registry = bind(this.observer_registry, this);
                         this.$ = jquery;
                         this.url = url;
                         this.hubs = {};
@@ -873,14 +820,14 @@
                         this.observer_callbacks[id].push(futureCallback);
                     };
                     SignalRBrowserWrapper.prototype.removeCallback = function(id, pastCallback) {
-                        var callback, temp, _i, _len, _ref;
+                        var callback, i, len, ref, temp;
                         if (pastCallback === null) {
                             this.observer_callbacks[id] = [];
                         } else {
                             temp = [];
-                            _ref = this.observer_callbacks[id];
-                            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-                                callback = _ref[_i];
+                            ref = this.observer_callbacks[id];
+                            for (i = 0, len = ref.length; i < len; i++) {
+                                callback = ref[i];
                                 if (callback !== pastCallback) {
                                     temp.push(callback);
                                 }
@@ -922,11 +869,11 @@
                 }();
             }).call(this);
         }, {} ],
-        6: [ function(_dereq_, module, exports) {
+        4: [ function(_dereq_, module, exports) {
             (function() {
-                var App, MojioModel, __extends = function(child, parent) {
+                var App, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -935,10 +882,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = App = function(_super) {
-                    __extends(App, _super);
+                module.exports = App = function(superClass) {
+                    extend(App, superClass);
                     App.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -967,13 +914,13 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        7: [ function(_dereq_, module, exports) {
+        5: [ function(_dereq_, module, exports) {
             (function() {
-                var Event, MojioModel, __extends = function(child, parent) {
+                var Event, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -982,10 +929,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Event = function(_super) {
-                    __extends(Event, _super);
+                module.exports = Event = function(superClass) {
+                    extend(Event, superClass);
                     Event.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -993,22 +940,13 @@
                         OwnerId: "String",
                         EventType: "Integer",
                         Time: "String",
-                        Location: {
-                            Lat: "Float",
-                            Lng: "Float",
-                            FromLockedGPS: "Boolean",
-                            Dilution: "Float"
-                        },
+                        Location: "Object",
+                        Accelerometer: "Object",
                         TimeIsApprox: "Boolean",
                         BatteryVoltage: "Float",
                         ConnectionLost: "Boolean",
                         _id: "String",
                         _deleted: "Boolean",
-                        Accelerometer: {
-                            X: "Float",
-                            Y: "Float",
-                            Z: "Float"
-                        },
                         TripId: "String",
                         Altitude: "Float",
                         Heading: "Float",
@@ -1040,11 +978,7 @@
                         SubjectId: "String",
                         Transports: "Integer",
                         Status: "Integer",
-                        Tokens: "Array",
-                        TimeWindow: "String",
-                        BroadcastOnlyRecent: "Boolean",
-                        Throttle: "String",
-                        NextAllowedBroadcast: "String"
+                        Tokens: "Array"
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
@@ -1063,13 +997,13 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        8: [ function(_dereq_, module, exports) {
+        6: [ function(_dereq_, module, exports) {
             (function() {
-                var Login, MojioModel, __extends = function(child, parent) {
+                var Mojio, MojioModel, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1078,57 +1012,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Login = function(_super) {
-                    __extends(Login, _super);
-                    Login.prototype._schema = {
-                        Type: "String",
-                        AppId: "String",
-                        UserId: "String",
-                        ValidUntil: "String",
-                        Scopes: "String",
-                        Sandboxed: "Boolean",
-                        Depricated: "Boolean",
-                        _id: "String",
-                        _deleted: "Boolean"
-                    };
-                    Login.prototype._resource = "Login";
-                    Login.prototype._model = "Login";
-                    function Login(json) {
-                        Login.__super__.constructor.call(this, json);
-                    }
-                    Login._resource = "Login";
-                    Login._model = "Login";
-                    Login.resource = function() {
-                        return Login._resource;
-                    };
-                    Login.model = function() {
-                        return Login._model;
-                    };
-                    return Login;
-                }(MojioModel);
-            }).call(this);
-        }, {
-            "./MojioModel": 10
-        } ],
-        9: [ function(_dereq_, module, exports) {
-            (function() {
-                var Mojio, MojioModel, __extends = function(child, parent) {
-                    for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
-                    }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, __hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Mojio = function(_super) {
-                    __extends(Mojio, _super);
+                module.exports = Mojio = function(superClass) {
+                    extend(Mojio, superClass);
                     Mojio.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",
@@ -1156,9 +1043,9 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        10: [ function(_dereq_, module, exports) {
+        7: [ function(_dereq_, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
@@ -1176,13 +1063,13 @@
                         return this[field];
                     };
                     MojioModel.prototype.validate = function(json) {
-                        var field, value, _results;
-                        _results = [];
+                        var field, results, value;
+                        results = [];
                         for (field in json) {
                             value = json[field];
-                            _results.push(this.setField(field, value));
+                            results.push(this.setField(field, value));
                         }
-                        return _results;
+                        return results;
                     };
                     MojioModel.prototype.stringify = function() {
                         return JSON.stringify(this, this.replacer);
@@ -1279,25 +1166,17 @@
                             }
                         }, callback);
                     };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
+                    MojioModel.prototype.observe = function(object, subject, observer_callback, callback) {
+                        if (subject == null) {
+                            subject = null;
                         }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
-                        }
+                        return this._client.observe(object, subject, observer_callback, callback);
                     };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
+                    MojioModel.prototype.unobserve = function(object, subject, observer_callback, callback) {
+                        if (subject == null) {
+                            subject = null;
                         }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
-                        }
+                        return this._client.observe(object, subject, observer_callback, callback);
                     };
                     MojioModel.prototype.store = function(model, key, value, callback) {
                         return this._client.store(model, key, value, callback);
@@ -1328,13 +1207,13 @@
                         return this._id;
                     };
                     MojioModel.prototype.mock = function(type, withid) {
-                        var field, value, _ref;
+                        var field, ref, value;
                         if (withid == null) {
                             withid = false;
                         }
-                        _ref = this.schema();
-                        for (field in _ref) {
-                            value = _ref[field];
+                        ref = this.schema();
+                        for (field in ref) {
+                            value = ref[field];
                             if (field === "Type") {
                                 this.setField(field, this.model());
                             } else if (field === "UserName") {
@@ -1364,11 +1243,11 @@
                 }();
             }).call(this);
         }, {} ],
-        11: [ function(_dereq_, module, exports) {
+        8: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Observer, __extends = function(child, parent) {
+                var MojioModel, Observer, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1377,10 +1256,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Observer = function(_super) {
-                    __extends(Observer, _super);
+                module.exports = Observer = function(superClass) {
+                    extend(Observer, superClass);
                     Observer.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -1395,10 +1274,6 @@
                         Transports: "Integer",
                         Status: "Integer",
                         Tokens: "Array",
-                        TimeWindow: "String",
-                        BroadcastOnlyRecent: "Boolean",
-                        Throttle: "String",
-                        NextAllowedBroadcast: "String",
                         _id: "String",
                         _deleted: "Boolean"
                     };
@@ -1419,13 +1294,13 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        12: [ function(_dereq_, module, exports) {
+        9: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Product, __extends = function(child, parent) {
+                var MojioModel, Product, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1434,10 +1309,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Product = function(_super) {
-                    __extends(Product, _super);
+                module.exports = Product = function(superClass) {
+                    extend(Product, superClass);
                     Product.prototype._schema = {
                         Type: "String",
                         AppId: "String",
@@ -1469,13 +1344,13 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        13: [ function(_dereq_, module, exports) {
+        10: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Subscription, __extends = function(child, parent) {
+                var MojioModel, Subscription, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1484,10 +1359,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Subscription = function(_super) {
-                    __extends(Subscription, _super);
+                module.exports = Subscription = function(superClass) {
+                    extend(Subscription, superClass);
                     Subscription.prototype._schema = {
                         Type: "Integer",
                         ChannelType: "Integer",
@@ -1519,13 +1394,13 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        14: [ function(_dereq_, module, exports) {
+        11: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Trip, __extends = function(child, parent) {
+                var MojioModel, Trip, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1534,10 +1409,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Trip = function(_super) {
-                    __extends(Trip, _super);
+                module.exports = Trip = function(superClass) {
+                    extend(Trip, superClass);
                     Trip.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -1552,43 +1427,11 @@
                         FuelLevel: "Float",
                         FuelEfficiency: "Float",
                         Distance: "Float",
-                        MovingTime: "Float",
-                        IdleTime: "Float",
-                        StopTime: "Float",
-                        StartLocation: {
-                            Lat: "Float",
-                            Lng: "Float",
-                            FromLockedGPS: "Boolean",
-                            Dilution: "Float"
-                        },
-                        LastKnownLocation: {
-                            Lat: "Float",
-                            Lng: "Float",
-                            FromLockedGPS: "Boolean",
-                            Dilution: "Float"
-                        },
-                        EndLocation: {
-                            Lat: "Float",
-                            Lng: "Float",
-                            FromLockedGPS: "Boolean",
-                            Dilution: "Float"
-                        },
-                        StartAddress: {
-                            Address1: "String",
-                            Address2: "String",
-                            City: "String",
-                            State: "String",
-                            Zip: "String",
-                            Country: "String"
-                        },
-                        EndAddress: {
-                            Address1: "String",
-                            Address2: "String",
-                            City: "String",
-                            State: "String",
-                            Zip: "String",
-                            Country: "String"
-                        },
+                        StartLocation: "Object",
+                        LastKnownLocation: "Object",
+                        EndLocation: "Object",
+                        StartAddress: "Object",
+                        EndAddress: "Object",
                         ForcefullyEnded: "Boolean",
                         StartMilage: "Float",
                         EndMilage: "Float",
@@ -1613,13 +1456,13 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        15: [ function(_dereq_, module, exports) {
+        12: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, User, __extends = function(child, parent) {
+                var MojioModel, User, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1628,10 +1471,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = User = function(_super) {
-                    __extends(User, _super);
+                module.exports = User = function(superClass) {
+                    extend(User, superClass);
                     User.prototype._schema = {
                         Type: "Integer",
                         UserName: "String",
@@ -1664,13 +1507,13 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ],
-        16: [ function(_dereq_, module, exports) {
+        13: [ function(_dereq_, module, exports) {
             (function() {
-                var MojioModel, Vehicle, __extends = function(child, parent) {
+                var MojioModel, Vehicle, extend = function(child, parent) {
                     for (var key in parent) {
-                        if (__hasProp.call(parent, key)) child[key] = parent[key];
+                        if (hasProp.call(parent, key)) child[key] = parent[key];
                     }
                     function ctor() {
                         this.constructor = child;
@@ -1679,10 +1522,10 @@
                     child.prototype = new ctor();
                     child.__super__ = parent.prototype;
                     return child;
-                }, __hasProp = {}.hasOwnProperty;
+                }, hasProp = {}.hasOwnProperty;
                 MojioModel = _dereq_("./MojioModel");
-                module.exports = Vehicle = function(_super) {
-                    __extends(Vehicle, _super);
+                module.exports = Vehicle = function(superClass) {
+                    extend(Vehicle, superClass);
                     Vehicle.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",
@@ -1694,12 +1537,7 @@
                         VehicleTime: "String",
                         LastTripEvent: "String",
                         LastLocationTime: "String",
-                        LastLocation: {
-                            Lat: "Float",
-                            Lng: "Float",
-                            FromLockedGPS: "Boolean",
-                            Dilution: "Float"
-                        },
+                        LastLocation: "Object",
                         LastSpeed: "Float",
                         FuelLevel: "Float",
                         LastAcceleration: "Float",
@@ -1744,7 +1582,7 @@
                 }(MojioModel);
             }).call(this);
         }, {
-            "./MojioModel": 10
+            "./MojioModel": 7
         } ]
-    }, {}, [ 4 ])(4);
+    }, {}, [ 2 ])(2);
 });

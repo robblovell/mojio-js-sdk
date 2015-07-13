@@ -1,0 +1,8 @@
+#appname:test
+#publisher:robblovell
+#url:http://
+#image:appicon.png
+#appid:moj.io.MojioJsTitaniumMyFirstApp
+#desc:An example of how to use the mojio-js SDK with Titanium js.
+#type:mobile
+#guid:e2603b4e-3d0c-4551-9f3a-4359b6b2d4e4

@@ -81,6 +81,7 @@
             view['models'] = models;
             view['http_require'] = "Http = require './HttpNodeWrapper'";
             view['http_request'] = "http = new Http()";
+            view['token_requester'] = "@getTokenId()";
             view['signalr_default_scheme'] = 'http';
             view['signalr_default_port'] = '80';
             view['extra_signalr_params'] = "";
@@ -91,6 +92,7 @@
             wstream.end();
             view['http_require'] = "Http = require './HttpBrowserWrapper'";
             view['http_request'] = "http = new Http()";
+            view['token_requester'] = "(() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))";
             view['extra_signalr_params'] = ", $";
             view['signalr_default_scheme'] = 'https';
             view['signalr_default_port'] = '443';
@@ -101,6 +103,7 @@
             wstream.end();
             view['http_require'] = "Http = require './HttpTitaniumWrapper'";
             view['http_request'] = "http = new Http()";
+            view['token_requester'] = "@getTokenId()";
             view['extra_signalr_params'] = "";
             view['signalr_default_scheme'] = 'https';
             view['signalr_default_port'] = '443';

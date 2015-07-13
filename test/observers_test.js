@@ -38,7 +38,7 @@
 
   describe('Observer', function() {
     before(function(done) {
-      return mojio_client.login(testdata.username, testdata.password, function(error, result) {
+      return mojio_client._login(testdata.username, testdata.password, function(error, result) {
         (error === null).should.be["true"];
         return done();
       });
@@ -76,6 +76,7 @@
     it('can Observe Events of Vehicle', function(done) {
       var mojio;
       mojio = new Mojio().mock();
+      theevent = null;
       return mojio_client.create(mojio, function(error, result) {
         (error === null).should.be["true"];
         mojio = new Mojio(result);

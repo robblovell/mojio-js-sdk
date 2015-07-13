@@ -1,7 +1,5 @@
-# version 3.5.2
 Http = require './HttpTitaniumWrapper'
 SignalR = require './SignalRTitaniumWrapper'
-FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class MojioClient
 
@@ -23,7 +21,7 @@ module.exports = class MojioClient
         @hub = null
         @connStatus = null
         @auth_token = null
-        @options.tokenRequester ?= (() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))
+        @options.tokenRequester ?= @getTokenId()
 
         @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub])
 
@@ -73,17 +71,17 @@ module.exports = class MojioClient
     stringify: (data) ->
         return JSON.stringify(data)
 
-    request: (request, callback, isOauth = false) ->
+    request: (request, callback) ->
         parts = {
             hostname: @options.hostname
             host: @options.hostname
             port: @options.port
             scheme: @options.scheme
-            path: (if isOauth then '' else '/' + @options.version)
+            path: '/'+@options.version
             method: request.method,
             withCredentials: false
         }
-        parts.path = parts.path + @getPath(request.resource, request.id, request.action, request.key)
+        parts.path = '/'+@options.version + @getPath(request.resource, request.id, request.action, request.key)
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
             parts.path += MojioClient._makeParameters(request.parameters)
@@ -94,11 +92,7 @@ module.exports = class MojioClient
         #parts.headers["Access-Control-Allow-Credentials"] = 'true'
         parts.headers["Content-Type"] = 'application/json'
 
-        if (request.body?)
-            if (isOauth)
-                parts.body = FormUrlencoded.encode(request.body)
-            else
-                parts.body = request.body
+        parts.body = request.body if request.body?
 
         http = new Http()
         http.request(parts, callback)
@@ -108,39 +102,47 @@ module.exports = class MojioClient
     ###
     login_resource: 'Login'
 
-    authorize: (redirect_url, scope='full') ->
-        parts = {
-            hostname: @options.hostname
-            host: @options.hostname
-            port: @options.port
-            scheme: @options.scheme
-            path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
-            method: 'Get'
-            withCredentials: false
-        }
-        parts.path += "?response_type=token"
-        parts.path += "&client_id=" + @options.application
-        parts.path += "&redirect_uri="+redirect_url
-        parts.path += "&scope="+scope
-        parts.headers = {}
-        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
-        parts.headers["Content-Type"] = 'application/json'
+    authorize: (redirect_url, scope='full', callback) ->
+        if (@options? and @options.secret? and @options.username? and @options.password?)
+            @_login(@options.username, @options.password, callback)
+        else
+            parts = {
+                hostname: @options.hostname
+                host: @options.hostname
+                port: @options.port
+                scheme: @options.scheme
+                path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
+                method: 'Get'
+                withCredentials: false
+            }
+            parts.path += "?response_type=token"
+            parts.path += "&client_id=" + @options.application
+            parts.path += "&redirect_uri="+redirect_url
+            parts.path += "&scope="+scope
+            parts.headers = {}
+            parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+            parts.headers["Content-Type"] = 'application/json'
 
-        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        window.location = url
+            # url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+            http.redirect(parts, (error, result) ->
+                @auth_token = { _id: result } if result?
+                return if (!callback?)
+                callback(error, null) if error?
+                callback(null, result)
+            )
 
     token: (callback) ->
         @user = null
 
-        token = @options.tokenRequester()
-        match = !!token && token[1]
-        if (!match)
+        match = @options.tokenRequester()
+        token = !!match && match[1]
+        if (!token)
             callback("token for authorization not found.", null)
         else
             # get the user id by requesting login information, then set the auth_token:
             @request(
                 {
-                    method: 'GET', resource: @login_resource, id: match
+                    method: 'GET', resource: @login_resource, id: token
                 },
             (error, result) =>
                 if error
@@ -151,49 +153,46 @@ module.exports = class MojioClient
                     callback(null, @auth_token)
             )
 
-    unauthorize: (redirect_url) ->
-        parts = {
-            hostname: @options.hostname
-            host: @options.hostname
-            port: @options.port
-            scheme: @options.scheme
-            path: '/account/logout'
-            method: 'Get'
-            withCredentials: false
-        }
-        parts.path += "?Guid=" + @getTokenId()
-        parts.path += "&client_id=" + @options.application
-        parts.path += "&redirect_uri="+redirect_url
-        parts.headers = {}
-        parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
-        parts.headers["Content-Type"] = 'application/json'
+    unauthorize: (redirect_url, callback) ->
+        if (@options? and @options.secret? and @options.username? and @options.password?)
+            @_logout(callback)
 
-        url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
-        window.location = url
+        else
+            parts = {
+                hostname: @options.hostname
+                host: @options.hostname
+                port: @options.port
+                scheme: @options.scheme
+                path: '/account/logout'
+                method: 'Get'
+                withCredentials: false
+            }
+            parts.path += "?Guid=" + @getTokenId()
+            parts.path += "&client_id=" + @options.application
+            parts.path += "&redirect_uri="+redirect_url
+            parts.headers = {}
+            parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
+            parts.headers["Content-Type"] = 'application/json'
 
+            http.redirect(parts, (error, result) ->
+                @auth_token = null
+                return if (!callback?)
+                callback(error, null) if error?
+                callback(null, result)
+            )
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
             {
-                method: 'POST', resource: if @options.live then '/OAuth2/token' else '/OAuth2Sandbox/token',
-                # method: 'POST', resource: '/OAuth2/token',
-                body:
+                method: 'POST', resource: @login_resource, id: @options.application,
+                parameters:
                     {
-                        username: username
+                        userOrEmail: username
                         password: password
-                        client_id: @options.application
-                        client_secret: @options.secret
-                        grant_type: 'password'
+                        secretKey: @options.secret
                     }
-
-            }, callback, true
-        )
-
-    # Login
-    login: (username, password, callback) ->
-        @_login(username, password, (error, result) =>
-            if (result?)
-                @auth_token = if result.access_token then result.access_token else result
-            callback(error, result)
+            }, (error, result) =>
+                @auth_token = result if (result?)
+                callback(error, result)
         )
 
     _logout: (callback) ->
@@ -201,14 +200,9 @@ module.exports = class MojioClient
             {
                 method: 'DELETE', resource: @login_resource,
                 id: if mojio_token? then mojio_token else @getTokenId()
-            }, callback
-        )
-
-    # Logout
-    logout: (callback) ->
-        @_logout((error, result) =>
-            @auth_token = null
-            callback(error, result)
+            }, (error, result) =>
+                @auth_token = null
+                callback(error, result)
         )
 
     mojio_models = {}  # this is so model can use a string to constuct the model.
@@ -216,9 +210,6 @@ module.exports = class MojioClient
 
     App = require('../models/App');
     mojio_models['App'] = App
-
-    Login = require('../models/Login');
-    mojio_models['Login'] = Login
 
     Mojio = require('../models/Mojio');
     mojio_models['Mojio'] = Mojio
@@ -428,38 +419,30 @@ module.exports = class MojioClient
     ###
         Token/User
     ###
+    isAuthorized: () ->
+        return @auth_token? and @auth_token._id
 
     getTokenId:  () ->
-        return @auth_token._id if @auth_token? and @auth_token._id?
-        return @auth_token if @auth_token?
+        return @auth_token._id if @auth_token?
         return null;
 
     getUserId:  () ->
-        return @auth_token.UserId if @auth_token? and @auth_token.UserId
+        return @auth_token.UserId if @auth_token?
         return null
 
     isLoggedIn: () ->
-        return @getUserId() != null || typeof(@auth_token) is "string"
+        return @getUserId() != null
 
     getCurrentUser: (callback) ->
         if (@user?)
-            callback(null, @user)
+            callback(@user)
         else if (@isLoggedIn())
-            @get(Login, @auth_token, (error, result) =>
-                if error?
-                    callback(error, null)
-                else if (result.UserId?)
-                    @get(User, result.UserId, (error, result) =>
-                        if error?
-                            callback(error, null)
-                        else
-                            @user = result
-                            callback(null, @user)
-                    )
-                else
-                    callback("User not found", null)
-            )
+            get('users', @getUserId())
+            .done( (user) ->
+                    return unless (user?)
+                    @user = user if (@getUserId() == @user._id)
+                    callback(@user)
+                )
         else
-            callback("User not found", null)
             return false
         return true

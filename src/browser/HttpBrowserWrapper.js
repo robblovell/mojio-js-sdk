@@ -68,6 +68,12 @@
       }
     };
 
+    HttpBrowserWrapper.prototype.redirect = function(params, callback) {
+      var url;
+      url = params.scheme + "://" + params.host + ":" + params.port + params.path;
+      return window.location = url;
+    };
+
     return HttpBrowserWrapper;
 
   })();

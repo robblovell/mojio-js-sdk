@@ -59,6 +59,10 @@
       return action.end();
     };
 
+    HttpNodeWrapper.prototype.redirect = function(params, callback) {
+      return this.request(params, callback);
+    };
+
     return HttpNodeWrapper;
 
   })();

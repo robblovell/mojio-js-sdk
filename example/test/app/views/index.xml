@@ -1,0 +1,9 @@
+<Alloy>
+	<Window>
+		<ImageView id = "imageView" ></ImageView>
+		<Label id="l">Example App</Label>		
+		<Button id = "LoginButton" onClick="LoginButton">Login </Button>
+		<Button id = "GetTokenButton" onClick="GetTokenButton"> GetToken </Button>
+		<Button id = "ObtainDataButton" onClick="ObtainDataButton"> Obtain Data </Button>
+	</Window>
+</Alloy>

@@ -19,7 +19,7 @@ vehicle = null
 describe 'Observer', ->
 
     before( (done) ->
-        mojio_client.login(testdata.username, testdata.password, (error, result) ->
+        mojio_client._login(testdata.username, testdata.password, (error, result) ->
             (error==null).should.be.true
             done()
         )
@@ -64,6 +64,7 @@ describe 'Observer', ->
     it 'can Observe Events of Vehicle', (done) ->
         mojio = new Mojio().mock()
 
+        theevent = null
         mojio_client.create(mojio, (error, result) ->
             (error==null).should.be.true
             mojio = new Mojio(result)

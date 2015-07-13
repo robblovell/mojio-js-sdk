@@ -24,7 +24,6 @@ module.exports = class HttpBrowserWrapper
             return encodeURIComponent(k) + '=' + encodeURIComponent(params.data[k])
           ).join('&')
 
-
         if (XMLHttpRequest?)
             xmlhttp = new XMLHttpRequest
         else
@@ -45,3 +44,8 @@ module.exports = class HttpBrowserWrapper
             xmlhttp.send()
         else
             xmlhttp.send(params.data)
+
+    redirect: (params, callback) -> # callback is through a server call.
+        url = params.scheme+"://"+params.host+":"+params.port+params.path
+
+        return window.location = url;
