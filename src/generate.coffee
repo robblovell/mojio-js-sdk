@@ -121,6 +121,20 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     wstream = fs.createWriteStream("./titanium/MojioClient.coffee")
                     wstream.write(output)
                     wstream.end()
+
+                    # cordova
+                    view['http_require'] = "Http = require './HttpCordovaWrapper'"
+                    view['http_request'] = "http = new Http()"
+                    view['token_requester'] = "@getTokenId()"
+                    view['extra_signalr_params'] = ""
+                    view['signalr_default_scheme'] = 'https'
+                    view['signalr_default_port'] = '443'
+                    view['signalr_require'] = "SignalR = require './SignalRCordovaWrapper'"
+                    output = client_template.render(view)
+
+                    wstream = fs.createWriteStream("./cordova/MojioClient.coffee")
+                    wstream.write(output)
+                    wstream.end()
                 )
             )
         )
