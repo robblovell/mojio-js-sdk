@@ -1,6 +1,7 @@
 node_modules
 bower_components
 .idea
+npm-debug.log
 src/**/*.js
 src/**/*.map
 test/**/*.js
@@ -9,7 +10,5 @@ example/**/*.js
 example/**/*.map
 examples/**/*.js
 examples/**/*.map
-npm-debug.log
 test/*.js
 test/*.map
-npm-debug.log
