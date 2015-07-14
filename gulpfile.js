@@ -22,7 +22,7 @@
 
   useSourceMaps = true;
 
-  coffeeFiles = ['./src/**/*.coffee', 'test/**/*.coffee', 'example/**/*.coffee'];
+  coffeeFiles = ['./src/**/*.coffee', 'test/**/*.coffee', 'example/**/*.coffee', 'examples/**/*.coffee'];
 
   handleError = function(err) {
     console.log(err.toString());
@@ -50,5 +50,3 @@
   gulp.task('done', (function() {}));
 
 }).call(this);
-
-//# sourceMappingURL=gulpfile.js.map
