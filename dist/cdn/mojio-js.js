@@ -219,7 +219,7 @@
                         this.conn = null;
                         this.hub = null;
                         this.connStatus = null;
-                        this.auth_token = null;
+                        this.setToken(null);
                         if ((base7 = this.options).tokenRequester == null) {
                             base7.tokenRequester = function() {
                                 return document.location.hash.match(/access_token=([0-9a-f-]{36})/);
@@ -350,11 +350,7 @@
                             }
                             parts.headers["Content-Type"] = "application/json";
                             return http.redirect(parts, function(error, result) {
-                                if (result != null) {
-                                    this.auth_token = {
-                                        _id: result
-                                    };
-                                }
+                                this.setToken(result);
                                 if (callback == null) {
                                     return;
                                 }
@@ -382,8 +378,8 @@
                                     if (error) {
                                         return callback(error, null);
                                     } else {
-                                        _this.auth_token = result;
-                                        return callback(null, _this.auth_token);
+                                        _this.setToken(result);
+                                        return callback(null, _this.getToken());
                                     }
                                 };
                             }(this));
@@ -412,7 +408,7 @@
                             }
                             parts.headers["Content-Type"] = "application/json";
                             return http.redirect(parts, function(error, result) {
-                                this.auth_token = null;
+                                this.setToken(null);
                                 if (callback == null) {
                                     return;
                                 }
@@ -436,9 +432,7 @@
                             }
                         }, function(_this) {
                             return function(error, result) {
-                                if (result != null) {
-                                    _this.auth_token = result;
-                                }
+                                _this.setToken(result);
                                 return callback(error, result);
                             };
                         }(this), true);
@@ -446,9 +440,7 @@
                     MojioClient.prototype.login = function(username, password, callback) {
                         return this._login(username, password, function(_this) {
                             return function(error, result) {
-                                if (result != null) {
-                                    _this.auth_token = result;
-                                }
+                                _this.setToken(result);
                                 return callback(error, result);
                             };
                         }(this));
@@ -460,7 +452,7 @@
                             id: typeof mojio_token !== "undefined" && mojio_token !== null ? mojio_token : this.getTokenId()
                         }, function(_this) {
                             return function(error, result) {
-                                _this.auth_token = null;
+                                _this.setToken(null);
                                 return callback(error, result);
                             };
                         }(this));
@@ -763,19 +755,45 @@
                         }
                     };
                     MojioClient.prototype.isAuthorized = function() {
-                        return this.auth_token != null && this.auth_token._id;
+                        return this.auth_token != null && this.getToken() != null;
+                    };
+                    MojioClient.prototype.isLoggedIn = function() {
+                        return this.getUserId() !== null && this.isAuthorized();
+                    };
+                    MojioClient.prototype.setToken = function(token) {
+                        if (token === null) {
+                            return this.auth_token = {
+                                _id: null,
+                                access_token: null
+                            };
+                        } else if (typeof token === "object") {
+                            this.auth_token = token;
+                            if (!this.auth_token._id && token.access_token != null) {
+                                this.auth_token._id = token.access_token;
+                            } else if (!this.auth_token.access_token && token._id != null) {
+                                this.auth_token.access_token = token._id;
+                            }
+                            if (this.auth_token.access_token == null && this.auth_token._id == null) {
+                                this.auth_token.access_token = null;
+                                return this.auth_token._id = null;
+                            }
+                        } else {
+                            if (token != null) {
+                                return this.auth_token = {
+                                    _id: token,
+                                    access_token: token
+                                };
+                            }
+                        }
+                    };
+                    MojioClient.prototype.getToken = function() {
+                        return this.auth_token.access_token;
                     };
                     MojioClient.prototype.getTokenId = function() {
-                        if (this.auth_token != null && this.auth_token._id != null) {
-                            return this.auth_token._id;
-                        }
-                        if (this.auth_token != null) {
-                            return this.auth_token;
-                        }
-                        return null;
+                        return this.getToken();
                     };
                     MojioClient.prototype.getUserId = function() {
-                        if (this.auth_token != null && this.auth_token.UserId) {
+                        if (this.auth_token.UserId) {
                             return this.auth_token.UserId;
                         }
                         return null;
@@ -787,7 +805,7 @@
                         if (this.user != null) {
                             callback(null, this.user);
                         } else if (this.isLoggedIn()) {
-                            this.get(Login, this.auth_token, function(_this) {
+                            this.get(Login, this.getToken(), function(_this) {
                                 return function(error, result) {
                                     if (error != null) {
                                         return callback(error, null);
