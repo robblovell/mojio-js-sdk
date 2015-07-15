@@ -171,7 +171,6 @@ module.exports = class MojioClient
         @request(
             {
                 method: 'POST', resource: if @options.live then '/OAuth2/token' else '/OAuth2Sandbox/token',
-                # method: 'POST', resource: '/OAuth2/token',
                 body:
                     {
                         username: username
@@ -180,10 +179,12 @@ module.exports = class MojioClient
                         client_secret: @options.secret
                         grant_type: 'password'
                     }
+
             }, (error, result) =>
                 @setToken(result)
                 callback(error, result)
-             , true
+            , true
+
         )
 
     # Login
@@ -194,22 +195,21 @@ module.exports = class MojioClient
         )
 
     _logout: (callback) ->
-        @setToken(null)
-        callback(null, "ok")
-#        @request(
-#            {
-#                method: 'POST', resource: if @options.live then '/OAuth2/revoke' else '/OAuth2Sandbox/revoke',
-#                code: @getToken(),
-#                body:
-#                    {
-#                        code: @getRefreshToken(),
-#                        client_id: @options.application
-#                        client_secret: @options.secret
-#                    }
-#            }, (error, result) =>
-#                @setToken(null)
-#                callback(error, result)
-#        )
+        @request(
+            {
+                method: 'DELETE', resource: @login_resource,
+                id: if mojio_token? then mojio_token else @getTokenId()
+            }, (error, result) =>
+                @setToken(null)
+                callback(error, result)
+        )
+
+    # Logout
+    logout: (callback) ->
+        @_logout((error, result) =>
+            @setToken(null)
+            callback(error, result)
+        )
 
     mojio_models = {}  # this is so model can use a string to constuct the model.
 
@@ -407,9 +407,6 @@ module.exports = class MojioClient
     isAuthorized: () ->
         return @auth_token? and @getToken()?
 
-    isLoggedIn: () ->
-        return @getUserId() != null and @isAuthorized()
-
     setToken: (token) ->
         # fix up the returned token and set _id and access_token fields to be the mojio token.
         if (token == null)
@@ -441,7 +438,7 @@ module.exports = class MojioClient
         return null
 
     isLoggedIn: () ->
-        return @getUserId() != null || typeof(@auth_token) is "string"
+        return @getUserId() != null || @getToken()?
 
     getCurrentUser: (callback) ->
         if (@user?)

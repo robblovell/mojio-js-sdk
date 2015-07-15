@@ -457,8 +457,25 @@ module.exports = _dereq_('./form-urlencoded');
     };
 
     MojioClient.prototype._logout = function(callback) {
-      this.setToken(null);
-      return callback(null, "ok");
+      return this.request({
+        method: 'DELETE',
+        resource: this.login_resource,
+        id: typeof mojio_token !== "undefined" && mojio_token !== null ? mojio_token : this.getTokenId()
+      }, (function(_this) {
+        return function(error, result) {
+          _this.setToken(null);
+          return callback(error, result);
+        };
+      })(this));
+    };
+
+    MojioClient.prototype.logout = function(callback) {
+      return this._logout((function(_this) {
+        return function(error, result) {
+          _this.setToken(null);
+          return callback(error, result);
+        };
+      })(this));
     };
 
     mojio_models = {};
@@ -820,10 +837,6 @@ module.exports = _dereq_('./form-urlencoded');
       return (this.auth_token != null) && (this.getToken() != null);
     };
 
-    MojioClient.prototype.isLoggedIn = function() {
-      return this.getUserId() !== null && this.isAuthorized();
-    };
-
     MojioClient.prototype.setToken = function(token) {
       if (token === null) {
         return this.auth_token = {
@@ -871,7 +884,7 @@ module.exports = _dereq_('./form-urlencoded');
     };
 
     MojioClient.prototype.isLoggedIn = function() {
-      return this.getUserId() !== null || typeof this.auth_token === "string";
+      return this.getUserId() !== null || (this.getToken() != null);
     };
 
     MojioClient.prototype.getCurrentUser = function(callback) {
