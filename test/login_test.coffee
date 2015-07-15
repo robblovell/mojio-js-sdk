@@ -11,6 +11,7 @@ describe 'Authorize', ->
 
     it 'can Authorize', (done) ->
         mojio_client.authorize(null, null, (error, result) ->
+            console.log(error) if error?
             (error==null).should.be.true
             mojio_client.should.be.an.instanceOf(MojioClient)
             mojio_client.auth_token.should.be.ok
@@ -23,10 +24,13 @@ describe 'UnAuthorize', ->
 
     it 'can UnAuthorize', (done) ->
         mojio_client.authorize(null, null, (error, result) ->
+            console.log(error) if error?
+            (error==null).should.be.true
             mojio_client.unauthorize((error, result) ->
+                console.log(error) if error?
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
-                (mojio_client.auth_token==null).should.be.true
+                (mojio_client.getToken()==null).should.be.true
                 done()
             )
         )
