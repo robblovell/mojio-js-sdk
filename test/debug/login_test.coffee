@@ -35,3 +35,22 @@ describe 'UnAuthorize', ->
             )
         )
 
+describe 'Logout', ->
+
+
+    it 'can get current user', (done) ->
+        mojio_client.login(testdata.username, testdata.password, (error, result) ->
+            mojio_client.getCurrentUser((error, result) ->
+                (error==null).should.be.true
+                done()
+            )
+
+    it 'can logout', (done) ->
+        mojio_client.login(testdata.username, testdata.password, (error, result) ->
+            mojio_client.logout((error, result) ->
+                (error==null).should.be.true
+                mojio_client.should.be.an.instanceOf(MojioClient)
+                (mojio_client.auth_token==null).should.be.true
+                done()
+            )
+        )
