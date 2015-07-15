@@ -23,7 +23,7 @@ describe 'UnAuthorize', ->
 
     it 'can UnAuthorize', (done) ->
         mojio_client.authorize(null, null, (error, result) ->
-            mojio_client.unauthorize(null, (error, result) ->
+            mojio_client.unauthorize((error, result) ->
                 (error==null).should.be.true
                 mojio_client.should.be.an.instanceOf(MojioClient)
                 (mojio_client.auth_token==null).should.be.true
