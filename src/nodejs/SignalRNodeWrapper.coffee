@@ -75,3 +75,4 @@ module.exports = class SignalRNodeWrapper
             )
         else
             callback(null, true)
+
