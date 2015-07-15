@@ -158,33 +158,14 @@ module.exports = class MojioClient
                     callback(null, @getToken())
             )
 
-    unauthorize: (redirect_url, callback) ->
+    unauthorize: (callback) ->
         if (@options? and @options.secret? and @options.username? and @options.password?)
             @_logout(callback)
-
+        else if (@options? and @options.secret? and @options.application?)
+            @_logout(callback)
         else
-            parts = {
-                hostname: @options.hostname
-                host: @options.hostname
-                port: @options.port
-                scheme: @options.scheme
-                path: '/account/logout'
-                method: 'Get'
-                withCredentials: false
-            }
-            parts.path += "?Guid=" + @getTokenId()
-            parts.path += "&client_id=" + @options.application
-            parts.path += "&redirect_uri="+redirect_url
-            parts.headers = {}
-            parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
-            parts.headers["Content-Type"] = 'application/json'
-
-            http.redirect(parts, (error, result) ->
-                @setToken(null)
-                return if (!callback?)
-                callback(error, null) if error?
-                callback(null, result)
-            )
+            @setToken(null)
+            callback(null, "ok")
 
     _login: (username, password, callback) -> # Use if you want the raw result of the call.
         @request(
@@ -213,14 +194,22 @@ module.exports = class MojioClient
         )
 
     _logout: (callback) ->
-        @request(
-            {
-                method: 'DELETE', resource: @login_resource,
-                id: if mojio_token? then mojio_token else @getTokenId()
-            }, (error, result) =>
-                @setToken(null)
-                callback(error, result)
-        )
+        @setToken(null)
+        callback(null, "ok")
+#        @request(
+#            {
+#                method: 'POST', resource: if @options.live then '/OAuth2/revoke' else '/OAuth2Sandbox/revoke',
+#                code: @getToken(),
+#                body:
+#                    {
+#                        code: @getRefreshToken(),
+#                        client_id: @options.application
+#                        client_secret: @options.secret
+#                    }
+#            }, (error, result) =>
+#                @setToken(null)
+#                callback(error, result)
+#        )
 
     mojio_models = {}  # this is so model can use a string to constuct the model.
 
@@ -467,6 +456,9 @@ module.exports = class MojioClient
 
     getTokenId:  () ->
         return @getToken()
+
+    getRefreshToken: () ->
+        return @auth_token.refresh_token
 
     getUserId:  () ->
         return @auth_token.UserId if @auth_token.UserId

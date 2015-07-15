@@ -8,7 +8,7 @@ module.exports =
         scheme:'https',
         signalr_port:'80',
         signalr_scheme:'http',
-        username: 'anonymous@moj.io',
-        password: 'Password007',
-        live: false
+        username: 'unittest@moj.io',
+        password: 'Password007!',
+        live: true
     }
