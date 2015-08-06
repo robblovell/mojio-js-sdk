@@ -184,7 +184,6 @@ module.exports = class MojioClient
                 @setToken(result)
                 callback(error, result)
             , true
-
         )
 
     # Login

@@ -108,6 +108,21 @@ module.exports = class MojioClient
     ###
     login_resource: 'Login'
 
+    ###
+    Function: authorize
+
+    Redirects to the Mojio OAuth2 server and authenticates a user. A token is returned that is used by the SDK for subsequent calls.
+
+    Parameters:
+
+        redirect_url - The place where the OAuth2 server redirects after authentication
+        scope - What scope of authentication to request from the user.
+        callback - For server based authentication only, this function is called after direct authentication.
+
+    See Also:
+
+        unauthorize, login, token, logout
+    ###
     authorize: (redirect_url, scope='full', callback) ->
         if (@options? and @options.secret? and @options.username? and @options.password?)
             @_login(@options.username, @options.password, callback)
@@ -157,7 +172,19 @@ module.exports = class MojioClient
                     @setToken(result)
                     callback(null, @getToken())
             )
+    ###
+    Function: unauthorize
 
+    Logs the user out and invalidates the token.
+
+    Parameters:
+
+        callback - This function is called after the token is destoryed.
+
+    See Also:
+
+        authorize, login, token, logout
+    ###
     unauthorize: (callback) ->
         if (@options? and @options.secret? and @options.username? and @options.password?)
             @_logout(callback)
@@ -187,7 +214,21 @@ module.exports = class MojioClient
 
         )
 
-    # Login
+    ###
+    Function: login
+
+    For server based authentication, log in a server with a username and password.
+
+    Parameters:
+
+        username - A registered mojio user's username or email. See the my.moj.io registration page.
+        password - The password associated with the account.
+        callback - This function is called after login.
+
+    See Also:
+
+        authorize, unauthorize, token, logout
+    ###
     login: (username, password, callback) ->
         @_login(username, password, (error, result) =>
             @setToken(result)
@@ -204,7 +245,19 @@ module.exports = class MojioClient
                 callback(error, result)
         )
 
-    # Logout
+    ###
+    Function: logout
+
+    Log the user out. Destroys tokens created with authorization or login.
+
+    Parameters:
+
+        callback - This function is called after the token is destroyed.
+
+    See Also:
+
+        authorize, unauthorize, token, login
+    ###
     logout: (callback) ->
         @_logout((error, result) =>
             @setToken(null)

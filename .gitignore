@@ -12,3 +12,4 @@ examples/**/*.js
 examples/**/*.map
 test/*.js
 test/*.map
+docs

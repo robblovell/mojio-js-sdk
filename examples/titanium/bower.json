@@ -1,0 +1,26 @@
+{
+  "name": "mojio-js",
+  "version": "3.5.2",
+  "main": "dist/MojioClient.js",
+  "ignore": [
+    ".gitignore",
+    "travis.yml",
+    "build.sh",
+    "package.json",
+    ".jshintrc",
+    "**/*.txt",
+    "**/*.json",
+    "**/*.md",
+    "bower_components",
+    "lib",
+    "/example",
+    "node_modules",
+    "src",
+    "test"
+  ],
+  "dependencies": {
+    "mojio-js": "*"
+  },
+  "devDependencies": {
+  }
+}
