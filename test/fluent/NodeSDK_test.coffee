@@ -1,0 +1,124 @@
+
+MojioSDK = require '../../src/nodejs/MojioSDK'
+should = require('should')
+async = require('async')
+describe 'Node Mojio Push SDK', ->
+    sdk = new MojioSDK()
+    user = null
+    mojio = null
+    vehicle = null
+
+    testErrorResult = (error, result) ->
+        (error==null).should.be.true
+        (result!=null).should.be.true
+
+    setupTimeout = (time, cb) ->
+        setTimeout((() -> cb("Error: Time Out.", null)), time)
+
+    changeVehicle = (vehicle, cb) ->
+        sdk.vehicle(vehicle).update((error, result) ->
+            cb("Error: Vehicle could not be saved", null) if error?
+            console.log("vehicle changed:"+result) if result?
+            # observers will call the ultimate callback, or a timeout will occur and call it.
+        )
+
+    execute = (test) ->
+
+        async.series([ # todo encrypted password
+                (cb) ->
+                    sdk.authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" },
+                        ((error, result) -> vehicle = result; cb(error, result)))
+            ,
+                (cb) ->
+                    sdk.mock().user({}).callback(
+                        (error, result) -> user = result; cb(error, result))
+            ,
+                (cb) ->
+                    sdk.mojio({UserId: user.id, Imei: "9991234567891234"})
+                    .mock((error, result) -> mojio = result; cb(error, result))
+            ,
+                (cb) ->
+                    sdk.mock().vehicle({MojioId: mojio.id, UserId: user.id, Speed: 80},
+                        ((error, result) -> vehicle = result; cb(error, result)))
+            ,
+                (cb) ->
+                    test(cb) # execute a test.
+            ]
+        ,
+# callback when the series is done or in error.
+            (error, results) ->
+                console.log(error) if error?
+                #(error==null).should.be.true
+                # todo:: test results for correctness.
+                (result!=null).should.be.true # test results content to be the observed entitiy
+                done()
+        )
+    beforeEach () ->
+        user = null
+        mojio = null
+        vehicle = null
+
+    it 'can create an observer of vehicles with minimum defaults', (done) ->
+        execute(
+            (cb) ->
+                sdk.observe({key: "UnitTestVehicleDefault"})
+                .vehicles()
+                # in this case, the callback given below is the signalR callback too.
+                .callback((error, result) ->
+                    testErrorResult(error, result)
+                    if (typeof result is 'boolean') # this is a callback via nodejs return
+                        # end test if result not received in the delay time
+                        setupTimeout(2000, cb)
+                        # change the vehicle
+                        changeVehicle(vehicle, cb)
+                    else if (++callbackTimes == 2 or result instanceof 'object') # we are in a callback via signalR
+                        # todo: test validity of vehicle
+                        cb(null, result)
+                )
+        )
+
+    it 'can create a complex observer of vehicles', (done) ->
+        execute(
+            (cb) ->
+                sdk.observe({key: "AccidentStateOnVehicleForMojio"})
+                .vehicles()
+                .fields([
+                        "VIN",
+                        "AccidentState",
+                        "Battery",
+                        "Location",
+                        "Heading",
+                        "Altitude",
+                        "Speed",
+                        "Accelerometer",
+                        "LastContactTime",
+                        "GatewayTimeStamp",
+                        "FuelLevel"
+                    ])
+
+                .where("Battery > min or Battery < max and MojioId == [mojio id]")
+# later: .Where("Battery ∆ -20")
+
+                .throttle("1 second") # 1 second, 1 minute, 3.17:25:30.5000000
+                .debounce({
+                        DataPoints: 6,
+                        TimeWindow: "timespan"
+                    })
+                .transport({
+                        Type: "HttpPost",
+                        Address: "http://ecall.moj.io/accidents"
+                    })
+                .transport({
+                        Type: "SignalR",
+                        Callback: (error, result) ->
+                            testErrorResult(error, result)
+                            # todo: test validity of vehicle
+                            done()
+                    })
+                .callback((error, result) ->
+                    testErrorResult(error, result)
+                    setupTimeout(2000, cb)
+                    changeVehicle(vehicle, cb)
+                )
+
+        )
