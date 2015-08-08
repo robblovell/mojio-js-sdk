@@ -39,6 +39,22 @@ module.exports = class MojioRestSDK extends MojioAuthSDK
         @callback(callback) if (callback?)
         return @
 
+    share: (user, callback) ->
+        @callback(callback) if (callback?)
+        return @
+
+    with: (user, callback) ->
+        @callback(callback) if (callback?)
+        return @
+
+    revoke: (user, callback) ->
+        @callback(callback) if (callback?)
+        return @
+
+    from: (user, callback) ->
+        @callback(callback) if (callback?)
+        return @
+
     users: (callback) ->
         @callback(callback) if (callback?)
         return @

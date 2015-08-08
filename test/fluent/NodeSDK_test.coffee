@@ -77,6 +77,7 @@ describe 'Node Mojio Push SDK', ->
                 )
         )
 
+
     it 'can create a complex observer of vehicles', (done) ->
         execute(
             (cb) ->
@@ -103,10 +104,6 @@ describe 'Node Mojio Push SDK', ->
                 .debounce({
                         DataPoints: 6,
                         TimeWindow: "timespan"
-                    })
-                .transport({
-                        Type: "HttpPost",
-                        Address: "http://ecall.moj.io/accidents"
                     })
                 .transport({
                         Type: "SignalR",
