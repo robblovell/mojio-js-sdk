@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>CoffeeScript API Documentation</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>MojioSharingSDK</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        MojioSharingSDK
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>fluent&#47;MojioSharingSDK.coffee</td>
+        </tr>
+        <tr>
+          <td>Inherits:</td>
+          <td>
+            <a href='MojioRestSDK.html'>MojioRestSDK</a>
+          </td>
+        </tr>
+      </table>
+      <h2>Direct Known Subclasses</h2>
+      <p class='children'>
+        <a href='MojioPushSDK.html'>MojioPushSDK</a>
+      </p>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#share-dynamic'>
+        #
+(void)
+<b>share</b><span>(user, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      sharing and access 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#with-dynamic'>
+        #
+(void)
+<b>with</b><span>(user_or_group, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#access-dynamic'>
+        #
+(void)
+<b>access</b><span>(rules, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#revoke-dynamic'>
+        #
+(void)
+<b>revoke</b><span>(user, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#from-dynamic'>
+        #
+(void)
+<b>from</b><span>(user, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#group-dynamic'>
+        #
+(void)
+<b>group</b><span>(name, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      grouping 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#add-dynamic'>
+        #
+(void)
+<b>add</b><span>(name, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#remove-dynamic'>
+        #
+(void)
+<b>remove</b><span>(name, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#into-dynamic'>
+        #
+(void)
+<b>into</b><span>(callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#outof-dynamic'>
+        #
+(void)
+<b>outof</b><span>(callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#for-dynamic'>
+        #
+(void)
+<b>for</b><span>(user)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      targeted rest calls 
+    </span>
+  </li>
+</ul>
+      <h2>
+        <small>Inherited Method Summary</small>
+        <h3 class='inherited'>
+          Methods inherited from
+          <a href='MojioRestSDK.html'>MojioRestSDK</a>
+        </h3>
+        <p class='inherited'>
+          <a href='MojioRestSDK.html#save-dynamic'>#save</a>
+          <a href='MojioRestSDK.html#update-dynamic'>#update</a>
+          <a href='MojioRestSDK.html#put-dynamic'>#put</a>
+          <a href='MojioRestSDK.html#create-dynamic'>#create</a>
+          <a href='MojioRestSDK.html#post-dynamic'>#post</a>
+          <a href='MojioRestSDK.html#destroy-dynamic'>#destroy</a>
+          <a href='MojioRestSDK.html#delete-dynamic'>#delete</a>
+          <a href='MojioRestSDK.html#query-dynamic'>#query</a>
+          <a href='MojioRestSDK.html#get-dynamic'>#get</a>
+          <a href='MojioRestSDK.html#limit-dynamic'>#limit</a>
+          <a href='MojioRestSDK.html#offset-dynamic'>#offset</a>
+          <a href='MojioRestSDK.html#desc-dynamic'>#desc</a>
+          <a href='MojioAuthSDK.html#configure-dynamic'>#configure</a>
+          <a href='MojioAuthSDK.html#authorize-dynamic'>#authorize</a>
+          <a href='MojioAuthSDK.html#token-dynamic'>#token</a>
+          <a href='MojioModelSDK.html#users-dynamic'>#users</a>
+          <a href='MojioModelSDK.html#user-dynamic'>#user</a>
+          <a href='MojioModelSDK.html#vehicles-dynamic'>#vehicles</a>
+          <a href='MojioModelSDK.html#vehicle-dynamic'>#vehicle</a>
+          <a href='MojioModelSDK.html#mojios-dynamic'>#mojios</a>
+          <a href='MojioModelSDK.html#mojio-dynamic'>#mojio</a>
+          <a href='MojioModelSDK.html#trips-dynamic'>#trips</a>
+          <a href='MojioModelSDK.html#mock-dynamic'>#mock</a>
+        </p>
+      </h2>
+      <h2>Constructor Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='constructor-dynamic'>
+      #
+(void)
+<b>constructor</b><span>(options = {})</span>
+      <br>
+    </p>
+    
+  </div>
+</div>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='share-dynamic'>
+      #
+(void)
+<b>share</b><span>(user, callback)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>sharing and access</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='with-dynamic'>
+      #
+(void)
+<b>with</b><span>(user_or_group, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='access-dynamic'>
+      #
+(void)
+<b>access</b><span>(rules, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='revoke-dynamic'>
+      #
+(void)
+<b>revoke</b><span>(user, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='from-dynamic'>
+      #
+(void)
+<b>from</b><span>(user, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='group-dynamic'>
+      #
+(void)
+<b>group</b><span>(name, callback)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>grouping</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='add-dynamic'>
+      #
+(void)
+<b>add</b><span>(name, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='remove-dynamic'>
+      #
+(void)
+<b>remove</b><span>(name, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='into-dynamic'>
+      #
+(void)
+<b>into</b><span>(callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='outof-dynamic'>
+      #
+(void)
+<b>outof</b><span>(callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='for-dynamic'>
+      #
+(void)
+<b>for</b><span>(user)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>targeted rest calls</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  September 03, 15 11:42:49 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.11
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>

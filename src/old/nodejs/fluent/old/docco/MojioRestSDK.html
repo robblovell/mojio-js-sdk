@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>MojioRestSDK.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="MojioAuthSDK.html">
+                  MojioAuthSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioModelSDK.html">
+                  MojioModelSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioPushSDK.html">
+                  MojioPushSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioRequest.html">
+                  MojioRequest.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioRestSDK.html">
+                  MojioRestSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioSDK.html">
+                  MojioSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioSharingSDK.html">
+                  MojioSharingSDK.coffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>MojioRestSDK.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>version 4.0.0
+Http = require ‘./HttpNodeWrapper’</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>FormUrlencoded = <span class="hljs-built_in">require</span> <span class="hljs-string">'form-urlencoded'</span>
+
+MojioAuthSDK = <span class="hljs-built_in">require</span> <span class="hljs-string">'./MojioAuthSDK'</span>
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MojioRestSDK</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">MojioAuthSDK</span></span>
+
+    <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(options={})</span> -&gt;</span>
+        <span class="hljs-keyword">super</span>(options)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>REST</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>put/save/update
+An optional call that will initiate the actions of the fluent chain which executes synchronously. The actions is
+blocking, and the results are returned by the function.
+@public</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">save</span>: <span class="hljs-function"><span class="hljs-params">(object_or_json_string)</span> -&gt;</span> <span class="hljs-comment"># PUT or POST depending on if it exists</span>
+        <span class="hljs-property">@put</span>(object_or_json_string)
+        <span class="hljs-keyword">return</span> @
+    <span class="hljs-attribute">update</span>: <span class="hljs-function"><span class="hljs-params">(object_or_json_string)</span> -&gt;</span> <span class="hljs-comment"># PUT, throw error if it doesn't exist</span>
+        <span class="hljs-property">@put</span>(object_or_json_string)
+        <span class="hljs-keyword">return</span> @
+    <span class="hljs-attribute">put</span>: <span class="hljs-function"><span class="hljs-params">(object_or_json_string)</span> -&gt;</span>
+        setState(<span class="hljs-string">"put"</span>)
+        setObject(object_or_json_string)
+        <span class="hljs-keyword">return</span> @
+
+    <span class="hljs-attribute">create</span>: <span class="hljs-function"><span class="hljs-params">(object_or_json_string)</span> -&gt;</span> <span class="hljs-comment"># POST, throw error if it already exists</span>
+        <span class="hljs-property">@post</span>(object_or_json_string)
+        <span class="hljs-keyword">return</span> @
+    <span class="hljs-attribute">post</span>: <span class="hljs-function"><span class="hljs-params">(object_or_json_string)</span> -&gt;</span>
+        setState(<span class="hljs-string">"post"</span>)
+        setObject(object_or_json_string)
+        <span class="hljs-keyword">return</span> @
+
+    <span class="hljs-attribute">destroy</span>: <span class="hljs-function"><span class="hljs-params">(id_or_array_of_ids)</span> -&gt;</span> <span class="hljs-comment"># DELETE</span>
+        <span class="hljs-property">@delete</span>(id_or_array_of_ids)
+        <span class="hljs-keyword">return</span> @
+    <span class="hljs-attribute">delete</span>: <span class="hljs-function"><span class="hljs-params">(id_or_array_of_ids)</span> -&gt;</span>
+        setState(<span class="hljs-string">"delete"</span>)
+        setWhere(id_example_or_query)
+        <span class="hljs-keyword">return</span> @
+
+    <span class="hljs-attribute">query</span>: <span class="hljs-function"><span class="hljs-params">(id_example_or_query)</span> -&gt;</span> <span class="hljs-comment"># GET</span>
+        <span class="hljs-property">@get</span>(id_example_or_query)
+        <span class="hljs-keyword">return</span> @
+    <span class="hljs-attribute">get</span>: <span class="hljs-function"><span class="hljs-params">(id_example_or_query)</span> -&gt;</span> <span class="hljs-comment"># number, object, or string</span>
+        setState(<span class="hljs-string">"get"</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>determine if this is a get with a later where, or a call with a given id, example, or a query string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        setWhere(id_example_or_query)
+        <span class="hljs-keyword">return</span> @
+
+    <span class="hljs-attribute">limit</span>: <span class="hljs-function"><span class="hljs-params">(limit)</span> -&gt;</span>
+        state.limit = limit
+        <span class="hljs-keyword">return</span> @
+
+    <span class="hljs-attribute">offset</span>: <span class="hljs-function"><span class="hljs-params">(offset)</span> -&gt;</span>
+        state.offset = offset
+        <span class="hljs-keyword">return</span> @
+
+    <span class="hljs-attribute">desc</span>: <span class="hljs-function"><span class="hljs-params">(desc)</span> -&gt;</span>
+        state.desc = desc
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

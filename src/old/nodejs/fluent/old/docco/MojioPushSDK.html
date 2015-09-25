@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>MojioPushSDK.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="MojioAuthSDK.html">
+                  MojioAuthSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioModelSDK.html">
+                  MojioModelSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioPushSDK.html">
+                  MojioPushSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioRequest.html">
+                  MojioRequest.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioRestSDK.html">
+                  MojioRestSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioSDK.html">
+                  MojioSDK.coffee
+                </a>
+              
+                
+                <a class="source" href="MojioSharingSDK.html">
+                  MojioSharingSDK.coffee
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>MojioPushSDK.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>version 4.0.0
+Http = require ‘./HttpNodeWrapper’
+SignalR = require ‘./SignalRNodeWrapper’</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>FormUrlencoded = <span class="hljs-built_in">require</span> <span class="hljs-string">'form-urlencoded'</span>
+_ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span>
+MojioSharingSDK = <span class="hljs-built_in">require</span> <span class="hljs-string">'./MojioSharingSDK'</span>
+
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MojioPushSDK</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">MojioSharingSDK</span></span>
+
+    defaultTransports = { <span class="hljs-attribute">signalr</span>: {}, <span class="hljs-attribute">httpPost</span>: {}}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Instantiate the Mojio Push SDK.</p>
+<p>@param {object} options
+@return {object} this</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(transports, options={})</span> -&gt;</span>
+        _.extend(@, transports)
+        <span class="hljs-keyword">super</span>(options)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Observe a Vehicle, Mojio, or User object in the Mojio API.</p>
+<p>Observers on particular objects are setup by chaining them with calls to the RestSDK’s entity methods: Vehicle, Vehicles, User, Users, Mojio, or Mojios.
+The observer will observe the entities specified in those calls.
+@param {string} key This parameter is a name that can be used to find the observer later, or to modify it.
+@param {function} callback Optional parameter to initiate the fluent chain if needed.
+@example observe all vehicles for this user, assumes SignalR transport and the callback given is the handler.
+  sdk.observe(“MyUniqueKeyName”)
+  .vehicles() # observe all vehicles for the account of the authorized token
+  .callback((error, result) -&gt;
+       if (typeof result is ‘boolean’) # this is a callback via nodejs return
+           console.log(“Vehicle Observer created with signalR transport and this callback as the handler”)
+       else if (result instanceof ‘object’) # we are in a callback via signalR
+           … # receive the changes to the objects.
+   )
+@example
+  sdk.observe(“MyUniqueKeyName”)
+   .vehicle(“[some id]”) # observe all vehicles for a specific vehicle
+   .callback((error, result) -&gt;
+      console.log(“success in creating an observer”) if (result?)
+   )
+@return {object} this</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">observe</span>: <span class="hljs-function"><span class="hljs-params">(key)</span> -&gt;</span>
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>Limit the fields returned to a specific set of properties.</p>
+<p>Fields are given as an array of strings that are the names of the properties of the entity returned.
+@param {array of strings} fields The fields of an object to deliver in the results of a query.
+@param {function} callback Optional parameter to initiate the fluent chain if needed.
+@example
+  sdk.observe({key: “MyUniqueKeyName”})
+  .vehicles()
+  .fields(
+          “VIN”,
+          “AccidentState”,
+          “Battery”,
+          “Location”,
+          “Heading”,
+          “Altitude”,
+          “Speed”,
+          “Accelerometer”,
+          “LastContactTime”,
+          “GatewayTimeStamp”,
+          “FuelLevel”
+      ])
+@return {object} this</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">fields</span>: <span class="hljs-function"><span class="hljs-params">(fields)</span> -&gt;</span>
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>The condition that must be satisfied for the observer to fire.</p>
+<p>When the condition fires, the observer sends data. For instance, if the observer is setup
+with the condition send data when MilStatus is true, it will fire when the MilStatus field on the vehicle
+changes from false to true. See “timing” below to change the time when the data is sent.
+@param {string} clause A where clause for queries.
+@param {function} callback Optional parameter to initiate the fluent chain if needed. 
+@return {object} this
+@example Send only when the battery level transitions is in this condition
+  sdk.observe({key: “MyUniqueKeyName”})
+  .vehicles()
+  .where(“Battery &gt; min or Battery &lt; max”)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">where</span>: <span class="hljs-function"><span class="hljs-params">(clause)</span> -&gt;</span>
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Specify how data is sent.</p>
+<p>Specify the transport used to send data. Possible transports are numerous and include: SignalR, Http Post, MQTT, etc.
+@param {object} transport An object that contains the information about how the entity will be delivered, eg http post, signalr etc.
+@param {function} callback Optional parameter to initiate the fluent chain if needed. 
+@return {object} this
+@example Use SignalR as a transport with the given callback:</p>
+<h1 id="coffeescript">coffeescript</h1>
+<p>  sdk.observe({key: “MyUniqueKeyName”})
+  .vehicles()
+  .transport({
+      Type: “SignalR”,
+      Callback: (error, result) -&gt; # function to call when the condition fires.
+          console.log(“Error:”+ JSON.stringify(error)) if error
+         console.log(JSON.stringify(result)) if result
+  })</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">transport</span>: <span class="hljs-function"><span class="hljs-params">(transport)</span> -&gt;</span>
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Limit how much data is sent.</p>
+<p>Throttle back the data sent by telling the push API to send data at a limited rate. The rate is limited by
+specifying a window of time to refrain from sending data after the observer has fired.
+@param {object} throttle An object that defines how often to send data.
+@param {function} callback Optional parameter to initiate the fluent chain if needed. 
+@return {object} this
+@example Don’t send data faster than 10 seconds, in other words, once data is sent, don’t send anything again until 10 seconds have past.
+  throttle(“10 seconds”)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">throttle</span>: <span class="hljs-function"><span class="hljs-params">(throttle)</span> -&gt;</span>
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Debounce the condtion for the obserer.</p>
+<p>Prevent false positives by making sure that the condition has fired by specifying either the number of
+readings required for a condition to be considered true, or specifying the amount of time the condition must
+be true in order to be sure of the change.
+@param {object} debounce An object that defines how to smooth out detection of transitions of state.
+@param {function} callback Optional parameter to initiate the fluent chain if needed. 
+@return {object} this
+@example Set the observer so that it detects a transition if 6 true data points show the change.
+  debounce({ DataPoints: 6 })
+@example Set the observer so that it detects a transition if the change has been active for 15 seconds.
+  debounce({ TimeWindow: “00:00:15” }) # time window is given in a csharp timespan format
+@example Set the observer so that it detects a transition there are 6 true datapoints within 15 seconds.
+  debounce({ DataPoints: 6, TimeWindow: “00:00:15” }) # time window is given in a csharp timespan format</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">debounce</span>: <span class="hljs-function"><span class="hljs-params">(debounce)</span> -&gt;</span>
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Set the timing of the observer. Timing refers to when to send data in relation to the given condition.
+Possible timings are: leading, trailing, high, low, edge, and continuous.</p>
+<p>leading- deliver data when the condition transitions from false to true.</p>
+<p>trailing- deliver the data when the condition transitions from true to false</p>
+<p>high- deliver the data when the condition is true and information comes from the vehicle (subject to throttle)</p>
+<p>low- deliver the data when the condition is false and information comes from the vehicle (subject to throttle)</p>
+<p>edge- both leading and trailing edges</p>
+<p>continuous- both high and low</p>
+<p>@param {string} states An object that defines how to smooth out detection of transitions of state.
+@param {function} callback Optional parameter to initiate the fluent chain if needed.
+@return {object} this
+@example Set the observer so that it detects a transition if 6 data points show the change.
+  timing(“high”)
+@example Set the observer so that it detects a transition if the change has been active for 15 seconds.
+  timing(“leading”)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">timing</span>: <span class="hljs-function"><span class="hljs-params">(state)</span> -&gt;</span>
+        <span class="hljs-keyword">return</span> @</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

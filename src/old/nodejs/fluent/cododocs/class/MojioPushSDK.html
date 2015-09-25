@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>CoffeeScript API Documentation</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>MojioPushSDK</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        MojioPushSDK
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>MojioPushSDK.coffee</td>
+        </tr>
+        <tr>
+          <td>Inherits:</td>
+          <td>
+            <a href='MojioRestSDK.html'>MojioRestSDK</a>
+          </td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>The Push segment of the Mojio SDK. The Push segement of the SDK provides a mechanism for applications to subscribe
+to changes occurring on primary API resources of Vehicles, Users, Mojios, Trips, Groups, and Apps.</p><p>Mojio maintains a separate &quot;Push&quot; style API where applications can subscribe to changes on resources and receive those
+changes across multiple transports.  Current transports include: SIGNALR, HTTPS POST, and MQTT.</p><p>Subscriptions are instantiated by posting &quot;Observers&quot; to the Push API&#39;s REST interface.  Observers define what, when
+and how data is channeled to the application from the server.</p><p>What is defined by specification of the resource type and id.
+The &quot;What&quot; delivered can be narrowed down to a specific set of fields through a filter specification (basically a list of the names of the fields).</p><p>The &quot;When&quot; is defined by optional conditions, debounce, throttle, and timings.</p><p>The &quot;How&quot; is defined by a transport specification
+that has the connection details to a method, server or hub, depending on the transport type.  For SignalR, Mojio provides
+the hub of communication, for other protocols like MQTT or Http Post, the application writer is responsible for the
+communication infrastructure.</p><p>The inheritance path is:
+   MojioPushSDK-&gt;MojioRestSDK-&gt;MojioAuthSDK-&gt;MojioModelSDK</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>mojioSdk = new MojioSDK({sdk: MojioPushSDK}) # instantiate the mojioSDK to all available API calls.</code></pre>
+  </div>
+</div>
+<div class='tags'>
+</div>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#observe-dynamic'>
+        #
+(object)
+<b>observe</b><span>(key)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Observe a Vehicle, Mojio, or User object in the Mojio API. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#fields-dynamic'>
+        #
+(object)
+<b>fields</b><span>(fields)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Limit the fields returned to a specific set of properties. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#where-dynamic'>
+        #
+(object)
+<b>where</b><span>(clause)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      The condition that must be satisfied for the observer to fire. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#transport-dynamic'>
+        #
+(object)
+<b>transport</b><span>(transport)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Specify how data is sent. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#throttle-dynamic'>
+        #
+(object)
+<b>throttle</b><span>(throttle)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Limit how much data is sent. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#debounce-dynamic'>
+        #
+(object)
+<b>debounce</b><span>(debounce)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Debounce the condtion for the obserer. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#timing-dynamic'>
+        #
+(object)
+<b>timing</b><span>(state)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Set the timing of the observer. 
+    </span>
+  </li>
+</ul>
+      <h2>
+        <small>Inherited Method Summary</small>
+        <h3 class='inherited'>
+          Methods inherited from
+          <a href='MojioRestSDK.html'>MojioRestSDK</a>
+        </h3>
+        <p class='inherited'>
+          <a href='MojioRestSDK.html#put-dynamic'>#put</a>
+          <a href='MojioRestSDK.html#post-dynamic'>#post</a>
+          <a href='MojioRestSDK.html#delete-dynamic'>#delete</a>
+          <a href='MojioRestSDK.html#get-dynamic'>#get</a>
+          <a href='MojioRestSDK.html#query-dynamic'>#query</a>
+          <a href='MojioRestSDK.html#select-dynamic'>#select</a>
+          <a href='MojioRestSDK.html#filter-dynamic'>#filter</a>
+          <a href='MojioRestSDK.html#top-dynamic'>#top</a>
+          <a href='MojioRestSDK.html#skip-dynamic'>#skip</a>
+          <a href='MojioRestSDK.html#orderby-dynamic'>#orderby</a>
+          <a href='MojioRestSDK.html#add-dynamic'>#add</a>
+          <a href='MojioRestSDK.html#set-dynamic'>#set</a>
+          <a href='MojioRestSDK.html#remove-dynamic'>#remove</a>
+          <a href='MojioAuthSDK.html#authorize-dynamic'>#authorize</a>
+          <a href='MojioAuthSDK.html#token-dynamic'>#token</a>
+          <a href='MojioModelSDK.html#users-dynamic'>#users</a>
+          <a href='MojioModelSDK.html#user-dynamic'>#user</a>
+          <a href='MojioModelSDK.html#vehicles-dynamic'>#vehicles</a>
+          <a href='MojioModelSDK.html#vehicle-dynamic'>#vehicle</a>
+          <a href='MojioModelSDK.html#mojios-dynamic'>#mojios</a>
+          <a href='MojioModelSDK.html#mojio-dynamic'>#mojio</a>
+          <a href='MojioModelSDK.html#trips-dynamic'>#trips</a>
+          <a href='MojioModelSDK.html#group-dynamic'>#group</a>
+          <a href='MojioModelSDK.html#groups-dynamic'>#groups</a>
+          <a href='MojioModelSDK.html#permissions-dynamic'>#permissions</a>
+          <a href='MojioModelSDK.html#image-dynamic'>#image</a>
+          <a href='MojioModelSDK.html#tags-dynamic'>#tags</a>
+          <a href='MojioModelSDK.html#tag-dynamic'>#tag</a>
+          <a href='MojioModelSDK.html#mock-dynamic'>#mock</a>
+        </p>
+      </h2>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='observe-dynamic'>
+      #
+(object)
+<b>observe</b><span>(key)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Observe a Vehicle, Mojio, or User object in the Mojio API.</p><p>Observers on particular objects are setup by chaining them with calls to the RestSDK&#39;s entity methods: Vehicle, Vehicles, User, Users, Mojio, or Mojios.
+The observer will observe the entities specified in those calls.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      observe all vehicles for this user, assumes SignalR transport and the callback given is the handler.
+    </h4>
+    <pre><code class='coffeescript'>sdk.observe(&quot;MyUniqueKeyName&quot;)
+.vehicles() # observe all vehicles for the account of the authorized token
+.callback((error, result) -&gt;
+     if (typeof result is &#39;boolean&#39;) # this is a callback via nodejs return
+         console.log(&quot;Vehicle Observer created with signalR transport and this callback as the handler&quot;)
+     else if (result instanceof &#39;object&#39;) # we are in a callback via signalR
+         ... # receive the changes to the objects.
+ )</code></pre>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.observe(&quot;MyUniqueKeyName&quot;)
+ .vehicle(&quot;[some id]&quot;) # observe all vehicles for a specific vehicle
+ .callback((error, result) -&gt;
+    console.log(&quot;success in creating an observer&quot;) if (result?)
+ )</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>key</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>This parameter is a name that can be used to find the observer later, or to modify it. </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Optional parameter to initiate the fluent chain if needed. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='fields-dynamic'>
+      #
+(object)
+<b>fields</b><span>(fields)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Limit the fields returned to a specific set of properties.</p><p>Fields are given as an array of strings that are the names of the properties of the entity returned.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.observe({key: &quot;MyUniqueKeyName&quot;})
+.vehicles()
+.fields(
+        &quot;VIN&quot;,
+        &quot;AccidentState&quot;,
+        &quot;Battery&quot;,
+        &quot;Location&quot;,
+        &quot;Heading&quot;,
+        &quot;Altitude&quot;,
+        &quot;Speed&quot;,
+        &quot;Accelerometer&quot;,
+        &quot;LastContactTime&quot;,
+        &quot;GatewayTimeStamp&quot;,
+        &quot;FuelLevel&quot;
+    ])</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>fields</span>
+      <span class='type'>
+        (
+          <tt>array of strings</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The fields of an object to deliver in the results of a query. </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Optional parameter to initiate the fluent chain if needed. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='where-dynamic'>
+      #
+(object)
+<b>where</b><span>(clause)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>The condition that must be satisfied for the observer to fire.</p><p>When the condition fires, the observer sends data. For instance, if the observer is setup
+with the condition send data when MilStatus is true, it will fire when the MilStatus field on the vehicle
+changes from false to true. See &quot;timing&quot; below to change the time when the data is sent.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Send only when the battery level transitions is in this condition
+    </h4>
+    <pre><code class='coffeescript'>sdk.observe({key: &quot;MyUniqueKeyName&quot;})
+.vehicles()
+.where(&quot;Battery &gt; min or Battery &lt; max&quot;)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>clause</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>A where clause for queries. </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Optional parameter to initiate the fluent chain if needed.  </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='transport-dynamic'>
+      #
+(object)
+<b>transport</b><span>(transport)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Specify how data is sent.</p><p>Specify the transport used to send data. Possible transports are numerous and include: SignalR, Http Post, MQTT, etc.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Use SignalR as a transport with the given callback:
+    </h4>
+    <pre><code class='coffeescript'># coffeescript
+sdk.observe({key: &quot;MyUniqueKeyName&quot;})
+.vehicles()
+.transport({
+    Type: &quot;SignalR&quot;,
+    Callback: (error, result) -&gt; # function to call when the condition fires.
+        console.log(&quot;Error:&quot;+ JSON.stringify(error)) if error
+       console.log(JSON.stringify(result)) if result
+})</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>transport</span>
+      <span class='type'>
+        (
+          <tt>object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>An object that contains the information about how the entity will be delivered, eg http post, signalr etc. </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Optional parameter to initiate the fluent chain if needed.  </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='throttle-dynamic'>
+      #
+(object)
+<b>throttle</b><span>(throttle)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Limit how much data is sent.</p><p>Throttle back the data sent by telling the push API to send data at a limited rate. The rate is limited by
+specifying a window of time to refrain from sending data after the observer has fired.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Don&#39;t send data faster than 10 seconds, in other words, once data is sent, don&#39;t send anything again until 10 seconds have past.
+    </h4>
+    <pre><code class='coffeescript'>throttle(&quot;10 seconds&quot;)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>throttle</span>
+      <span class='type'>
+        (
+          <tt>object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>An object that defines how often to send data. </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Optional parameter to initiate the fluent chain if needed.  </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='debounce-dynamic'>
+      #
+(object)
+<b>debounce</b><span>(debounce)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Debounce the condtion for the obserer.</p><p>Prevent false positives by making sure that the condition has fired by specifying either the number of
+readings required for a condition to be considered true, or specifying the amount of time the condition must
+be true in order to be sure of the change.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Set the observer so that it detects a transition if 6 true data points show the change.
+    </h4>
+    <pre><code class='coffeescript'>debounce({ DataPoints: 6 })</code></pre>
+    <h4>
+      Set the observer so that it detects a transition if the change has been active for 15 seconds.
+    </h4>
+    <pre><code class='coffeescript'>debounce({ TimeWindow: &quot;00:00:15&quot; }) # time window is given in a csharp timespan format</code></pre>
+    <h4>
+      Set the observer so that it detects a transition there are 6 true datapoints within 15 seconds.
+    </h4>
+    <pre><code class='coffeescript'>debounce({ DataPoints: 6, TimeWindow: &quot;00:00:15&quot; }) # time window is given in a csharp timespan format</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>debounce</span>
+      <span class='type'>
+        (
+          <tt>object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>An object that defines how to smooth out detection of transitions of state. </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Optional parameter to initiate the fluent chain if needed.  </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='timing-dynamic'>
+      #
+(object)
+<b>timing</b><span>(state)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Set the timing of the observer. Timing refers to when to send data in relation to the given condition.
+Possible timings are: leading, trailing, high, low, edge, and continuous.</p><p>leading- deliver data when the condition transitions from false to true.</p><p>trailing- deliver the data when the condition transitions from true to false</p><p>high- deliver the data when the condition is true and information comes from the vehicle (subject to throttle)</p><p>low- deliver the data when the condition is false and information comes from the vehicle (subject to throttle)</p><p>edge- both leading and trailing edges</p><p>continuous- both high and low</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Set the observer so that it detects a transition if 6 data points show the change.
+    </h4>
+    <pre><code class='coffeescript'>timing(&quot;high&quot;)</code></pre>
+    <h4>
+      Set the observer so that it detects a transition if the change has been active for 15 seconds.
+    </h4>
+    <pre><code class='coffeescript'>timing(&quot;leading&quot;)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>states</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>An object that defines how to smooth out detection of transitions of state. </span>
+    </li>
+    <li>
+      <span class='name'>callback</span>
+      <span class='type'>
+        (
+          <tt>function</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Optional parameter to initiate the fluent chain if needed. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  September 22, 15 11:14:14 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.11
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>

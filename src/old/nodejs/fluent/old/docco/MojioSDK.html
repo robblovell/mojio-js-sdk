@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>MojioSDK.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>MojioSDK.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>version 5.0.0</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>_ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span>
+MojioPushSDK = <span class="hljs-built_in">require</span> <span class="hljs-string">'./MojioPushSDK'</span>
+Module = <span class="hljs-built_in">require</span> <span class="hljs-string">'../Module'</span>
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MojioSDK</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Module</span></span>
+    state = {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>MojioSDK is a container for working with the Mojio API. Four programming styles are supported, synchronous,
+asynchronous with callbacks (node js style), asynchronous with promises, and asynchronous with reactive streams.
+The sdk works with either the PushSDK, or can be paired down to just the REST SDK.
+The SDK is fluent, so chains of calls are used to construct a desired outcome and then one of the four function
+calls below initiates the the call to the API in one of the four programming styles.
+@parameter {object} options
+@public</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
+        <span class="hljs-keyword">super</span>()
+        options = {} <span class="hljs-keyword">unless</span> options?
+        <span class="hljs-property">@include</span> <span class="hljs-keyword">if</span> options.sdk <span class="hljs-keyword">then</span> options.sdk <span class="hljs-keyword">else</span> MojioPushSDK
+        <span class="hljs-keyword">delete</span> options.sdk
+        options.test = <span class="hljs-literal">false</span> <span class="hljs-keyword">unless</span> (options.test?)
+        <span class="hljs-property">@configure</span>(options)
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"test:"</span>+<span class="hljs-property">@test</span>)
+        reset()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>SYNCHRONOUS
+An optional call that will initiate the actions of the fluent chain which executes synchronously. The actions is
+blocking, and the results are returned by the function.
+@public</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">initiate</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+        initiate()
+        result = <span class="hljs-literal">true</span>
+        <span class="hljs-keyword">return</span> result</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>ASYNCHRONOUS with callbacks
+An optional call that will initiate the actions of the fluent chain. When the actions of the
+chain are completed, the given function will be called with the results. In the case of a redirect
+control will be returned to the url given and you must call authorize again with the results
+until ‘true’ is given in the callback results.
+@param callback {function} A function to call when the fluent chain is complete.
+@public</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">callback</span>: <span class="hljs-function"><span class="hljs-params">(callback)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>execute the rest request and return the result in the callback.
+use generator to yield</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        initiate()
+        callback(<span class="hljs-literal">null</span>, <span class="hljs-literal">true</span>)
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>ASYNCHRONOUS with promises
+An optional call that will initiate the actions of the fluent chain which returns a promise. When
+the actions of the chain are completed, the promise is updated and its then clause executed. Anyone
+attaching to the promise is also called.
+@public</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">submit</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+        initiate()
+        promise = <span class="hljs-literal">null</span>
+        <span class="hljs-keyword">return</span> promise</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>ASYNCHRONOUS with reactive
+An optional call that will initiate the actions of the fluent chain which returns a reactive observer or stream.
+When the actions of the chain are completed, the stream is updated.
+@public</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-attribute">stream</span>: <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span>
+        initiate()
+        stream = <span class="hljs-literal">null</span>
+        <span class="hljs-keyword">return</span> stream
+<span class="hljs-function">
+    <span class="hljs-title">initiate</span>= <span class="hljs-params">()</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>form the request
+make the call</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function">
+    <span class="hljs-title">reset</span> = <span class="hljs-params">()</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>GET</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        state.operation = <span class="hljs-string">"get"</span>
+        state.lmiit = <span class="hljs-number">10</span>
+        state.offset = <span class="hljs-number">0</span>
+        state.desc = <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>GET/DELETE
+id, object example, query string, or array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        state.type = <span class="hljs-string">"all"</span>
+        state.where = <span class="hljs-literal">null</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>PUT/POST
+can specify an object, json string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        state.object = {}
+<span class="hljs-function">
+    <span class="hljs-title">setObject</span> = <span class="hljs-params">(object_or_json_string)</span> -&gt;</span>
+        <span class="hljs-keyword">switch</span> <span class="hljs-keyword">typeof</span> object_or_json_string
+            <span class="hljs-keyword">when</span> <span class="hljs-string">"string"</span>
+                state.object = object_or_json_string
+            <span class="hljs-keyword">when</span> <span class="hljs-string">"object"</span>
+                state.object = JSON.stringify(object_or_json_string)
+        <span class="hljs-keyword">return</span> state
+<span class="hljs-function">
+    <span class="hljs-title">setState</span> = <span class="hljs-params">(operation)</span> -&gt;</span>
+        reset()
+        state.operation = operation
+<span class="hljs-function">
+    <span class="hljs-title">setWhere</span> = <span class="hljs-params">(id_example_or_query)</span> -&gt;</span>
+        state.type = <span class="hljs-string">"all"</span>
+        state.where = <span class="hljs-literal">null</span>
+
+        <span class="hljs-keyword">if</span> (id_example_or_query != <span class="hljs-literal">null</span>)
+            <span class="hljs-keyword">switch</span> <span class="hljs-keyword">typeof</span> id_example_or_query
+                <span class="hljs-keyword">when</span> <span class="hljs-string">"number"</span>
+                    state.type = <span class="hljs-string">"id"</span>
+                    state.where = id_example_or_query
+                <span class="hljs-keyword">when</span> <span class="hljs-string">"string"</span>
+                    state.type = <span class="hljs-string">"query"</span>
+                    state.where = id_example_or_query
+                <span class="hljs-keyword">when</span> <span class="hljs-string">"object"</span>
+                    state.type = <span class="hljs-string">"example"</span>
+                    state.where = id_example_or_query
+                <span class="hljs-keyword">else</span>
+                    state.type = <span class="hljs-string">"query"</span>
+                    state.where = id_example_or_query
+        <span class="hljs-keyword">return</span> state</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

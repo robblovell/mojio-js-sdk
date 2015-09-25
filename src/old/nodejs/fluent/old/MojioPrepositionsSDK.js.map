@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "MojioPrepositionsSDK.js",
+  "sourceRoot": "",
+  "sources": [
+    "MojioPrepositionsSDK.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAIA;AAAA,MAAA,kCAAA;IAAA;;;EAAA,YAAA,GAAe,OAAA,CAAQ,gBAAR;;EAEf,MAAM,CAAC,OAAP,GAAuB;;;IAGN,8BAAC,OAAD;;QAAC,UAAQ;;MAClB,sDAAM,OAAN;IADS;;mCAMb,OAAA,GAAM,SAAA;AACF,aAAO;IADL;;mCAMN,IAAA,GAAM,SAAA;AACF,aAAO;IADL;;mCAMN,IAAA,GAAM,SAAA;AACF,aAAO;IADL;;mCAMN,KAAA,GAAO,SAAA;AACH,aAAO;IADJ;;;;KA3ByC;AAFpD"
+}

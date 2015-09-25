@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "TestClass.js",
+  "sourceRoot": "",
+  "sources": [
+    "TestClass.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA;;EAAA,MAAM,CAAC,OAAP,GAAuB;;;wBACnB,SAAA,GAAW,SAAA;AACP,aAAO;IADA;;;;;AADf"
+}
