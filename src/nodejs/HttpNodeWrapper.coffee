@@ -1,14 +1,11 @@
+
 Http = require 'http'
 Https = require 'https'
 constants = require 'constants'
+# @nodoc
 module.exports = class HttpNodeWrapper
 
     request: (params, callback) ->
-#        params.agent = false
-#        #params.rejectUnauthorized = false
-#        params.secureOptions = constants.SSL_OP_NO_TLSv1_2
-#        params.secureProtocol = 'SSLv3_method'
-#        params.strictSSL = false
 
         if (params.scheme == 'https')
             action = Https.request params

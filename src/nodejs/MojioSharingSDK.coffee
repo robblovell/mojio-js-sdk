@@ -3,34 +3,30 @@ Http = require './HttpNodeWrapper'
 SignalR = require './SignalRNodeWrapper'
 FormUrlencoded = require 'form-urlencoded'
 _ = require 'underscore'
-MojioAuthSDK = require './MojioAuthSDK'
+MojioGroupingSDK = require './MojioGroupingSDK'
 
-module.exports = class MojioRestSDK extends MojioAuthSDK
+module.exports = class MojioSharingSDK extends MojioGroupingSDK
 
     constructor: (options={}) ->
         super(options)
 
-    # REST
-    save: (callback) -> # PUT or POST depending on if it exists
+    # sharing and access
+    share: (user, callback) ->
         @callback(callback) if (callback?)
         return @
 
-    update: (callback) -> # PUT, throw error if it doesn't exist
+    with: (user, callback) ->
         @callback(callback) if (callback?)
         return @
 
-    create: (callback) -> # POST, throw error if it already exists
+    access: (rules, callback) ->
         @callback(callback) if (callback?)
         return @
 
-    for: (user, callback) ->
+    revoke: (user, callback) ->
         @callback(callback) if (callback?)
         return @
 
-    query: (callback) -> # GET
-        @callback(callback) if (callback?)
-        return @
-
-    destroy: (callback) -> # DELETE
+    from: (user, callback) ->
         @callback(callback) if (callback?)
         return @

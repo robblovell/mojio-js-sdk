@@ -16,22 +16,25 @@
     "xmlhttprequest": "1.7.0"
   },
   "devDependencies": {
-    "mocha": "1.18.2",
-    "should": "3.3.1",
-    "http-browserify": "1.3.2",
-    "coffee-script": "1.*",
-    "browserify": "3.44.2",
-    "combyne": "0.2.1",
-    "uglify-js": "2.4.15",
     "bower": "1.3.9",
+    "browserify": "3.44.2",
+    "coffee-script": "1.*",
+    "codo": "^2.0.11",
+    "combyne": "0.2.1",
     "concurrent-transform": "^1.0.0",
     "gulp": "^3.8.11",
     "gulp-coffee": "*",
     "gulp-jade": "^1.0.0",
+    "gulp-jsdoc": "^0.1.4",
     "gulp-sourcemaps": "^1.5.2",
+    "gulp-tap": "*",
     "gulp-util": "^3.0.1",
+    "http-browserify": "1.3.2",
+    "jsdoc": "^3.3.2",
+    "mocha": "1.18.2",
+    "should": "3.3.1",
     "touch": "*",
-    "gulp-tap": "*"
+    "uglify-js": "2.4.15"
   },
   "engines": {
     "node": "0.10.*",

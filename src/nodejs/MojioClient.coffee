@@ -3,6 +3,7 @@ Http = require './HttpNodeWrapper'
 SignalR = require './SignalRNodeWrapper'
 FormUrlencoded = require 'form-urlencoded'
 
+# @nodoc
 module.exports = class MojioClient
 
     defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'http', signalr_port: '80', signalr_hub: 'ObserverHub', live: true }

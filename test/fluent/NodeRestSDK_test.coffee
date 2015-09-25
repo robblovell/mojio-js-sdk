@@ -1,6 +1,7 @@
 MojioSDK = require '../../src/nodejs/MojioSDK'
 should = require('should')
 async = require('async')
+
 describe 'Node Mojio Rest SDK', ->
     sdk = new MojioSDK()
     user = null
@@ -11,11 +12,7 @@ describe 'Node Mojio Rest SDK', ->
         (error==null).should.be.true
         (result!=null).should.be.true
 
-    setupTimeout = (time, cb) ->
-        setTimeout((() -> cb("Error: Time Out.", null)), time)
-
-    execute = (test) ->
-
+    execute = (test, done) ->
         async.series([ # todo encrypted password
                 (cb) ->
                     sdk.authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" },
@@ -37,7 +34,7 @@ describe 'Node Mojio Rest SDK', ->
                     test(cb) # execute a test.
             ]
         ,
-# callback when the series is done or in error.
+            # callback when the series is done or in error.
             (error, results) ->
                 console.log(error) if error?
                 #(error==null).should.be.true
@@ -51,16 +48,30 @@ describe 'Node Mojio Rest SDK', ->
         vehicle = null
 
     it 'can create create a vehicle', (done) ->
+        @.timeout(5000)
         execute(
             (cb) ->
-                sdk.create().vehicle({}).for(user).callback((error, result) ->
+                sdk.create().vehicle({ }).for(user).callback((error, result) ->
                     testErrorResult(error, result)
                     # todo: test validity of vehicle
                     cb(null, result)
                 )
+            , done
+        )
+    it 'can create create a vehicle', (done) ->
+        @.timeout(5000)
+        execute(
+            (cb) ->
+                sdk.create().vehicle({ }).for(user, (error, result) ->
+                    testErrorResult(error, result)
+                    # todo: test validity of vehicle
+                    cb(null, result)
+                )
+            , done
         )
 
     it 'can create share and revoke a vehicle', (done) ->
+        @.timeout(5000)
         execute(
             (cb) ->
                 sdk.share().vehicle(vehicle).with(user).access("write").callback((error, result) ->
@@ -73,22 +84,42 @@ describe 'Node Mojio Rest SDK', ->
                     # todo: test validity of vehicle
                     cb(null, result)
                 )
+            , done
         )
     it 'can create share and revoke a list of vehicles', (done) ->
+        @.timeout(5000)
         execute(
             (cb) ->
-                sdk.share().vehicle([vehicle]).with(user).access("read").callback((error, result) ->
+                sdk.share().vehicles([vehicle]).with(user).access("read").callback((error, result) ->
                     testErrorResult(error, result)
                     # todo: test validity of vehicle
                     cb(null, result)
                 )
-                sdk.revoke().vehicle([vehicle]).from(user).access("read").callback((error, result) ->
+                sdk.revoke().vehicles([vehicle]).from(user).access("read").callback((error, result) ->
                     testErrorResult(error, result)
                     # todo: test validity of vehicle
                     cb(null, result)
                 )
+            , done
+        )
+    it "can create share and revoke a vehicle's fields", (done) ->
+        @.timeout(5000)
+        execute(
+            (cb) ->
+                sdk.share().vehicle(vehicle).fields(['location', 'speed']).with(user).access("read").callback((error, result) ->
+                    testErrorResult(error, result)
+                    # todo: test validity of vehicle
+                    cb(null, result)
+                )
+                sdk.revoke().vehicle(vehicle).from(user).access("read").callback((error, result) ->
+                    testErrorResult(error, result)
+                    # todo: test validity of vehicle
+                    cb(null, result)
+                )
+        , done
         )
     it 'can create group add/remove users', (done) ->
+        @.timeout(5000)
         execute(
             (cb) ->
                 sdk.create().group({name: "blah"}).with([user]).callback((error, result) ->
@@ -98,17 +129,21 @@ describe 'Node Mojio Rest SDK', ->
                         group = result
                 )
 
-                sdk.group(group).add(user).callback((error, result) ->
+                sdk.group("blah").add(user).callback((error, result) ->
                     testErrorResult(error, result)
                     # todo: test validity of vehicle
                     cb(null, result)
                 )
-                sdk.add(user).to().group(group).callback((error, result) ->
+                sdk.add(user).into().group("blah").callback((error, result) ->
+                    testErrorResult(error, result)
+                    # todo: test validity of vehicle
+                    cb(null, result)
+                )
+                sdk.remove(user).outof().group("blah").callback((error, result) ->
                     testErrorResult(error, result)
                     # todo: test validity of vehicle
                     cb(null, result)
                 )
                 sdk.create().mojio({imei: "123981392131"}) # attach to current user.
-
-
+            , done
         )

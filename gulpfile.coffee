@@ -6,12 +6,14 @@ sourcemaps = require('gulp-sourcemaps')
 touch = require('touch')
 path = require('path')
 tap = require('gulp-tap')
+jsdoc = require('gulp-jsdoc')
 
 parallelize = require("concurrent-transform")
 
 threads = 100
 useSourceMaps = true
 coffeeFiles = ['./src/**/*.coffee','test/**/*.coffee','example/**/*.coffee','examples/**/*.coffee']
+nodeJsFiles = './src/nodejs/*.js'
 
 handleError = (err) ->
     console.log(err.toString())
@@ -25,6 +27,11 @@ gulp.task('touch', () ->
         )
 
     )
+)
+
+gulp.task('docs', () ->
+    gulp.src(nodeJsFiles)
+    .pipe(jsdoc('./docs'))
 )
 
 gulp.task('coffeescripts', () ->

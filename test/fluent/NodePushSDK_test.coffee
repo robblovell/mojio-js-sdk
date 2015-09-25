@@ -12,9 +12,6 @@ describe 'Node Mojio Push SDK', ->
         (error==null).should.be.true
         (result!=null).should.be.true
 
-    setupTimeout = (time, cb) ->
-        setTimeout((() -> cb("Error: Time Out.", null)), time)
-
     changeVehicle = (vehicle, cb) ->
         sdk.vehicle(vehicle).update((error, result) ->
             cb("Error: Vehicle could not be saved", null) if error?
@@ -26,18 +23,24 @@ describe 'Node Mojio Push SDK', ->
 
         async.series([ # todo encrypted password
                 (cb) ->
+                    console.log("Authorize")
                     sdk.authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" },
                         ((error, result) -> vehicle = result; cb(error, result)))
             ,
                 (cb) ->
+                    console.log("Mock User")
                     sdk.mock().user({}).callback(
                         (error, result) -> user = result; cb(error, result))
             ,
                 (cb) ->
+                    console.log("Mock Mojio")
+
                     sdk.mojio({UserId: user.id, Imei: "9991234567891234"})
                     .mock((error, result) -> mojio = result; cb(error, result))
             ,
                 (cb) ->
+                    console.log("Mock Vehicle")
+
                     sdk.mock().vehicle({MojioId: mojio.id, UserId: user.id, Speed: 80},
                         ((error, result) -> vehicle = result; cb(error, result)))
             ,
@@ -45,10 +48,10 @@ describe 'Node Mojio Push SDK', ->
                     test(cb) # execute a test.
             ]
         ,
-# callback when the series is done or in error.
+            # callback when the series is done or in error.
             (error, results) ->
                 console.log(error) if error?
-                #(error==null).should.be.true
+                (error==null).should.be.true
                 # todo:: test results for correctness.
                 (result!=null).should.be.true # test results content to be the observed entitiy
                 done()
@@ -59,26 +62,30 @@ describe 'Node Mojio Push SDK', ->
         vehicle = null
 
     it 'can create an observer of vehicles with minimum defaults', (done) ->
+        @.timeout(2000)
         execute(
             (cb) ->
+                console.log("Start observer test")
                 sdk.observe({key: "UnitTestVehicleDefault"})
                 .vehicles()
                 # in this case, the callback given below is the signalR callback too.
                 .callback((error, result) ->
                     testErrorResult(error, result)
                     if (typeof result is 'boolean') # this is a callback via nodejs return
-                        # end test if result not received in the delay time
-                        setupTimeout(2000, cb)
                         # change the vehicle
+                        console.log("Change Vehicle")
                         changeVehicle(vehicle, cb)
                     else if (++callbackTimes == 2 or result instanceof 'object') # we are in a callback via signalR
                         # todo: test validity of vehicle
                         cb(null, result)
                 )
+            ,
+            done
         )
 
 
     it 'can create a complex observer of vehicles', (done) ->
+        @.timeout(2000)
         execute(
             (cb) ->
                 sdk.observe({key: "AccidentStateOnVehicleForMojio"})
@@ -114,8 +121,8 @@ describe 'Node Mojio Push SDK', ->
                     })
                 .callback((error, result) ->
                     testErrorResult(error, result)
-                    setupTimeout(2000, cb)
                     changeVehicle(vehicle, cb)
                 )
-
+            ,
+            done
         )
