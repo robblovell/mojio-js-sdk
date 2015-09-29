@@ -1,7 +1,6 @@
 should = require('should')
 async = require('async')
-HttpNodeWrapper = require '../../src/old/nodejs/HttpWrapper'
-httpNodeWrapper = new HttpNodeWrapper()
+HttpNodeWrapper = require '../../src/wrappers/nodejs/HttpWrapper'
 nock = require 'nock'
 
 describe 'Http Nodejs Wrapper', ->
@@ -19,12 +18,13 @@ describe 'Http Nodejs Wrapper', ->
             @.req.headers.mojioapitoken.should.be.equal(token)
             @.req.headers['content-type'].should.be.equal(contentType)
             cb(null, [200, { id: 1}]))
+        httpNodeWrapper = new HttpNodeWrapper("token")
 
         httpNodeWrapper.request({
                 method: 'Get',
                 resource: "Vehicles",
                 id: "1"
-            }, token, null, null, (error, result) =>
+            }, (error, result) =>
                 testErrorResult(error, result)
                 done()
         )
@@ -37,12 +37,13 @@ describe 'Http Nodejs Wrapper', ->
             @.req.headers['content-type'].should.be.equal(contentType)
             @.req.headers['host'].should.be.equal("api.moj.io")
             cb(null, [200, { id: 1}]))
+        httpNodeWrapper = new HttpNodeWrapper("token", 'https://api.moj.io/v1', true)
 
         httpNodeWrapper.request({
                 method: 'Get',
                 resource: "Vehicles",
                 id: "1"
-            }, token, 'https://api.moj.io/v1', true, (error, result) =>
+            }, (error, result) =>
             testErrorResult(error, result)
             done()
         )

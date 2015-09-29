@@ -2,7 +2,7 @@
 (function() {
   var MojioSDK, async, nock, should;
 
-  MojioSDK = require('.././fluent/MojioSDK');
+  MojioSDK = require('../../src/sdk/MojioSDK');
 
   should = require('should');
 

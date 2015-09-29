@@ -38,6 +38,8 @@
     };
 
     MojioAuthSDK.prototype.authorize = function(authorization) {
+      _extend(state, authorization);
+      state.operation = "authorize";
       return this;
     };
 

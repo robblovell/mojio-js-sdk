@@ -4,13 +4,13 @@
 
   should = require('should');
 
-  MojioSDK = require('.././fluent/MojioSDK');
+  MojioSDK = require('../../src/sdk/MojioSDK');
 
-  MojioAuthSDK = require('.././fluent/MojioAuthSDK');
+  MojioAuthSDK = require('../../src/sdk/MojioAuthSDK');
 
   nock = require('nock');
 
-  describe('Node Mojio Fluent Auth SDK', function() {
+  describe('Node Mojio Auth SDK password type auth', function() {
     var sdk, testErrorResult;
     sdk = new MojioSDK({
       sdk: MojioAuthSDK,
@@ -30,9 +30,9 @@
         ]);
       });
       return sdk.authorize({
-        type: "token",
-        user: "unittest@moj.io",
-        password: "mojioRocks"
+        type: "code",
+        app_id: "1234",
+        redirect_uri: "http://localhost"
       }).callback(function(error, result) {
         testErrorResult(error, result);
         return done();
@@ -49,9 +49,9 @@
         ]);
       });
       promise = sdk.authorize({
-        type: "code",
-        user: "unittest@moj.io",
-        password: "mojioRocks"
+        type: "password",
+        user: "1234",
+        password: "http://localhost"
       }).submit();
       return promise.then(function(result) {
         testErrorResult(null, result);
@@ -73,9 +73,9 @@
         ]);
       });
       return observer = sdk.authorize({
-        type: "token",
-        user: "unittest@moj.io",
-        password: "mojioRocks"
+        type: "password",
+        user: "1234",
+        password: "http://localhost"
       }).stream();
     });
     return it('can authorize with sync', function(done) {
@@ -89,13 +89,13 @@
         ]);
       });
       return result = sdk.authorize({
-        type: "token",
-        user: "unittest@moj.io",
-        password: "mojioRocks"
+        type: "password",
+        user: "1234",
+        password: "http://localhost"
       }).sync();
     });
   });
 
 }).call(this);
 
-//# sourceMappingURL=NodeAuthSDK_test.js.map
+//# sourceMappingURL=NodeAuthSDK_code_test.js.map

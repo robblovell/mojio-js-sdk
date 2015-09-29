@@ -1,7 +1,7 @@
 # version 5.0.0
 _ = require 'underscore'
 MojioPushSDK = require './MojioPushSDK'
-Module = require '../Module'
+Module = require 'Module'
 # The Mojio SDK. The Mojio SDK provides a means to easily use Mojio's Authentication Server, REST API, and Push API.
 #
 # The SDK works with four code segments: MojioModel, MojioAuth, MojioRest, and MojioPush that work together to provide
@@ -108,11 +108,15 @@ module.exports = class MojioSDK extends Module
 
     # @nodoc
     reset = () ->
+        state.resource = "Vehicles"
+        state.action = ""
         # GET
         state.operation = "get"
         state.lmiit = 10
         state.offset = 0
         state.desc = false
+        state.id = null
+        state.query = null
 
         # GET/DELETE
         # id, object example, query string, or array.
@@ -157,3 +161,32 @@ module.exports = class MojioSDK extends Module
                     state.type = "query"
                     state.where = id_example_or_query
         return state
+
+    fixup = () ->
+        # remove capitals from fields and values in the state.
+        for p, v of state
+            lowP = p.toLowerCase()
+            lowV = v.toLowerCase()
+            state[lowP]= lowV
+            delete state[p]
+
+    validate = () ->
+        switch state.operation
+            when 'authorize'
+                switch state.type
+                    when 'code'
+                        if (state.redirect_url? or state.redirect? or state.redirectUrl? or
+                        state.return_url? or state.return? or state.returnUrl?)
+                            return true
+                        else
+                            return "Must specify a return url (returnUrl or redirectUrl) field when using 'code' type OAuth2 authorization"
+                    when 'token'
+                        if (state.user? or state.username? or state.email? or state.usernameoremail? ) and
+                        (state.password? or state.pass?)
+                            return true
+                        else
+                            return "Must specify a username or email and a password when using 'token' type OAuth2 authorization"
+                    else
+                        return 'When authorizing, you must specify token or code authorization.'
+            else
+                return 'Must Specify an operation: authorize, get, put, post, delete, query, retreive, create, destroy.'

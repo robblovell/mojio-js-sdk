@@ -24,6 +24,8 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     users: (users) ->
+        state.resource = 'Users'
+        state.object = users
         return @
 
     # Specify a user to apply operations to in the fluent chain.
@@ -42,6 +44,7 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     user: (user) ->
+        @users([user])
         return @
 
     # Specify a list of vehicles to apply operations to in the fluent chain.
@@ -56,6 +59,8 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     vehicles: (vehicles) ->
+        state.resource = 'Vehicles'
+        state.object = vehicles
         return @
 
     # Specify a vehicle to apply operations to in the fluent chain.
@@ -74,6 +79,7 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     vehicle: (vehicle) ->
+        @vehicles([vehicle])
         return @
 
     # Specify a list of mojios to apply operations to in the fluent chain.
@@ -88,6 +94,8 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     mojios: (mojios) ->
+        state.resource = 'Vehicles'
+        state.object = vehicles
         return @
 
     # Specify a mojio to apply operations to in the fluent chain.
@@ -106,6 +114,7 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     mojio: (mojio) ->
+        @mojios([mojio])
         return @
 
     # Specify a list of trips to apply operations to in the fluent chain.
@@ -120,17 +129,23 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     trips: (trips) ->
+        state.resource = 'Trips'
+        state.object = trips
         return @
 
     # group
     # @return {object} this
-    group: (name, callback) ->
+    groups: (names, callback) ->
+        #todo:: instantiate groups from names?
+        state.resource = 'Groups'
+        state.object = names
         @callback(callback) if (callback?)
         return @
 
     # groups
     # @return {object} this
-    groups: (name, callback) ->
+    group: (name, callback) ->
+        @groups([name])
         @callback(callback) if (callback?)
         return @
 
@@ -143,20 +158,36 @@ module.exports = class MojioModelSDK
     # Specify an image to apply operations to in the fluent chain. One image can be associated with either Vehicles or Users.
     #
     # @return {object} this
-    image: (mojios) ->
+    image: (image) ->
+        state.action = 'Image'
+        state.object = image
         return @
 
     # Specify a tag to apply operations to in the fluent chain. Tags are secondary resources associated with Vehicles, Mojios, Users, Groups, or Trips
     #
     # @return {object} this
-    tags: (mojio) ->
+    tags: (tags) ->
+        state.action = 'Tags'
+        state.object = tags
         return @
 
     # Specify a tag to apply operations to in the fluent chain. Tags are secondary resources associated with Vehicles, Mojios, Users, Groups, or Trips
     #
     # @return {object} this
-    tag: (mojio) ->
+    tag: (tag) ->
+        tags([tag])
         return @
+
+    # Return the name of a resource as a string
+    # @parameter {string} Get the name of the resource or action. default is "resource"
+    # @example Return the string used to retrieve a vehicle:
+    #   sdk.vehicles().name() # returns "Vehicle"
+    # @example Return the string used to retrieve a vehicle:
+    #   sdk.vehicles().tag().name() # returns "Image"
+    # @return {string} The name of a resource or action
+    name: (type = "resource") ->
+        return state[type] # resource or action
+
 
     # Create models for testing purposes.
     #

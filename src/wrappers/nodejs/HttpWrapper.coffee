@@ -3,30 +3,14 @@ Https = require 'https'
 FormUrlencoded = require 'form-urlencoded'
 url = require("url");
 constants = require 'constants'
-iHttpWrapper = require '../interfaces/iHttpWrapper'
+HttpWrapperHelper = require '../HttpWrapperHelper'
+iHttpWrapper = require '../../interfaces/iHttpWrapper'
 # @nodoc
 module.exports = class HttpNodeWrapper extends iHttpWrapper
     constructor: (@token, @uri='https://api.moj.io/v1', @encoding = false) ->
-        super(@token, @uri, @encoding)
-    @_makeParameters: (params) ->
-        '' if params.length==0
-        query = '?'
-        for property, value of params
-            query += "#{encodeURIComponent property}=#{encodeURIComponent value}&"
-        return query.slice(0,-1)
+        super()
 
-    @_getPath: (resource, id, action, key) ->
-        if (key && id && action && id != '' && action != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id) + "/" + encodeURIComponent(action) + "/" + encodeURIComponent(key);
-        else if (id && action && id != '' && action != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id) + "/" + encodeURIComponent(action);
-        else if (id && id != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id);
-        else if (action && action != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(action);
-        return "/" + encodeURIComponent(resource);
-
-    @_request: (params, callback) ->
+    _request = (params, callback) ->
         if (params.href.slice(0,"https".length) == "https")
             action = Https.request params
         else
@@ -92,14 +76,14 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
         token = @token
         uri = @uri
         encoding = @encoding
-        uri += HttpNodeWrapper._getPath(request.resource, request.id, request.action, request.key)
+        uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key)
         console.log("Request:"+uri)
         parts = url.parse(uri)
         parts.method = request.method
         parts.withCredentials = false
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
-            parts.path += HttpNodeWrapper._makeParameters(request.parameters)
+            parts.path += HttpWrapperHelper._makeParameters(request.parameters)
 
         parts.headers = {}
         parts.headers["MojioAPIToken"] = token
@@ -112,7 +96,7 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
             else
                 parts.body = request.body
 
-        HttpNodeWrapper._request(parts, callback)
+        _request(parts, callback)
 
     redirect: (params, callback) -> # @applicationName is appname
-        HttpNodeWrapper.request(params, callback)
+        _request(params, callback)

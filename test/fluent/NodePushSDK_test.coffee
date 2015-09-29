@@ -1,4 +1,4 @@
-MojioSDK = require '.././fluent/MojioSDK'
+MojioSDK = require '../../src/sdk/MojioSDK'
 should = require('should')
 async = require('async')
 nock = require 'nock'

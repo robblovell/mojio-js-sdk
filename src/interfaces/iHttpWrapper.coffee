@@ -6,7 +6,7 @@ constants = require 'constants'
 # @nodoc
 module.exports = class HttpNodeWrapper
 
-    constructor: (@token, @uri='api.moj.io', @encoding = null) ->
+    constructor: () ->
 
     request: (request, callback) ->
         throw new Error("Not implemented")

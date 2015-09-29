@@ -13,11 +13,7 @@
   constants = require('constants');
 
   module.exports = HttpNodeWrapper = (function() {
-    function HttpNodeWrapper(token, uri, encoding) {
-      this.token = token;
-      this.uri = uri != null ? uri : 'api.moj.io';
-      this.encoding = encoding != null ? encoding : null;
-    }
+    function HttpNodeWrapper() {}
 
     HttpNodeWrapper.prototype.request = function(request, callback) {
       throw new Error("Not implemented");

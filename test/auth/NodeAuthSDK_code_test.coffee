@@ -1,9 +1,9 @@
 should = require('should')
-MojioSDK = require '.././fluent/MojioSDK'
-MojioAuthSDK = require '.././fluent/MojioAuthSDK'
+MojioSDK = require '../../src/sdk/MojioSDK'
+MojioAuthSDK = require '../../src/sdk/MojioAuthSDK'
 nock = require 'nock'
 
-describe 'Node Mojio Fluent Auth SDK', ->
+describe 'Node Mojio Auth SDK password type auth', ->
     sdk = new MojioSDK({sdk: MojioAuthSDK, test: true})
 
     testErrorResult = (error, result) ->
@@ -17,7 +17,7 @@ describe 'Node Mojio Fluent Auth SDK', ->
         .reply((uri, requestBody, cb) ->
             cb(null, [200, { id: 1}]))
         sdk
-        .authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" })
+        .authorize({type: "code", app_id: "1234", redirect_uri: "http://localhost" })
         .callback(
             (error, result) ->
                 testErrorResult(error, result)
@@ -30,7 +30,7 @@ describe 'Node Mojio Fluent Auth SDK', ->
         .reply((uri, requestBody, cb) ->
             cb(null, [200, { id: 1}]))
         promise = sdk
-        .authorize({type: "code", user: "unittest@moj.io", password: "mojioRocks" })
+        .authorize({type: "password", user: "1234", password: "http://localhost" })
         .submit()
         promise
         .then(
@@ -53,7 +53,7 @@ describe 'Node Mojio Fluent Auth SDK', ->
         .reply((uri, requestBody, cb) ->
             cb(null, [200, { id: 1}]))
         observer = sdk
-        .authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" })
+        .authorize({type: "password", user: "1234", password: "http://localhost" })
         .stream()
 
     it 'can authorize with sync', (done) ->
@@ -63,5 +63,5 @@ describe 'Node Mojio Fluent Auth SDK', ->
         .reply((uri, requestBody, cb) ->
             cb(null, [200, { id: 1}]))
         result = sdk
-        .authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" })
+        .authorize({type: "password", user: "1234", password: "http://localhost" })
         .sync()

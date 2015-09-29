@@ -5,11 +5,7 @@
   SignalR = require('signalr-client');
 
   module.exports = SignalRNodeWrapper = (function() {
-    function SignalRNodeWrapper(url, hubNames, options) {
-      this.url = url;
-      this.hubNames = hubNames;
-      this.options = options != null ? options : {};
-    }
+    function SignalRNodeWrapper() {}
 
     SignalRNodeWrapper.prototype.subscribe = function(hubName, method, observerId, subject, futureCallback, callback) {
       throw new Error("Not implemented");

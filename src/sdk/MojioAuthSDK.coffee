@@ -63,6 +63,8 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     #   authorize({type: 'token', user: '', password: ''})
     # @return {object} this
     authorize: (authorization) ->
+        _extend(state, authorization) # {type=code, redirect_url=}, {type=token, user=, password=}
+        state.operation = "authorize"
         return @
 
     # A method that returns an authorization token after authorization

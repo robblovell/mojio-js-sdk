@@ -8,10 +8,10 @@
 
   MojioPushSDK = require('./MojioPushSDK');
 
-  Module = require('../Module');
+  Module = require('Module');
 
   module.exports = MojioSDK = (function(superClass) {
-    var initiate, reset, setObject, setState, setWhere, state;
+    var fixup, initiate, reset, setObject, setState, setWhere, state, validate;
 
     extend(MojioSDK, superClass);
 
@@ -62,10 +62,14 @@
     initiate = function() {};
 
     reset = function() {
+      state.resource = "Vehicles";
+      state.action = "";
       state.operation = "get";
       state.lmiit = 10;
       state.offset = 0;
       state.desc = false;
+      state.id = null;
+      state.query = null;
       state.type = "all";
       state.where = null;
       return state.object = {};
@@ -110,6 +114,46 @@
         }
       }
       return state;
+    };
+
+    fixup = function() {
+      var lowP, lowV, p, results, v;
+      results = [];
+      for (p in state) {
+        v = state[p];
+        lowP = p.toLowerCase();
+        lowV = v.toLowerCase();
+        state[lowP] = lowV;
+        results.push(delete state[p]);
+      }
+      return results;
+    };
+
+    validate = function() {
+      switch (state.operation) {
+        case 'authorize':
+          switch (state.type) {
+            case 'code':
+              if ((state.redirect_url != null) || (state.redirect != null) || (state.redirectUrl != null) || (state.return_url != null) || (state["return"] != null) || (state.returnUrl != null)) {
+                return true;
+              } else {
+                return "Must specify a return url (returnUrl or redirectUrl) field when using 'code' type OAuth2 authorization";
+              }
+              break;
+            case 'token':
+              if (((state.user != null) || (state.username != null) || (state.email != null) || (state.usernameoremail != null)) && ((state.password != null) || (state.pass != null))) {
+                return true;
+              } else {
+                return "Must specify a username or email and a password when using 'token' type OAuth2 authorization";
+              }
+              break;
+            default:
+              return 'When authorizing, you must specify token or code authorization.';
+          }
+          break;
+        default:
+          return 'Must Specify an operation: authorize, get, put, post, delete, query, retreive, create, destroy.';
+      }
     };
 
     return MojioSDK;
