@@ -72,7 +72,7 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
 #    query = { method: 'GET',  resource: "Vehicles", parameters: { criteria: "name=blah; field=blah", limit:10, offset:0, sortby:"name", desc:false }}
 #    get = { method: 'GET',  resource: "Vehicles", parameters: {id: parameters} }
 
-    request: (request, callback) ->
+    parts: (request) ->
         token = @token
         uri = @uri
         encoding = @encoding
@@ -81,20 +81,33 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
         parts = url.parse(uri)
         parts.method = request.method
         parts.withCredentials = false
-
+        parts.params = ''
         if (request.parameters? and Object.keys(request.parameters).length > 0)
-            parts.path += HttpWrapperHelper._makeParameters(request.parameters)
-
+            parts.params = HttpWrapperHelper._makeParameters(request.parameters)
+        if (request.params? and Object.keys(request.params).length > 0)
+            parts.params = HttpWrapperHelper._makeParameters(request.params)
+        parts.path += parts.params
         parts.headers = {}
-        parts.headers["MojioAPIToken"] = token
+
+        parts.headers["MojioAPIToken"] = token if token?
         parts.headers += request.headers if (request.headers?)
-        parts.headers["Content-Type"] = 'application/json'
 
         if (request.body?)
-            if (encoding?)
+            if (encoding?) #
+                parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
                 parts.body = FormUrlencoded.encode(request.body)
             else
+                parts.headers["Content-Type"] = 'application/json'
                 parts.body = request.body
+        return parts
+
+    url: (request) ->
+        parts = @parts(request)
+        return parts.protocol + '//' + parts.hostname + parts.pathname + parts.params
+
+
+    request: (request, callback) ->
+        parts = @parts(request)
 
         _request(parts, callback)
 

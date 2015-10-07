@@ -78,7 +78,7 @@
       return action.end();
     };
 
-    HttpNodeWrapper.prototype.request = function(request, callback) {
+    HttpNodeWrapper.prototype.parts = function(request) {
       var encoding, parts, token, uri;
       token = this.token;
       uri = this.uri;
@@ -88,22 +88,42 @@
       parts = url.parse(uri);
       parts.method = request.method;
       parts.withCredentials = false;
+      parts.params = '';
       if ((request.parameters != null) && Object.keys(request.parameters).length > 0) {
-        parts.path += HttpWrapperHelper._makeParameters(request.parameters);
+        parts.params = HttpWrapperHelper._makeParameters(request.parameters);
       }
+      if ((request.params != null) && Object.keys(request.params).length > 0) {
+        parts.params = HttpWrapperHelper._makeParameters(request.params);
+      }
+      parts.path += parts.params;
       parts.headers = {};
-      parts.headers["MojioAPIToken"] = token;
+      if (token != null) {
+        parts.headers["MojioAPIToken"] = token;
+      }
       if ((request.headers != null)) {
         parts.headers += request.headers;
       }
-      parts.headers["Content-Type"] = 'application/json';
       if ((request.body != null)) {
         if ((encoding != null)) {
+          parts.headers["Content-Type"] = 'application/x-www-form-urlencoded';
           parts.body = FormUrlencoded.encode(request.body);
         } else {
+          parts.headers["Content-Type"] = 'application/json';
           parts.body = request.body;
         }
       }
+      return parts;
+    };
+
+    HttpNodeWrapper.prototype.url = function(request) {
+      var parts;
+      parts = this.parts(request);
+      return parts.protocol + '//' + parts.hostname + parts.pathname + parts.params;
+    };
+
+    HttpNodeWrapper.prototype.request = function(request, callback) {
+      var parts;
+      parts = this.parts(request);
       return _request(parts, callback);
     };
 

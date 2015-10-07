@@ -11,9 +11,14 @@
   MojioRestSDK = require('./MojioRestSDK');
 
   module.exports = MojioPushSDK = (function(superClass) {
-    var defaultTransports;
+    var defaultTransports, defaults;
 
     extend(MojioPushSDK, superClass);
+
+    defaults = {
+      hostname: 'api2.moj.io',
+      version: 'v2'
+    };
 
     defaultTransports = {
       signalr: {},

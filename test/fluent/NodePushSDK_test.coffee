@@ -113,6 +113,7 @@ describe 'Node Mojio Fluent Push SDK', ->
                         DataPoints: 6,
                         TimeWindow: "timespan"
                     })
+                .timing(['edge','high'])
                 .transport({
                         Type: "SignalR",
                         Callback: (error, result) ->

@@ -15,9 +15,14 @@ MojioModelSDK = require './MojioModelSDK'
 # @example
 #   mojioAuthSdk = new MojioSDK({sdk: MojioAuthSDK}) # instantiate the mojioSDK to do only authentication methods.
 #
-module.exports = class MojioAuthSDK extends MojioModelSDK
-    defaults = { hostname: 'api2.moj.io', version: 'v2' }
-
+module.exports = class MojioAuthSDK
+    defaults = {
+        parseToken: ((result) ->  token = result)
+        site: 'https://accounts.moj.io'
+        tokenPath: '/oauth2/token'
+        authorizationPath: '/oauth2/authorize'
+    }
+    token = null
     # Construct a MojioAuthSDK object.
     #
     # @example New MojioAuthSDK
@@ -27,22 +32,15 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @return {object} Returns a new MojioAuthSDK object
     # @nodoc
     constructor: (options={}) ->
-        @configure(options)
         super()
-
-    # Configure the SDK's options
-    #
-    # @example Basic Configuration
-    #   configure({ version: 'v2' })
-    # @param [object] options Configurable options for the sdk.
-    # @option options [String] version api version to use 'v1' or 'v2't
-    # @return {object} this
-    # @private
-    # @nodoc
-    configure: (options={}) ->
-        _.extend(@, options)
-        _.defaults(@, defaults)
-        return @
+        @configure(options, defaults)
+        @user = null
+        # set up the state variables needed for the Auth SDK
+        @state.client = @client_id
+        @state.secret = @client_secret
+        @state.site = @site
+        @state.tokenPath = @tokenPath
+        @state.authorizationPath = @authorizationPath
 
     # A method that authorizes access to a user's data.  There are two ways to authorize users,
     # depending on whether the application is designed to be used by a consumer, or it is designed
@@ -62,11 +60,63 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @example Server based authorization for trusted enterprise applications. Sends username and password with the application key directly to the authorization server.
     #   authorize({type: 'token', user: '', password: ''})
     # @return {object} this
-    authorize: (authorization) ->
-        _extend(state, authorization) # {type=code, redirect_url=}, {type=token, user=, password=}
-        state.operation = "authorize"
+    authorize: (redirect_url, implicit = false) ->
+        # authorization_code or implicit flows (server or browser for end users/consumers.
+        # {client_id:, response_type:, redirect_url:, scope:, realm:}, {type=token, user=, password=}
+        @state.setMethod("POST")
+        @state.setEndpoint("accounts")
+        @state.setResource("oauth2")
+        @state.setAction("authorize")
+        if (@sdk_env == 'browser' or implicit)
+            @state.setBody({response_type: 'token', redirect_uri: redirect_url, client_id: @client_id})
+        else if (@sdk_env == 'nodejs')
+            @state.setBody({response_type: 'code', redirect_uri: redirect_url, client_id: @client_id})
+        return @
+    # A method that un-authorizes access to a user's data, removing grants to data.
+    # @return {object} this
+    unauthorize: (redirect_url, implicit = false) ->
+        # authorization_code or implicit flows (server or browser for end users/consumers.
+        # {client_id:, response_type:, redirect_url:, scope:, realm:}, {type=token, user=, password=}
+        @state.setMethod("POST")
+        @state.setEndpoint("accounts")
+        @state.setResource("oauth2")
+        @state.setAction("authorize")
+        if (@sdk_env == 'browser' or implicit)
+            @state.setBody({response_type: 'token', redirect_uri: redirect_url, client_id: @client_id})
+        else if (@sdk_env == 'nodejs')
+            @state.setBody({response_type: 'code', redirect_uri: redirect_url, client_id: @client_id})
+
         return @
 
+    # A method that logs the user out.
+    # @return {object} this
+    login: () ->
+        @prompt ({prompt: 'login'})
+        return @
+
+    # A method that logs the user out.
+    # @return {object} this
+    consent: () ->
+        @prompt ({prompt: 'consent'})
+        return @
+
+    # A method that logs the user out.
+    # @return {object} this
+    loginAndConsent: () ->
+        @prompt ({prompt: 'consent,login'})
+        return @
+
+    prompt: (prompt) ->
+        # both if alread set
+        if (@state.getBody().prompt?) and
+                (@state.getBody().prompt is 'login' and prompt.prompt is 'consent') or
+                (@state.getBody().prompt is 'consent' and prompt.prompt is 'login')
+            @state.setBody({prompt: 'consent,login'})
+        # or as is.
+        else
+            @state.setBody(prompt)
+        @state.show()
+        return @
     # A method that returns an authorization token after authorization
     #
     # @param {string} The response from the authorization workflow.
@@ -74,6 +124,85 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @example Get the token after returning from a consumer application's redirect to the authorization server
     # apitoken = token( document.location.hash.match(/access_token=([0-9a-f-]{36})/)) )
     # @return {string} token
-    token: (response) ->
-        return "token"
+    # password or refresh flow, second half of authorization code flow
+    token: () ->
+        redirect_uri = @state.getBody().redirect_uri
+        console.log(@state.url())
+        @state.setMethod("POST")
+        @state.setEndpoint("accounts")
+        @state.setResource("oauth2")
+        @state.setAction("token")
+        @state.setBody({ client_id: @client_id, client_secret: @client_secret })
+        @state.setBody({ redirect_uri: redirect_uri}) if redirect_uri?
+        return @
+
+    # password flow
+    credentials: (username_or_credentials, password=null) ->
+        if (typeof username_or_credentials is 'object')
+            credentails=username_or_credentials
+        else
+            credentails={ username: username_or_credentials, password: password, grant_type: 'password' }
+        @validator.credentials(credentails)
+        @state.setBody(credentails)
+        return @
+
+    # second half of authorization code flow, or parse of the return from the implicit flow
+    parse: (return_url, redirect_uri=null) ->
+        if (return_url.query.code and redirect_uri?)
+            code = return_url.query.code
+
+            @state.setBody({
+                code: code,
+                grant_type: 'authorization_code'
+            })
+            @state.setBody({ redirect_uri: redirect_uri}) if redirect_uri?
+        else
+            # todo:: set the token for implicit flow.
+            @state.setToken(req.query.access_token)
+            @state.setAnswer(req.query.access_token)
+        return @
+    code: (req) ->
+        code = req.query.code
+        @state.setBody( { authorization_code: code })
+        return @
+
+    # refresh flow.
+    refresh: (refresh_token) ->
+        @state.setBody({ refresh_token: 'some code', grant_type: 'refresh_token' })
+        return @
+
+    scope: (scopes) ->
+        @validator.validateScope(scopes, @scopes)
+        param = ''
+        scopes.map (scope) -> param+=scope+' '
+        @state.setBody({ scope: param.slice(0,-1) })
+        return @
+
+#    realm: (realm) ->
+#        @state.setParams({ realm: realm })
+#        return @
+
+    url: () ->
+        console.log("URL: #{JSON.stringify(@state.url())}")
+        return @state.url()
+
+    redirect: (redirectFunction) ->
+        redirectFunction.redirect(@url())
+        return @
+
+    username: (username) ->
+        @state.setBody({ username: username})
+        return @
+
+    email: (email) ->
+        @state.setBody({ username: email})
+        return @
+
+    password: (password) ->
+        @state.setBody({ password: password })
+        return @
+
+    with: (usernameOrEmail, password) ->
+        @state.setBody({ username: usernameOrEmail, password: password })
+        return @
 

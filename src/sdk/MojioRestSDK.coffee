@@ -22,7 +22,10 @@ MojioAuthSDK = require './MojioAuthSDK'
 #   mojioRestSdk = new MojioSDK({sdk: MojioRestSDK}) # instantiate the mojioSDK to do only REST and authentication methods.
 #
 module.exports = class MojioRestSDK extends MojioAuthSDK
-
+    defaults = {
+        hostname: 'api2.moj.io'
+        version: 'v2'
+    }
     # Constructor for the MojioRestSDK
     # @param [object] options Configurable options for the sdk.
     # @option options [String] version api version to use 'v1' or 'v2't

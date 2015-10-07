@@ -1,3 +1,4 @@
+
 # The Model segment of the Mojio SDK. The model part of the SDK is the lowest level of the fluent chain and is used
 # by all other SDK segments. It provides ways to specify the type of resource, identification of particular resources,
 # and data for the resource.

@@ -32,7 +32,10 @@ MojioRestSDK = require './MojioRestSDK'
 #   mojioSdk = new MojioSDK({sdk: MojioPushSDK}) # instantiate the mojioSDK to all available API calls.
 #
 module.exports = class MojioPushSDK extends MojioRestSDK
-
+    defaults = {
+        hostname: 'api2.moj.io'
+        version: 'v2'
+    }
     defaultTransports = { signalr: {}, httpPost: {}}
 
     # Instantiate the Mojio Push SDK.

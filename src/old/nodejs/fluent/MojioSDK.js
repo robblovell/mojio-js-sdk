@@ -8,7 +8,7 @@
 
   MojioPushSDK = require('./MojioPushSDK');
 
-  Module = require('../Module');
+  Module = require('../../../Module');
 
   module.exports = MojioSDK = (function(superClass) {
     var initiate, reset, setObject, setState, setWhere, state;

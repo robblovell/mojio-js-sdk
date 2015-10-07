@@ -6,7 +6,7 @@
 
   should = require('should');
 
-  Module = require('.././Module');
+  Module = require('../../src/Module');
 
   describe('Test Module', function() {
     it('Module can extend from object', function() {
@@ -125,7 +125,7 @@
       guitar = new Guitar();
       return guitar.makeSound().should.be["true"];
     });
-    return it('Module can include from class in constructor', function() {
+    it('Module can include from class in constructor', function() {
       var Guitar, guitar, instanceProperties;
       instanceProperties = (function() {
         function instanceProperties() {}
@@ -149,6 +149,108 @@
       })(Module);
       guitar = new Guitar();
       return guitar.makeSound().should.be["true"];
+    });
+    it("Module can't include from hidden variables", function() {
+      var Guitar, guitar, instanceProperties;
+      instanceProperties = (function() {
+        var state;
+
+        function instanceProperties() {}
+
+        state = {};
+
+        instanceProperties.prototype.makeSound = function() {
+          state["thing"] = true;
+          return true;
+        };
+
+        return instanceProperties;
+
+      })();
+      Guitar = (function(superClass) {
+        extend(Guitar, superClass);
+
+        function Guitar() {
+          this.include(instanceProperties);
+        }
+
+        Guitar.prototype.makeAnotherSound = function() {
+          state["thing"] = true;
+          return true;
+        };
+
+        return Guitar;
+
+      })(Module);
+      guitar = new Guitar();
+      guitar.makeSound().should.be["true"];
+      return guitar.makeAnotherSound().should.be["true"];
+    });
+    return it("Module can't include from hidden variables", function() {
+      var Guitar, State, guitar, instanceProperties;
+      State = (function() {
+        var stuff;
+
+        stuff = {
+          stuff: "hi"
+        };
+
+        function State() {
+          this.state = {
+            stuff: "hi"
+          };
+        }
+
+        State.prototype.set = function() {
+          return stuff['thing'] = true;
+        };
+
+        State.prototype.reset = function() {
+          return stuff['thing'] = false;
+        };
+
+        State.prototype.show = function() {
+          return stuff;
+        };
+
+        return State;
+
+      })();
+      instanceProperties = (function() {
+        function instanceProperties() {}
+
+        instanceProperties.prototype.makeSound = function() {
+          console.log(JSON.stringify(this.state.show()));
+          this.state.set();
+          console.log(JSON.stringify(this.state.show()));
+          return true;
+        };
+
+        return instanceProperties;
+
+      })();
+      Guitar = (function(superClass) {
+        extend(Guitar, superClass);
+
+        function Guitar() {
+          Guitar.__super__.constructor.call(this);
+          this.include(instanceProperties);
+          this.state = new State();
+        }
+
+        Guitar.prototype.makeAnotherSound = function() {
+          console.log(JSON.stringify(this.state.show()));
+          this.state.reset();
+          console.log(JSON.stringify(this.state.show()));
+          return true;
+        };
+
+        return Guitar;
+
+      })(Module);
+      guitar = new Guitar();
+      guitar.makeSound().should.be["true"];
+      return guitar.makeAnotherSound().should.be["true"];
     });
   });
 

@@ -109,7 +109,7 @@
         }).vehicles().fields(["VIN", "AccidentState", "Battery", "Location", "Heading", "Altitude", "Speed", "Accelerometer", "LastContactTime", "GatewayTimeStamp", "FuelLevel"]).where("Battery > min or Battery < max and MojioId == [mojio id]").throttle("1 second").debounce({
           DataPoints: 6,
           TimeWindow: "timespan"
-        }).transport({
+        }).timing(['edge', 'high']).transport({
           Type: "SignalR",
           Callback: function(error, result) {
             testErrorResult(error, result);

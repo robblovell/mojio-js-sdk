@@ -9,7 +9,14 @@
   MojioAuthSDK = require('./MojioAuthSDK');
 
   module.exports = MojioRestSDK = (function(superClass) {
+    var defaults;
+
     extend(MojioRestSDK, superClass);
+
+    defaults = {
+      hostname: 'api2.moj.io',
+      version: 'v2'
+    };
 
     function MojioRestSDK(options) {
       if (options == null) {

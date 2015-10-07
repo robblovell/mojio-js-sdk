@@ -1,5 +1,5 @@
 should = require('should')
-Module = require '.././Module'
+Module = require '../../src/Module'
 
 #class Module
 #    constructor: () ->
@@ -113,3 +113,57 @@ describe 'Test Module', ->
 
         guitar = new Guitar()
         guitar.makeSound().should.be.true
+
+    it "Module can't include from hidden variables", ->
+        class instanceProperties
+            state = {}
+            makeSound: () ->
+                state["thing"] = true
+                return true
+
+        class Guitar extends Module
+            constructor: () ->
+                @include instanceProperties
+            makeAnotherSound: () ->
+                state["thing"] = true
+                return true
+
+        guitar = new Guitar()
+        guitar.makeSound().should.be.true
+        guitar.makeAnotherSound().should.be.true
+
+    it "Module can't include from hidden variables", ->
+        class State
+            stuff = {stuff: "hi"}
+            constructor: () ->
+                @state = {stuff: "hi"}
+            set: () ->
+                stuff['thing'] = true
+            reset: () ->
+                stuff['thing'] = false
+            show: () ->
+                return stuff
+
+        class instanceProperties
+            constructor: () ->
+            makeSound: () ->
+                console.log(JSON.stringify(@state.show()))
+                @state.set()
+                console.log(JSON.stringify(@state.show()))
+
+                return true
+
+        class Guitar extends Module
+            constructor: () ->
+                super()
+                @include instanceProperties
+                @state = new State()
+            makeAnotherSound: () ->
+                console.log(JSON.stringify(@state.show()))
+                @state.reset()
+                console.log(JSON.stringify(@state.show()))
+                return true
+
+        guitar = new Guitar()
+        guitar.makeSound().should.be.true
+        guitar.makeAnotherSound().should.be.true

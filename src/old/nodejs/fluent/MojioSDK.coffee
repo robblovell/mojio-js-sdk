@@ -1,7 +1,7 @@
 # version 5.0.0
 _ = require 'underscore'
 MojioPushSDK = require './MojioPushSDK'
-Module = require '../Module'
+Module = require '../../../Module'
 # The Mojio SDK. The Mojio SDK provides a means to easily use Mojio's Authentication Server, REST API, and Push API.
 #
 # The SDK works with four code segments: MojioModel, MojioAuth, MojioRest, and MojioPush that work together to provide

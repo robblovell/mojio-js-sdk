@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "NodeAuthSDK_token_test.js",
+  "sourceRoot": "",
+  "sources": [
+    "NodeAuthSDK_token_test.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;;AAAA"
+}
