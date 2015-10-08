@@ -1,4 +1,3 @@
-SignalR = require 'signalr-client'
 # @nodoc
 module.exports = class SignalRNodeWrapper
 

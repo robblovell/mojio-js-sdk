@@ -13,10 +13,6 @@
       throw new Error("Not implemented");
     };
 
-    HttpNodeWrapper.prototype.url = function(request) {
-      throw new Error("Not implemented");
-    };
-
     return HttpNodeWrapper;
 
   })();

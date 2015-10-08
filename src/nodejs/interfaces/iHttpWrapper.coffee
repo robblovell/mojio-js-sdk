@@ -9,8 +9,4 @@ module.exports = class HttpNodeWrapper
     redirect: (params, callback) -> # @applicationName is appname
         throw new Error("Not implemented")
 
-    url: (request) ->
-        throw new Error("Not implemented")
-
-
 

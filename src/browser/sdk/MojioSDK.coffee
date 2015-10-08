@@ -1,5 +1,4 @@
 # version 5.0.0
-_ = require 'underscore'
 MojioSDKState = require '../state/MojioSDKState'
 MojioPushSDK = require './MojioPushSDK'
 Module = require '../helpers/Module'
@@ -80,8 +79,10 @@ module.exports = class MojioSDK extends Module
     # @return {object} this # @private
     # @nodoc
     configure: (options={}, defaults={}) ->
-        _.extend(@, options)
-        _.defaults(@, defaults)
+        for property,value of options
+            @[property] = value
+        for property,value of defaults
+            @[property] = value if !@[property]?
         return @
 
     # Sync initiates the fluent chain in a synchronous call, blocking until results are returned. Sync is one of four
