@@ -148,7 +148,6 @@
           grant_type: 'password'
         };
       }
-      this.validator.credentials(credentails);
       this.state.setBody(credentails);
       return this;
     };
@@ -195,7 +194,6 @@
 
     MojioAuthSDK.prototype.scope = function(scopes) {
       var param;
-      this.validator.validateScope(scopes, this.scopes);
       param = '';
       scopes.map(function(scope) {
         return param += scope + ' ';

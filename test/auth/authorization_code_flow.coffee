@@ -1,7 +1,7 @@
 
 express = require('express')
-MojioSDK = require '../../src/sdk/MojioSDK'
-MojioAuthSDK = require '../../src/sdk/MojioAuthSDK'
+MojioSDK = require '../../src/nodejs/sdk/MojioSDK'
+MojioAuthSDK = require '../../src/nodejs/sdk/MojioAuthSDK'
 
 app = express()
 client_id = '5f81657f-47f6-4d86-8213-5c01c1f3a243'

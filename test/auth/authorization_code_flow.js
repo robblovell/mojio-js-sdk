@@ -4,9 +4,9 @@
 
   express = require('express');
 
-  MojioSDK = require('../../src/sdk/MojioSDK');
+  MojioSDK = require('../../src/nodejs/sdk/MojioSDK');
 
-  MojioAuthSDK = require('../../src/sdk/MojioAuthSDK');
+  MojioAuthSDK = require('../../src/nodejs/sdk/MojioAuthSDK');
 
   app = express();
 

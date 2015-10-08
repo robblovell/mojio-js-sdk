@@ -4,9 +4,9 @@
 
   should = require('should');
 
-  MojioSDK = require('../../src/sdk/MojioSDK');
+  MojioSDK = require('../../src/nodejs/sdk/MojioSDK');
 
-  MojioAuthSDK = require('../../src/sdk/MojioAuthSDK');
+  MojioAuthSDK = require('../../src/nodejs/sdk/MojioAuthSDK');
 
   describe('Node Mojio Auth SDK Methods', function() {
     var call, client_id, client_secret, grant_type, password, response_type, testErrorResult, timeout, username;

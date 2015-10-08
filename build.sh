@@ -2,13 +2,13 @@
 echo "Building nodejs SDK"
 echo "Copy files from template to source directory"
 # copy files to a flat location.
-cp template/helpers/* src/nodejs/helpers
-cp template/interfaces/* src/nodejs/interfaces
-cp template/sdk/* src/nodejs/sdk
-cp template/state/* src/nodejs/state
-cp template/styles-all/* src/nodejs/styles
-cp template/styles-nodejs/* src/nodejs/styles
-cp template/wrappers-nodejs/* src/nodejs/wrappers
+cp -f template/helpers/* src/nodejs/helpers
+cp -f template/interfaces/* src/nodejs/interfaces
+cp -f template/sdk/* src/nodejs/sdk
+cp -f template/state/* src/nodejs/state
+cp -f template/styles-all/* src/nodejs/styles
+cp -f template/styles-nodejs/* src/nodejs/styles
+cp -f template/wrappers-nodejs/* src/nodejs/wrappers
 
 echo "Build Javascript from Coffeescript..."
 coffee --compile src/nodejs
@@ -26,13 +26,13 @@ echo "Completed nodejs SDK"
 echo "Building browser SDK"
 echo "Copy files from template to source directory"
 
-cp template/helpers/* src/browser/helpers
-cp template/interfaces/* src/browser/interfaces
-cp template/sdk/* src/browser/sdk
-cp template/state/* src/browser/state
-cp template/styles-all/* src/browser/styles
-cp template/styles-browser/* src/browser/styles
-cp template/wrappers-browser/* src/browser/wrappers
+cp -f template/helpers/* src/browser/helpers
+cp -f template/interfaces/* src/browser/interfaces
+cp -f template/sdk/* src/browser/sdk
+cp -f template/state/* src/browser/state
+cp -f template/styles-all/* src/browser/styles
+cp -f template/styles-browser/* src/browser/styles
+cp -f template/wrappers-browser/* src/browser/wrappers
 echo "Build Javascript from Coffeescript..."
 
 coffee --compile src/browser

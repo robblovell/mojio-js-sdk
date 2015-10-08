@@ -70,11 +70,11 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
         return parts
 
     url: (request) ->
-        parts = @_parts(request, @token, @uri, @encoding)
+        parts = _parts(request, @token, @uri, @encoding)
         return parts.protocol + '//' + parts.hostname + parts.pathname + parts.params
 
     request: (request, callback) ->
-        parts = @_parts(request, @token, @uri, @encoding)
+        parts = _parts(request, @token, @uri, @encoding)
         _request(parts, @requester, callback)
 
     redirect: (params, callback) -> # @applicationName is appname

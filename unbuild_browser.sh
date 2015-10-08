@@ -1,10 +1,20 @@
-#!/usr/bin/env bash
-cp src/browser/helpers/* template/helpers
-cp src/browser/interfaces/* template/interfaces
-cp src/browser/sdk/* template/browser/sdk
-cp src/browser/state/* template/browser/state
-cp src/browser/styles/MojioPromiseStyle* template/styles-all
-cp src/browser/styles/MojioReactiveStyle* template/styles-all
+#!/bin/sh
+echo "Copy browser src files to template locations."
+echo "Copy helpers"
+
+cp -f src/browser/helpers/* template/helpers
+echo "Copy interfaces"
+cp -f src/browser/interfaces/* template/interfaces
+echo "Copy sdk"
+cp -f src/browser/sdk/* template/sdk
+echo "Copy state"
+cp -f src/browser/state/* template/state
+echo "Copy styles, promise"
+cp -f src/browser/styles/MojioPromiseStyle* template/styles-all
+echo "Copy styles, reactive"
+cp -f src/browser/styles/MojioReactiveStyle* template/styles-all
 #cp src/browser/styles/MojioAsyncAwaitStyle* template/styles-browser
 #cp src/browser/styles/MojioSyncStyle* template/styles-browser
-cp src/browser/wrappers/* template/wrappers-browser/wrappers
+echo "Copy wrappers"
+cp -f src/browser/wrappers/* template/wrappers-browser
+echo "Completed browser copy-back"

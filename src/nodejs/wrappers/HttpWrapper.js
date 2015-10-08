@@ -116,13 +116,13 @@
 
     HttpNodeWrapper.prototype.url = function(request) {
       var parts;
-      parts = this._parts(request, this.token, this.uri, this.encoding);
+      parts = _parts(request, this.token, this.uri, this.encoding);
       return parts.protocol + '//' + parts.hostname + parts.pathname + parts.params;
     };
 
     HttpNodeWrapper.prototype.request = function(request, callback) {
       var parts;
-      parts = this._parts(request, this.token, this.uri, this.encoding);
+      parts = _parts(request, this.token, this.uri, this.encoding);
       return _request(parts, this.requester, callback);
     };
 

@@ -1,6 +1,6 @@
 should = require('should')
-MojioSDK = require '../../src/sdk/MojioSDK'
-MojioAuthSDK = require '../../src/sdk/MojioAuthSDK'
+MojioSDK = require '../../src/nodejs/sdk/MojioSDK'
+MojioAuthSDK = require '../../src/nodejs/sdk/MojioAuthSDK'
 
 describe 'Node Mojio Auth SDK Methods', ->
 
