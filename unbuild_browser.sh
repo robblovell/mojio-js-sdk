@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-cp lib/browser/helpers/* src/helpers
-cp lib/browser/interfaces/* src/interfaces
-cp lib/browser/sdk/* src/browser/sdk
-cp lib/browser/state/* src/browser/state
-cp lib/browser/styles/MojioPromiseStyle* src/styles-all
-cp lib/browser/styles/MojioReactiveStyle* src/styles-all
-#cp lib/browser/styles/MojioAsyncAwaitStyle* src/styles-browser
-#cp lib/browser/styles/MojioSyncStyle* src/styles-browser
-cp lib/browser/wrappers/* src/wrappers-browser/wrappers
+cp src/browser/helpers/* template/helpers
+cp src/browser/interfaces/* template/interfaces
+cp src/browser/sdk/* template/browser/sdk
+cp src/browser/state/* template/browser/state
+cp src/browser/styles/MojioPromiseStyle* template/styles-all
+cp src/browser/styles/MojioReactiveStyle* template/styles-all
+#cp src/browser/styles/MojioAsyncAwaitStyle* template/styles-browser
+#cp src/browser/styles/MojioSyncStyle* template/styles-browser
+cp src/browser/wrappers/* template/wrappers-browser/wrappers

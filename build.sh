@@ -1,22 +1,22 @@
 #!/bin/sh
 
 # copy files to a flat location.
-cp src/helpers/* lib/nodejs/helpers
-cp src/interfaces/* lib/nodejs/interfaces
-cp src/sdk/* lib/nodejs/sdk
-cp src/state/* lib/nodejs/state
-cp src/styles-all/* lib/nodejs/styles
-cp src/styles-nodejs/* lib/nodejs/styles
-cp src/wrappers-nodejs/* lib/nodejs/wrappers
+cp template/helpers/* src/nodejs/helpers
+cp template/interfaces/* src/nodejs/interfaces
+cp template/sdk/* src/nodejs/sdk
+cp template/state/* src/nodejs/state
+cp template/styles-all/* src/nodejs/styles
+cp template/styles-nodejs/* src/nodejs/styles
+cp template/wrappers-nodejs/* src/nodejs/wrappers
 
-cp src/helpers/* lib/browser/helpers
-cp src/interfaces/* lib/browser/interfaces
-cp src/sdk/* lib/browser/sdk
-cp src/state/* lib/browser/state
-cp src/styles-all/* lib/browser/styles
-cp src/styles-browser/* lib/browser/styles
-cp src/wrappers-browser/* lib/browser/wrappers
+cp template/helpers/* src/browser/helpers
+cp template/interfaces/* src/browser/interfaces
+cp template/sdk/* src/browser/sdk
+cp template/state/* src/browser/state
+cp template/styles-all/* src/browser/styles
+cp template/styles-browser/* src/browser/styles
+cp template/wrappers-browser/* src/browser/wrappers
 
-coffee --compile lib/nodejs
-coffee --compile lib/browser
+coffee --compile src/nodejs
+coffee --compile src/browser
 

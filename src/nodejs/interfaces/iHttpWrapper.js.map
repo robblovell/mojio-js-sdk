@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "iHttpWrapper.js",
+  "sourceRoot": "",
+  "sources": [
+    "iHttpWrapper.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA;AAAA,MAAA;;EAAA,MAAM,CAAC,OAAP,GAAuB;IAEN,yBAAA,GAAA;;8BAEb,OAAA,GAAS,SAAC,OAAD,EAAU,QAAV;AACL,YAAU,IAAA,KAAA,CAAM,iBAAN;IADL;;8BAGT,QAAA,GAAU,SAAC,MAAD,EAAS,QAAT;AACN,YAAU,IAAA,KAAA,CAAM,iBAAN;IADJ;;8BAGV,GAAA,GAAK,SAAC,OAAD;AACD,YAAU,IAAA,KAAA,CAAM,iBAAN;IADT;;;;;AAVT"
+}

@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-cp lib/nodejs/helpers/* src/helpers
-cp lib/nodejs/interfaces/* src/interfaces
-cp lib/nodejs/sdk/* src/nodejs/sdk
-cp lib/nodejs/state/* src/nodejs/state
-cp lib/nodejs/styles/MojioPromiseStyle* src/styles-all
-cp lib/nodejs/styles/MojioReactiveStyle* src/styles-all
-cp lib/nodejs/styles/MojioAsyncAwaitStyle* src/styles-nodejs
-cp lib/nodejs/styles/MojioSyncStyle* src/styles-nodejs
-cp lib/nodejs/wrappers/* src/wrappers-nodejs/wrappers
+cp src/nodejs/helpers/* template/helpers
+cp src/nodejs/interfaces/* template/interfaces
+cp src/nodejs/sdk/* template/nodejs/sdk
+cp src/nodejs/state/* template/nodejs/state
+cp src/nodejs/styles/MojioPromiseStyle* template/styles-all
+cp src/nodejs/styles/MojioReactiveStyle* template/styles-all
+cp src/nodejs/styles/MojioAsyncAwaitStyle* template/styles-nodejs
+cp src/nodejs/styles/MojioSyncStyle* template/styles-nodejs
+cp src/nodejs/wrappers/* template/wrappers-nodejs/wrappers
