@@ -8,11 +8,6 @@ module.exports = class MojioModelSDK
     # @nodoc
     constructor: () ->
 
-    # @nodoc
-    configure: (options={}) ->
-        _.extend(@, options)
-        return @
-
     # Specify a list of users to apply operations to in the fluent chain.
     #
     # A list of users can be specified either with an array of users (id's or objects), or a query string.

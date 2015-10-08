@@ -1,7 +1,4 @@
 # version 4.0.0
-#Http = require './HttpNodeWrapper'
-FormUrlencoded = require 'form-urlencoded'
-_ = require 'underscore'
 MojioModelSDK = require './MojioModelSDK'
 
 # The authentication segment of the Mojio SDK. Authentication is accomplished through the use of a Mojio OAuth server.

@@ -1,8 +1,5 @@
 # version 4.0.0
-#Http = require './HttpNodeWrapper'
-#SignalR = require './SignalRNodeWrapper'
-FormUrlencoded = require 'form-urlencoded'
-_ = require 'underscore'
+
 MojioRestSDK = require './MojioRestSDK'
 # The Push segment of the Mojio SDK. The Push segement of the SDK provides a mechanism for applications to subscribe
 # to changes occurring on primary API resources of Vehicles, Users, Mojios, Trips, Groups, and Apps.

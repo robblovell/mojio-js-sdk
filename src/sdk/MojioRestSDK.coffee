@@ -1,7 +1,4 @@
 # version 4.0.0
-#Http = require './HttpNodeWrapper'
-FormUrlencoded = require 'form-urlencoded'
-
 MojioAuthSDK = require './MojioAuthSDK'
 # The REST segment of the Mojio SDK. The REST methods provide a mechanism to retrieve, create, save, or destroy
 # objects in the Mojio API. Availablity of REST calls is subject to the access rights of the user authenticated.

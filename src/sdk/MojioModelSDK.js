@@ -5,14 +5,6 @@
   module.exports = MojioModelSDK = (function() {
     function MojioModelSDK() {}
 
-    MojioModelSDK.prototype.configure = function(options) {
-      if (options == null) {
-        options = {};
-      }
-      _.extend(this, options);
-      return this;
-    };
-
     MojioModelSDK.prototype.users = function(users) {
       state.resource = 'Users';
       state.object = users;

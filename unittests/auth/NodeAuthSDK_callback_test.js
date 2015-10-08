@@ -8,13 +8,13 @@
 
   MojioAuthSDK = require('../../src/sdk/MojioAuthSDK');
 
-  MojioPromiseStyle = require('../../src/sdk/MojioPromiseStyle');
+  MojioPromiseStyle = require('../../src/styles/nodejs/MojioPromiseStyle');
 
-  MojioReactiveStyle = require('../../src/sdk/MojioReactiveStyle');
+  MojioReactiveStyle = require('../../src/styles/nodejs/MojioReactiveStyle');
 
-  MojioAsyncAwaitStyle = require('../../src/sdk/MojioAsyncAwaitStyle');
+  MojioAsyncAwaitStyle = require('../../src/styles/nodejs/MojioAsyncAwaitStyle');
 
-  MojioSyncStyle = require('../../src/sdk/MojioSyncStyle');
+  MojioSyncStyle = require('../../src/styles/nodejs/MojioSyncStyle');
 
   nock = require('nock');
 

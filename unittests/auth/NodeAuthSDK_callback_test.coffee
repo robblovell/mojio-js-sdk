@@ -1,10 +1,10 @@
 should = require('should')
 MojioSDK = require '../../src/sdk/MojioSDK'
 MojioAuthSDK = require '../../src/sdk/MojioAuthSDK'
-MojioPromiseStyle = require '../../src/sdk/MojioPromiseStyle'
-MojioReactiveStyle = require '../../src/sdk/MojioReactiveStyle'
-MojioAsyncAwaitStyle = require '../../src/sdk/MojioAsyncAwaitStyle'
-MojioSyncStyle = require '../../src/sdk/MojioSyncStyle'
+MojioPromiseStyle = require '../../src/styles/nodejs/MojioPromiseStyle'
+MojioReactiveStyle = require '../../src/styles/nodejs/MojioReactiveStyle'
+MojioAsyncAwaitStyle = require '../../src/styles/nodejs/MojioAsyncAwaitStyle'
+MojioSyncStyle = require '../../src/styles/nodejs/MojioSyncStyle'
 nock = require 'nock'
 async = require('asyncawait/async')
 await = require('asyncawait/await')

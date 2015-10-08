@@ -6,7 +6,7 @@
 
   should = require('should');
 
-  Module = require('../../src/Module');
+  Module = require('../../src/helpers/Module');
 
   describe('Test Module', function() {
     it('Module can extend from object', function() {

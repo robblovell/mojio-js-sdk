@@ -1,9 +1,8 @@
 # version 5.0.0
 _ = require 'underscore'
-MojioSDKState = require './MojioSDKState'
+MojioSDKState = require '../state/MojioSDKState'
 MojioPushSDK = require './MojioPushSDK'
-MojioValidator = require './MojioValidator'
-Module = require '../Module'
+Module = require '../helpers/Module'
 
 # The Mojio SDK. The Mojio SDK provides a means to easily use Mojio's Authentication Server, REST API, and Push API.
 #
@@ -56,7 +55,6 @@ module.exports = class MojioSDK extends Module
     # @public
     # @nodoc
     constructor: (options={}) ->
-        @validator = new MojioValidator()
 
         # include the sdk level instance functions.
         @include if options.sdk then options.sdk else MojioPushSDK
