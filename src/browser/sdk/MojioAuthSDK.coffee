@@ -139,7 +139,7 @@ module.exports = class MojioAuthSDK
             credentails=username_or_credentials
         else
             credentails={ username: username_or_credentials, password: password, grant_type: 'password' }
-        @validator.credentials(credentails)
+#        @validator.credentials(credentails)
         @state.setBody(credentails)
         return @
 
@@ -169,7 +169,7 @@ module.exports = class MojioAuthSDK
         return @
 
     scope: (scopes) ->
-        @validator.validateScope(scopes, @scopes)
+#        @validator.validateScope(scopes, @scopes)
         param = ''
         scopes.map (scope) -> param+=scope+' '
         @state.setBody({ scope: param.slice(0,-1) })
