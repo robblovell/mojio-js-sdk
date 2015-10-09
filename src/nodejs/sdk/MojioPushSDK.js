@@ -22,10 +22,14 @@
     };
 
     function MojioPushSDK(transports, options) {
+      var property, value;
       if (options == null) {
         options = {};
       }
-      _.extend(this, transports);
+      for (property in transports) {
+        value = transports[property];
+        this[property] = value;
+      }
       MojioPushSDK.__super__.constructor.call(this, options);
     }
 

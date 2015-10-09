@@ -1,7 +1,7 @@
 Http = require 'http'
 Https = require 'https'
 FormUrlencoded = require 'form-urlencoded'
-url = require("url");
+#url = require("url");
 constants = require 'constants'
 HttpWrapperHelper = require '../helpers/HttpWrapperHelper'
 iHttpWrapper = require '../interfaces/iHttpWrapper'
@@ -46,7 +46,8 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
 
     _parts = (request, token, uri, encoding) ->
         uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key)
-        parts = url.parse(uri)
+        parts = HttpWrapperHelper._parse(uri)
+        parts.path = parts.pathname
         parts.method = request.method
         parts.withCredentials = false
         parts.params = ''
@@ -77,5 +78,8 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
         parts = _parts(request, @token, @uri, @encoding)
         _request(parts, @requester, callback)
 
-    redirect: (params, callback) -> # @applicationName is appname
-        _request(params, @requester, callback)
+    redirect: (request, redirectClass=null) => # @applicationName is appname
+        if (redirectClass?)
+            redirectClass.redirect(@url(request))
+        else
+            throw new Error("Please pass in the redirecting function of the framework used in nodejs")

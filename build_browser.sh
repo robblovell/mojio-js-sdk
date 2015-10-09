@@ -1,28 +1,4 @@
 #!/bin/sh
-echo "Building nodejs SDK"
-echo "Copy files from template to nodejs source directory"
-# copy files to a flat location.
-cp -f template/helpers/* src/nodejs/helpers
-cp -f template/interfaces/* src/nodejs/interfaces
-cp -f template/sdk/* src/nodejs/sdk
-cp -f template/state/* src/nodejs/state
-cp -f template/styles-all/* src/nodejs/styles
-cp -f template/styles-nodejs/* src/nodejs/styles
-cp -f template/wrappers-nodejs/* src/nodejs/wrappers
-
-echo "Build Javascript from Coffeescript..."
-coffee --compile src/nodejs
-echo "Combine files using browserify..."
-
-cd src/nodejs/sdk
-../../../node_modules/.bin/browserify -r ./MojioSDK.js --standalone MojioSDK > ../../../lib/mojio-sdk.js
-cd ../styles
-../../../node_modules/.bin/browserify -r ./MojioPromiseStyle.js --standalone MojioPromiseStyle > ../../../lib/mojio-sdk-promise.js
-../../../node_modules/.bin/browserify -r ./MojioReactiveStyle.js --standalone MojioReactiveStyle > ../../../lib/mojio-sdk-reactive.js
-../../../node_modules/.bin/browserify -r ./MojioAsyncAwaitStyle.js --standalone MojioAsyncAwaitStyle > ../../../lib/mojio-sdk-asyncawait.js
-../../../node_modules/.bin/browserify -r ./MojioSyncStyle.js --standalone MojioSyncStyle > ../../../lib/mojio-sdk-sync.js
-cd ../../../
-echo "Completed nodejs SDK"
 echo "Building browser SDK"
 echo "Copy files from template to browser source directory"
 

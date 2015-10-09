@@ -33,10 +33,8 @@ sdk = new MojioSDK({
     test: true,
 }
 )
-implicit = false
 # Initial page redirecting to Github
 app.get('/authCode', (req, res) ->
-    implicit = false
     console.log("res:"+res)
     # step 1 of authorization code workflow.
     sdk
@@ -47,11 +45,10 @@ app.get('/authCode', (req, res) ->
 #    res.redirect(redirect_url)
 )
 app.get('/authImplicit', (req, res) ->
-    implicit = true
     console.log("res:"+res)
     # step 1 of authorization code workflow.
     sdk
-    .authorize(redirect_uri, implicit)
+    .authorize(redirect_uri, true)
     .scope(['full'])
     .redirect(res)
 #
@@ -69,7 +66,7 @@ app.get('/logout', (req, res) ->
     loggedOut = (error, result) ->
         console.log("logged out")
     sdk
-    .unauthorize("http://localhost:3000/callback", implicit)
+    .unauthorize("http://localhost:3000/callback")
     .login()
     .redirect(res)
 
@@ -80,7 +77,7 @@ app.get('/consent', (req, res) ->
     loggedOut = (error, result) ->
         console.log("Removed Consent")
     sdk
-    .unauthorize("http://localhost:3000/callback", implicit)
+    .unauthorize("http://localhost:3000/callback")
     .consent()
     .redirect(res)
 
@@ -91,7 +88,7 @@ app.get('/unauth', (req, res) ->
     loggedOut = (error, result) ->
         console.log("logged out and removed consent")
     sdk
-    .unauthorize("http://localhost:3000/callback", implicit)
+    .unauthorize("http://localhost:3000/callback")
     .login()
     .consent()
     .redirect(res)
@@ -116,6 +113,9 @@ app.get('/callback', (req, res) ->
 
     sdk.token().parse(req, redirect_uri).callback(saveToken)
 
+
+    console.log("")
+    console.log("")
 #    oauth2.authCode.getToken({
 #        client_id: client_id,
 #        client_secret: client_secret,

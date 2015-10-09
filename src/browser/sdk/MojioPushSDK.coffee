@@ -41,7 +41,9 @@ module.exports = class MojioPushSDK extends MojioRestSDK
     # @return {object} this
     # @nodoc
     constructor: (transports, options={}) ->
-        _.extend(@, transports)
+        for property, value of transports
+            @[property] = value
+#        _.extend(@, transports)
         super(options)
 
     # Observe a Vehicle, Mojio, or User object in the Mojio API.

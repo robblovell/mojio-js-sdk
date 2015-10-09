@@ -12,7 +12,7 @@ MojioModelSDK = require './MojioModelSDK'
 # @example
 #   mojioAuthSdk = new MojioSDK({sdk: MojioAuthSDK}) # instantiate the mojioSDK to do only authentication methods.
 #
-module.exports = class MojioAuthSDK
+module.exports = class MojioAuthSDK extends MojioModelSDK
     defaults = {
         parseToken: ((result) ->  token = result)
         site: 'https://accounts.moj.io'
@@ -57,9 +57,11 @@ module.exports = class MojioAuthSDK
     # @example Server based authorization for trusted enterprise applications. Sends username and password with the application key directly to the authorization server.
     #   authorize({type: 'token', user: '', password: ''})
     # @return {object} this
-    authorize: (redirect_url, implicit = false) ->
+    authorize: (redirect_url, implicit = null) ->
         # authorization_code or implicit flows (server or browser for end users/consumers.
         # {client_id:, response_type:, redirect_url:, scope:, realm:}, {type=token, user=, password=}
+        if !implicit?
+            implicit = document?
         @state.setMethod("POST")
         @state.setEndpoint("accounts")
         @state.setResource("oauth2")
@@ -124,7 +126,6 @@ module.exports = class MojioAuthSDK
     # password or refresh flow, second half of authorization code flow
     token: () ->
         redirect_uri = @state.getBody().redirect_uri
-        console.log(@state.url())
         @state.setMethod("POST")
         @state.setEndpoint("accounts")
         @state.setResource("oauth2")
@@ -145,19 +146,29 @@ module.exports = class MojioAuthSDK
 
     # second half of authorization code flow, or parse of the return from the implicit flow
     parse: (return_url, redirect_uri=null) ->
-        if (return_url.query.code and redirect_uri?)
+        if (return_url? and return_url.query? and return_url.query.code? and redirect_uri?)
             code = return_url.query.code
-
             @state.setBody({
                 code: code,
                 grant_type: 'authorization_code'
             })
             @state.setBody({ redirect_uri: redirect_uri}) if redirect_uri?
+            @state.setCallback((error, result) =>
+                if (error)
+                    console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage)
+                else
+                    # recover the token
+                    @state.setToken(result)
+            )
         else
             # todo:: set the token for implicit flow.
-            @state.setToken(req.query.access_token)
-            @state.setAnswer(req.query.access_token)
+            if (return_url.location.hash== "")
+                @state.setAnswer("")
+            else if (return_url.location.hash?)
+                @state.setToken(return_url.location.hash)
+                @state.setAnswer(return_url.location.hash)
         return @
+
     code: (req) ->
         code = req.query.code
         @state.setBody( { authorization_code: code })
@@ -180,11 +191,10 @@ module.exports = class MojioAuthSDK
 #        return @
 
     url: () ->
-        console.log("URL: #{JSON.stringify(@state.url())}")
         return @state.url()
 
-    redirect: (redirectFunction) ->
-        redirectFunction.redirect(@url())
+    redirect: (redirectClass=null) ->
+        @state.redirect(redirectClass)
         return @
 
     username: (username) ->

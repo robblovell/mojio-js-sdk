@@ -1,4 +1,5 @@
 # @nodoc
+URL = require('url-parse')
 module.exports = class HttpWrapperHelper
     constructor: () ->
         super()
@@ -20,3 +21,6 @@ module.exports = class HttpWrapperHelper
         else if (action && action != '')
             return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(action);
         return "/" + encodeURIComponent(resource);
+
+    @_parse: (url) ->
+        return new URL(url)

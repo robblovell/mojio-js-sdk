@@ -1,4 +1,4 @@
-_ = require 'underscore'
+#_ = require 'underscore'
 HttpWrapper = require '../wrappers/HttpWrapper'
 MojioValidator = require './MojioValidator'
 
@@ -46,8 +46,12 @@ module.exports = class MojioSDKState
     # @nodoc
     # form the request and make the call
     initiate: (callback) =>
+        callbacks = (error, result) ->
+            state.callback(error, result) if (state.callback?)
+            callback(error,result) if (callback)
+
         if state.answer?
-            callback(null, state.answer)
+            callbacks(null, state.answer)
         else
             @validator.credentials(state.body)
 
@@ -57,20 +61,21 @@ module.exports = class MojioSDKState
                 @endpoints[state.endpoint].encoding) # push, accounts, or api
             # the request needs at least method and resource.
             # parameters, method, headers, resource, id, action, key, body.
-            httpWrapper.request({
-                    method: state.method,
-                    resource: state.resource,
-                    id: state.id,
-                    action: state.action,
-                    key: state.key,
-                    body: state.body,
-                    params: state.params
-                }, callback)
+            httpWrapper.request(@parts(false), callbacks)
+
+    redirect: (redirectClass=null) =>
+        httpWrapper = new HttpWrapper(state.token,
+            @endpoints[state.endpoint].uri, @endpoints[state.endpoint].encoding)
+        httpWrapper.redirect(@parts(true), redirectClass)
 
     url: (bodyAsParameters = true) ->
         httpWrapper = new HttpWrapper(state.token,
             @endpoints[state.endpoint].uri, @endpoints[state.endpoint].encoding)
-        url = httpWrapper.url({
+        url = httpWrapper.url(@parts(bodyAsParameters))
+        return url
+
+    parts: (bodyAsParameters = true) ->
+        return {
             method: state.method,
             resource: state.resource,
             id: state.id,
@@ -78,8 +83,7 @@ module.exports = class MojioSDKState
             key: state.key,
             body: if bodyAsParameters then "" else state.body,
             params: if bodyAsParameters then state.body else state.params
-        })
-        return url
+        }
 
 #method: 'POST', resource: if @options.live then '/OAuth2/token' else '/OAuth2Sandbox/token',
 #body:
@@ -95,8 +99,13 @@ module.exports = class MojioSDKState
         console.log(JSON.stringify(state))
         return state
 
+    setCallback: (callback) ->
+        state.callback = callback
+        return
+
     setToken: (token) ->
         state.token = token
+        return
 
     setAnswer: (token) ->
         state.answer = token
@@ -136,10 +145,14 @@ module.exports = class MojioSDKState
         state.action = action
 
     setParams: (parameters) ->
-        _.extend(state.parameters, parameters)
+        for property, value of parameters
+            state.parameters[property] = value
+#        _.extend(state.parameters, parameters)
 
     setBody: (parameters) ->
-        _.extend(state.body, parameters)
+        for property, value of parameters
+            state.body[property] = value
+#        _.extend(state.body, parameters)
         return
 
     getBody: () ->
@@ -179,6 +192,7 @@ module.exports = class MojioSDKState
 
     # @nodoc
     reset: () ->
+        state.callback = null
         state.answer = null # return this immediately if not null, otherwise make an api call.
         state.endpoint = defaultEndpoint
         state.method = null # GET, PUT, POST, DELETE

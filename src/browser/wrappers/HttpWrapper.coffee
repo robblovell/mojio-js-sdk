@@ -4,6 +4,7 @@ iHttpWrapper = require '../interfaces/iHttpWrapper'
 module.exports = class HttpBrowserWrapper extends iHttpWrapper
 
     constructor: (@token, @uri='https://api.moj.io/v1', @encoding = false, @requester=null) ->
+
         super()
     _request = (request, requester, callback) ->
 
@@ -27,42 +28,60 @@ module.exports = class HttpBrowserWrapper extends iHttpWrapper
             xmlhttp.send()
         else
             xmlhttp.send(request.data)
-
     _parts = (request, token, uri, encoding) ->
-        parts = url.parse(uri)
-
-        parts.method = if request.method? then request.method else "GET"
-        parts.host = request.hostname if (!request.host? and request.hostname?)
-        parts.scheme = window.location.protocol.split(':')[0] unless request.scheme? || !window?
-        parts.scheme = 'https' if !request.scheme || request.scheme == 'file'
+        uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key)
+        parts = HttpWrapperHelper._parse(uri)
+        parts.path = parts.pathname
+        parts.method = request.method
+        parts.withCredentials = false
+        parts.params = ''
+        if (request.parameters? and Object.keys(request.parameters).length > 0)
+            parts.params = HttpWrapperHelper._makeParameters(request.parameters)
+        if (request.params? and Object.keys(request.params).length > 0)
+            parts.params = HttpWrapperHelper._makeParameters(request.params)
+        parts.path += parts.params
+        parts.headers = {}
 
         parts.headers["MojioAPIToken"] = token if token?
-        parts.headers = if request.headers? then request.headers else {}
+        parts.headers += request.headers if (request.headers?)
 
-        parts.data = if request.data? then request.data else {}
-        parts.data = request.body if request.body?
+        if (request.body?)
+#            if (encoding?) #
+#                parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
+#                parts.body = FormUrlencoded.encode(request.body)
+#            else
+#                parts.headers["Content-Type"] = 'application/json'
+#                parts.body = request.body
+            parts.headers["Content-Type"] = 'application/json'
+            parts.body = request.body
+            parts.data = parts.body
 
-        parts.params = ''
-        if request.method == "GET" and request.data? and request.data.length > 0
-            parts.params = '?' + Object.keys(request.data).map( (k) ->
-                    return encodeURIComponent(k) + '=' + encodeURIComponent(request.data[k])
-                ).join('&')
-        else if (request.parameters? and Object.keys(request.parameters).length > 0)
-            parts.params = HttpWrapperHelper._makeParameters(request.parameters)
-        else if (request.params? and Object.keys(request.params).length > 0)
-            parts.params = HttpWrapperHelper._makeParameters(request.params)
+        if (request.data?)
+#            if (encoding?) #
+#                parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
+#                parts.data = FormUrlencoded.encode(request.data)
+#            else
+#                parts.headers["Content-Type"] = 'application/json'
+#                parts.data = request.data
+            parts.headers["Content-Type"] = 'application/json'
+            parts.data = request.data
+            parts.body = parts.data
+        parts.scheme = window.location.protocol.split(':')[0] unless parts.scheme? || !window?
+        parts.scheme = 'https' if !parts.scheme || parts.scheme == 'file'
 
         return parts
 
     url: (request) ->
-        parts = @_parts(request, @token, @uri, @encoding)
-        return parts.scheme+"://"+parts.host+":"+parts.port+parts.path + parts.params
+        parts = _parts(request, @token, @uri, @encoding)
+        return parts.protocol + '//' + parts.hostname + parts.pathname + parts.params
 
     request: (request, callback) ->
-        url = _parts(request, @token, @uri, @encoding)
+        parts = _parts(request, @token, @uri, @encoding)
         _request(parts, @requester, callback)
 
-    redirect: (params, callback) -> # callback is through a server call.
-        url = params.scheme+"://"+params.host+":"+params.port+params.path
-
-        return window.location = url;
+    redirect: (request, redirectClass=null) => # callback is through a server call.
+        if (redirectClass?)
+            redirectClass.redirect(@url(request))
+        else
+            window.location = @url(request);
+        return
