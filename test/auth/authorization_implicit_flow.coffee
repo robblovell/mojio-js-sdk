@@ -18,9 +18,9 @@ sdk = new MojioSDK({
     test: true,
 }
 )
-saveToken =
-
-sdk.token().parse(document, redirect_uri).callback((error, result) ->
+sdk
+.token()
+.parse(document, redirect_uri).callback((error, result) ->
     if (error)
         console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
     else

@@ -1,3 +1,4 @@
+
 express = require('express')
 MojioSDK = require '../../src/nodejs/sdk/MojioSDK'
 MojioAuthSDK = require '../../src/nodejs/sdk/MojioAuthSDK'
@@ -23,30 +24,32 @@ authorization_uri = oauth2.authCode.authorizeURL({
 #    state: '3(#0/!~'
 })
 sdk = new MojioSDK({
-        sdk: MojioAuthSDK,
-        client_id: client_id,
-        client_secret: client_secret
-        site: 'https://staging-accounts.moj.io',
-        tokenPath: '/oauth2/token',
-        authorizationPath: '/oauth2/authorize'
-        test: true,
-    }
+    sdk: MojioAuthSDK,
+    client_id: client_id,
+    client_secret: client_secret
+    site: 'https://staging-accounts.moj.io',
+    tokenPath: '/oauth2/token',
+    authorizationPath: '/oauth2/authorize'
+    test: true,
+}
 )
 # Initial page redirecting to Github
 app.get('/authCode', (req, res) ->
     console.log("res:"+res)
     # step 1 of authorization code workflow.
     sdk
-    .authorize(redirect_uri)
-    .scope(['full'])
-    .redirect(res)
+        .authorize(redirect_uri)
+        .scope(['full'])
+        .redirect(res)
+
+#    res.redirect(redirect_url)
 )
 app.get('/password', (req, res) ->
     console.log("res:"+res)
     # step 1 of authorization code workflow.
     sdk
     .token(redirect_uri)
-    .credentials("testing@moj.io", "Test123!")
+    .password("testing@moj.io", "Test123!")
     .scope(['full'])
     .callback((error, result) ->
         if (error)
@@ -57,8 +60,27 @@ app.get('/password', (req, res) ->
             console.log("Token:"+JSON.stringify(token))
             res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>')
     )
-)
 
+#    res.redirect(redirect_url)
+)
+# doesn't work:
+#app.get('/authImplicit', (req, res) ->
+#    console.log("res:"+res)
+#    # step 1 of authorization code workflow.
+#    sdk
+#    .authorize(redirect_uri, true)
+#    .scope(['full'])
+#    .redirect(res)
+##
+##    .callback((error, result) ->
+##        if error?
+##            res.send('Implicit login error: '+JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
+##        else
+##            console.log("Logged in")
+##            res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>')
+##    )
+##    res.redirect(redirect_url)
+#)
 app.get('/logout', (req, res) ->
     console.log("res:"+res)
     loggedOut = (error, result) ->
@@ -103,13 +125,25 @@ app.get('/callback', (req, res) ->
             console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
             res.send('Access Token Error: '+JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
         else
-# recover the token
-# todo:: recover token from mojio sdk.
+            # recover the token
+            # todo:: recover token from mojio sdk.
             token = oauth2.accessToken.create(result)
             console.log("Token:"+JSON.stringify(token))
             res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>')
 
     sdk.token().parse(req, redirect_uri).callback(saveToken)
+
+
+    console.log("")
+    console.log("")
+#    oauth2.authCode.getToken({
+#        client_id: client_id,
+#        client_secret: client_secret,
+#        code: code,
+#        redirect_uri: 'http://localhost:3000/callback'
+#    }, saveToken
+#    )
+
 )
 
 app.get('/', (req, res) ->

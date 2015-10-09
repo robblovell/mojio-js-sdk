@@ -49,7 +49,7 @@
 
   app.get('/password', function(req, res) {
     console.log("res:" + res);
-    return sdk.token(redirect_uri).credentials("testing@moj.io", "Test123!").scope(['full']).callback(function(error, result) {
+    return sdk.token(redirect_uri).password("testing@moj.io", "Test123!").scope(['full']).callback(function(error, result) {
       var token;
       if (error) {
         console.log('Access Token Error', JSON.stringify(error.content) + "  message:" + error.statusMessage + "  url:" + sdk.url());
@@ -104,7 +104,9 @@
         return res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>');
       }
     };
-    return sdk.token().parse(req, redirect_uri).callback(saveToken);
+    sdk.token().parse(req, redirect_uri).callback(saveToken);
+    console.log("");
+    return console.log("");
   });
 
   app.get('/', function(req, res) {
@@ -117,4 +119,4 @@
 
 }).call(this);
 
-//# sourceMappingURL=authorization_code_flow.js.map
+//# sourceMappingURL=authorization_simple_auth.js.map
