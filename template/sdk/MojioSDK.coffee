@@ -100,7 +100,7 @@ module.exports = class MojioSDK extends Module
         result = true
         return result
 
-    # Callback initiates the fluent chain asynchronously by providing a callback(error, result) that will be called once
+    # The 'callback' method initiates the fluent chain asynchronously by providing a callback(error, result) that will be called once
     # the request has returned. It is one of four ways to initiate fluent requests, one of which must be called for requests to be made.
     # In the case of a redirect (in the auth sdk) control will be returned to a url given and you must call authorize again with the results
     # until 'true' is given in the callback results.
@@ -109,8 +109,26 @@ module.exports = class MojioSDK extends Module
     callback: (callback) ->
         # execute the rest request and return the result in the callback.
         console.log(@state.url())
-
         @state.initiate(callback)
 
+    # The 'redirect' method initiates the fluent chain by performing a redirect given the passed in redirecting
+    # technology. The class or object passed in must follow the iRedirect interface and must have a function
+    # called "redirect". For browser environments, pass in "{ redirect: (url) -> window.location = url }". For
+    # NodeJS express, pass in ServerResponse ('res' passed into the route expression in the examples). For other
+    # technologies, this class will depend on the framework used to reply to server requests. Note that even
+    # in server environments, the redirect call may need to be wrapped as it is in the browser.
+    # @param redirectClass {object} An object with a 'redirect' function implement.
+    # @public
+    # @ return {object} this
+    redirect: (redirectClass=null) ->
+        @state.redirect(redirectClass)
+        return @
+
+    # return the url formed by the fluent chain instead of actually making the rest call.
+    # @return {string} Fully formed REST url
+    url: () ->
+        return @state.url()
+    # return the internal state object. Used for debugging this sdk.
+    # @return {object} Internal state object built up by the fluent chain.
     show: () ->
         return @state.show()
