@@ -19,12 +19,12 @@ sdk = new MojioSDK({
 }
 )
 sdk
-.token()
-.parse(document, redirect_uri).callback((error, result) ->
+.token(redirect_uri)
+.parse(document).callback((error, result) ->
     if (error)
         console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
     else
-        if result == "" or !result?
+        if !result?  or result == ""
             if confirm("Authorize Redirect, token could not be retrieved, you are logged out. Try again?")
                 # implicit workflow.
                 sdk

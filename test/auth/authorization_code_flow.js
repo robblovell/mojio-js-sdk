@@ -104,7 +104,7 @@
         return res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>');
       }
     };
-    return sdk.token().parse(req, redirect_uri).callback(saveToken);
+    return sdk.token(redirect_uri).parse(req).callback(saveToken);
   });
 
   app.get('/', function(req, res) {

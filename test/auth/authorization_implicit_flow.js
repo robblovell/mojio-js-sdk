@@ -17,12 +17,12 @@
     test: true
   });
 
-  sdk.token().parse(document, redirect_uri).callback(function(error, result) {
+  sdk.token(redirect_uri).parse(document).callback(function(error, result) {
     var div, token;
     if (error) {
       return console.log('Access Token Error', JSON.stringify(error.content) + "  message:" + error.statusMessage + "  url:" + sdk.url());
     } else {
-      if (result === "" || (result == null)) {
+      if ((result == null) || result === "") {
         if (confirm("Authorize Redirect, token could not be retrieved, you are logged out. Try again?")) {
           return sdk.authorize(redirect_uri).scope(['full']).redirect({
             redirect: function(url) {

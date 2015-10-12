@@ -109,7 +109,7 @@ app.get('/callback', (req, res) ->
             console.log("Token:"+JSON.stringify(token))
             res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>')
 
-    sdk.token().parse(req, redirect_uri).callback(saveToken)
+    sdk.token(redirect_uri).parse(req).callback(saveToken)
 )
 
 app.get('/', (req, res) ->
