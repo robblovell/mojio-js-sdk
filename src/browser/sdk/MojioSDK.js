@@ -73,6 +73,18 @@
       return this.state.initiate(callback);
     };
 
+    MojioSDK.prototype.redirect = function(redirectClass) {
+      if (redirectClass == null) {
+        redirectClass = null;
+      }
+      this.state.redirect(redirectClass);
+      return this;
+    };
+
+    MojioSDK.prototype.url = function() {
+      return this.state.url();
+    };
+
     MojioSDK.prototype.show = function() {
       return this.state.show();
     };

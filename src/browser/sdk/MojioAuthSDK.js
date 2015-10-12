@@ -2,12 +2,13 @@
 (function() {
   var MojioAuthSDK, MojioModelSDK,
     extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
+    hasProp = {}.hasOwnProperty,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   MojioModelSDK = require('./MojioModelSDK');
 
   module.exports = MojioAuthSDK = (function(superClass) {
-    var defaults, token;
+    var authorizeParameters, defaults, ref, ref1, ref2, setup, styleParameters, token, tokenParameters, unauthorizeParameters;
 
     extend(MojioAuthSDK, superClass);
 
@@ -23,6 +24,8 @@
 
     token = null;
 
+    styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async'];
+
     function MojioAuthSDK(options) {
       if (options == null) {
         options = {};
@@ -37,6 +40,24 @@
       this.state.authorizationPath = this.authorizationPath;
     }
 
+    setup = function(parameters, match, name) {
+      var property, results, value;
+      if (typeof parameters === 'object') {
+        results = [];
+        for (property in parameters) {
+          value = parameters[property];
+          if ((indexOf.call(match, property) >= 0)) {
+            results.push(eval("this." + property)(value));
+          } else {
+            throw new error("Parameter not used in " + name + " flow: " + property);
+          }
+        }
+        return results;
+      }
+    };
+
+    (ref = (authorizeParameters = ['username', 'password', 'credentials', 'scope', 'email'])).push.apply(ref, styleParameters);
+
     MojioAuthSDK.prototype.authorize = function(redirect_url, implicit) {
       if (implicit == null) {
         implicit = null;
@@ -44,6 +65,7 @@
       if (implicit == null) {
         implicit = typeof document !== "undefined" && document !== null;
       }
+      setup(redirect_url, authorizeParameters, 'authorize');
       this.state.setMethod("POST");
       this.state.setEndpoint("accounts");
       this.state.setResource("oauth2");
@@ -64,10 +86,18 @@
       return this;
     };
 
+    (ref1 = (unauthorizeParameters = ['login', 'consent', 'loginAndConsent', 'prompt', 'parse', 'code'])).push.apply(ref1, styleParameters);
+
     MojioAuthSDK.prototype.unauthorize = function(redirect_url, implicit) {
       if (implicit == null) {
+        implicit = null;
+      }
+      if ((typeof document !== "undefined" && document !== null) && (typeof implict === "undefined" || implict === null)) {
+        implicit = true;
+      } else {
         implicit = false;
       }
+      setup(redirect_url, unauthorizeParameters, 'unauthorize');
       this.state.setMethod("POST");
       this.state.setEndpoint("accounts");
       this.state.setResource("oauth2");
@@ -85,6 +115,69 @@
           client_id: this.client_id
         });
       }
+      return this;
+    };
+
+    (ref2 = (tokenParameters = [])).push.apply(ref2, authorizeParameters);
+
+    MojioAuthSDK.prototype.token = function(redirect_url) {
+      var redirect_uri;
+      if (redirect_url == null) {
+        redirect_url = null;
+      }
+      if ((redirect_url != null)) {
+        setup(redirect_url, tokenParameters, 'token');
+        redirect_uri = this.state.getBody().redirect_uri;
+      }
+      this.state.setMethod("POST");
+      this.state.setEndpoint("accounts");
+      this.state.setResource("oauth2");
+      this.state.setAction("token");
+      this.state.setBody({
+        client_id: this.client_id,
+        client_secret: this.client_secret
+      });
+      if (redirect_uri != null) {
+        this.state.setBody({
+          redirect_uri: redirect_uri
+        });
+      }
+      return this;
+    };
+
+    MojioAuthSDK.prototype.parse = function(return_url) {
+      var code;
+      if ((return_url != null) && (return_url.query != null) && (return_url.query.code != null)) {
+        code = return_url.query.code;
+        this.state.setBody({
+          code: code,
+          grant_type: 'authorization_code'
+        });
+        this.state.setCallback((function(_this) {
+          return function(error, result) {
+            if (error) {
+              return console.log('Access Token Error', JSON.stringify(error.content) + "  message:" + error.statusMessage);
+            } else {
+              return _this.state.setToken(result);
+            }
+          };
+        })(this));
+      } else {
+        if (return_url.location.hash === "") {
+          this.state.setAnswer("");
+        } else if ((return_url.location.hash != null)) {
+          this.state.setToken(return_url.location.hash);
+          this.state.setAnswer(return_url.location.hash);
+        }
+      }
+      return this;
+    };
+
+    MojioAuthSDK.prototype.refresh = function(refresh_token) {
+      this.state.setBody({
+        refresh_token: refresh_token,
+        grant_type: 'refresh_token'
+      });
       return this;
     };
 
@@ -110,128 +203,40 @@
     };
 
     MojioAuthSDK.prototype.prompt = function(prompt) {
-      if ((this.state.getBody().prompt != null) && (this.state.getBody().prompt === 'login' && prompt.prompt === 'consent') || (this.state.getBody().prompt === 'consent' && prompt.prompt === 'login')) {
+      if ((this.state.getBody().prompt != null) && ((this.state.getBody().prompt === 'login' && prompt.prompt === 'consent' || prompt === 'consent') || (this.state.getBody().prompt === 'consent' && prompt.prompt === 'login' || prompt === 'login'))) {
         this.state.setBody({
           prompt: 'consent,login'
+        });
+      } else if (typeof prompt === 'string') {
+        this.state.setBody({
+          prompt: prompt
+        });
+      } else if (prompt instanceof Array) {
+        this.state.setBody({
+          prompt: prompt.join()
         });
       } else {
         this.state.setBody(prompt);
       }
-      this.state.show();
-      return this;
-    };
-
-    MojioAuthSDK.prototype.token = function() {
-      var redirect_uri;
-      redirect_uri = this.state.getBody().redirect_uri;
-      this.state.setMethod("POST");
-      this.state.setEndpoint("accounts");
-      this.state.setResource("oauth2");
-      this.state.setAction("token");
-      this.state.setBody({
-        client_id: this.client_id,
-        client_secret: this.client_secret
-      });
-      if (redirect_uri != null) {
-        this.state.setBody({
-          redirect_uri: redirect_uri
-        });
-      }
-      return this;
-    };
-
-    MojioAuthSDK.prototype.credentials = function(username_or_credentials, password) {
-      var credentails;
-      if (password == null) {
-        password = null;
-      }
-      if (typeof username_or_credentials === 'object') {
-        credentails = username_or_credentials;
-      } else {
-        credentails = {
-          username: username_or_credentials,
-          password: password,
-          grant_type: 'password'
-        };
-      }
-      this.state.setBody(credentails);
-      return this;
-    };
-
-    MojioAuthSDK.prototype.parse = function(return_url, redirect_uri) {
-      var code;
-      if (redirect_uri == null) {
-        redirect_uri = null;
-      }
-      if ((return_url != null) && (return_url.query != null) && (return_url.query.code != null) && (redirect_uri != null)) {
-        code = return_url.query.code;
-        this.state.setBody({
-          code: code,
-          grant_type: 'authorization_code'
-        });
-        if (redirect_uri != null) {
-          this.state.setBody({
-            redirect_uri: redirect_uri
-          });
-        }
-        this.state.setCallback((function(_this) {
-          return function(error, result) {
-            if (error) {
-              return console.log('Access Token Error', JSON.stringify(error.content) + "  message:" + error.statusMessage);
-            } else {
-              return _this.state.setToken(result);
-            }
-          };
-        })(this));
-      } else {
-        if (return_url.location.hash === "") {
-          this.state.setAnswer("");
-        } else if ((return_url.location.hash != null)) {
-          this.state.setToken(return_url.location.hash);
-          this.state.setAnswer(return_url.location.hash);
-        }
-      }
-      return this;
-    };
-
-    MojioAuthSDK.prototype.code = function(req) {
-      var code;
-      code = req.query.code;
-      this.state.setBody({
-        authorization_code: code
-      });
-      return this;
-    };
-
-    MojioAuthSDK.prototype.refresh = function(refresh_token) {
-      this.state.setBody({
-        refresh_token: 'some code',
-        grant_type: 'refresh_token'
-      });
       return this;
     };
 
     MojioAuthSDK.prototype.scope = function(scopes) {
       var param;
-      param = '';
-      scopes.map(function(scope) {
-        return param += scope + ' ';
-      });
-      this.state.setBody({
-        scope: param.slice(0, -1)
-      });
-      return this;
-    };
-
-    MojioAuthSDK.prototype.url = function() {
-      return this.state.url();
-    };
-
-    MojioAuthSDK.prototype.redirect = function(redirectClass) {
-      if (redirectClass == null) {
-        redirectClass = null;
+      if (typeof scopes === 'string') {
+        param = scopes.replace(/,/g, ' ');
+        this.state.setBody({
+          scope: param
+        });
+      } else {
+        param = '';
+        scopes.map(function(scope) {
+          return param += scope + ' ';
+        });
+        this.state.setBody({
+          scope: param.slice(0, -1)
+        });
       }
-      this.state.redirect(redirectClass);
       return this;
     };
 
@@ -256,12 +261,29 @@
       return this;
     };
 
-    MojioAuthSDK.prototype["with"] = function(usernameOrEmail, password) {
-      this.state.setBody({
-        username: usernameOrEmail,
-        password: password
-      });
+    MojioAuthSDK.prototype.credentials = function(usernameOrEmail_or_credentials, password) {
+      var credentails;
+      if (password == null) {
+        password = null;
+      }
+      if (typeof usernameOrEmail_or_credentials === 'object') {
+        credentails = usernameOrEmail_or_credentials;
+      } else {
+        credentails = {
+          username: usernameOrEmail_or_credentials,
+          password: password
+        };
+      }
+      credentials['grant_type'] = 'password';
+      this.state.setBody(credentails);
       return this;
+    };
+
+    MojioAuthSDK.prototype["with"] = function(usernameOrEmail_or_credentials, password) {
+      if (password == null) {
+        password = null;
+      }
+      return this.credentails(usernameOrEmail_or_credentials, password);
     };
 
     return MojioAuthSDK;
