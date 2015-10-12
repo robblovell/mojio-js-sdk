@@ -262,20 +262,20 @@
     };
 
     MojioAuthSDK.prototype.credentials = function(usernameOrEmail_or_credentials, password) {
-      var credentails;
+      var credentials;
       if (password == null) {
         password = null;
       }
       if (typeof usernameOrEmail_or_credentials === 'object') {
-        credentails = usernameOrEmail_or_credentials;
+        credentials = usernameOrEmail_or_credentials;
       } else {
-        credentails = {
+        credentials = {
           username: usernameOrEmail_or_credentials,
           password: password
         };
       }
       credentials['grant_type'] = 'password';
-      this.state.setBody(credentails);
+      this.state.setBody(credentials);
       return this;
     };
 
@@ -283,7 +283,7 @@
       if (password == null) {
         password = null;
       }
-      return this.credentails(usernameOrEmail_or_credentials, password);
+      return this.credentials(usernameOrEmail_or_credentials, password);
     };
 
     return MojioAuthSDK;

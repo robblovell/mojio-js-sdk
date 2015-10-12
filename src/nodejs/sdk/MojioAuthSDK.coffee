@@ -289,12 +289,12 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @return {object} this
     credentials: (usernameOrEmail_or_credentials, password=null) ->
         if (typeof usernameOrEmail_or_credentials is 'object')
-            credentails=usernameOrEmail_or_credentials
+            credentials=usernameOrEmail_or_credentials
         else
-            credentails={ username: usernameOrEmail_or_credentials, password: password }
-        #        @validator.credentials(credentails)
+            credentials={ username: usernameOrEmail_or_credentials, password: password }
+        #        @validator.credentials(credentials)
         credentials['grant_type'] = 'password'
-        @state.setBody(credentails)
+        @state.setBody(credentials)
         return @
 
     # Synonym for the credentials() call.
@@ -304,6 +304,6 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @param password {string} The password if username and password aren't given in the first parameter.
     # @return {object} this
     with: (usernameOrEmail_or_credentials, password=null) ->
-        return @credentails(usernameOrEmail_or_credentials, password)
+        return @credentials(usernameOrEmail_or_credentials, password)
 
 
