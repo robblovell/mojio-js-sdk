@@ -14,13 +14,9 @@ MojioModelSDK = require './MojioModelSDK'
 #
 module.exports = class MojioAuthSDK extends MojioModelSDK
     defaults = {
-        parseToken: ((result) ->  token = result)
-        site: 'https://accounts.moj.io'
-        tokenPath: '/oauth2/token'
-        authorizationPath: '/oauth2/authorize'
     }
-    token = null
     styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async']
+    token = null
 
     # Construct a MojioAuthSDK object.
     #
@@ -145,8 +141,10 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @return {object} this
     token: (redirect_url=null) ->
         if (redirect_url?)
-            setup(redirect_url, tokenParameters, 'token')
-            redirect_uri = @state.getBody().redirect_uri
+            if !setup(redirect_url, tokenParameters, 'token')
+                redirect_uri = redirect_url
+            else
+                redirect_uri = @state.getBody().redirect_uri
         @state.setMethod("POST")
         @state.setEndpoint("accounts")
         @state.setResource("oauth2")
@@ -292,7 +290,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
             credentials=usernameOrEmail_or_credentials
         else
             credentials={ username: usernameOrEmail_or_credentials, password: password }
-        #        @validator.credentials(credentials)
+        @state.validator.credentials(credentials)
         credentials['grant_type'] = 'password'
         @state.setBody(credentials)
         return @

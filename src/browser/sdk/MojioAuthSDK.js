@@ -12,19 +12,11 @@
 
     extend(MojioAuthSDK, superClass);
 
-    defaults = {
-      parseToken: (function(result) {
-        var token;
-        return token = result;
-      }),
-      site: 'https://accounts.moj.io',
-      tokenPath: '/oauth2/token',
-      authorizationPath: '/oauth2/authorize'
-    };
-
-    token = null;
+    defaults = {};
 
     styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async'];
+
+    token = null;
 
     function MojioAuthSDK(options) {
       if (options == null) {
@@ -126,8 +118,11 @@
         redirect_url = null;
       }
       if ((redirect_url != null)) {
-        setup(redirect_url, tokenParameters, 'token');
-        redirect_uri = this.state.getBody().redirect_uri;
+        if (!setup(redirect_url, tokenParameters, 'token')) {
+          redirect_uri = redirect_url;
+        } else {
+          redirect_uri = this.state.getBody().redirect_uri;
+        }
       }
       this.state.setMethod("POST");
       this.state.setEndpoint("accounts");
@@ -262,20 +257,21 @@
     };
 
     MojioAuthSDK.prototype.credentials = function(usernameOrEmail_or_credentials, password) {
-      var credentails;
+      var credentials;
       if (password == null) {
         password = null;
       }
       if (typeof usernameOrEmail_or_credentials === 'object') {
-        credentails = usernameOrEmail_or_credentials;
+        credentials = usernameOrEmail_or_credentials;
       } else {
-        credentails = {
+        credentials = {
           username: usernameOrEmail_or_credentials,
           password: password
         };
       }
+      this.state.validator.credentials(credentials);
       credentials['grant_type'] = 'password';
-      this.state.setBody(credentails);
+      this.state.setBody(credentials);
       return this;
     };
 
@@ -283,7 +279,7 @@
       if (password == null) {
         password = null;
       }
-      return this.credentails(usernameOrEmail_or_credentials, password);
+      return this.credentials(usernameOrEmail_or_credentials, password);
     };
 
     return MojioAuthSDK;
@@ -291,5 +287,3 @@
   })(MojioModelSDK);
 
 }).call(this);
-
-//# sourceMappingURL=MojioAuthSDK.js.map

@@ -1,7 +1,7 @@
 #_ = require 'underscore'
 HttpWrapper = require '../wrappers/HttpWrapper'
 MojioValidator = require './MojioValidator'
-
+# @nodoc
 module.exports = class MojioSDKState
     state = {}
 
@@ -62,18 +62,20 @@ module.exports = class MojioSDKState
             # the request needs at least method and resource.
             # parameters, method, headers, resource, id, action, key, body.
             httpWrapper.request(@parts(false), callbacks)
-
+    # @nodoc
     redirect: (redirectClass=null) =>
         httpWrapper = new HttpWrapper(state.token,
             @endpoints[state.endpoint].uri, @endpoints[state.endpoint].encoding)
         httpWrapper.redirect(@parts(true), redirectClass)
 
+    # @nodoc
     url: (bodyAsParameters = true) ->
         httpWrapper = new HttpWrapper(state.token,
             @endpoints[state.endpoint].uri, @endpoints[state.endpoint].encoding)
         url = httpWrapper.url(@parts(bodyAsParameters))
         return url
 
+    # @nodoc
     parts: (bodyAsParameters = true) ->
         return {
             method: state.method,
@@ -94,19 +96,22 @@ module.exports = class MojioSDKState
 #    client_secret: @options.secret
 #    grant_type: 'password'
 #}
-    #
+    # @nodoc
     show: () ->
         console.log(JSON.stringify(state))
         return state
 
+    # @nodoc
     setCallback: (callback) ->
         state.callback = callback
         return
 
+    # @nodoc
     setToken: (token) ->
         state.token = token
         return
 
+    # @nodoc
     setAnswer: (token) ->
         state.answer = token
 
@@ -119,6 +124,7 @@ module.exports = class MojioSDKState
                 state.body = JSON.stringify(object_or_json_string)
         return state
 
+    # @nodoc
     setEndpoint: (endpoint) ->
         validateEndpoint = (endpoint, endpoints) =>
             found = false
@@ -144,20 +150,24 @@ module.exports = class MojioSDKState
     setAction: (action) ->
         state.action = action
 
+    # @nodoc
     setParams: (parameters) ->
         for property, value of parameters
             state.parameters[property] = value
 #        _.extend(state.parameters, parameters)
 
+# @nodoc
     setBody: (parameters) ->
         for property, value of parameters
             state.body[property] = value
 #        _.extend(state.body, parameters)
         return
 
+    # @nodoc
     getBody: () ->
         return state.body
 
+    # @nodoc
     getParams: () ->
         return state.parameters
 
@@ -182,6 +192,7 @@ module.exports = class MojioSDKState
                     state.where = id_example_or_query
         return state
 
+    # @nodoc
     fixup: () ->
     # remove capitals from fields and values in the state.
         for p, v of state

@@ -13,21 +13,27 @@ describe 'Node Mojio Auth SDK password type auth', ->
 
     call = null
     timeout = 50
+    callback_url = "http://localhost:3000/callback"
     authorization = {
-        client_id: '5f81657f-47f6-4d86-8213-5c01c1f3a243',
-        password: 'Test123!', response_type: 'password',
+        client_id: 'id',
+        client_secret: 'secret'
+        redirect_uri: 'http://localhost:3000/callback'
         username: 'testing'
+        password: 'Test123!',
+        grant_type: 'password',
     }
 
-    beforeEach(() ->
-        if (true || process.env.FUNCTIONAL_TESTS?)
+    setupNock = () ->
+        if (process.env.FUNCTIONAL_TESTS?)
             timeout = 3000
+            return {done: () ->}
         else
-            call = nock('https://accounts.moj.io')
-            .post("/oauth2/token",authorization)
-            .reply((uri, requestBody, cb) ->
-                cb(null, [200, { id: 1}]))
-    )
+            call = nock('https://staging-accounts.moj.io')
+                .post("/oauth2/token", authorization)
+                .reply((uri, requestBody, cb) ->
+                    cb(null, [200, { id: 1}]))
+            return call
+
 
     testErrorResult = (error, result) ->
         (error==null).should.be.true
@@ -35,10 +41,12 @@ describe 'Node Mojio Auth SDK password type auth', ->
 
     it 'can authorize with password flow, callback async', (done) ->
         @.timeout(timeout)
-        sdk = new MojioSDK({sdk: MojioAuthSDK, test: true})
+        call = setupNock()
+
+        sdk = new MojioSDK({sdk: MojioAuthSDK, client_id: 'id', client_secret: 'secret', test: true})
 
         sdk
-        .token('5f81657f-47f6-4d86-8213-5c01c1f3a243', "fcca6c06-3d30-488e-947b-a6291e39ff3c")
+        .token(callback_url)
         .credentials('testing', 'Test123!')
         .callback(
             (error, result) ->
@@ -47,32 +55,32 @@ describe 'Node Mojio Auth SDK password type auth', ->
                 done()
         )
 
-#    it 'can authorize with promise', (done) ->
+    it 'can authorize with promise', (done) ->
 #        @.timeout(timeout)
-#
-#        sdk = new MojioSDK({sdk: MojioAuthSDK, styles: [MojioPromiseStyle], test: true})
-#        promise = sdk
-#        .authorize(authorization)
-#        .promise()
-#
-#        promise
-#        .then(
-#            (result) ->
-#                testErrorResult(null, result)
-#                call.done() if call?
-#                done()
-#            ,
-#            (error) ->
-#                testErrorResult(error, null)
-#                done()
-#        )
-#        .catch(
-## Rejected promises are passed on by Promise.prototype.then(onFulfilled)
-#            (error) ->
-#                console.log('Handle rejected promise ('+error+') here.');
-#                (error==null).should.be.true
-#                done()
-#        )
+        call = setupNock()
+        sdk = new MojioSDK({sdk: MojioAuthSDK, styles: [MojioPromiseStyle],
+        client_id: 'id', client_secret: 'secret', test: true})
+
+        promise = sdk
+        .token(callback_url)
+        .credentials('testing', 'Test123!')
+        .promise()
+
+        promise
+        .then(
+            (result) ->
+                testErrorResult(null, result)
+                call.done() if call?
+                done()
+            ,
+            (error) ->
+                console.log("")
+                console.log("Error with promise: "+error)
+                process.exit(1)
+
+        )
+
+
 #
 #    it 'can authorize with reactive observable.', (done) ->
 #        @.timeout(timeout)

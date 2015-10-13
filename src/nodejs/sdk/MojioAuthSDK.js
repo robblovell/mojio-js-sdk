@@ -12,19 +12,11 @@
 
     extend(MojioAuthSDK, superClass);
 
-    defaults = {
-      parseToken: (function(result) {
-        var token;
-        return token = result;
-      }),
-      site: 'https://accounts.moj.io',
-      tokenPath: '/oauth2/token',
-      authorizationPath: '/oauth2/authorize'
-    };
-
-    token = null;
+    defaults = {};
 
     styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async'];
+
+    token = null;
 
     function MojioAuthSDK(options) {
       if (options == null) {
@@ -126,8 +118,11 @@
         redirect_url = null;
       }
       if ((redirect_url != null)) {
-        setup(redirect_url, tokenParameters, 'token');
-        redirect_uri = this.state.getBody().redirect_uri;
+        if (!setup(redirect_url, tokenParameters, 'token')) {
+          redirect_uri = redirect_url;
+        } else {
+          redirect_uri = this.state.getBody().redirect_uri;
+        }
       }
       this.state.setMethod("POST");
       this.state.setEndpoint("accounts");
@@ -274,6 +269,7 @@
           password: password
         };
       }
+      this.state.validator.credentials(credentials);
       credentials['grant_type'] = 'password';
       this.state.setBody(credentials);
       return this;

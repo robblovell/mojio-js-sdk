@@ -20,7 +20,6 @@
     };
 
     MojioValidator.prototype.credentials = function(params) {
-      return true;
       if ((params.redirect_url != null) || (typeof params.redirect_uri === "function" ? params.redirect_uri((orparams.redirect != null) || (params.redirectUrl != null) || (params.return_url != null) || (params["return"] != null) || (params.returnUrl != null)) : void 0)) {
         return true;
       }
@@ -49,7 +48,6 @@
 
     MojioValidator.prototype.OAuthBody = function(params) {
       var haveUser;
-      return true;
       if ((params.app_id != null)) {
         params.client_id = params.app_id;
         delete params.app_id;

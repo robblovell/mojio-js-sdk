@@ -11,7 +11,6 @@ module.exports = class MojioValidator
         return true
 
     credentials: (params) ->
-        return true
         if (params.redirect_url? or params.redirect_uri? orparams.redirect? or params.redirectUrl? or
                 params.return_url? or params.return? or params.returnUrl?)
             return true
@@ -26,7 +25,6 @@ module.exports = class MojioValidator
             throw "Must specify a username or email and a password when using 'password' or 'implicit' type OAuth2 authorization"
 
     OAuthBody: (params) ->
-        return true
         (params.client_id = params.app_id; delete params.app_id) if (params.app_id?)
         (params.response_type = params.type; delete params.type) if (params.type?)
         switch params.response_type

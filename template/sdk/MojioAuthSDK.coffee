@@ -14,13 +14,9 @@ MojioModelSDK = require './MojioModelSDK'
 #
 module.exports = class MojioAuthSDK extends MojioModelSDK
     defaults = {
-        parseToken: ((result) ->  token = result)
-        site: 'https://accounts.moj.io'
-        tokenPath: '/oauth2/token'
-        authorizationPath: '/oauth2/authorize'
     }
-    token = null
     styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async']
+    token = null
 
     # Construct a MojioAuthSDK object.
     #
@@ -145,8 +141,10 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @return {object} this
     token: (redirect_url=null) ->
         if (redirect_url?)
-            setup(redirect_url, tokenParameters, 'token')
-            redirect_uri = @state.getBody().redirect_uri
+            if !setup(redirect_url, tokenParameters, 'token')
+                redirect_uri = redirect_url
+            else
+                redirect_uri = @state.getBody().redirect_uri
         @state.setMethod("POST")
         @state.setEndpoint("accounts")
         @state.setResource("oauth2")
@@ -289,12 +287,12 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @return {object} this
     credentials: (usernameOrEmail_or_credentials, password=null) ->
         if (typeof usernameOrEmail_or_credentials is 'object')
-            credentails=usernameOrEmail_or_credentials
+            credentials=usernameOrEmail_or_credentials
         else
-            credentails={ username: usernameOrEmail_or_credentials, password: password }
-        #        @validator.credentials(credentails)
+            credentials={ username: usernameOrEmail_or_credentials, password: password }
+        @state.validator.credentials(credentials)
         credentials['grant_type'] = 'password'
-        @state.setBody(credentails)
+        @state.setBody(credentials)
         return @
 
     # Synonym for the credentials() call.
@@ -304,6 +302,6 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @param password {string} The password if username and password aren't given in the first parameter.
     # @return {object} this
     with: (usernameOrEmail_or_credentials, password=null) ->
-        return @credentails(usernameOrEmail_or_credentials, password)
+        return @credentials(usernameOrEmail_or_credentials, password)
 
 

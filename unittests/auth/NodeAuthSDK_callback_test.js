@@ -23,45 +23,78 @@
   await = require('asyncawait/await');
 
   describe('Node Mojio Auth SDK password type auth', function() {
-    var authorization, call, testErrorResult, timeout;
+    var authorization, call, callback_url, setupNock, testErrorResult, timeout;
     call = null;
     timeout = 50;
+    callback_url = "http://localhost:3000/callback";
     authorization = {
-      client_id: '5f81657f-47f6-4d86-8213-5c01c1f3a243',
+      client_id: 'id',
+      client_secret: 'secret',
+      redirect_uri: 'http://localhost:3000/callback',
+      username: 'testing',
       password: 'Test123!',
-      response_type: 'password',
-      username: 'testing'
+      grant_type: 'password'
     };
-    beforeEach(function() {
-      if (true || (process.env.FUNCTIONAL_TESTS != null)) {
-        return timeout = 3000;
+    setupNock = function() {
+      if ((process.env.FUNCTIONAL_TESTS != null)) {
+        timeout = 3000;
+        return {
+          done: function() {}
+        };
       } else {
-        return call = nock('https://accounts.moj.io').post("/oauth2/token", authorization).reply(function(uri, requestBody, cb) {
+        call = nock('https://staging-accounts.moj.io').post("/oauth2/token", authorization).reply(function(uri, requestBody, cb) {
           return cb(null, [
             200, {
               id: 1
             }
           ]);
         });
+        return call;
       }
-    });
+    };
     testErrorResult = function(error, result) {
       (error === null).should.be["true"];
       return (result !== null).should.be["true"];
     };
-    return it('can authorize with password flow, callback async', function(done) {
+    it('can authorize with password flow, callback async', function(done) {
       var sdk;
       this.timeout(timeout);
+      call = setupNock();
       sdk = new MojioSDK({
         sdk: MojioAuthSDK,
+        client_id: 'id',
+        client_secret: 'secret',
         test: true
       });
-      return sdk.token('5f81657f-47f6-4d86-8213-5c01c1f3a243', "fcca6c06-3d30-488e-947b-a6291e39ff3c").credentials('testing', 'Test123!').callback(function(error, result) {
+      return sdk.token(callback_url).credentials('testing', 'Test123!').callback(function(error, result) {
         testErrorResult(error, result);
         if (call != null) {
           call.done();
         }
         return done();
+      });
+    });
+    return it('can authorize with promise', function(done) {
+      var promise, sdk;
+      call = setupNock();
+      sdk = new MojioSDK({
+        sdk: MojioAuthSDK,
+        styles: [MojioPromiseStyle],
+        client_id: 'id',
+        client_secret: 'secret',
+        test: true
+      });
+      promise = sdk.token(callback_url).credentials('testing', 'Test123!').promise();
+      return promise.then(function(result) {
+        testErrorResult(null, result);
+        if (call != null) {
+          call.done();
+        }
+        return done();
+      }, function(error) {
+        console.log("");
+        console.log("Error with promise: " + error);
+        return process.exit(1);
       });
     });
   });

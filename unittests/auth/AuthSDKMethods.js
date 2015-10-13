@@ -9,7 +9,7 @@
   MojioAuthSDK = require('../../src/nodejs/sdk/MojioAuthSDK');
 
   describe('Node Mojio Auth SDK Methods', function() {
-    var call, client_id, client_secret, grant_type, password, response_type, testErrorResult, timeout, username;
+    var call, client_id, client_secret, grant_type, init, password, redirect_url, response_type, testErrorResult, timeout, username;
     call = null;
     timeout = 50;
     client_id = 'client_id';
@@ -18,16 +18,20 @@
     username = 'username';
     response_type = 'response_type';
     grant_type = 'grant_type';
+    redirect_url = "http://localhost:3000/callback";
+    init = {
+      sdk: MojioAuthSDK,
+      client_id: client_id,
+      client_secret: client_secret,
+      test: true
+    };
     testErrorResult = function(error, result) {
       (error === null).should.be["true"];
       return (result !== null).should.be["true"];
     };
     it('can set credentials', function() {
       var sdk, stuff;
-      sdk = new MojioSDK({
-        sdk: MojioAuthSDK,
-        test: true
-      });
+      sdk = new MojioSDK(init);
       sdk.credentials(username, password);
       stuff = sdk.show();
       stuff.body.username.should.be.equal(username);
@@ -35,10 +39,7 @@
     });
     it('can set credentials with object', function() {
       var sdk, stuff;
-      sdk = new MojioSDK({
-        sdk: MojioAuthSDK,
-        test: true
-      });
+      sdk = new MojioSDK(init);
       sdk.credentials({
         user: username,
         password: password
@@ -49,18 +50,14 @@
     });
     return it('can set token parameters', function() {
       var sdk, stuff;
-      sdk = new MojioSDK({
-        sdk: MojioAuthSDK,
-        test: true
-      });
-      sdk.token(client_id, client_secret);
+      sdk = new MojioSDK(init);
+      sdk.token(redirect_url);
       stuff = sdk.show();
       stuff.method.should.be.equal('POST');
       stuff.endpoint.should.be.equal('accounts');
       stuff.resource.should.be.equal('oauth2');
       stuff.action.should.be.equal('token');
-      stuff.body.client_id.should.be.equal(client_id);
-      return stuff.body.client_secret.should.be.equal(client_secret);
+      return stuff.body.redirect_uri.should.be.equal(redirect_url);
     });
   });
 
