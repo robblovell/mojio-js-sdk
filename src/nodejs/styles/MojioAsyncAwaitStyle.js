@@ -25,5 +25,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=MojioAsyncAwaitStyle.js.map

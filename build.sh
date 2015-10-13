@@ -12,6 +12,13 @@ cp -f template/wrappers-nodejs/* src/nodejs/wrappers
 
 echo "Build Javascript from Coffeescript..."
 coffee --compile src/nodejs
+
+echo "Build the documentation"
+cd src/nodejs/sdk
+codo -o ../../../lib/docs *.coffee
+codo -o ../../../docs *.coffee
+cd ../../../
+
 echo "Combine files using browserify..."
 
 cd src/nodejs/sdk
@@ -36,6 +43,12 @@ cp -f template/wrappers-browser/* src/browser/wrappers
 echo "Build Javascript from Coffeescript..."
 
 coffee --compile src/browser
+
+echo "Build the documentation"
+cd src/browser/sdk
+codo -o ../../../dist/docs *.coffee
+cd ../../../
+
 echo "Combine files using browserify..."
 
 cd src/browser/sdk

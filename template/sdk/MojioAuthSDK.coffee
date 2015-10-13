@@ -60,10 +60,20 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     #
     # @param {object} authorization An object that contains the information needed to authorize a user.
     #
-    # @example Client application for consumer authorization. Redirects to the authorization server within a browser and returns a token in a document.
-    #   authorize({type: 'code', redirect_url: ''})
-    # @example Server based authorization for trusted enterprise applications. Sends username and password with the application key directly to the authorization server.
-    #   authorize({type: 'token', user: '', password: ''})
+    # @example Client application for consumer authorization. In the node js express environment, redirects
+    # to the authorization server within a browser and returns a token in a document.
+    #   app.get('/authCode', (req, res) ->
+    #     # step 1 of authorization code workflow.
+    #     sdk
+    #     .authorize(redirect_uri)
+    #     .scope(['full'])
+    #     .redirect(res)
+    #  )
+    # @example Browser based implicit flow authorization. Redirects the user to auth server.
+    #   sdk
+    #     .authorize(redirect_uri)
+    #     .scope(['full'])
+    #     .redirect( { redirect: (url) -> window.location = url } )
     # @return {object} this
     authorize: (redirect_url, implicit = null) ->
 
@@ -91,9 +101,9 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @param {string} redirect_url where to redirect if the user logs in again using the
     # oauth page retrieved as a result of the prompt specified.
     # @example Log the user out, but keep permissions for this application
-    # sdk.unauthorize("http://localhost:3000/callback").login().callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").login().callback(...)
     # @example Log the user out, and deny permissions for this application
-    # sdk.unauthorize("http://localhost:3000/callback").login().consent().callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").login().consent().callback(...)
     # @return {object} this
     unauthorize: (redirect_url, implicit = null) ->
         if (document? and !implict?)
@@ -131,13 +141,13 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @param redirect_url {string} The response from the authorization workflow.
     #
     # @example Get the token after returning from a consumer application's redirect to the authorization server
-    # sdk.token().parse(document.location.hash.match(/access_token=([0-9a-f-]{36})/)) )
+    #   sdk.token().parse(document.location.hash.match(/access_token=([0-9a-f-]{36})/)) )
     # @example Get the token after returning from an implicit flow
-    # sdk.token().parse(response).callback(...)
+    #   sdk.token().parse(response).callback(...)
     # @example Refresh the internal sdk stored token
-    # sdk.token().refresh().callback(...)
+    #   sdk.token().refresh().callback(...)
     # @example Refresh the an arbitrary token
-    # sdk.token().refresh(some_token_object).callback(...)
+    #   sdk.token().refresh(some_token_object).callback(...)
     # @return {object} this
     token: (redirect_url=null) ->
         if (redirect_url?)
@@ -154,6 +164,17 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
         return @
 
     # second half of authorization code flow, or parse of the return from the implicit flow
+    #
+    # @param refresh_token {object} The authorization-token object's refresh token returned from the authorization/token workflow.
+    # the authorization token returned from the authorization workflow is an object that has several fields, one of
+    # which is labeled "refresh_token". All of this is cached in the sdk, but you can pass a valid refresh token in, a
+    # in a new token will be returned.
+    #
+    # @example Get the token after returning from a consumer application's redirect to the authorization server
+    #   sdk.token().parse(document.location.hash.match(/access_token=([0-9a-f-]{36})/)) )
+    # @example Get the token after returning from an implicit flow
+    #   sdk.token().parse(response).callback(...)
+    # @return {object} this
     parse: (return_url) ->
         if (return_url? and return_url.query? and return_url.query.code?)
             code = return_url.query.code
@@ -185,9 +206,8 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # in a new token will be returned.
     #
     # @example Get the token after returning from a consumer application's redirect to the authorization server
-    # sdk.token("http://localhost:3000/callback").refresh().callback(...)
-    # @return {string} token
-    # password or refresh flow, second half of authorization code flow
+    #   sdk.token("http://localhost:3000/callback").refresh().callback(...)
+    # @return {object} this
     refresh: (refresh_token) ->
         @state.setBody({ refresh_token: refresh_token, grant_type: 'refresh_token' })
         return @
@@ -196,7 +216,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # the application. The application will still have permission to access the user's resources
     # when they log in again with 'authorize'.
     # @example Log the user out and do not deny permissions, go to the oauth2 login prompt
-    # sdk.unauthorize("http://localhost:3000/callback").login().callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").login().callback(...)
     # @return {object} this
     login: () ->
         @prompt ({prompt: 'login'})
@@ -205,7 +225,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # A method that specifies that when unauthorize is initiated, the application will no longer have
     # access to the user's resources.
     # @example Deny permissions and go to the oauth2 consent prompt.
-    # sdk.unauthorize("http://localhost:3000/callback").loginAndConsent().callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").loginAndConsent().callback(...)
     # @return {object} this
     consent: () ->
         @prompt ({prompt: 'consent'})
@@ -224,10 +244,10 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # A helper method to set the body of the REST uri for login and consent calls. Can be used
     # instead of login, consent, or loginAndConsent calls
     # @example Set the unauthorize chain to 'login' and 'consent'
-    # sdk.unauthorize("http://localhost:3000/callback").prompt({prompt: 'consent, login'}).callback(...)
-    # sdk.unauthorize("http://localhost:3000/callback").prompt('consent, login').callback(...)
-    # sdk.unauthorize("http://localhost:3000/callback").prompt(['consent', 'login']).callback(...)
-    # sdk.unauthorize("http://localhost:3000/callback").prompt('login').callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").prompt({prompt: 'consent, login'}).callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").prompt('consent, login').callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").prompt(['consent', 'login']).callback(...)
+    #   sdk.unauthorize("http://localhost:3000/callback").prompt('login').callback(...)
     # @param prompt {object, array, or string} object: {prompt: 'login,consent'}, array: ['login','consent'], string:'login,consent'.
     # @return {object} this
     prompt: (prompt) ->
@@ -247,6 +267,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # Set the scope of the authorization workflow. The user will be asked for consent of the given 'scope'
     # for the application to have access to their resources.
     # @param scopes {array or string} Array of scopes, or a space separated list of scopes in a string.
+    # @return {object} this
     scope: (scopes) ->
 #        @validator.validateScope(scopes, @scopes)
         if (typeof scopes is 'string')

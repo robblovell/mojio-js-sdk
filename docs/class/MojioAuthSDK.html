@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>CoffeeScript API Documentation</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>MojioAuthSDK</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        MojioAuthSDK
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>MojioAuthSDK.coffee</td>
+        </tr>
+        <tr>
+          <td>Inherits:</td>
+          <td>
+            <a href='../class/MojioModelSDK.html'>MojioModelSDK</a>
+          </td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>The authentication segment of the Mojio SDK. Authentication is accomplished through the use of a Mojio OAuth server.
+Consumer applications authenticate by redirecting to the OAuth server and waiting for a redirect back to the application&#39;s
+authentication return url.  Once the authentication server has validated the user&#39;s credentials it passes back a token
+through the redirect url to the consumer application.</p><p>For server applications that have their own username and password within the Mojio API, the OAuth server provides a means
+to directly authenticate the server with it&#39;s credentials with a direct client-server request.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>mojioAuthSdk = new MojioSDK({sdk: MojioAuthSDK}) # instantiate the mojioSDK to do only authentication methods.</code></pre>
+  </div>
+</div>
+<div class='tags'>
+</div>
+      <h2>Direct Known Subclasses</h2>
+      <p class='children'>
+        <a href='../class/MojioRestSDK.html'>MojioRestSDK</a>
+      </p>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#authorize-dynamic'>
+        #
+(object)
+<b>authorize</b><span>(redirect_url, implicit = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A method that authorizes access to a user&#39;s data. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#unauthorize-dynamic'>
+        #
+(object)
+<b>unauthorize</b><span>(redirect_url, implicit = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A method that un-authorizes access to a user&#39;s data, removing grants to data. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#token-dynamic'>
+        #
+(object)
+<b>token</b><span>(redirect_url = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A method that returns an authorization token after authorization has returned a code. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#parse-dynamic'>
+        #
+(object)
+<b>parse</b><span>(return_url)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      second half of authorization code flow, or parse of the return from the implicit flow <p>the authorization token returned from the authorization workflow is an object that has several fields, one of
+which is labeled &quot;refresh_token&quot;.</p>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#refresh-dynamic'>
+        #
+(object)
+<b>refresh</b><span>(refresh_token)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A method that refreshes an authorization token, gives it more active time. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#login-dynamic'>
+        #
+(object)
+<b>login</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A method that specifies that when unauthorize is initiated, the user should be logged out of the application.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#consent-dynamic'>
+        #
+(object)
+<b>consent</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A method that specifies that when unauthorize is initiated, the application will no longer have access to the user&#39;s resources.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#loginAndConsent-dynamic'>
+        #
+(object)
+<b>loginAndConsent</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A method that specifies that when unauthorize is initiated, the user should be logged out. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#prompt-dynamic'>
+        #
+(object)
+<b>prompt</b><span>(prompt)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      A helper method to set the body of the REST uri for login and consent calls. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#scope-dynamic'>
+        #
+(object)
+<b>scope</b><span>(scopes)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Set the scope of the authorization workflow. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#username-dynamic'>
+        #
+(object)
+<b>username</b><span>(username)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Set the username for a server side, resource owner &#39;password&#39; authorization workflow. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#email-dynamic'>
+        #
+(object)
+<b>email</b><span>(email)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Set the email for a server side, resource owner &#39;password&#39; authorization workflow. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#password-dynamic'>
+        #
+(object)
+<b>password</b><span>(password)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Set the password for a server side, resource owner &#39;password&#39; authorization workflow. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#credentials-dynamic'>
+        #
+(object)
+<b>credentials</b><span>(usernameOrEmail_or_credentials, password = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      This call is used to specify both username and password for an authorization workflow. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#with-dynamic'>
+        #
+(object)
+<b>with</b><span>(usernameOrEmail_or_credentials, password = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Synonym for the credentials() call. 
+    </span>
+  </li>
+</ul>
+      <h2>
+        <small>Inherited Method Summary</small>
+        <h3 class='inherited'>
+          Methods inherited from
+          <a href='../class/MojioModelSDK.html'>MojioModelSDK</a>
+        </h3>
+        <p class='inherited'>
+          <a href='../class/MojioModelSDK.html#users-dynamic'>#users</a>
+          <a href='../class/MojioModelSDK.html#user-dynamic'>#user</a>
+          <a href='../class/MojioModelSDK.html#vehicles-dynamic'>#vehicles</a>
+          <a href='../class/MojioModelSDK.html#vehicle-dynamic'>#vehicle</a>
+          <a href='../class/MojioModelSDK.html#mojios-dynamic'>#mojios</a>
+          <a href='../class/MojioModelSDK.html#mojio-dynamic'>#mojio</a>
+          <a href='../class/MojioModelSDK.html#trips-dynamic'>#trips</a>
+          <a href='../class/MojioModelSDK.html#groups-dynamic'>#groups</a>
+          <a href='../class/MojioModelSDK.html#group-dynamic'>#group</a>
+          <a href='../class/MojioModelSDK.html#permissions-dynamic'>#permissions</a>
+          <a href='../class/MojioModelSDK.html#image-dynamic'>#image</a>
+          <a href='../class/MojioModelSDK.html#tags-dynamic'>#tags</a>
+          <a href='../class/MojioModelSDK.html#tag-dynamic'>#tag</a>
+          <a href='../class/MojioModelSDK.html#name-dynamic'>#name</a>
+          <a href='../class/MojioModelSDK.html#mock-dynamic'>#mock</a>
+        </p>
+      </h2>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='authorize-dynamic'>
+      #
+(object)
+<b>authorize</b><span>(redirect_url, implicit = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A method that authorizes access to a user&#39;s data.  There are two ways to authorize users,
+depending on whether the application is designed to be used by a consumer, or it is designed
+as a server that users trust to act on their behalf.  Generally, this devides into two camps,
+client applications for consumers or server applications for enterprise applications.  For
+client applications, the user is redirected to mojio&#39;s authorization server which will collect
+the user&#39;s password outside the application so that the user can give permission to or revoke
+permission from the application to use their data.  For enterprise or server side applications,
+the user&#39;s password is known to the application and can be sent directly to the authorization
+server for verification. In both cases, the authorization server will return a token that will
+be used to access the user&#39;s data.</p><p>to the authorization server within a browser and returns a token in a document. app.get(&#39;/authCode&#39;, (req, res) -&gt;</p><pre><code># step 1 of authorization code workflow.
+sdk
+.authorize(redirect_uri)
+.scope([&#39;full&#39;])
+.redirect(res)
+</code></pre><p> )</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Browser based implicit flow authorization. Redirects the user to auth server.
+    </h4>
+    <pre><code class='coffeescript'>sdk
+  .authorize(redirect_uri)
+  .scope([&#39;full&#39;])
+  .redirect( { redirect: (url) -&gt; window.location = url } )</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>authorization</span>
+      <span class='type'>
+        (
+          <tt>object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>An object that contains the information needed to authorize a user. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='unauthorize-dynamic'>
+      #
+(object)
+<b>unauthorize</b><span>(redirect_url, implicit = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A method that un-authorizes access to a user&#39;s data, removing grants to data. Parameters to
+this function
+oauth page retrieved as a result of the prompt specified.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Log the user out, but keep permissions for this application
+    </h4>
+    <pre><code class='coffeescript'>sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).login().callback(...)</code></pre>
+    <h4>
+      Log the user out, and deny permissions for this application
+    </h4>
+    <pre><code class='coffeescript'>sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).login().consent().callback(...)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>redirect_url</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>where to redirect if the user logs in again using the </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='token-dynamic'>
+      #
+(object)
+<b>token</b><span>(redirect_url = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A method that returns an authorization token after authorization has returned a code. Used in
+combination with &#39;parse&#39;, &#39;refresh&#39;, and &#39;password&#39; to implement completion of an authorization
+workflow.  Parse is used in conjunction with code and implicit flows, call authorize first, then
+after the redirect call token().parse(response). Password with token implements the &#39;password&#39;
+authorization flow for server based authorization where the server is also the owner of the
+resources (the user account that will be accessing the vehicles, mojios, and trips for that user
+account and no one else). This would be token().password(&#39;username&#39;, &#39;password&#39;) and is done without
+a prior &#39;authorize&#39; call.  Refresh is used to refresh already active tokens, giving them an
+extended expiration timespan, token().refresh().</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Get the token after returning from a consumer application&#39;s redirect to the authorization server
+    </h4>
+    <pre><code class='coffeescript'>sdk.token().parse(document.location.hash.match(&#47;access_token=([0-9a-f-]{36})&#47;)) )</code></pre>
+    <h4>
+      Get the token after returning from an implicit flow
+    </h4>
+    <pre><code class='coffeescript'>sdk.token().parse(response).callback(...)</code></pre>
+    <h4>
+      Refresh the internal sdk stored token
+    </h4>
+    <pre><code class='coffeescript'>sdk.token().refresh().callback(...)</code></pre>
+    <h4>
+      Refresh the an arbitrary token
+    </h4>
+    <pre><code class='coffeescript'>sdk.token().refresh(some_token_object).callback(...)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>redirect_url</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The response from the authorization workflow. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='parse-dynamic'>
+      #
+(object)
+<b>parse</b><span>(return_url)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>second half of authorization code flow, or parse of the return from the implicit flow</p><p>the authorization token returned from the authorization workflow is an object that has several fields, one of
+which is labeled &quot;refresh_token&quot;. All of this is cached in the sdk, but you can pass a valid refresh token in, a
+in a new token will be returned.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Get the token after returning from a consumer application&#39;s redirect to the authorization server
+    </h4>
+    <pre><code class='coffeescript'>sdk.token().parse(document.location.hash.match(&#47;access_token=([0-9a-f-]{36})&#47;)) )</code></pre>
+    <h4>
+      Get the token after returning from an implicit flow
+    </h4>
+    <pre><code class='coffeescript'>sdk.token().parse(response).callback(...)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>refresh_token</span>
+      <span class='type'>
+        (
+          <tt>object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The authorization-token object&#39;s refresh token returned from the authorization/token workflow. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='refresh-dynamic'>
+      #
+(object)
+<b>refresh</b><span>(refresh_token)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A method that refreshes an authorization token, gives it more active time. Actually, a new token is returned
+when a refresh call is made.</p><p>the authorization token returned from the authorization workflow is an object that has several fields, one of
+which is labeled &quot;refresh_token&quot;. All of this is cached in the sdk, but you can pass a valid refresh token in, a
+in a new token will be returned.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Get the token after returning from a consumer application&#39;s redirect to the authorization server
+    </h4>
+    <pre><code class='coffeescript'>sdk.token(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).refresh().callback(...)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>refresh_token</span>
+      <span class='type'>
+        (
+          <tt>object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The authorization-token object&#39;s refresh token returned from the authorization/token workflow. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='login-dynamic'>
+      #
+(object)
+<b>login</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A method that specifies that when unauthorize is initiated, the user should be logged out of
+the application. The application will still have permission to access the user&#39;s resources
+when they log in again with &#39;authorize&#39;.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Log the user out and do not deny permissions, go to the oauth2 login prompt
+    </h4>
+    <pre><code class='coffeescript'>sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).login().callback(...)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='consent-dynamic'>
+      #
+(object)
+<b>consent</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A method that specifies that when unauthorize is initiated, the application will no longer have
+access to the user&#39;s resources.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Deny permissions and go to the oauth2 consent prompt.
+    </h4>
+    <pre><code class='coffeescript'>sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).loginAndConsent().callback(...)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='loginAndConsent-dynamic'>
+      #
+(object)
+<b>loginAndConsent</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A method that specifies that when unauthorize is initiated, the user should be logged out. The
+application will also be denied permission to access the user&#39;s resources when they log in again
+with &#39;authorize&#39; unless permission is given by the user again.
+sdk.unauthorize(&quot;<a href="http://localhost:3000/callback&quot;).loginAndConsent().callback(">http://localhost:3000/callback&quot;).loginAndConsent().callback(</a>...)</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='prompt-dynamic'>
+      #
+(object)
+<b>prompt</b><span>(prompt)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>A helper method to set the body of the REST uri for login and consent calls. Can be used
+instead of login, consent, or loginAndConsent calls</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Set the unauthorize chain to &#39;login&#39; and &#39;consent&#39;
+    </h4>
+    <pre><code class='coffeescript'>sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).prompt({prompt: &#39;consent, login&#39;}).callback(...)
+sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).prompt(&#39;consent, login&#39;).callback(...)
+sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).prompt([&#39;consent&#39;, &#39;login&#39;]).callback(...)
+sdk.unauthorize(&quot;http:&#47;&#47;localhost:3000&#47;callback&quot;).prompt(&#39;login&#39;).callback(...)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>prompt</span>
+      <span class='type'>
+        (
+          <tt>object, array, or string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>object: {prompt: &#39;login,consent&#39;}, array: [&#39;login&#39;,&#39;consent&#39;], string:&#39;login,consent&#39;. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='scope-dynamic'>
+      #
+(object)
+<b>scope</b><span>(scopes)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Set the scope of the authorization workflow. The user will be asked for consent of the given &#39;scope&#39;
+for the application to have access to their resources.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>scopes</span>
+      <span class='type'>
+        (
+          <tt>array or string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>Array of scopes, or a space separated list of scopes in a string. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='username-dynamic'>
+      #
+(object)
+<b>username</b><span>(username)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Set the username for a server side, resource owner &#39;password&#39; authorization workflow.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>username</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The username to use for the password authorization. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='email-dynamic'>
+      #
+(object)
+<b>email</b><span>(email)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Set the email for a server side, resource owner &#39;password&#39; authorization workflow.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>email</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The email to use for the password authorization. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='password-dynamic'>
+      #
+(object)
+<b>password</b><span>(password)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Set the password for a server side, resource owner &#39;password&#39; authorization workflow.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>password</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The password to use for the password authorization. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='credentials-dynamic'>
+      #
+(object)
+<b>credentials</b><span>(usernameOrEmail_or_credentials, password = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>This call is used to specify both username and password for an authorization workflow.
+username. In the case of an object, it&#39;s both username and password given in the following
+format: {username: &#39;&#39;, password: &#39;&#39;}</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>usernameOrEmail_or_credentials</span>
+      <span class='type'>
+        (
+          <tt>string or object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>In the case of a string, this is the </span>
+    </li>
+    <li>
+      <span class='name'>password</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The password if username and password aren&#39;t given in the first parameter. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='with-dynamic'>
+      #
+(object)
+<b>with</b><span>(usernameOrEmail_or_credentials, password = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Synonym for the credentials() call.
+username. In the case of an object, it&#39;s both username and password given in the following
+format: {username: &#39;&#39;, password: &#39;&#39;}</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>username_or_credentials</span>
+      <span class='type'>
+        (
+          <tt>string or object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>In the case of a string, this is the </span>
+    </li>
+    <li>
+      <span class='name'>password</span>
+      <span class='type'>
+        (
+          <tt>string</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>The password if username and password aren&#39;t given in the first parameter. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  October 12, 15 18:41:30 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.11
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>
