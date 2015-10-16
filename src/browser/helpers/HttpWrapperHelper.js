@@ -35,8 +35,48 @@
       return "/" + encodeURIComponent(resource);
     };
 
-    HttpWrapperHelper._parse = function(url) {
-      return new URL(url);
+    HttpWrapperHelper._parse = function(url, request, encoding, token) {
+      var parts;
+      parts = new URL(url);
+      parts.path = parts.pathname;
+      parts.method = request.method;
+      parts.withCredentials = false;
+      parts.params = '';
+      if ((request.parameters != null) && Object.keys(request.parameters).length > 0) {
+        parts.params = HttpWrapperHelper._makeParameters(request.parameters);
+      }
+      if ((request.params != null) && Object.keys(request.params).length > 0) {
+        parts.params = HttpWrapperHelper._makeParameters(request.params);
+      }
+      parts.path += parts.params;
+      parts.headers = {};
+      if (token != null) {
+        parts.headers["MojioAPIToken"] = token;
+      }
+      if ((request.headers != null)) {
+        parts.headers += request.headers;
+      }
+      parts.headers['Accept'] = 'application/json';
+      parts.headers["Content-Type"] = 'application/json';
+      if ((request.body != null)) {
+        if ((encoding != null)) {
+          parts.headers["Content-Type"] = 'application/x-www-form-urlencoded';
+          parts.body = FormUrlencoded.encode(request.body);
+        } else {
+          parts.body = request.body;
+        }
+        parts.data = parts.body;
+      }
+      if ((request.data != null)) {
+        if ((encoding != null)) {
+          parts.headers["Content-Type"] = 'application/x-www-form-urlencoded';
+          parts.data = FormUrlencoded.encode(request.data);
+        } else {
+          parts.data = request.data;
+        }
+        parts.body = parts.data;
+      }
+      return parts;
     };
 
     return HttpWrapperHelper;
@@ -44,5 +84,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=HttpWrapperHelper.js.map
