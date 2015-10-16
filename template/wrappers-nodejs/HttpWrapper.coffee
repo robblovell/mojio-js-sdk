@@ -46,28 +46,39 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
 
     _parts = (request, token, uri, encoding) ->
         uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key)
-        parts = HttpWrapperHelper._parse(uri)
-        parts.path = parts.pathname
-        parts.method = request.method
-        parts.withCredentials = false
-        parts.params = ''
-        if (request.parameters? and Object.keys(request.parameters).length > 0)
-            parts.params = HttpWrapperHelper._makeParameters(request.parameters)
-        if (request.params? and Object.keys(request.params).length > 0)
-            parts.params = HttpWrapperHelper._makeParameters(request.params)
-        parts.path += parts.params
-        parts.headers = {}
+        parts = HttpWrapperHelper._parse(uri, request, encoding, token)
+#        parts.path = parts.pathname
+#        parts.method = request.method
+#        parts.withCredentials = false
+#        parts.params = ''
+#        if (request.parameters? and Object.keys(request.parameters).length > 0)
+#            parts.params = HttpWrapperHelper._makeParameters(request.parameters)
+#        if (request.params? and Object.keys(request.params).length > 0)
+#            parts.params = HttpWrapperHelper._makeParameters(request.params)
+#        parts.path += parts.params
+#        parts.headers = {}
+#
+#        parts.headers["MojioAPIToken"] = token if token?
+#        parts.headers += request.headers if (request.headers?)
+#        parts.headers['Accept'] = 'application/json'
+#        parts.headers["Content-Type"] = 'application/json'
+#
+#        if (request.body?)
+#            if (encoding?) #
+#                parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
+#                parts.body = FormUrlencoded.encode(request.body)
+#            else
+#                parts.body = request.body
+#            parts.data = parts.body
+#
+#        if (request.data?)
+#            if (encoding?) #
+#                parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
+#                parts.data = FormUrlencoded.encode(request.data)
+#            else
+#                parts.data = request.data
+#            parts.body = parts.data
 
-        parts.headers["MojioAPIToken"] = token if token?
-        parts.headers += request.headers if (request.headers?)
-
-        if (request.body?)
-            if (encoding?) #
-                parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
-                parts.body = FormUrlencoded.encode(request.body)
-            else
-                parts.headers["Content-Type"] = 'application/json'
-                parts.body = request.body
         return parts
 
     url: (request) ->

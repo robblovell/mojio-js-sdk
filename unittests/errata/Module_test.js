@@ -6,7 +6,7 @@
 
   should = require('should');
 
-  Module = require('../../src/helpers/Module');
+  Module = require('../../template/helpers/Module');
 
   describe('Test Module', function() {
     it('Module can extend from object', function() {
@@ -175,7 +175,11 @@
         }
 
         Guitar.prototype.makeAnotherSound = function() {
-          state["thing"] = true;
+          try {
+            state["thing"] = true;
+          } catch (_error) {
+            return true;
+          }
           return true;
         };
 

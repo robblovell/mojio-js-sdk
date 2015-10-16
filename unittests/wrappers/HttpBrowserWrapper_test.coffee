@@ -1,11 +1,9 @@
 should = require('should')
 async = require('async')
-HttpNodeWrapper = require '../../template/wrappers-nodejs/HttpWrapper'
+HttpBrowserWrapper = require '../../template/wrappers-browser/HttpWrapper'
 nock = require 'nock'
-
-
-
-describe 'Http Nodejs Wrapper', ->
+sinon = require 'sinon'
+describe 'Http Browser Wrapper', ->
 
     token = "token"
     contentType = "application/json"
@@ -13,6 +11,26 @@ describe 'Http Nodejs Wrapper', ->
         (error==null).should.be.true
         (result!=null).should.be.true
 
+    xhr = null
+    requests = null
+    before( () ->
+        xhr = sinon.useFakeXMLHttpRequest()
+        requests = []
+        xhr.onCreate = (req) ->
+            requests.push(req)
+    )
+
+    after( () ->
+        # Like before we must clean up when tampering with globals.
+        xhr.restore()
+    )
+
+#    it("makes a GET request for todo items", function () {
+#        getTodos(42, sinon.spy());
+#
+#        assert.equals(requests.length, 1);
+#        assert.match(requests[0].url, "/todo/42/items");
+#    });
     it 'tests @request get resource with id', (done) ->
         nock('https://api.moj.io')
         .get('/v1/Vehicles/1')
@@ -20,15 +38,15 @@ describe 'Http Nodejs Wrapper', ->
             @.req.headers.mojioapitoken.should.be.equal(token)
             @.req.headers['content-type'].should.be.equal(contentType)
             cb(null, [200, { id: 1}]))
-        httpNodeWrapper = new HttpNodeWrapper("token")
+        httpBrowserWrapper = new HttpBrowserWrapper("token")
 
-        httpNodeWrapper.request({
+        httpBrowserWrapper.request({
                 method: 'Get',
                 resource: "Vehicles",
                 id: "1"
             }, (error, result) =>
-                testErrorResult(error, result)
-                done()
+            testErrorResult(error, result)
+            done()
         )
 
     it 'tests @request get resource with id and form url encoding', (done) ->
@@ -39,9 +57,9 @@ describe 'Http Nodejs Wrapper', ->
             @.req.headers['content-type'].should.be.equal(contentType)
             @.req.headers['host'].should.be.equal("api.moj.io")
             cb(null, [200, { id: 1}]))
-        httpNodeWrapper = new HttpNodeWrapper("token", 'https://api.moj.io/v1', true)
+        httpBrowserWrapper = new HttpBrowserWrapper("token", 'https://api.moj.io/v1', true)
 
-        httpNodeWrapper.request({
+        httpBrowserWrapper.request({
                 method: 'Get',
                 resource: "Vehicles",
                 id: "1"

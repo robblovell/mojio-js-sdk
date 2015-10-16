@@ -55,35 +55,7 @@
     _parts = function(request, token, uri, encoding) {
       var parts;
       uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key);
-      parts = HttpWrapperHelper._parse(uri);
-      parts.path = parts.pathname;
-      parts.method = request.method;
-      parts.withCredentials = false;
-      parts.params = '';
-      if ((request.parameters != null) && Object.keys(request.parameters).length > 0) {
-        parts.params = HttpWrapperHelper._makeParameters(request.parameters);
-      }
-      if ((request.params != null) && Object.keys(request.params).length > 0) {
-        parts.params = HttpWrapperHelper._makeParameters(request.params);
-      }
-      parts.path += parts.params;
-      parts.headers = {};
-      if (token != null) {
-        parts.headers["MojioAPIToken"] = token;
-      }
-      if ((request.headers != null)) {
-        parts.headers += request.headers;
-      }
-      if ((request.body != null)) {
-        parts.headers["Content-Type"] = 'application/json';
-        parts.body = request.body;
-        parts.data = parts.body;
-      }
-      if ((request.data != null)) {
-        parts.headers["Content-Type"] = 'application/json';
-        parts.data = request.data;
-        parts.body = parts.data;
-      }
+      parts = HttpWrapperHelper._parse(uri, request, encoding, this.token);
       if (!((parts.scheme != null) || (typeof window === "undefined" || window === null))) {
         parts.scheme = window.location.protocol.split(':')[0];
       }

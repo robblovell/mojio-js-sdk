@@ -1,5 +1,5 @@
 should = require('should')
-Module = require '../../src/helpers/Module'
+Module = require '../../template/helpers/Module'
 
 #class Module
 #    constructor: () ->
@@ -125,7 +125,10 @@ describe 'Test Module', ->
             constructor: () ->
                 @include instanceProperties
             makeAnotherSound: () ->
-                state["thing"] = true
+                try
+                    state["thing"] = true
+                catch
+                    return true
                 return true
 
         guitar = new Guitar()
