@@ -6,8 +6,8 @@
     function MojioModelSDK() {}
 
     MojioModelSDK.prototype.users = function(users) {
-      state.resource = 'Users';
-      state.object = users;
+      this.state.resource = 'Users';
+      this.state.object = users;
       return this;
     };
 
@@ -17,8 +17,8 @@
     };
 
     MojioModelSDK.prototype.vehicles = function(vehicles) {
-      state.resource = 'Vehicles';
-      state.object = vehicles;
+      this.state.resource = 'Vehicles';
+      this.state.object = vehicles;
       return this;
     };
 
@@ -28,8 +28,8 @@
     };
 
     MojioModelSDK.prototype.mojios = function(mojios) {
-      state.resource = 'Vehicles';
-      state.object = vehicles;
+      this.state.resource = 'Vehicles';
+      this.state.object = vehicles;
       return this;
     };
 
@@ -39,14 +39,14 @@
     };
 
     MojioModelSDK.prototype.trips = function(trips) {
-      state.resource = 'Trips';
-      state.object = trips;
+      this.state.resource = 'Trips';
+      this.state.object = trips;
       return this;
     };
 
     MojioModelSDK.prototype.groups = function(names, callback) {
-      state.resource = 'Groups';
-      state.object = names;
+      this.state.resource = 'Groups';
+      this.state.object = names;
       if ((callback != null)) {
         this.callback(callback);
       }
@@ -69,14 +69,14 @@
     };
 
     MojioModelSDK.prototype.image = function(image) {
-      state.action = 'Image';
-      state.object = image;
+      this.state.action = 'Image';
+      this.state.object = image;
       return this;
     };
 
     MojioModelSDK.prototype.tags = function(tags) {
-      state.action = 'Tags';
-      state.object = tags;
+      this.state.action = 'Tags';
+      this.state.object = tags;
       return this;
     };
 

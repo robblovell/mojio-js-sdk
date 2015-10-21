@@ -20,8 +20,8 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     users: (users) ->
-        state.resource = 'Users'
-        state.object = users
+        @state.resource = 'Users'
+        @state.object = users
         return @
 
     # Specify a user to apply operations to in the fluent chain.
@@ -55,8 +55,8 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     vehicles: (vehicles) ->
-        state.resource = 'Vehicles'
-        state.object = vehicles
+        @state.resource = 'Vehicles'
+        @state.object = vehicles
         return @
 
     # Specify a vehicle to apply operations to in the fluent chain.
@@ -90,8 +90,8 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     mojios: (mojios) ->
-        state.resource = 'Vehicles'
-        state.object = vehicles
+        @state.resource = 'Vehicles'
+        @state.object = vehicles
         return @
 
     # Specify a mojio to apply operations to in the fluent chain.
@@ -125,16 +125,16 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     trips: (trips) ->
-        state.resource = 'Trips'
-        state.object = trips
+        @state.resource = 'Trips'
+        @state.object = trips
         return @
 
     # group
     # @return {object} this
     groups: (names, callback) ->
         #todo:: instantiate groups from names?
-        state.resource = 'Groups'
-        state.object = names
+        @state.resource = 'Groups'
+        @state.object = names
         @callback(callback) if (callback?)
         return @
 
@@ -155,16 +155,16 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     image: (image) ->
-        state.action = 'Image'
-        state.object = image
+        @state.action = 'Image'
+        @state.object = image
         return @
 
     # Specify a tag to apply operations to in the fluent chain. Tags are secondary resources associated with Vehicles, Mojios, Users, Groups, or Trips
     #
     # @return {object} this
     tags: (tags) ->
-        state.action = 'Tags'
-        state.object = tags
+        @state.action = 'Tags'
+        @state.object = tags
         return @
 
     # Specify a tag to apply operations to in the fluent chain. Tags are secondary resources associated with Vehicles, Mojios, Users, Groups, or Trips

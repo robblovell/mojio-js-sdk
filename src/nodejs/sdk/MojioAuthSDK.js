@@ -24,7 +24,7 @@
       }
       MojioAuthSDK.__super__.constructor.call(this);
       this.configure(options, defaults);
-      this.user = null;
+      this.currentUser = null;
       this.state.client = this.client_id;
       this.state.secret = this.client_secret;
       this.state.site = this.site;
@@ -41,7 +41,7 @@
           if ((indexOf.call(match, property) >= 0)) {
             results.push(eval("this." + property)(value));
           } else {
-            throw new error("Parameter not used in " + name + " flow: " + property);
+            throw new Error("Parameter not used in " + name + " flow: " + property);
           }
         }
         return results;

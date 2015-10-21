@@ -52,7 +52,7 @@
         console.log('Access Token Error', JSON.stringify(error.content) + "  message:" + error.statusMessage + "  url:" + sdk.url());
         return res.send('Access Token Error: ' + JSON.stringify(error.content) + "  message:" + error.statusMessage + "  url:" + sdk.url());
       } else {
-        token = oauth2.accessToken.create(result);
+        token = result;
         console.log("Token:" + JSON.stringify(token));
         return res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>');
       }
@@ -96,7 +96,7 @@
         console.log('Access Token Error', JSON.stringify(error.content) + "  message:" + error.statusMessage + "  url:" + sdk.url());
         return res.send('Access Token Error: ' + JSON.stringify(error.content) + "  message:" + error.statusMessage + "  url:" + sdk.url());
       } else {
-        token = oauth2.accessToken.create(result);
+        token = result;
         console.log("Token:" + JSON.stringify(token));
         return res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>');
       }

@@ -50,7 +50,7 @@ app.get('/password', (req, res) ->
             console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
             res.send('Access Token Error: '+JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
         else
-            token = oauth2.accessToken.create(result)
+            token = result
             console.log("Token:"+JSON.stringify(token))
             res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>')
     )
@@ -100,9 +100,9 @@ app.get('/callback', (req, res) ->
             console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
             res.send('Access Token Error: '+JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
         else
-# recover the token
-# todo:: recover token from mojio sdk.
-            token = oauth2.accessToken.create(result)
+            # recover the token
+            # todo:: recover token from mojio sdk.
+            token = result
             console.log("Token:"+JSON.stringify(token))
             res.send('World: <br><a href="/unauth">Unauthorize Mojio</a><br><a href="/logout">Log out of Mojio</a><br><a href="/consent">Remove consent from Mojio</a>')
 

@@ -1,13 +1,39 @@
-MojioSDK = require '../../src/sdk/MojioSDK'
+MojioSDK = require '../../src/nodejs/sdk/MojioSDK'
+MojioRestSDK = require '../../src/nodejs/sdk/MojioRestSDK'
+
 should = require('should')
 async = require('async')
 nock = require 'nock'
 
 describe 'Node Mojio Fluent Rest SDK', ->
-    sdk = new MojioSDK()
     user = null
     mojio = null
     vehicle = null
+
+    call = null
+    timeout = 50
+    callback_url = "http://localhost:3000/callback"
+    authorization = {
+        client_id: 'id',
+        client_secret: 'secret'
+        redirect_uri: 'http://localhost:3000/callback'
+        username: 'testing'
+        password: 'Test123!'
+        scope: 'full'
+        grant_type: 'password'
+    }
+    sdk = new MojioSDK({ sdk: MojioRestSDK, client_id: 'id', client_secret: 'secret', test: true })
+
+    setupNock = () ->
+        if (process.env.FUNCTIONAL_TESTS?)
+            timeout = 3000
+            return {done: () ->}
+        else
+            call = nock('https://staging-accounts.moj.io')
+            .post("/oauth2/token", authorization)
+            .reply((uri, requestBody, cb) ->
+                cb(null, [200, { id: 1}]))
+            return call
 
     testErrorResult = (error, result) ->
         (error==null).should.be.true
@@ -16,8 +42,20 @@ describe 'Node Mojio Fluent Rest SDK', ->
     execute = (test, done) ->
         async.series([ # todo encrypted password
                 (cb) ->
-                    sdk.authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" }).callback(
-                        ((error, result) -> vehicle = result; cb(error, result)))
+                    setupNock()
+                    sdk
+                    .token(authorization.redirect_uri)
+                    .credentials(authorization.username, authorization.password)
+                    .scope(['full'])
+                    .callback((error, result) ->
+                        if (error)
+                            console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
+                        else
+                            token = result
+                            console.log("Token:"+JSON.stringify(token))
+                        cb(error, result)
+                    )
+
             ,
                 (cb) ->
                     sdk.mock().user({}).callback(
@@ -38,9 +76,9 @@ describe 'Node Mojio Fluent Rest SDK', ->
             # callback when the series is done or in error.
             (error, results) ->
                 console.log(error) if error?
-                #(error==null).should.be.true
+                (error==null).should.be.true
                 # todo:: test results for correctness.
-                (result!=null).should.be.true # test results content to be the observed entitiy
+                (results!=null).should.be.true # test results content to be the observed entitiy
                 done()
         )
     beforeEach () ->

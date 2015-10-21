@@ -1,13 +1,40 @@
-MojioSDK = require '../../src/sdk/MojioSDK'
+MojioSDK = require '../../src/nodejs/sdk/MojioSDK'
+MojioPushSDK = require '../../src/nodejs/sdk/MojioPushSDK'
+
 should = require('should')
 async = require('async')
 nock = require 'nock'
 
 describe 'Node Mojio Fluent Push SDK', ->
-    sdk = new MojioSDK()
     user = null
     mojio = null
     vehicle = null
+    call = null
+    timeout = 50
+    callback_url = "http://localhost:3000/callback"
+
+    authorization = {
+        client_id: 'id',
+        client_secret: 'secret'
+        redirect_uri: 'http://localhost:3000/callback'
+        username: 'testing'
+        password: 'Test123!'
+        scope: 'full'
+        grant_type: 'password'
+    }
+
+    sdk = new MojioSDK({ sdk: MojioPushSDK, client_id: 'id', client_secret: 'secret', test: true })
+
+    setupNock = () ->
+        if (process.env.FUNCTIONAL_TESTS?)
+            timeout = 3000
+            return {done: () ->}
+        else
+            call = nock('https://staging-accounts.moj.io')
+            .post("/oauth2/token", authorization)
+            .reply((uri, requestBody, cb) ->
+                cb(null, [200, { id: 1}]))
+            return call
 
     testErrorResult = (error, result) ->
         (error==null).should.be.true
@@ -20,13 +47,22 @@ describe 'Node Mojio Fluent Push SDK', ->
             # observers will call the ultimate callback, or a timeout will occur and call it.
         )
 
-    execute = (test) ->
-
+    execute = (test, done) ->
         async.series([ # todo encrypted password
                 (cb) ->
-                    console.log("Authorize")
-                    sdk.authorize({type: "token", user: "unittest@moj.io", password: "mojioRocks" },
-                        ((error, result) -> vehicle = result; cb(error, result)))
+                    setupNock()
+                    sdk
+                    .token(authorization.redirect_uri)
+                    .credentials(authorization.username, authorization.password)
+                    .scope(['full'])
+                    .callback((error, result) ->
+                        if (error)
+                            console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage+"  url:"+sdk.url())
+                        else
+                            token = result
+                            console.log("Token:"+JSON.stringify(token))
+                        cb(error, result)
+                    )
             ,
                 (cb) ->
                     console.log("Mock User")
@@ -54,7 +90,7 @@ describe 'Node Mojio Fluent Push SDK', ->
                 console.log(error) if error?
                 (error==null).should.be.true
                 # todo:: test results for correctness.
-                (result!=null).should.be.true # test results content to be the observed entitiy
+                (results!=null).should.be.true # test results content to be the observed entitiy
                 done()
         )
     beforeEach () ->
@@ -109,10 +145,9 @@ describe 'Node Mojio Fluent Push SDK', ->
 # later: .Where("Battery ∆ -20")
 
                 .throttle("1 second") # 1 second, 1 minute, 3.17:25:30.5000000
-                .debounce({
-                        DataPoints: 6,
-                        TimeWindow: "timespan"
-                    })
+                .throttle("5 samples") # 1 second, 1 minute, 3.17:25:30.5000000
+                .debounce("3 samples")
+                .debounce("3 seconds")
                 .timing(['edge','high'])
                 .transport({
                         Type: "SignalR",

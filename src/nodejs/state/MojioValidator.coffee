@@ -11,7 +11,7 @@ module.exports = class MojioValidator
         return true
 
     credentials: (params) ->
-        if (params.redirect_url? or params.redirect_uri? orparams.redirect? or params.redirectUrl? or
+        if (params.redirect_url? or params.redirect_uri? or params.redirect? or params.redirectUrl? or
                 params.return_url? or params.return? or params.returnUrl?)
             return true
         if (params.user? or params.username? or params.email? or params.usernameoremail? ) and

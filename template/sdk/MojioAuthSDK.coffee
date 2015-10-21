@@ -29,7 +29,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     constructor: (options={}) ->
         super()
         @configure(options, defaults)
-        @user = null
+        @currentUser = null
         # set up the state variables needed for the Auth SDK
         @state.client = @client_id
         @state.secret = @client_secret
@@ -43,7 +43,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
                 if (property in match)
                     eval("this."+property)(value)
                 else
-                    throw new error "Parameter not used in "+name+" flow: "+property
+                    throw new Error "Parameter not used in "+name+" flow: "+property
 
     (authorizeParameters = ['username', 'password', 'credentials', 'scope', 'email'])
     .push styleParameters...

@@ -20,7 +20,7 @@
     };
 
     MojioValidator.prototype.credentials = function(params) {
-      if ((params.redirect_url != null) || (typeof params.redirect_uri === "function" ? params.redirect_uri((orparams.redirect != null) || (params.redirectUrl != null) || (params.return_url != null) || (params["return"] != null) || (params.returnUrl != null)) : void 0)) {
+      if ((params.redirect_url != null) || (params.redirect_uri != null) || (params.redirect != null) || (params.redirectUrl != null) || (params.return_url != null) || (params["return"] != null) || (params.returnUrl != null)) {
         return true;
       }
       if (((params.user != null) || (params.username != null) || (params.email != null) || (params.usernameoremail != null)) && ((params.password != null) || (params.pass != null))) {

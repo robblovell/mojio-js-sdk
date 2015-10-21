@@ -1,5 +1,7 @@
 # @nodoc
 URL = require('url-parse')
+FormUrlencoded = require 'form-urlencoded'
+
 module.exports = class HttpWrapperHelper
     constructor: () ->
         super()
