@@ -29,13 +29,13 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     constructor: (options={}) ->
         super()
         @configure(options, defaults)
-        @user = null
+        @currentUser = null
         # set up the state variables needed for the Auth SDK
-        @state.client = @client_id
-        @state.secret = @client_secret
-        @state.site = @site
-        @state.tokenPath = @tokenPath
-        @state.authorizationPath = @authorizationPath
+        @stateMachine.client = @client_id
+        @stateMachine.secret = @client_secret
+        @stateMachine.site = @site
+        @stateMachine.tokenPath = @tokenPath
+        @stateMachine.authorizationPath = @authorizationPath
 
     setup = (parameters, match, name) =>
         if typeof parameters is 'object'
@@ -43,7 +43,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
                 if (property in match)
                     eval("this."+property)(value)
                 else
-                    throw new error "Parameter not used in "+name+" flow: "+property
+                    throw new Error "Parameter not used in "+name+" flow: "+property
 
     (authorizeParameters = ['username', 'password', 'credentials', 'scope', 'email'])
     .push styleParameters...
@@ -84,14 +84,14 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
 
         setup(redirect_url, authorizeParameters, 'authorize')
 
-        @state.setMethod("POST")
-        @state.setEndpoint("accounts")
-        @state.setResource("oauth2")
-        @state.setAction("authorize")
+        @stateMachine.setMethod("POST")
+        @stateMachine.setEndpoint("accounts")
+        @stateMachine.setResource("oauth2")
+        @stateMachine.setAction("authorize")
         if (@sdk_env == 'browser' or implicit)
-            @state.setBody({response_type: 'token', redirect_uri: redirect_url, client_id: @client_id})
+            @stateMachine.setBody({response_type: 'token', redirect_uri: redirect_url, client_id: @client_id})
         else if (@sdk_env == 'nodejs')
-            @state.setBody({response_type: 'code', redirect_uri: redirect_url, client_id: @client_id})
+            @stateMachine.setBody({response_type: 'code', redirect_uri: redirect_url, client_id: @client_id})
         return @
 
     (unauthorizeParameters = ['login', 'consent', 'loginAndConsent', 'prompt', 'parse', 'code'])
@@ -114,15 +114,14 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
 
         # authorization_code or implicit flows (server or browser for end users/consumers.
         # {client_id:, response_type:, redirect_url:, scope:, realm:}, {type=token, user=, password=}
-        @state.setMethod("POST")
-        @state.setEndpoint("accounts")
-        @state.setResource("oauth2")
-        @state.setAction("authorize")
+        @stateMachine.setMethod("POST")
+        @stateMachine.setEndpoint("accounts")
+        @stateMachine.setResource("oauth2")
+        @stateMachine.setAction("authorize")
         if (@sdk_env == 'browser' or implicit)
-            @state.setBody({response_type: 'token', redirect_uri: redirect_url, client_id: @client_id})
+            @stateMachine.setBody({response_type: 'token', redirect_uri: redirect_url, client_id: @client_id})
         else if (@sdk_env == 'nodejs')
-            @state.setBody({response_type: 'code', redirect_uri: redirect_url, client_id: @client_id})
-
+            @stateMachine.setBody({response_type: 'code', redirect_uri: redirect_url, client_id: @client_id})
         return @
 
     (tokenParameters= [])
@@ -154,13 +153,13 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
             if !setup(redirect_url, tokenParameters, 'token')
                 redirect_uri = redirect_url
             else
-                redirect_uri = @state.getBody().redirect_uri
-        @state.setMethod("POST")
-        @state.setEndpoint("accounts")
-        @state.setResource("oauth2")
-        @state.setAction("token")
-        @state.setBody({ client_id: @client_id, client_secret: @client_secret })
-        @state.setBody({ redirect_uri: redirect_uri}) if redirect_uri?
+                redirect_uri = @stateMachine.getBody().redirect_uri
+        @stateMachine.setMethod("POST")
+        @stateMachine.setEndpoint("accounts")
+        @stateMachine.setResource("oauth2")
+        @stateMachine.setAction("token")
+        @stateMachine.setBody({ client_id: @client_id, client_secret: @client_secret })
+        @stateMachine.setBody({ redirect_uri: redirect_uri}) if redirect_uri?
         return @
 
     # second half of authorization code flow, or parse of the return from the implicit flow
@@ -178,23 +177,29 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     parse: (return_url) ->
         if (return_url? and return_url.query? and return_url.query.code?)
             code = return_url.query.code
-            @state.setBody({
+            @stateMachine.setBody({
                 code: code,
                 grant_type: 'authorization_code'
             })
-            @state.setCallback((error, result) =>
+            @stateMachine.setCallback((error, result) =>
                 if (error)
                     console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage)
                 else
                     # recover the token
-                    @state.setToken(result)
+                    @stateMachine.setToken(result)
             )
-        else
+        else if return_url.location?
             if (return_url.location.hash== "")
-                @state.setAnswer("")
+                @stateMachine.setAnswer("")
             else if (return_url.location.hash?)
-                @state.setToken(return_url.location.hash)
-                @state.setAnswer(return_url.location.hash)
+                obj = {}
+                obj[t.split("=")[0]] = t.split("=")[1] for t in return_url.location.hash.split("#")[1].split("&")
+
+                @stateMachine.setToken(obj)
+                @stateMachine.setAnswer(obj)
+        else if (typeof return_url is 'object' and return_url.access_token?)
+            @stateMachine.setToken(return_url)
+            @stateMachine.setAnswer(return_url)
         return @
 
     # A method that refreshes an authorization token, gives it more active time. Actually, a new token is returned
@@ -209,7 +214,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     #   sdk.token("http://localhost:3000/callback").refresh().callback(...)
     # @return {object} this
     refresh: (refresh_token) ->
-        @state.setBody({ refresh_token: refresh_token, grant_type: 'refresh_token' })
+        @stateMachine.setBody({ refresh_token: refresh_token, grant_type: 'refresh_token' })
         return @
 
     # A method that specifies that when unauthorize is initiated, the user should be logged out of
@@ -251,17 +256,17 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @param prompt {object, array, or string} object: {prompt: 'login,consent'}, array: ['login','consent'], string:'login,consent'.
     # @return {object} this
     prompt: (prompt) ->
-        if ((@state.getBody().prompt?) and
-            ((@state.getBody().prompt is 'login' and prompt.prompt is 'consent' or prompt is 'consent') or
-             (@state.getBody().prompt is 'consent' and prompt.prompt is 'login' or prompt is 'login')))
-            @state.setBody ({prompt: 'consent,login'})
+        if ((@stateMachine.getBody().prompt?) and
+            ((@stateMachine.getBody().prompt is 'login' and prompt.prompt is 'consent' or prompt is 'consent') or
+             (@stateMachine.getBody().prompt is 'consent' and prompt.prompt is 'login' or prompt is 'login')))
+            @stateMachine.setBody ({prompt: 'consent,login'})
         else if (typeof prompt is 'string')
-            @state.setBody ({prompt: prompt})
+            @stateMachine.setBody ({prompt: prompt})
         else if (prompt instanceof Array )
-            @state.setBody ({prompt: prompt.join()})
+            @stateMachine.setBody ({prompt: prompt.join()})
         # or as is.
         else
-            @state.setBody (prompt)
+            @stateMachine.setBody (prompt)
         return @
 
     # Set the scope of the authorization workflow. The user will be asked for consent of the given 'scope'
@@ -272,32 +277,32 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
 #        @validator.validateScope(scopes, @scopes)
         if (typeof scopes is 'string')
             param = scopes.replace(/,/g,' ') # remove commas if given.
-            @state.setBody({scope: param })
+            @stateMachine.setBody({scope: param })
         else
             param = ''
             scopes.map (scope) -> param+=scope+' '
-            @state.setBody({ scope: param.slice(0,-1) })
+            @stateMachine.setBody({ scope: param.slice(0,-1) })
         return @
 
     # Set the username for a server side, resource owner 'password' authorization workflow.
     # @param username {string} The username to use for the password authorization.
     # @return {object} this
     username: (username) ->
-        @state.setBody({ username: username})
+        @stateMachine.setBody({ username: username})
         return @
 
     # Set the email for a server side, resource owner 'password' authorization workflow.
     # @param email {string} The email to use for the password authorization.
     # @return {object} this
     email: (email) ->
-        @state.setBody({ username: email})
+        @stateMachine.setBody({ username: email})
         return @
 
     # Set the password for a server side, resource owner 'password' authorization workflow.
     # @param password {string} The password to use for the password authorization.
     # @return {object} this
     password: (password) ->
-        @state.setBody({ password: password })
+        @stateMachine.setBody({ password: password })
         return @
 
     # This call is used to specify both username and password for an authorization workflow.
@@ -311,9 +316,9 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
             credentials=usernameOrEmail_or_credentials
         else
             credentials={ username: usernameOrEmail_or_credentials, password: password }
-        @state.validator.credentials(credentials)
+        @stateMachine.validator.credentials(credentials)
         credentials['grant_type'] = 'password'
-        @state.setBody(credentials)
+        @stateMachine.setBody(credentials)
         return @
 
     # Synonym for the credentials() call.

@@ -45,10 +45,32 @@ and data for the resource.</p>
       <ul class='summary'>
   <li>
     <span class='signature'>
+      <a href='#setup-dynamic'>
+        #
+(void)
+<b>setup</b><span>(data)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#setCriteria-dynamic'>
+        #
+(void)
+<b>setCriteria</b><span>(data)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
       <a href='#users-dynamic'>
         #
 (object)
-<b>users</b><span>(users)</span>
+<b>users</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -57,22 +79,10 @@ and data for the resource.</p>
   </li>
   <li>
     <span class='signature'>
-      <a href='#user-dynamic'>
-        #
-(object)
-<b>user</b><span>(user)</span>
-      </a>
-    </span>
-    <span class='desc'>
-      Specify a user to apply operations to in the fluent chain. 
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
       <a href='#vehicles-dynamic'>
         #
 (object)
-<b>vehicles</b><span>(vehicles)</span>
+<b>vehicles</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -81,22 +91,10 @@ and data for the resource.</p>
   </li>
   <li>
     <span class='signature'>
-      <a href='#vehicle-dynamic'>
-        #
-(object)
-<b>vehicle</b><span>(vehicle)</span>
-      </a>
-    </span>
-    <span class='desc'>
-      Specify a vehicle to apply operations to in the fluent chain. 
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
       <a href='#mojios-dynamic'>
         #
 (object)
-<b>mojios</b><span>(mojios)</span>
+<b>mojios</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -105,22 +103,10 @@ and data for the resource.</p>
   </li>
   <li>
     <span class='signature'>
-      <a href='#mojio-dynamic'>
-        #
-(object)
-<b>mojio</b><span>(mojio)</span>
-      </a>
-    </span>
-    <span class='desc'>
-      Specify a mojio to apply operations to in the fluent chain. 
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
       <a href='#trips-dynamic'>
         #
 (object)
-<b>trips</b><span>(trips)</span>
+<b>trips</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -129,10 +115,22 @@ and data for the resource.</p>
   </li>
   <li>
     <span class='signature'>
+      <a href='#apps-dynamic'>
+        #
+(object)
+<b>apps</b><span>(data)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Specify a list of apps to apply operations to in the fluent chain. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
       <a href='#groups-dynamic'>
         #
 (object)
-<b>groups</b><span>(names, callback)</span>
+<b>groups</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -141,22 +139,10 @@ and data for the resource.</p>
   </li>
   <li>
     <span class='signature'>
-      <a href='#group-dynamic'>
-        #
-(object)
-<b>group</b><span>(name, callback)</span>
-      </a>
-    </span>
-    <span class='desc'>
-      groups 
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
       <a href='#permissions-dynamic'>
         #
 (object)
-<b>permissions</b><span>(user, callback)</span>
+<b>permissions</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -165,10 +151,10 @@ and data for the resource.</p>
   </li>
   <li>
     <span class='signature'>
-      <a href='#image-dynamic'>
+      <a href='#images-dynamic'>
         #
 (object)
-<b>image</b><span>(image)</span>
+<b>images</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -180,7 +166,7 @@ and data for the resource.</p>
       <a href='#tags-dynamic'>
         #
 (object)
-<b>tags</b><span>(tags)</span>
+<b>tags</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
@@ -189,27 +175,50 @@ and data for the resource.</p>
   </li>
   <li>
     <span class='signature'>
-      <a href='#tag-dynamic'>
+      <a href='#details-dynamic'>
         #
 (object)
-<b>tag</b><span>(tag)</span>
+<b>details</b><span>(data)</span>
       </a>
     </span>
     <span class='desc'>
-      Specify a tag to apply operations to in the fluent chain. 
+      Return the changeable details of a resource 
     </span>
   </li>
   <li>
     <span class='signature'>
-      <a href='#name-dynamic'>
+      <a href='#histories-dynamic'>
         #
-(string)
-<b>name</b><span>(type = &quot;resource&quot;)</span>
+(object)
+<b>histories</b><span>(measurement = null)</span>
       </a>
     </span>
     <span class='desc'>
-      Return the name of a resource as a string @parameter {string} Get the name of the resource or action.
-
+      Return the changeable details of a resource 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#states-dynamic'>
+        #
+(object)
+<b>states</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Return the changeable details of a resource 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#locations-dynamic'>
+        #
+(object)
+<b>locations</b><span>()</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Return the changeable details of a resource 
     </span>
   </li>
   <li>
@@ -228,10 +237,28 @@ and data for the resource.</p>
       <h2>Instance Method Details</h2>
       <div class='methods'>
   <div class='method_details'>
+    <p class='signature' id='setup-dynamic'>
+      #
+(void)
+<b>setup</b><span>(data)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='setCriteria-dynamic'>
+      #
+(void)
+<b>setCriteria</b><span>(data)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
     <p class='signature' id='users-dynamic'>
       #
 (object)
-<b>users</b><span>(users)</span>
+<b>users</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -275,63 +302,10 @@ Pass null or undefined for all users accessible by the current user.</p>
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='user-dynamic'>
-      #
-(object)
-<b>user</b><span>(user)</span>
-      <br>
-    </p>
-    <div class='docstring'>
-  <p>Specify a user to apply operations to in the fluent chain.</p><p>A user id, object or query string resulting in one user.
-Pass null or undefined to specify a user type for mocking objects.</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      Create a User for unit testing.
-    </h4>
-    <pre><code class='coffeescript'>sdk.user().mock((error, result) -&gt;
-    ...
-)</code></pre>
-    <h4>
-      Observe a user.
-    </h4>
-    <pre><code class='coffeescript'>sdk.observe(&quot;key&quot;).user().callback((error, result) -&gt;
-    ...
-)</code></pre>
-  </div>
-</div>
-<div class='tags'>
-  <h3>Parameters:</h3>
-  <ul class='param'>
-    <li>
-      <span class='name'>user</span>
-      <span class='type'>
-        (
-          <tt>string</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>A user id, object or null. </span>
-    </li>
-  </ul>
-  <h3>Returns:</h3>
-  <ul class='return'>
-    <li>
-      <span class='type'></span>
-      (
-        <tt>object</tt>
-      )
-      &mdash;
-      <span class='desc'>this </span>
-    </li>
-  </ul>
-</div>
-  </div>
-  <div class='method_details'>
     <p class='signature' id='vehicles-dynamic'>
       #
 (object)
-<b>vehicles</b><span>(vehicles)</span>
+<b>vehicles</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -375,63 +349,10 @@ Pass null or undefined for all vehicles accessible by the current vehicle.</p>
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='vehicle-dynamic'>
-      #
-(object)
-<b>vehicle</b><span>(vehicle)</span>
-      <br>
-    </p>
-    <div class='docstring'>
-  <p>Specify a vehicle to apply operations to in the fluent chain.</p><p>A vehicle id, object or query string resulting in one vehicle.
-Pass null or undefined to specify a vehicle type for mocking objects.</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      Create a User for unit testing.
-    </h4>
-    <pre><code class='coffeescript'>sdk.vehicle().mock((error, result) -&gt;
-    ...
-)</code></pre>
-    <h4>
-      Observe a vehicle.
-    </h4>
-    <pre><code class='coffeescript'>sdk.observe(&quot;key&quot;).vehicle().callback((error, result) -&gt;
-    ...
-)</code></pre>
-  </div>
-</div>
-<div class='tags'>
-  <h3>Parameters:</h3>
-  <ul class='param'>
-    <li>
-      <span class='name'>vehicle</span>
-      <span class='type'>
-        (
-          <tt>string</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>A vehicle id, object or null. </span>
-    </li>
-  </ul>
-  <h3>Returns:</h3>
-  <ul class='return'>
-    <li>
-      <span class='type'></span>
-      (
-        <tt>object</tt>
-      )
-      &mdash;
-      <span class='desc'>this </span>
-    </li>
-  </ul>
-</div>
-  </div>
-  <div class='method_details'>
     <p class='signature' id='mojios-dynamic'>
       #
 (object)
-<b>mojios</b><span>(mojios)</span>
+<b>mojios</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -475,63 +396,10 @@ Pass null or undefined for all mojios accessible by the current mojio.</p>
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='mojio-dynamic'>
-      #
-(object)
-<b>mojio</b><span>(mojio)</span>
-      <br>
-    </p>
-    <div class='docstring'>
-  <p>Specify a mojio to apply operations to in the fluent chain.</p><p>A mojio id, object or query string resulting in one mojio.
-Pass null or undefined to specify a mojio type for mocking objects.</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      Create a User for unit testing.
-    </h4>
-    <pre><code class='coffeescript'>sdk.mojio().mock((error, result) -&gt;
-    ...
-)</code></pre>
-    <h4>
-      Observe a mojio.
-    </h4>
-    <pre><code class='coffeescript'>sdk.observe(&quot;key&quot;).mojio().callback((error, result) -&gt;
-    ...
-)</code></pre>
-  </div>
-</div>
-<div class='tags'>
-  <h3>Parameters:</h3>
-  <ul class='param'>
-    <li>
-      <span class='name'>mojio</span>
-      <span class='type'>
-        (
-          <tt>string</tt>
-        )
-      </span>
-      &mdash;
-      <span class='desc'>A mojio id, object or null. </span>
-    </li>
-  </ul>
-  <h3>Returns:</h3>
-  <ul class='return'>
-    <li>
-      <span class='type'></span>
-      (
-        <tt>object</tt>
-      )
-      &mdash;
-      <span class='desc'>this </span>
-    </li>
-  </ul>
-</div>
-  </div>
-  <div class='method_details'>
     <p class='signature' id='trips-dynamic'>
       #
 (object)
-<b>trips</b><span>(trips)</span>
+<b>trips</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -575,10 +443,34 @@ Pass null or undefined for all trips accessible by the current trip.</p>
 </div>
   </div>
   <div class='method_details'>
+    <p class='signature' id='apps-dynamic'>
+      #
+(object)
+<b>apps</b><span>(data)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Specify a list of apps to apply operations to in the fluent chain.</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
     <p class='signature' id='groups-dynamic'>
       #
 (object)
-<b>groups</b><span>(names, callback)</span>
+<b>groups</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -599,34 +491,10 @@ Pass null or undefined for all trips accessible by the current trip.</p>
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='group-dynamic'>
-      #
-(object)
-<b>group</b><span>(name, callback)</span>
-      <br>
-    </p>
-    <div class='docstring'>
-  <p>groups</p>
-</div>
-<div class='tags'>
-  <h3>Returns:</h3>
-  <ul class='return'>
-    <li>
-      <span class='type'></span>
-      (
-        <tt>object</tt>
-      )
-      &mdash;
-      <span class='desc'>this </span>
-    </li>
-  </ul>
-</div>
-  </div>
-  <div class='method_details'>
     <p class='signature' id='permissions-dynamic'>
       #
 (object)
-<b>permissions</b><span>(user, callback)</span>
+<b>permissions</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -647,10 +515,10 @@ Pass null or undefined for all trips accessible by the current trip.</p>
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='image-dynamic'>
+    <p class='signature' id='images-dynamic'>
       #
 (object)
-<b>image</b><span>(image)</span>
+<b>images</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -674,7 +542,7 @@ Pass null or undefined for all trips accessible by the current trip.</p>
     <p class='signature' id='tags-dynamic'>
       #
 (object)
-<b>tags</b><span>(tags)</span>
+<b>tags</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -695,14 +563,14 @@ Pass null or undefined for all trips accessible by the current trip.</p>
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='tag-dynamic'>
+    <p class='signature' id='details-dynamic'>
       #
 (object)
-<b>tag</b><span>(tag)</span>
+<b>details</b><span>(data)</span>
       <br>
     </p>
     <div class='docstring'>
-  <p>Specify a tag to apply operations to in the fluent chain. Tags are secondary resources associated with Vehicles, Mojios, Users, Groups, or Trips</p>
+  <p>Return the changeable details of a resource</p>
 </div>
 <div class='tags'>
   <h3>Returns:</h3>
@@ -719,26 +587,14 @@ Pass null or undefined for all trips accessible by the current trip.</p>
 </div>
   </div>
   <div class='method_details'>
-    <p class='signature' id='name-dynamic'>
+    <p class='signature' id='histories-dynamic'>
       #
-(string)
-<b>name</b><span>(type = &quot;resource&quot;)</span>
+(object)
+<b>histories</b><span>(measurement = null)</span>
       <br>
     </p>
     <div class='docstring'>
-  <p>Return the name of a resource as a string
-@parameter {string} Get the name of the resource or action. default is &quot;resource&quot;</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      Return the string used to retrieve a vehicle:
-    </h4>
-    <pre><code class='coffeescript'>sdk.vehicles().name() # returns &quot;Vehicle&quot;</code></pre>
-    <h4>
-      Return the string used to retrieve a vehicle:
-    </h4>
-    <pre><code class='coffeescript'>sdk.vehicles().tag().name() # returns &quot;Image&quot;</code></pre>
-  </div>
+  <p>Return the changeable details of a resource</p>
 </div>
 <div class='tags'>
   <h3>Returns:</h3>
@@ -746,10 +602,58 @@ Pass null or undefined for all trips accessible by the current trip.</p>
     <li>
       <span class='type'></span>
       (
-        <tt>string</tt>
+        <tt>object</tt>
       )
       &mdash;
-      <span class='desc'>The name of a resource or action </span>
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='states-dynamic'>
+      #
+(object)
+<b>states</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Return the changeable details of a resource</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='locations-dynamic'>
+      #
+(object)
+<b>locations</b><span>()</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Return the changeable details of a resource</p>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
     </li>
   </ul>
 </div>
@@ -803,7 +707,7 @@ Pass null or undefined for all trips accessible by the current trip.</p>
 </div>
     </div>
     <div id='footer'>
-  October 15, 15 20:24:18 by
+  November 08, 15 15:08:56 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

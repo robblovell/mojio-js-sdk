@@ -1,14 +1,15 @@
+# Using mojio's auth SDK.
 express = require('express')
 MojioSDK = require '../../src/nodejs/sdk/MojioSDK'
 MojioAuthSDK = require '../../src/nodejs/sdk/MojioAuthSDK'
 
 app = express()
-client_id = '5f81657f-47f6-4d86-8213-5c01c1f3a243'
-client_secret = 'fcca6c06-3d30-488e-947b-a6291e39ff3c'
+client_id = '41a04077-0157-49fb-a35c-6e2824f3b348'
+client_secret = 'd80357f8-cbc9-4022-b340-6e99a72e7e0b'
 oauth2 = require('simple-oauth2')({
     clientID: client_id,
     clientSecret: client_secret,
-    site: 'https://staging-accounts.moj.io',
+    site: 'https://accounts.moj.io',
     tokenPath: '/oauth2/token',
     authorizationPath: '/oauth2/authorize'
 })
@@ -17,7 +18,7 @@ redirect_uri2 = 'http://localhost:3000/callback'
 
 # Authorization uri definition
 authorization_uri = oauth2.authCode.authorizeURL({
-    client_id: '5f81657f-47f6-4d86-8213-5c01c1f3a243',
+    client_id: client_id,
     redirect_uri: redirect_uri #:3000/callback',
     scope: ['full']
 #    state: '3(#0/!~'
@@ -40,7 +41,6 @@ app.get('/authCode', (req, res) ->
 )
 app.get('/password', (req, res) ->
     console.log("res:"+res)
-    # step 1 of authorization code workflow.
     sdk
     .token(redirect_uri)
     .credentials("testing@moj.io", "Test123!")

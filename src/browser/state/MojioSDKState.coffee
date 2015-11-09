@@ -7,12 +7,12 @@ module.exports = class MojioSDKState
 
     accountsURL = "accounts.moj.io"
     pushURL = "push.moj.io"
-    apiURL = "api.moj.io"
+    apiURL = "api2.moj.io"
     defaultEndpoint = "api"
 
     # @nodoc
-    constructor: (options = {environment: 'staging', version: 'v2'}) ->
-        options.environment = 'staging' if !options.environment?
+    constructor: (options = {environment: '', version: 'v2'}) ->
+        options.environment = '' if !options.environment?
         options.version = 'v2' if !options.version?
 
         options.environment += '-' if options.environment != ''
@@ -53,7 +53,7 @@ module.exports = class MojioSDKState
         if state.answer?
             callbacks(null, state.answer)
         else
-            @validator.credentials(state.body)
+#            @validator.credentials(state.body)
 
             # the http wrapper holds the url, the token, and the encoding type for the endpoint.
             httpWrapper = new HttpWrapper(state.token,
@@ -62,6 +62,7 @@ module.exports = class MojioSDKState
             # the request needs at least method and resource.
             # parameters, method, headers, resource, id, action, key, body.
             httpWrapper.request(@parts(false), callbacks)
+        @reset()
     # @nodoc
     redirect: (redirectClass=null) =>
         httpWrapper = new HttpWrapper(state.token,
@@ -80,8 +81,11 @@ module.exports = class MojioSDKState
         return {
             method: state.method,
             resource: state.resource,
-            id: state.id,
+            pid: state.pid,
             action: state.action,
+            sid: state.sid,
+            object: state.object,
+            tid: state.tid,
             key: state.key,
             body: if bodyAsParameters then "" else state.body,
             params: if bodyAsParameters then state.body else state.params
@@ -144,7 +148,14 @@ module.exports = class MojioSDKState
 
     # @nodoc
     setResource: (resource) ->
-        state.resource = resource
+        if state.resource == 'Groups'
+            @setObject(resource)
+        else
+            state.resource = resource
+
+    # @nodoc
+    setObject: (object) ->
+        state.object = object
 
     # @nodoc
     setAction: (action) ->
@@ -162,6 +173,18 @@ module.exports = class MojioSDKState
             state.body[property] = value
 #        _.extend(state.body, parameters)
         return
+
+    setId: (id) ->
+        @setPrimaryId(id)
+
+    setPrimaryId: (id) ->
+        state.pid = id
+
+    setSecondaryId: (id) ->
+        state.sid = id
+
+    setTertiaryId: (id) ->
+        state.tid = id
 
     # @nodoc
     getBody: () ->
@@ -194,21 +217,27 @@ module.exports = class MojioSDKState
 
     # @nodoc
     fixup: () ->
-    # remove capitals from fields and values in the state.
+        # remove capitals from fields and values in the state.
         for p, v of state
             lowP = p.toLowerCase()
             lowV = v.toLowerCase()
             state[lowP]= lowV
             delete state[p]
 
+    mock: () ->
+        state.mock = true
+
     # @nodoc
     reset: () ->
+        state.mock = false
         state.callback = null
         state.answer = null # return this immediately if not null, otherwise make an api call.
         state.endpoint = defaultEndpoint
-        state.method = null # GET, PUT, POST, DELETE
-        state.resource = null # authorize, vehicle,
-        state.id = null
+        state.method = "GET" # GET, PUT, POST, DELETE
+        state.resource = "Vehicles" # authorize, vehicle,
+        state.pid = null
+        state.sid = null
+        state.tid = null
         state.action = null
         state.key = null
 
@@ -217,11 +246,12 @@ module.exports = class MojioSDKState
 
         # GET
         state.operation = ""
-        state.lmiit = 10
+        state.limit = 10
         state.offset = 0
         state.desc = false
         state.query = null
-
+        state.field = null
+        state.fields = null
 
         # GET/DELETE
         # id, object example, query string, or array.

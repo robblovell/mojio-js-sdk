@@ -13,16 +13,19 @@ module.exports = class HttpWrapperHelper
             query += "#{encodeURIComponent property}=#{encodeURIComponent value}&"
         return query.slice(0,-1)
 
-    @_getPath: (resource, id, action, key) ->
-        if (key && id && action && id != '' && action != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id) + "/" + encodeURIComponent(action) + "/" + encodeURIComponent(key);
-        else if (id && action && id != '' && action != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id) + "/" + encodeURIComponent(action);
-        else if (id && id != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(id);
-        else if (action && action != '')
-            return "/" + encodeURIComponent(resource) + "/" + encodeURIComponent(action);
-        return "/" + encodeURIComponent(resource);
+    @_makePath: (elements) ->
+        return elements.reduce (x,y) -> x + "/" + encodeURIComponent(y)
+
+    @_getPath: (resource, pid, action, sid, object, oid) ->
+        path = ""
+        path += "/" + encodeURIComponent(resource) if resource?
+        path += "/" + encodeURIComponent(pid) if pid?
+        path += "/" + encodeURIComponent(action) if action?
+        path += "/" + encodeURIComponent(sid) if sid?
+        path += "/" + encodeURIComponent(object) if object?
+        path += "/" + encodeURIComponent(oid) if oid?
+        return path
+
 
     @_parse: (url, request, encoding, token) ->
         parts = new URL(url)
@@ -37,7 +40,7 @@ module.exports = class HttpWrapperHelper
         parts.path += parts.params
         parts.headers = {}
 
-        parts.headers["MojioAPIToken"] = token if token?
+        parts.headers["MojioAPIToken"] = token.access_token if token?
         parts.headers += request.headers if (request.headers?)
         parts.headers['Accept'] = 'application/json'
         parts.headers["Content-Type"] = 'application/json'
@@ -58,4 +61,5 @@ module.exports = class HttpWrapperHelper
                 parts.data = request.data
             parts.body = parts.data
 
+#        console.log(JSON.stringify(parts))
         return parts

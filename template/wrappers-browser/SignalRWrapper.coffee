@@ -30,7 +30,7 @@ module.exports = class SignalRBrowserWrapper extends iSignalRWrapper
             )
             hub.on("UpdateEntity", registry.observer_registry)
 
-            if (hub.connection.state != 1)
+            if (hub.connection.stateMachine != 1)
                 if (!@connectionStatus)
                     @signalr.start().done( () =>
                         @connectionStatus = true

@@ -118,7 +118,7 @@ describe 'Test Module', ->
         class instanceProperties
             state = {}
             makeSound: () ->
-                state["thing"] = true
+                stateMachine["thing"] = true
                 return true
 
         class Guitar extends Module
@@ -126,7 +126,7 @@ describe 'Test Module', ->
                 @include instanceProperties
             makeAnotherSound: () ->
                 try
-                    state["thing"] = true
+                    stateMachine["thing"] = true
                 catch
                     return true
                 return true
@@ -139,7 +139,7 @@ describe 'Test Module', ->
         class State
             stuff = {stuff: "hi"}
             constructor: () ->
-                @state = {stuff: "hi"}
+                @stateMachine = {stuff: "hi"}
             set: () ->
                 stuff['thing'] = true
             reset: () ->
@@ -150,9 +150,9 @@ describe 'Test Module', ->
         class instanceProperties
             constructor: () ->
             makeSound: () ->
-                console.log(JSON.stringify(@state.show()))
-                @state.set()
-                console.log(JSON.stringify(@state.show()))
+                console.log(JSON.stringify(@stateMachine.show()))
+                @stateMachine.set()
+                console.log(JSON.stringify(@stateMachine.show()))
 
                 return true
 
@@ -160,11 +160,11 @@ describe 'Test Module', ->
             constructor: () ->
                 super()
                 @include instanceProperties
-                @state = new State()
+                @stateMachine = new State()
             makeAnotherSound: () ->
-                console.log(JSON.stringify(@state.show()))
-                @state.reset()
-                console.log(JSON.stringify(@state.show()))
+                console.log(JSON.stringify(@stateMachine.show()))
+                @stateMachine.reset()
+                console.log(JSON.stringify(@stateMachine.show()))
                 return true
 
         guitar = new Guitar()

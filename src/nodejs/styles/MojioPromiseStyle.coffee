@@ -14,7 +14,7 @@ module.exports = class MojioPromiseStyle
     promise: () ->
         promise = new Promise((resolve, reject) =>
             # make the rest call here.
-            @state.initiate((error, result) ->
+            @stateMachine.initiate((error, result) ->
                 # fulfill the promise !
                 resolve(result) if result?
                 reject(error) if error?

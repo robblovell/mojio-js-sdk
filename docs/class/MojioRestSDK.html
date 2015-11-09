@@ -124,7 +124,7 @@ These are ADD, SET, REMOVE, and GET.</p>
       <a href='#select-dynamic'>
         #
 (object)
-<b>select</b><span>(limit)</span>
+<b>select</b><span>(id_example_or_query)</span>
       </a>
     </span>
     <span class='desc'>
@@ -136,7 +136,7 @@ These are ADD, SET, REMOVE, and GET.</p>
       <a href='#filter-dynamic'>
         #
 (object)
-<b>filter</b><span>(limit)</span>
+<b>filter</b><span>(filter)</span>
       </a>
     </span>
     <span class='desc'>
@@ -148,7 +148,7 @@ These are ADD, SET, REMOVE, and GET.</p>
       <a href='#top-dynamic'>
         #
 (object)
-<b>top</b><span>(limit)</span>
+<b>top</b><span>(top)</span>
       </a>
     </span>
     <span class='desc'>
@@ -177,6 +177,19 @@ These are ADD, SET, REMOVE, and GET.</p>
     </span>
     <span class='desc'>
       Orderby specifies that the query results should be ordered by the given field and if it&#39;s descending (true) or ascending (false). 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#field-dynamic'>
+        #
+(object)
+<b>field</b><span>(field, desc = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Field specifies that the query results should be ordered by the given field (partial alias: desc)
+
     </span>
   </li>
   <li>
@@ -238,20 +251,21 @@ These are ADD, SET, REMOVE, and GET.</p>
           <a href='../class/MojioAuthSDK.html#password-dynamic'>#password</a>
           <a href='../class/MojioAuthSDK.html#credentials-dynamic'>#credentials</a>
           <a href='../class/MojioAuthSDK.html#with-dynamic'>#with</a>
+          <a href='../class/MojioModelSDK.html#setup-dynamic'>#setup</a>
+          <a href='../class/MojioModelSDK.html#setCriteria-dynamic'>#setCriteria</a>
           <a href='../class/MojioModelSDK.html#users-dynamic'>#users</a>
-          <a href='../class/MojioModelSDK.html#user-dynamic'>#user</a>
           <a href='../class/MojioModelSDK.html#vehicles-dynamic'>#vehicles</a>
-          <a href='../class/MojioModelSDK.html#vehicle-dynamic'>#vehicle</a>
           <a href='../class/MojioModelSDK.html#mojios-dynamic'>#mojios</a>
-          <a href='../class/MojioModelSDK.html#mojio-dynamic'>#mojio</a>
           <a href='../class/MojioModelSDK.html#trips-dynamic'>#trips</a>
+          <a href='../class/MojioModelSDK.html#apps-dynamic'>#apps</a>
           <a href='../class/MojioModelSDK.html#groups-dynamic'>#groups</a>
-          <a href='../class/MojioModelSDK.html#group-dynamic'>#group</a>
           <a href='../class/MojioModelSDK.html#permissions-dynamic'>#permissions</a>
-          <a href='../class/MojioModelSDK.html#image-dynamic'>#image</a>
+          <a href='../class/MojioModelSDK.html#images-dynamic'>#images</a>
           <a href='../class/MojioModelSDK.html#tags-dynamic'>#tags</a>
-          <a href='../class/MojioModelSDK.html#tag-dynamic'>#tag</a>
-          <a href='../class/MojioModelSDK.html#name-dynamic'>#name</a>
+          <a href='../class/MojioModelSDK.html#details-dynamic'>#details</a>
+          <a href='../class/MojioModelSDK.html#histories-dynamic'>#histories</a>
+          <a href='../class/MojioModelSDK.html#states-dynamic'>#states</a>
+          <a href='../class/MojioModelSDK.html#locations-dynamic'>#locations</a>
           <a href='../class/MojioModelSDK.html#mock-dynamic'>#mock</a>
         </p>
       </h2>
@@ -431,7 +445,7 @@ The query is specified with follow on query specificaiton calls: select, top, sk
     <p class='signature' id='select-dynamic'>
       #
 (object)
-<b>select</b><span>(limit)</span>
+<b>select</b><span>(id_example_or_query)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -463,7 +477,7 @@ The query is specified with follow on query specificaiton calls: select, top, sk
     <p class='signature' id='filter-dynamic'>
       #
 (object)
-<b>filter</b><span>(limit)</span>
+<b>filter</b><span>(filter)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -495,7 +509,7 @@ The query is specified with follow on query specificaiton calls: select, top, sk
     <p class='signature' id='top-dynamic'>
       #
 (object)
-<b>top</b><span>(limit)</span>
+<b>top</b><span>(top)</span>
       <br>
     </p>
     <div class='docstring'>
@@ -571,6 +585,38 @@ The query is specified with follow on query specificaiton calls: select, top, sk
       
     </h4>
     <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().top(#).skip(#).orderby(TimeStamp, true).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='field-dynamic'>
+      #
+(object)
+<b>field</b><span>(field, desc = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Field specifies that the query results should be ordered by the given field
+(partial alias: desc)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().top(#).skip(#).field(TimeStamp).desc().submit()</code></pre>
   </div>
 </div>
 <div class='tags'>
@@ -686,7 +732,7 @@ When used with the Sharing SDK, it allows the code to set users for groups or to
 </div>
     </div>
     <div id='footer'>
-  October 15, 15 20:24:18 by
+  November 08, 15 15:08:56 by
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>

@@ -68,7 +68,7 @@ module.exports = class MojioSDK extends Module
         # add the rest of the options or defaults to the instance.
         @configure(options, defaults)
         # instantiate the state of the fluent chain.
-        @state = new MojioSDKState(options)
+        @stateMachine = new MojioSDKState(options)
         super()
 
     # Configure the SDK's options
@@ -93,7 +93,7 @@ module.exports = class MojioSDK extends Module
     # way to initiate a call because it will block until an answer is returned or a timeout occurs.
     # @public
     sync: () ->
-        @state.initiate((error, result) ->
+        @stateMachine.initiate((error, result) ->
         )
 
         # make the rest call here.
@@ -108,8 +108,8 @@ module.exports = class MojioSDK extends Module
     # @public
     callback: (callback) ->
         # execute the rest request and return the result in the callback.
-        console.log(@state.url())
-        @state.initiate(callback)
+        console.log(@stateMachine.url())
+        @stateMachine.initiate(callback)
 
     # The 'redirect' method initiates the fluent chain by performing a redirect given the passed in redirecting
     # technology. The class or object passed in must follow the iRedirect interface and must have a function
@@ -121,14 +121,14 @@ module.exports = class MojioSDK extends Module
     # @public
     # @ return {object} this
     redirect: (redirectClass=null) ->
-        @state.redirect(redirectClass)
+        @stateMachine.redirect(redirectClass)
         return @
 
     # return the url formed by the fluent chain instead of actually making the rest call.
     # @return {string} Fully formed REST url
     url: () ->
-        return @state.url()
+        return @stateMachine.url()
     # return the internal state object. Used for debugging this sdk.
     # @return {object} Internal state object built up by the fluent chain.
     show: () ->
-        return @state.show()
+        return @stateMachine.show()

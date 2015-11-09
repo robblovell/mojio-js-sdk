@@ -8,7 +8,7 @@ echo "Copy interfaces"
 cp -f src/nodejs/interfaces/* template/interfaces
 echo "Copy sdk"
 cp -f src/nodejs/sdk/* template/sdk
-echo "Copy state"
+echo "Copy stateMachine"
 cp -f src/nodejs/state/* template/state
 echo "Copy styles, promise"
 cp -f src/nodejs/styles/MojioPromiseStyle* template/styles-all

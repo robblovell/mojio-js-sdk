@@ -11,7 +11,7 @@ module.exports = class MojioSyncStyle
     # @public
     sync: () =>
         console.log('fiber start')
-        result = wait.for(@state.initiate);
+        result = wait.for(@stateMachine.initiate);
         console.log('function returned:', result)
         console.log('fiber end')
         return result

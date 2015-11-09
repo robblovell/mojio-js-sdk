@@ -10,7 +10,7 @@ module.exports = class MojioAsyncAwaitStyle
     # attaching to the promise is also called.
     # @public
     async: async () ->
-        await @state.initiate((error, result) ->
+        await @stateMachine.initiate((error, result) ->
             return result if result?
             return error if error?
         )

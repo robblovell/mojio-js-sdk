@@ -7,7 +7,7 @@ module.exports = class MojioReactiveStyle
     # It is one of four ways to initiate fluent requests, one of which must be called for requests to be made.
     # @public
     observable: () ->
-        stream = Rx.Observable.fromCallback(@state.initiate)
+        stream = Rx.Observable.fromCallback(@stateMachine.initiate)
         observable = stream()
 
         return observable

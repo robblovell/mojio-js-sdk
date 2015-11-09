@@ -7,7 +7,7 @@ echo "Copy interfaces"
 cp -f src/browser/interfaces/* template/interfaces
 echo "Copy sdk"
 cp -f src/browser/sdk/* template/sdk
-echo "Copy state"
+echo "Copy stateMachine"
 cp -f src/browser/state/* template/state
 echo "Copy styles, promise"
 cp -f src/browser/styles/MojioPromiseStyle* template/styles-all

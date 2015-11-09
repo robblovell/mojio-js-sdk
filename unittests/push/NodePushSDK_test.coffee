@@ -30,7 +30,7 @@ describe 'Node Mojio Fluent Push SDK', ->
             timeout = 3000
             return {done: () ->}
         else
-            call = nock('https://staging-accounts.moj.io')
+            call = nock('https://accounts.moj.io')
             .post("/oauth2/token", authorization)
             .reply((uri, requestBody, cb) ->
                 cb(null, [200, { id: 1}]))

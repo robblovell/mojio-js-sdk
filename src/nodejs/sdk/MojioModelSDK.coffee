@@ -7,6 +7,39 @@ module.exports = class MojioModelSDK
 
     # @nodoc
     constructor: () ->
+        # make non plural versions of each resource call.
+        for p,v of @
+            capital = p.charAt(0).toUpperCase() + p.slice(1)
+            @[capital] = @[p]
+            ies = p.slice(p.length-3,p.length)
+            s = p[p.length-1]
+            if (ies is 'ies')
+                iesModel = p.slice(0,p.length-3)+'y'
+                iesCapital = iesModel.charAt(0).toUpperCase() + iesModel.slice(1)
+                @[iesModel] = @[p]
+                @[iesCapital] = @[p]
+            else if (s is 's')
+                sModel = p.slice(0,p.length-1)
+                sCapital = sModel.charAt(0).toUpperCase() + sModel.slice(1)
+                @[sModel] = @[p]
+                @[sCapital] = @[p]
+
+    setup: (data) ->
+        @stateMachine.reset()
+        @stateMachine.setEndpoint("api")
+        @stateMachine.setAction(null)
+
+    setCriteria: (data) ->
+        if data instanceof Array
+            # todo:: determine if this is body or body object or json
+#            throw new Error "Not implemented"
+            console.log("Not Implemented")
+        else if typeof data is 'object'
+            # todo:: determine if this is body or body object or json
+#            @stateMachine.setBody_ObjectOrJson(data)
+            console.log("Not Implemented")
+        else if typeof data is 'string' or typeof data is 'number'
+            @stateMachine.setId(data)
 
     # Specify a list of users to apply operations to in the fluent chain.
     #
@@ -19,28 +52,10 @@ module.exports = class MojioModelSDK
     #       ...
     #   )
     # @return {object} this
-    users: (users) ->
-        @state.resource = 'Users'
-        @state.object = users
-        return @
-
-    # Specify a user to apply operations to in the fluent chain.
-    #
-    # A user id, object or query string resulting in one user.
-    # Pass null or undefined to specify a user type for mocking objects.
-    #
-    # @param {string} user A user id, object or null.
-    # @example Create a User for unit testing.
-    #   sdk.user().mock((error, result) ->
-    #       ...
-    #   )
-    # @example Observe a user.
-    #   sdk.observe("key").user().callback((error, result) ->
-    #       ...
-    #   )
-    # @return {object} this
-    user: (user) ->
-        @users([user])
+    users: (data) ->
+        @setup()
+        @setCriteria(data)
+        @stateMachine.setResource('Users')
         return @
 
     # Specify a list of vehicles to apply operations to in the fluent chain.
@@ -54,28 +69,10 @@ module.exports = class MojioModelSDK
     #       ...
     #   )
     # @return {object} this
-    vehicles: (vehicles) ->
-        @state.resource = 'Vehicles'
-        @state.object = vehicles
-        return @
-
-    # Specify a vehicle to apply operations to in the fluent chain.
-    #
-    # A vehicle id, object or query string resulting in one vehicle.
-    # Pass null or undefined to specify a vehicle type for mocking objects.
-    #
-    # @param {string} vehicle A vehicle id, object or null.
-    # @example Create a User for unit testing.
-    #   sdk.vehicle().mock((error, result) ->
-    #       ...
-    #   )
-    # @example Observe a vehicle.
-    #   sdk.observe("key").vehicle().callback((error, result) ->
-    #       ...
-    #   )
-    # @return {object} this
-    vehicle: (vehicle) ->
-        @vehicles([vehicle])
+    vehicles: (data) ->
+        @setup()
+        @setCriteria(data)
+        @stateMachine.setResource('Vehicles')
         return @
 
     # Specify a list of mojios to apply operations to in the fluent chain.
@@ -89,28 +86,10 @@ module.exports = class MojioModelSDK
     #       ...
     #   )
     # @return {object} this
-    mojios: (mojios) ->
-        @state.resource = 'Vehicles'
-        @state.object = vehicles
-        return @
-
-    # Specify a mojio to apply operations to in the fluent chain.
-    #
-    # A mojio id, object or query string resulting in one mojio.
-    # Pass null or undefined to specify a mojio type for mocking objects.
-    #
-    # @param {string} mojio A mojio id, object or null.
-    # @example Create a User for unit testing.
-    #   sdk.mojio().mock((error, result) ->
-    #       ...
-    #   )
-    # @example Observe a mojio.
-    #   sdk.observe("key").mojio().callback((error, result) ->
-    #       ...
-    #   )
-    # @return {object} this
-    mojio: (mojio) ->
-        @mojios([mojio])
+    mojios: (data) ->
+        @setup()
+        @setCriteria(data)
+        @stateMachine.setResource('Mojios')
         return @
 
     # Specify a list of trips to apply operations to in the fluent chain.
@@ -124,66 +103,77 @@ module.exports = class MojioModelSDK
     #       ...
     #   )
     # @return {object} this
-    trips: (trips) ->
-        @state.resource = 'Trips'
-        @state.object = trips
+    trips: (data) ->
+        @setup()
+        @setCriteria(data)
+        @stateMachine.setResource('Trips')
+        return @
+
+    # Specify a list of apps to apply operations to in the fluent chain.
+    #
+    # @return {object} this
+    apps: (data) ->
+        @setup()
+        @setCriteria(data)
+        @stateMachine.setResource('Apps')
         return @
 
     # group
     # @return {object} this
-    groups: (names, callback) ->
-        #todo:: instantiate groups from names?
-        @state.resource = 'Groups'
-        @state.object = names
-        @callback(callback) if (callback?)
-        return @
-
-    # groups
-    # @return {object} this
-    group: (name, callback) ->
-        @groups([name])
-        @callback(callback) if (callback?)
+    groups: (data) ->
+        @setup()
+        @setCriteria(data)
+        @stateMachine.setResource('Groups')
         return @
 
     # permissions
     # @return {object} this
-    permissions: (user, callback) ->
-        @callback(callback) if (callback?)
+    permissions: (data) ->
+        @stateMachine.setAction('Permissions')
         return @
 
     # Specify an image to apply operations to in the fluent chain. One image can be associated with either Vehicles or Users.
     #
     # @return {object} this
-    image: (image) ->
-        @state.action = 'Image'
-        @state.object = image
+    images: (data) ->
+        @stateMachine.setAction('Images')
         return @
 
     # Specify a tag to apply operations to in the fluent chain. Tags are secondary resources associated with Vehicles, Mojios, Users, Groups, or Trips
     #
     # @return {object} this
-    tags: (tags) ->
-        @state.action = 'Tags'
-        @state.object = tags
+    tags: (data) ->
+        @stateMachine.setAction('Tags')
         return @
 
-    # Specify a tag to apply operations to in the fluent chain. Tags are secondary resources associated with Vehicles, Mojios, Users, Groups, or Trips
+    # Return the changeable details of a resource
     #
     # @return {object} this
-    tag: (tag) ->
-        tags([tag])
-        return @
+    details: (data) ->
+        @stateMachine.setAction('Details')
+        return @ # resource or action
 
-    # Return the name of a resource as a string
-    # @parameter {string} Get the name of the resource or action. default is "resource"
-    # @example Return the string used to retrieve a vehicle:
-    #   sdk.vehicles().name() # returns "Vehicle"
-    # @example Return the string used to retrieve a vehicle:
-    #   sdk.vehicles().tag().name() # returns "Image"
-    # @return {string} The name of a resource or action
-    name: (type = "resource") ->
-        return state[type] # resource or action
+    # Return the changeable details of a resource
+    #
+    # @return {object} this
+    histories: (measurement=null) ->
+        @stateMachine.setAction('History')
+        @stateMachine.setObject(measurement) if measurement?
+        return @ # this
 
+    # Return the changeable details of a resource
+    #
+    # @return {object} this
+    states: () ->
+        @stateMachine.setObject('States')
+        return @ # this
+
+    # Return the changeable details of a resource
+    #
+    # @return {object} this
+    locations: () ->
+        @stateMachine.setObject('Locations')
+        return @ # this
 
     # Create models for testing purposes.
     #
@@ -195,6 +185,7 @@ module.exports = class MojioModelSDK
     #   )
     # @return {object} this
     mock: () ->
+        @stateMachine.mock()
         return @
 
 
