@@ -25,7 +25,7 @@ module.exports = class MojioModelSDK
                 @[sCapital] = @[p]
 
     setup: (data) ->
-        @stateMachine.reset()
+#        @stateMachine.reset()
         @stateMachine.setEndpoint("api")
         @stateMachine.setAction(null)
 

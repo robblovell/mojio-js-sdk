@@ -13,7 +13,7 @@
   nock = require('nock');
 
   describe('Node Mojio Fluent Rest SDK', function() {
-    var authorization, call, callback_url, client_id, client_secret, execute, mojio, sdk, setupAuthorizeNock, setupNock, setupTokenNock, testErrorResult, timeout, user, vehicle;
+    var authorization, call, callback_url, client_id, client_secret, execute, mojio, sdk, setupAuthorizeNock, setupNock, setupPostNock, setupTokenNock, testErrorResult, timeout, user, vehicle;
     user = null;
     mojio = null;
     vehicle = null;
@@ -128,6 +128,48 @@
         return call;
       }
     };
+    setupPostNock = function(api, verb, version, primary_, pid_, secondary_, data_) {
+      var check;
+      if ((process.env.FUNCTIONAL_TESTS != null)) {
+        timeout = 3000;
+        return {
+          done: function() {}
+        };
+      } else {
+        check = {
+          pid: pid_,
+          data: data_,
+          secondary: secondary_,
+          primary: primary_
+        };
+        call = nock(api).filteringPath(function(path) {
+          var idRegex, parts, valid, versionValid;
+          parts = path.split('/');
+          idRegex = /\b[A-F0-9]{8}(?:-[A-F0-9]{4}){3}-[A-F0-9]{12}\b/;
+          parts = parts.slice(1, parts.length);
+          versionValid = parts[0] === version;
+          parts = parts.slice(1, parts.length);
+          if (parts.length === 1) {
+            valid = parts[0] === check.primary;
+          } else if (parts.length === 3) {
+            valid = parts[0] === check.primary && (parts[1].match(idRegex) || parts[1] === "" + check.pid) && parts[2] === check.secondary;
+          }
+          if (valid && versionValid) {
+            return '/' + check.primary + '/' + check.pid + '/' + check.secondary;
+          } else {
+            return '/false';
+          }
+        })[verb]('/' + check.primary + '/' + check.pid + '/' + check.secondary, check.data).reply(function(uri, requestBody, cb) {
+          return cb(null, [
+            200, {
+              id: 1,
+              name: "name"
+            }
+          ]);
+        });
+        return call;
+      }
+    };
     testErrorResult = function(error, result) {
       if (error != null) {
         console.log("ERROR: " + error);
@@ -169,7 +211,7 @@
       mojio = null;
       return vehicle = null;
     });
-    return it('can GET entities and get a resource, secondary resource, or history by ids or lists', function(done) {
+    it('can GET a resource or list of resources, secondary resource, or history by ids or no query', function(done) {
       var docall, entities, entity, i, j, k, len, len1, len2, results1, secondaries, secondaryEntity, tertiary, tertiaryEntity;
       docall = function(entity, pid, secondary, sid, tertiary, tid) {
         var finish;
@@ -269,6 +311,57 @@
           }
           return results2;
         })());
+      }
+      return results1;
+    });
+    return it('can POST and PUT entities and get a resource or secondary resource by ids or lists', function(done) {
+      var docall, entities, entity, i, len, results1, secondaries;
+      docall = function(entity, pid, secondary, data) {
+        var finish;
+        if (pid == null) {
+          pid = null;
+        }
+        if (secondary == null) {
+          secondary = null;
+        }
+        if (data == null) {
+          data = null;
+        }
+        if (entity === 'Trips' && secondary === 'Permissions') {
+          finish = done;
+        } else {
+          finish = (function() {});
+        }
+        return execute(function(cb) {
+          console.log("Primary:" + entity);
+          console.log("Pid:" + pid);
+          console.log("Secondary:" + secondary);
+          console.log("Data:" + JSON.stringify(data));
+          if ((secondary != null)) {
+            console.log("Setup Nock");
+            setupPostNock('https://api2.moj.io', 'post', 'v2', entity, pid, secondary, data);
+            return sdk.post()[entity](pid)[secondary](data).callback(function(error, result) {
+              testErrorResult(error, result);
+              return cb(null, result);
+            });
+          } else {
+            console.log("Setup Nock");
+            setupPostNock('https://api2.moj.io', 'post', 'v2', entity, null, null, data);
+            return sdk.post()[entity](data).callback(function(error, result) {
+              testErrorResult(error, result);
+              return cb(null, result);
+            });
+          }
+        }, finish);
+      };
+      entities = ['Mojios', 'Vehicles', 'Users', 'Apps', 'Groups', 'Trips'];
+      secondaries = ['Tags', 'Permissions'];
+      results1 = [];
+      for (i = 0, len = entities.length; i < len; i++) {
+        entity = entities[i];
+        results1.push(docall(entity, null, null, {
+          name: 'name' + entity
+        }));
       }
       return results1;
     });

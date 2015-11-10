@@ -26,7 +26,6 @@
     }
 
     MojioModelSDK.prototype.setup = function(data) {
-      this.stateMachine.reset();
       this.stateMachine.setEndpoint("api");
       return this.stateMachine.setAction(null);
     };

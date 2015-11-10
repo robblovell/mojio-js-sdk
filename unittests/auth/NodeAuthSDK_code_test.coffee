@@ -34,7 +34,6 @@ describe 'Node Mojio Auth SDK password type auth', ->
                     cb(null, [200, { id: 1}]))
             return call
 
-
     testErrorResult = (error, result) ->
         (error==null).should.be.true
         (result!=null).should.be.true
