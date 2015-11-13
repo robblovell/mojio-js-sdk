@@ -46,7 +46,6 @@ describe 'Vehicle', ->
             done()
         )
 
-
     it 'can create, find, save, and delete Vehicle', (done) ->
         mojio_client.get(Mojio, {}, (error, result) ->
             (error==null).should.be.true
@@ -88,7 +87,6 @@ describe 'Vehicle', ->
                 )
             )
         )
-
 
     it 'can create, save, and delete Vehicle from model', (done) ->
         mojio_client.get(Mojio, {}, (error, result) ->

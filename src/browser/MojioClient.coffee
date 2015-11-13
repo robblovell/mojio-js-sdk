@@ -45,7 +45,6 @@ module.exports = class MojioClient
 
         return objects
 
-
     @_makeParameters: (params) ->
         '' if params.length==0
         query = '?'
