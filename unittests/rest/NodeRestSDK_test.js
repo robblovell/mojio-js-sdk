@@ -13,7 +13,7 @@
   nock = require('nock');
 
   describe('Node Mojio Fluent Rest SDK', function() {
-    var authorization, call, callback_url, client_id, client_secret, execute, mojio, sdk, setupAuthorizeNock, setupNock, setupPostNock, setupTokenNock, testErrorResult, timeout, user, vehicle;
+    var authorization, call, callback_url, client_id, client_secret, execute, mojio, sdk, setupAuthorizeNock, setupNock, setupPostPutNock, setupTokenNock, testErrorResult, timeout, user, vehicle;
     user = null;
     mojio = null;
     vehicle = null;
@@ -128,7 +128,7 @@
         return call;
       }
     };
-    setupPostNock = function(api, verb, version, primary_, pid_, secondary_, data_) {
+    setupPostPutNock = function(api, verb, version, primary_, pid_, secondary_, data_) {
       var check;
       if ((process.env.FUNCTIONAL_TESTS != null)) {
         timeout = 3000;
@@ -155,11 +155,11 @@
             valid = parts[0] === check.primary && (parts[1].match(idRegex) || parts[1] === "" + check.pid) && parts[2] === check.secondary;
           }
           if (valid && versionValid) {
-            return '/' + check.primary + '/' + check.pid + '/' + check.secondary;
+            return '/true';
           } else {
             return '/false';
           }
-        })[verb]('/' + check.primary + '/' + check.pid + '/' + check.secondary, check.data).reply(function(uri, requestBody, cb) {
+        })[verb]('/true', check.data).reply(function(uri, requestBody, cb) {
           return cb(null, [
             200, {
               id: 1,
@@ -167,7 +167,7 @@
             }
           ]);
         });
-        return call;
+        return null;
       }
     };
     testErrorResult = function(error, result) {
@@ -236,9 +236,6 @@
           finish = (function() {});
         }
         return execute(function(cb) {
-          console.log(entity);
-          console.log(secondary);
-          console.log(tertiary);
           if ((tertiary != null)) {
             setupNock('https://api2.moj.io', 'get', 'v2', entity, pid, secondary, null, tertiary, null);
             return sdk.get()[entity](pid)[secondary]()[tertiary]().callback(function(error, result) {
@@ -315,8 +312,8 @@
       return results1;
     });
     return it('can POST and PUT entities and get a resource or secondary resource by ids or lists', function(done) {
-      var docall, entities, entity, i, len, results1, secondaries;
-      docall = function(entity, pid, secondary, data) {
+      var docall, entities, entity, i, len, results1, secondaries, secondaryEntity;
+      docall = function(verb, entity, pid, secondary, data) {
         var finish;
         if (pid == null) {
           pid = null;
@@ -327,27 +324,21 @@
         if (data == null) {
           data = null;
         }
-        if (entity === 'Trips' && secondary === 'Permissions') {
+        if (entity === 'Trips' && secondary === 'Permissions' && verb === 'put') {
           finish = done;
         } else {
           finish = (function() {});
         }
         return execute(function(cb) {
-          console.log("Primary:" + entity);
-          console.log("Pid:" + pid);
-          console.log("Secondary:" + secondary);
-          console.log("Data:" + JSON.stringify(data));
           if ((secondary != null)) {
-            console.log("Setup Nock");
-            setupPostNock('https://api2.moj.io', 'post', 'v2', entity, pid, secondary, data);
-            return sdk.post()[entity](pid)[secondary](data).callback(function(error, result) {
+            call = setupPostPutNock('https://api2.moj.io', verb, 'v2', entity, pid, secondary, data);
+            return sdk[verb]()[entity](pid)[secondary](data).callback(function(error, result) {
               testErrorResult(error, result);
               return cb(null, result);
             });
           } else {
-            console.log("Setup Nock");
-            setupPostNock('https://api2.moj.io', 'post', 'v2', entity, null, null, data);
-            return sdk.post()[entity](data).callback(function(error, result) {
+            call = setupPostPutNock('https://api2.moj.io', verb, 'v2', entity, null, null, data);
+            return sdk[verb]()[entity](data).callback(function(error, result) {
               testErrorResult(error, result);
               return cb(null, result);
             });
@@ -355,13 +346,30 @@
         }, finish);
       };
       entities = ['Mojios', 'Vehicles', 'Users', 'Apps', 'Groups', 'Trips'];
-      secondaries = ['Tags', 'Permissions'];
+      secondaries = ['Tags', 'Permissions', 'Images', 'Details'];
       results1 = [];
       for (i = 0, len = entities.length; i < len; i++) {
         entity = entities[i];
-        results1.push(docall(entity, null, null, {
+        docall('post', entity, null, null, {
           name: 'name' + entity
-        }));
+        });
+        docall('put', entity, null, null, {
+          name: 'name' + entity
+        });
+        results1.push((function() {
+          var j, len1, results2;
+          results2 = [];
+          for (j = 0, len1 = secondaries.length; j < len1; j++) {
+            secondaryEntity = secondaries[j];
+            docall('post', entity, 1, secondaryEntity, {
+              name: 'name/' + entity + '/1/' + secondaryEntity
+            });
+            results2.push(docall('put', entity, 1, secondaryEntity, {
+              name: 'name/' + entity + '/1/' + secondaryEntity
+            }));
+          }
+          return results2;
+        })());
       }
       return results1;
     });

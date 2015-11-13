@@ -13,7 +13,7 @@
         s = p[p.length - 1];
         if (ies === 'ies') {
           iesModel = p.slice(0, p.length - 3) + 'y';
-          iesCapital = sModel.charAt(0).toUpperCase() + iesModel.slice(1);
+          iesCapital = iesModel.charAt(0).toUpperCase() + iesModel.slice(1);
           this[iesModel] = this[p];
           this[iesCapital] = this[p];
         } else if (s === 's') {
@@ -26,16 +26,15 @@
     }
 
     MojioModelSDK.prototype.setup = function(data) {
-      this.stateMachine.reset();
       this.stateMachine.setEndpoint("api");
-      return this.stateMachine.setAction("");
+      return this.stateMachine.setAction(null);
     };
 
     MojioModelSDK.prototype.setCriteria = function(data) {
       if (data instanceof Array) {
-        throw new Error("Not implemented");
+        return console.log("Not Implemented");
       } else if (typeof data === 'object') {
-        throw new Error("Not implemented");
+        return this.stateMachine.setBody_ObjectOrJson(data);
       } else if (typeof data === 'string' || typeof data === 'number') {
         return this.stateMachine.setId(data);
       }
@@ -80,26 +79,29 @@
       this.setup();
       this.setCriteria(data);
       this.stateMachine.setResource('Groups');
-      this.stateMachine.setObject(names);
       return this;
     };
 
     MojioModelSDK.prototype.permissions = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Permissions');
       return this;
     };
 
     MojioModelSDK.prototype.images = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Images');
       return this;
     };
 
     MojioModelSDK.prototype.tags = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Tags');
       return this;
     };
 
     MojioModelSDK.prototype.details = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Details');
       return this;
     };
@@ -108,20 +110,20 @@
       if (measurement == null) {
         measurement = null;
       }
-      this.stateMachine.setObject('History');
+      this.stateMachine.setAction('History');
       if (measurement != null) {
-        this.stateMachine.setAction(measurement);
+        this.stateMachine.setObject(measurement);
       }
       return this;
     };
 
     MojioModelSDK.prototype.states = function() {
-      this.stateMachine.setAction('States');
+      this.stateMachine.setObject('States');
       return this;
     };
 
     MojioModelSDK.prototype.locations = function() {
-      this.stateMachine.setAction('Locations');
+      this.stateMachine.setObject('Locations');
       return this;
     };
 

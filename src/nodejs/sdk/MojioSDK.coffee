@@ -108,7 +108,6 @@ module.exports = class MojioSDK extends Module
     # @public
     callback: (callback) ->
         # execute the rest request and return the result in the callback.
-        console.log(@stateMachine.url())
         @stateMachine.initiate(callback)
 
     # The 'redirect' method initiates the fluent chain by performing a redirect given the passed in redirecting

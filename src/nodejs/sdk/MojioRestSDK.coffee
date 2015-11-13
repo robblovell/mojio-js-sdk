@@ -37,7 +37,7 @@ module.exports = class MojioRestSDK extends MojioAuthSDK
     # @example
     #   sdk.put().vehicle([resourceObject])
     # @return {object} this
-    put: () ->
+    put: (object_or_json_string) ->
         @stateMachine.setMethod("put")
         @stateMachine.setBody_ObjectOrJson(object_or_json_string)
         return @

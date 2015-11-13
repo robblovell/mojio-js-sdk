@@ -15,7 +15,7 @@ module.exports = class MojioModelSDK
             s = p[p.length-1]
             if (ies is 'ies')
                 iesModel = p.slice(0,p.length-3)+'y'
-                iesCapital = sModel.charAt(0).toUpperCase() + iesModel.slice(1)
+                iesCapital = iesModel.charAt(0).toUpperCase() + iesModel.slice(1)
                 @[iesModel] = @[p]
                 @[iesCapital] = @[p]
             else if (s is 's')
@@ -25,15 +25,17 @@ module.exports = class MojioModelSDK
                 @[sCapital] = @[p]
 
     setup: (data) ->
-        @stateMachine.reset()
+#        @stateMachine.reset()
         @stateMachine.setEndpoint("api")
-        @stateMachine.setAction("")
+        @stateMachine.setAction(null)
 
     setCriteria: (data) ->
         if data instanceof Array
-            throw new Error "Not implemented"
+            # todo:: determine if this is body or body object or json
+#            throw new Error "Not implemented"
+            console.log("Not Implemented")
         else if typeof data is 'object'
-            throw new Error "Not implemented"
+            @stateMachine.setBody_ObjectOrJson(data)
         else if typeof data is 'string' or typeof data is 'number'
             @stateMachine.setId(data)
 
@@ -117,16 +119,15 @@ module.exports = class MojioModelSDK
     # group
     # @return {object} this
     groups: (data) ->
-        #todo:: instantiate groups from names?
         @setup()
         @setCriteria(data)
         @stateMachine.setResource('Groups')
-        @stateMachine.setObject(names)
         return @
 
     # permissions
     # @return {object} this
     permissions: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Permissions')
         return @
 
@@ -134,6 +135,7 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     images: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Images')
         return @
 
@@ -141,6 +143,7 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     tags: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Tags')
         return @
 
@@ -148,6 +151,7 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     details: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Details')
         return @ # resource or action
 
@@ -155,22 +159,22 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     histories: (measurement=null) ->
-        @stateMachine.setObject('History')
-        @stateMachine.setAction(measurement) if measurement?
+        @stateMachine.setAction('History')
+        @stateMachine.setObject(measurement) if measurement?
         return @ # this
 
     # Return the changeable details of a resource
     #
     # @return {object} this
     states: () ->
-        @stateMachine.setAction('States')
+        @stateMachine.setObject('States')
         return @ # this
 
     # Return the changeable details of a resource
     #
     # @return {object} this
     locations: () ->
-        @stateMachine.setAction('Locations')
+        @stateMachine.setObject('Locations')
         return @ # this
 
     # Create models for testing purposes.

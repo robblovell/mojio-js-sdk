@@ -34,7 +34,7 @@
       if (data instanceof Array) {
         return console.log("Not Implemented");
       } else if (typeof data === 'object') {
-        return console.log("Not Implemented");
+        return this.stateMachine.setBody_ObjectOrJson(data);
       } else if (typeof data === 'string' || typeof data === 'number') {
         return this.stateMachine.setId(data);
       }
@@ -83,21 +83,25 @@
     };
 
     MojioModelSDK.prototype.permissions = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Permissions');
       return this;
     };
 
     MojioModelSDK.prototype.images = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Images');
       return this;
     };
 
     MojioModelSDK.prototype.tags = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Tags');
       return this;
     };
 
     MojioModelSDK.prototype.details = function(data) {
+      this.setCriteria(data);
       this.stateMachine.setAction('Details');
       return this;
     };

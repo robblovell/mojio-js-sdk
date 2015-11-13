@@ -95,7 +95,7 @@ describe 'Node Mojio Fluent Rest SDK', ->
                 cb(null, [200, { id: 1, message: "hi"}]))
             return call
 
-    setupPostNock = (api, verb, version, primary_, pid_, secondary_, data_) ->
+    setupPostPutNock = (api, verb, version, primary_, pid_, secondary_, data_) ->
         if (process.env.FUNCTIONAL_TESTS?)
             timeout = 3000
             return {done: () ->}
@@ -119,13 +119,13 @@ describe 'Node Mojio Fluent Rest SDK', ->
                             parts[2] is check.secondary
 
                 if valid and versionValid
-                    return '/'+check.primary+'/'+check.pid+'/'+check.secondary
+                    return '/true' #'/'+check.primary+'/'+check.pid+'/'+check.secondary
                 else
                     return '/false'
-            )[verb]('/'+check.primary+'/'+check.pid+'/'+check.secondary, check.data)
+            )[verb]('/true', check.data) #'/'+check.primary+'/'+check.pid+'/'+check.secondary, check.data)
             .reply((uri, requestBody, cb) ->
                 cb(null, [200, { id: 1, name: "name"}]))
-            return call
+            return null
 
     testErrorResult = (error, result) ->
         console.log("ERROR: "+error) if error?
@@ -197,9 +197,6 @@ describe 'Node Mojio Fluent Rest SDK', ->
                 finish = (() ->)
             execute(
                 (cb) ->
-                    console.log(entity)
-                    console.log(secondary)
-                    console.log(tertiary)
                     if (tertiary?)
                         setupNock('https://api2.moj.io', 'get', 'v2', entity, pid, secondary, null, tertiary, null)
                         sdk.get()[entity](pid)[secondary]()[tertiary]().callback((error, result) ->
@@ -253,28 +250,22 @@ describe 'Node Mojio Fluent Rest SDK', ->
     it 'can POST and PUT entities and get a resource or secondary resource by ids or lists', (done) ->
 #        @.timeout(5000)
 
-        docall = (entity, pid=null, secondary=null, data = null) ->
-            if entity == 'Trips' and secondary == 'Permissions'
+        docall = (verb, entity, pid=null, secondary=null, data = null) ->
+            if entity == 'Trips' and secondary == 'Permissions' and verb == 'put'
                 finish = done
             else
                 finish = (() ->)
             execute(
                 (cb) ->
-                    console.log("Primary:"+entity)
-                    console.log("Pid:"+pid)
-                    console.log("Secondary:"+secondary)
-                    console.log("Data:"+JSON.stringify(data))
                     if (secondary?)
-                        console.log("Setup Nock")
-                        setupPostNock('https://api2.moj.io', 'post', 'v2', entity, pid, secondary, data)
-                        sdk.post()[entity](pid)[secondary](data).callback((error, result) ->
+                        call = setupPostPutNock('https://api2.moj.io', verb, 'v2', entity, pid, secondary, data)
+                        sdk[verb]()[entity](pid)[secondary](data).callback((error, result) ->
                             testErrorResult(error, result)
                             cb(null, result)
                         )
                     else
-                        console.log("Setup Nock")
-                        setupPostNock('https://api2.moj.io', 'post', 'v2', entity, null, null, data)
-                        sdk.post()[entity](data).callback((error, result) ->
+                        call = setupPostPutNock('https://api2.moj.io', verb, 'v2', entity, null, null, data)
+                        sdk[verb]()[entity](data).callback((error, result) ->
                             testErrorResult(error, result)
                             cb(null, result)
                         )
@@ -282,11 +273,13 @@ describe 'Node Mojio Fluent Rest SDK', ->
             , finish
             )
         entities = ['Mojios', 'Vehicles', 'Users', 'Apps', 'Groups', 'Trips']
-        secondaries = ['Tags', 'Permissions']
+        secondaries = ['Tags', 'Permissions', 'Images', 'Details']
         for entity in entities
-            docall(entity, null, null, {name: 'name'+entity})
-#            for secondaryEntity in secondaries
-#                docall(entity,1,secondaryEntity, {name: 'name/'+entity+'/1/'+secondaryEntity})
+            docall('post',entity, null, null, {name: 'name'+entity})
+            docall('put',entity, null, null, {name: 'name'+entity})
+            for secondaryEntity in secondaries
+                docall('post',entity,1,secondaryEntity, {name: 'name/'+entity+'/1/'+secondaryEntity})
+                docall('put',entity,1,secondaryEntity, {name: 'name/'+entity+'/1/'+secondaryEntity})
 
 #    it 'can create share and revoke a vehicle', (done) ->
 #        @.timeout(5000)

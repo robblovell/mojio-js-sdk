@@ -37,9 +37,9 @@ module.exports = class MojioRestSDK extends MojioAuthSDK
     # @example
     #   sdk.put().vehicle([resourceObject])
     # @return {object} this
-    put: () ->
+    put: (object_or_json_string) ->
         @stateMachine.setMethod("put")
-        @stateMachine.setObject(object_or_json_string)
+        @stateMachine.setBody_ObjectOrJson(object_or_json_string)
         return @
     # Save, is an alias for Put, sets up the fluent chain to save an already persisted object in the Mojio system.
     # Use with one of the ModelSDK calls to specify the data for a vehicle, mojio, user, trip, group, or permission.
@@ -68,7 +68,7 @@ module.exports = class MojioRestSDK extends MojioAuthSDK
     # @return {object} this
     post: (object_or_json_string) ->
         @stateMachine.setMethod("post")
-        @stateMachine.setObject(object_or_json_string)
+        @stateMachine.setBody_ObjectOrJson(object_or_json_string)
         return @
     # Create is an alias for Post, sets up the fluent chain to create a new persisted object in the Mojio system.
     # Use with one of the ModelSDK calls to specify the data for a vehicle, mojio, user, trip, group, or permission.

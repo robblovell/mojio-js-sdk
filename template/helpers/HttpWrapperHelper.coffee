@@ -24,11 +24,10 @@ module.exports = class HttpWrapperHelper
         path += "/" + encodeURIComponent(sid) if sid?
         path += "/" + encodeURIComponent(object) if object?
         path += "/" + encodeURIComponent(oid) if oid?
+        return path
 
 
     @_parse: (url, request, encoding, token) ->
-        url += HttpWrapperHelper._getPath(request.resource, request.pid,
-            request.action, request.sid, request.object, request.tid)
         parts = new URL(url)
         parts.path = parts.pathname
         parts.method = request.method
@@ -62,4 +61,5 @@ module.exports = class HttpWrapperHelper
                 parts.data = request.data
             parts.body = parts.data
 
+#        console.log(JSON.stringify(parts))
         return parts

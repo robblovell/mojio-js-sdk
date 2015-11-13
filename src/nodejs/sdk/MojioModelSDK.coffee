@@ -35,9 +35,7 @@ module.exports = class MojioModelSDK
 #            throw new Error "Not implemented"
             console.log("Not Implemented")
         else if typeof data is 'object'
-            # todo:: determine if this is body or body object or json
-#            @stateMachine.setBody_ObjectOrJson(data)
-            console.log("Not Implemented")
+            @stateMachine.setBody_ObjectOrJson(data)
         else if typeof data is 'string' or typeof data is 'number'
             @stateMachine.setId(data)
 
@@ -129,6 +127,7 @@ module.exports = class MojioModelSDK
     # permissions
     # @return {object} this
     permissions: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Permissions')
         return @
 
@@ -136,6 +135,7 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     images: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Images')
         return @
 
@@ -143,6 +143,7 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     tags: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Tags')
         return @
 
@@ -150,6 +151,7 @@ module.exports = class MojioModelSDK
     #
     # @return {object} this
     details: (data) ->
+        @setCriteria(data)
         @stateMachine.setAction('Details')
         return @ # resource or action
 

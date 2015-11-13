@@ -72,7 +72,8 @@ module.exports = class MojioSDKState
     # @nodoc
     url: (bodyAsParameters = true) ->
         httpWrapper = new HttpWrapper(state.token,
-            @endpoints[state.endpoint].uri, @endpoints[state.endpoint].encoding)
+            @endpoints[state.endpoint].uri,
+            @endpoints[state.endpoint].encoding)
         url = httpWrapper.url(@parts(bodyAsParameters))
         return url
 
@@ -86,7 +87,6 @@ module.exports = class MojioSDKState
             sid: state.sid,
             object: state.object,
             tid: state.tid,
-            key: state.key,
             body: if bodyAsParameters then "" else state.body,
             params: if bodyAsParameters then state.body else state.params
         }
@@ -102,7 +102,7 @@ module.exports = class MojioSDKState
 #}
     # @nodoc
     show: () ->
-        console.log(JSON.stringify(state))
+#        console.log(JSON.stringify(state))
         return state
 
     # @nodoc
@@ -120,12 +120,12 @@ module.exports = class MojioSDKState
         state.answer = token
 
     # @nodoc
-    setObject: (object_or_json_string) ->
+    setBody_ObjectOrJson: (object_or_json_string) ->
         switch typeof object_or_json_string
             when "string"
                 state.body = object_or_json_string
             when "object"
-                state.body = JSON.stringify(object_or_json_string)
+                state.body = object_or_json_string
         return state
 
     # @nodoc
@@ -239,7 +239,7 @@ module.exports = class MojioSDKState
         state.sid = null
         state.tid = null
         state.action = null
-        state.key = null
+        state.object = null
 
         # parameters
         state.parameters = {}

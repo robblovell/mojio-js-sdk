@@ -49,13 +49,13 @@
         path += "/" + encodeURIComponent(object);
       }
       if (oid != null) {
-        return path += "/" + encodeURIComponent(oid);
+        path += "/" + encodeURIComponent(oid);
       }
+      return path;
     };
 
     HttpWrapperHelper._parse = function(url, request, encoding, token) {
       var parts;
-      url += HttpWrapperHelper._getPath(request.resource, request.pid, request.action, request.sid, request.object, request.tid);
       parts = new URL(url);
       parts.path = parts.pathname;
       parts.method = request.method;

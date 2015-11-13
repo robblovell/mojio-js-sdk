@@ -44,16 +44,18 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
         action.write(params.body) if (params.body?)
         action.end()
 
-    _parts = (request) ->
-        parts = HttpWrapperHelper._parse(@uri, request, @encoding, @token)
+    _parts = (request, token, uri, encoding) ->
+        uri += HttpWrapperHelper._getPath(request.resource, request.pid,
+            request.action, request.sid, request.object, request.tid)
+        parts = HttpWrapperHelper._parse(uri, request, encoding, token)
         return parts
 
     url: (request) ->
-        parts = _parts(request)
+        parts = _parts(request, @token, @uri, @encoding)
         return parts.protocol + '//' + parts.hostname + parts.pathname + parts.params
 
     request: (request, callback) ->
-        parts = _parts(request)
+        parts = _parts(request, @token, @uri, @encoding)
         _request(parts, @requester, callback)
 
     redirect: (request, redirectClass=null) => # @applicationName is appname

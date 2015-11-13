@@ -23,9 +23,9 @@
       MojioRestSDK.__super__.constructor.call(this, options);
     }
 
-    MojioRestSDK.prototype.put = function() {
+    MojioRestSDK.prototype.put = function(object_or_json_string) {
       this.stateMachine.setMethod("put");
-      this.stateMachine.setObject(object_or_json_string);
+      this.stateMachine.setBody_ObjectOrJson(object_or_json_string);
       return this;
     };
 
@@ -41,7 +41,7 @@
 
     MojioRestSDK.prototype.post = function(object_or_json_string) {
       this.stateMachine.setMethod("post");
-      this.stateMachine.setObject(object_or_json_string);
+      this.stateMachine.setBody_ObjectOrJson(object_or_json_string);
       return this;
     };
 

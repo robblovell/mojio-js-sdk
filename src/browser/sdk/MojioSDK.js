@@ -69,7 +69,6 @@
     };
 
     MojioSDK.prototype.callback = function(callback) {
-      console.log(this.stateMachine.url());
       return this.stateMachine.initiate(callback);
     };
 

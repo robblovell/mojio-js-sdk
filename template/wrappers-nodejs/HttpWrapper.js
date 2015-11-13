@@ -22,10 +22,10 @@
 
     extend(HttpNodeWrapper, superClass);
 
-    function HttpNodeWrapper(token, uri, encoding, requester1) {
-      this.token = token;
-      this.uri = uri != null ? uri : 'https://api.moj.io/v1';
-      this.encoding = encoding != null ? encoding : false;
+    function HttpNodeWrapper(token1, uri1, encoding1, requester1) {
+      this.token = token1;
+      this.uri = uri1 != null ? uri1 : 'https://api.moj.io/v1';
+      this.encoding = encoding1 != null ? encoding1 : false;
       this.requester = requester1 != null ? requester1 : null;
       this.redirect = bind(this.redirect, this);
       HttpNodeWrapper.__super__.constructor.call(this);
@@ -81,21 +81,22 @@
       return action.end();
     };
 
-    _parts = function(request) {
+    _parts = function(request, token, uri, encoding) {
       var parts;
-      parts = HttpWrapperHelper._parse(this.uri, request, this.encoding, this.token);
+      uri += HttpWrapperHelper._getPath(request.resource, request.pid, request.action, request.sid, request.object, request.tid);
+      parts = HttpWrapperHelper._parse(uri, request, encoding, token);
       return parts;
     };
 
     HttpNodeWrapper.prototype.url = function(request) {
       var parts;
-      parts = _parts(request);
+      parts = _parts(request, this.token, this.uri, this.encoding);
       return parts.protocol + '//' + parts.hostname + parts.pathname + parts.params;
     };
 
     HttpNodeWrapper.prototype.request = function(request, callback) {
       var parts;
-      parts = _parts(request);
+      parts = _parts(request, this.token, this.uri, this.encoding);
       return _request(parts, this.requester, callback);
     };
 

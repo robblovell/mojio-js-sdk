@@ -133,7 +133,7 @@
           state.body = object_or_json_string;
           break;
         case "object":
-          state.body = JSON.stringify(object_or_json_string);
+          state.body = object_or_json_string;
       }
       return state;
     };

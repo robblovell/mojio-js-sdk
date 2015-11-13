@@ -14,10 +14,10 @@
 
     extend(HttpBrowserWrapper, superClass);
 
-    function HttpBrowserWrapper(token, uri, encoding, requester1) {
-      this.token = token;
-      this.uri = uri != null ? uri : 'https://api.moj.io/v1';
-      this.encoding = encoding != null ? encoding : false;
+    function HttpBrowserWrapper(token1, uri1, encoding1, requester1) {
+      this.token = token1;
+      this.uri = uri1 != null ? uri1 : 'https://api.moj.io/v1';
+      this.encoding = encoding1 != null ? encoding1 : false;
       this.requester = requester1 != null ? requester1 : null;
       this.redirect = bind(this.redirect, this);
       HttpBrowserWrapper.__super__.constructor.call(this);
@@ -52,9 +52,10 @@
       }
     };
 
-    _parts = function(request) {
+    _parts = function(request, token, uri, encoding) {
       var parts;
-      parts = HttpWrapperHelper._parse(this.uri, request, this.encoding, this.token);
+      uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key);
+      parts = HttpWrapperHelper._parse(uri, request, encoding, this.token);
       if (!((parts.scheme != null) || (typeof window === "undefined" || window === null))) {
         parts.scheme = window.location.protocol.split(':')[0];
       }
@@ -72,7 +73,7 @@
 
     HttpBrowserWrapper.prototype.request = function(request, callback) {
       var parts;
-      parts = _parts(request);
+      parts = _parts(request, this.token, this.uri, this.encoding);
       return _request(parts, this.requester, callback);
     };
 

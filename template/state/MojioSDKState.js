@@ -106,14 +106,12 @@
         sid: state.sid,
         object: state.object,
         tid: state.tid,
-        key: state.key,
         body: bodyAsParameters ? "" : state.body,
         params: bodyAsParameters ? state.body : state.params
       };
     };
 
     MojioSDKState.prototype.show = function() {
-      console.log(JSON.stringify(state));
       return state;
     };
 
@@ -129,13 +127,13 @@
       return state.answer = token;
     };
 
-    MojioSDKState.prototype.setObject = function(object_or_json_string) {
+    MojioSDKState.prototype.setBody_ObjectOrJson = function(object_or_json_string) {
       switch (typeof object_or_json_string) {
         case "string":
           state.body = object_or_json_string;
           break;
         case "object":
-          state.body = JSON.stringify(object_or_json_string);
+          state.body = object_or_json_string;
       }
       return state;
     };
@@ -280,7 +278,7 @@
       state.sid = null;
       state.tid = null;
       state.action = null;
-      state.key = null;
+      state.object = null;
       state.parameters = {};
       state.operation = "";
       state.limit = 10;

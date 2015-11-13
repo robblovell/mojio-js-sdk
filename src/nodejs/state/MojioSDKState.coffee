@@ -125,7 +125,7 @@ module.exports = class MojioSDKState
             when "string"
                 state.body = object_or_json_string
             when "object"
-                state.body = JSON.stringify(object_or_json_string)
+                state.body = object_or_json_string
         return state
 
     # @nodoc
