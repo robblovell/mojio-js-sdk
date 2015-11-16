@@ -93,5 +93,3 @@
   })(Module);
 
 }).call(this);
-
-//# sourceMappingURL=MojioSDK.js.map

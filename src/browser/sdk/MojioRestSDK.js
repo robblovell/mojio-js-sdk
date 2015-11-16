@@ -201,5 +201,3 @@
   })(MojioAuthSDK);
 
 }).call(this);
-
-//# sourceMappingURL=MojioRestSDK.js.map
