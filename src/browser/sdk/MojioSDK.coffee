@@ -1,5 +1,6 @@
 # version 5.0.0
-#_ = require 'underscore'
+# Mojio Javascript SDK
+#
 MojioSDKState = require '../state/MojioSDKState'
 MojioPushSDK = require './MojioPushSDK'
 Module = require '../helpers/Module'
