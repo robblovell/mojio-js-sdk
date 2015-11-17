@@ -224,13 +224,25 @@ describe 'Node Mojio Fluent Rest SDK', ->
                                 cb(null, result)
                             )
                         else
-                            setupNock('https://api2.moj.io', 'get', 'v2', entity, null, null, null, null, null)
-                            sdk.get()[entity]().callback((error, result) ->
-                                testErrorResult(error, result)
-                                cb(null, result)
-                            )
+                            if (entity == 'me')
+                                setupNock('https://api2.moj.io', 'get', 'v2', entity, null, null, null, null, null)
+                                sdk.me().callback((error, result) ->
+                                    testErrorResult(error, result)
+                                    cb(null, result)
+                                )
+                                return
+                            else
+                                setupNock('https://api2.moj.io', 'get', 'v2', entity, null, null, null, null, null)
+                                sdk.get()[entity]().callback((error, result) ->
+                                    testErrorResult(error, result)
+                                    cb(null, result)
+                                )
             , finish
             )
+        entities = ['me']
+        for entity in entities
+            docall(entity)
+
         entities = ['Vehicles', 'Mojios', 'Users', 'Apps', 'Groups', 'Trips']
         secondaries = ['Tags', 'Permissions']
         for entity in entities

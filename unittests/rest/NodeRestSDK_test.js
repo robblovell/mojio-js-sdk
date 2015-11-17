@@ -212,7 +212,7 @@
       return vehicle = null;
     });
     it('can GET a resource or list of resources, secondary resource, or history by ids or no query', function(done) {
-      var docall, entities, entity, i, j, k, len, len1, len2, results1, secondaries, secondaryEntity, tertiary, tertiaryEntity;
+      var docall, entities, entity, i, j, k, l, len, len1, len2, len3, results1, secondaries, secondaryEntity, tertiary, tertiaryEntity;
       docall = function(entity, pid, secondary, sid, tertiary, tid) {
         var finish;
         if (pid == null) {
@@ -264,23 +264,36 @@
                 return cb(null, result);
               });
             } else {
-              setupNock('https://api2.moj.io', 'get', 'v2', entity, null, null, null, null, null);
-              return sdk.get()[entity]().callback(function(error, result) {
-                testErrorResult(error, result);
-                return cb(null, result);
-              });
+              if (entity === 'me') {
+                setupNock('https://api2.moj.io', 'get', 'v2', entity, null, null, null, null, null);
+                sdk.me().callback(function(error, result) {
+                  testErrorResult(error, result);
+                  return cb(null, result);
+                });
+              } else {
+                setupNock('https://api2.moj.io', 'get', 'v2', entity, null, null, null, null, null);
+                return sdk.get()[entity]().callback(function(error, result) {
+                  testErrorResult(error, result);
+                  return cb(null, result);
+                });
+              }
             }
           }
         }, finish);
       };
-      entities = ['Vehicles', 'Mojios', 'Users', 'Apps', 'Groups', 'Trips'];
-      secondaries = ['Tags', 'Permissions'];
+      entities = ['me'];
       for (i = 0, len = entities.length; i < len; i++) {
         entity = entities[i];
         docall(entity);
+      }
+      entities = ['Vehicles', 'Mojios', 'Users', 'Apps', 'Groups', 'Trips'];
+      secondaries = ['Tags', 'Permissions'];
+      for (j = 0, len1 = entities.length; j < len1; j++) {
+        entity = entities[j];
+        docall(entity);
         docall(entity, 1);
-        for (j = 0, len1 = secondaries.length; j < len1; j++) {
-          secondaryEntity = secondaries[j];
+        for (k = 0, len2 = secondaries.length; k < len2; k++) {
+          secondaryEntity = secondaries[k];
           docall(entity, 1, secondaryEntity);
           docall(entity, 1, secondaryEntity, 1);
         }
@@ -289,18 +302,18 @@
       secondaries = ['History'];
       tertiary = ['States', 'Locations'];
       results1 = [];
-      for (k = 0, len2 = entities.length; k < len2; k++) {
-        entity = entities[k];
+      for (l = 0, len3 = entities.length; l < len3; l++) {
+        entity = entities[l];
         results1.push((function() {
-          var l, len3, results2;
+          var len4, m, results2;
           results2 = [];
-          for (l = 0, len3 = secondaries.length; l < len3; l++) {
-            secondaryEntity = secondaries[l];
+          for (m = 0, len4 = secondaries.length; m < len4; m++) {
+            secondaryEntity = secondaries[m];
             results2.push((function() {
-              var len4, m, results3;
+              var len5, n, results3;
               results3 = [];
-              for (m = 0, len4 = tertiary.length; m < len4; m++) {
-                tertiaryEntity = tertiary[m];
+              for (n = 0, len5 = tertiary.length; n < len5; n++) {
+                tertiaryEntity = tertiary[n];
                 results3.push(docall(entity, 1, secondaryEntity, null, tertiaryEntity, null));
               }
               return results3;

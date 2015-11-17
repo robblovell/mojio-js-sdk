@@ -88,6 +88,12 @@
       return this.stateMachine.show();
     };
 
+    MojioSDK.prototype.me = function() {
+      this.setup();
+      this.stateMachine.setResource('me');
+      return this;
+    };
+
     return MojioSDK;
 
   })(Module);
