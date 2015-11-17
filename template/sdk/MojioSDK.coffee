@@ -132,3 +132,8 @@ module.exports = class MojioSDK extends Module
     # @return {object} Internal state object built up by the fluent chain.
     show: () ->
         return @stateMachine.show()
+
+    me: () ->
+        @setup()
+        @stateMachine.setResource('me')
+        return @
