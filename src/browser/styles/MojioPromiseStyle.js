@@ -29,3 +29,5 @@
   })();
 
 }).call(this);
+
+//# sourceMappingURL=MojioPromiseStyle.js.map

@@ -83,6 +83,12 @@
 
     _parts = function(request, token, uri, encoding) {
       var parts;
+      if (request.id) {
+        request.pid = request.id;
+      }
+      if (request.key) {
+        request.sid = request.key;
+      }
       uri += HttpWrapperHelper._getPath(request.resource, request.pid, request.action, request.sid, request.object, request.tid);
       parts = HttpWrapperHelper._parse(uri, request, encoding, token);
       return parts;

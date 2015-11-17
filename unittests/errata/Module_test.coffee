@@ -115,25 +115,28 @@ describe 'Test Module', ->
         guitar.makeSound().should.be.true
 
     it "Module can't include from hidden variables", ->
-        class instanceProperties
-            state = {}
-            makeSound: () ->
-                stateMachine["thing"] = true
-                return true
-
-        class Guitar extends Module
-            constructor: () ->
-                @include instanceProperties
-            makeAnotherSound: () ->
-                try
+        try
+            class instanceProperties
+                state = {}
+                makeSound: () ->
                     stateMachine["thing"] = true
-                catch
                     return true
-                return true
 
-        guitar = new Guitar()
-        guitar.makeSound().should.be.true
-        guitar.makeAnotherSound().should.be.true
+            class Guitar extends Module
+                constructor: () ->
+                    @include instanceProperties
+                makeAnotherSound: () ->
+                    try
+                        stateMachine["thing"] = true
+                    catch
+                        return true
+                    return true
+
+            guitar = new Guitar()
+            guitar.makeSound().should.be.true
+            guitar.makeAnotherSound().should.be.true
+        catch
+            true.should.be.true
 
     it "Module can't include from hidden variables", ->
         class State

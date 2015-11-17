@@ -30,7 +30,7 @@
       } else {
         xmlhttp = requester;
       }
-      xmlhttp.open(request.method, url, true);
+      xmlhttp.open(request.method, request.url, true);
       ref = request.headers;
       for (k in ref) {
         v = ref[k];
@@ -54,7 +54,13 @@
 
     _parts = function(request, token, uri, encoding) {
       var parts;
-      uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key);
+      if (request.id) {
+        request.pid = request.id;
+      }
+      if (request.key) {
+        request.sid = request.key;
+      }
+      uri += HttpWrapperHelper._getPath(request.resource, request.pid, request.action, request.sid, request.object, request.tid);
       parts = HttpWrapperHelper._parse(uri, request, encoding, this.token);
       if (!((parts.scheme != null) || (typeof window === "undefined" || window === null))) {
         parts.scheme = window.location.protocol.split(':')[0];
@@ -74,6 +80,7 @@
     HttpBrowserWrapper.prototype.request = function(request, callback) {
       var parts;
       parts = _parts(request, this.token, this.uri, this.encoding);
+      parts.url = this.url(request);
       return _request(parts, this.requester, callback);
     };
 
@@ -93,3 +100,5 @@
   })(iHttpWrapper);
 
 }).call(this);
+
+//# sourceMappingURL=HttpWrapper.js.map

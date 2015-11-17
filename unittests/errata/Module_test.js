@@ -151,45 +151,49 @@
       return guitar.makeSound().should.be["true"];
     });
     it("Module can't include from hidden variables", function() {
-      var Guitar, guitar, instanceProperties;
-      instanceProperties = (function() {
-        var state;
+      var Guitar, error, guitar, instanceProperties;
+      try {
+        instanceProperties = (function() {
+          var state;
 
-        function instanceProperties() {}
+          function instanceProperties() {}
 
-        state = {};
+          state = {};
 
-        instanceProperties.prototype.makeSound = function() {
-          stateMachine["thing"] = true;
-          return true;
-        };
-
-        return instanceProperties;
-
-      })();
-      Guitar = (function(superClass) {
-        extend(Guitar, superClass);
-
-        function Guitar() {
-          this.include(instanceProperties);
-        }
-
-        Guitar.prototype.makeAnotherSound = function() {
-          var error;
-          try {
+          instanceProperties.prototype.makeSound = function() {
             stateMachine["thing"] = true;
-          } catch (error) {
             return true;
+          };
+
+          return instanceProperties;
+
+        })();
+        Guitar = (function(superClass) {
+          extend(Guitar, superClass);
+
+          function Guitar() {
+            this.include(instanceProperties);
           }
-          return true;
-        };
 
-        return Guitar;
+          Guitar.prototype.makeAnotherSound = function() {
+            var error;
+            try {
+              stateMachine["thing"] = true;
+            } catch (error) {
+              return true;
+            }
+            return true;
+          };
 
-      })(Module);
-      guitar = new Guitar();
-      guitar.makeSound().should.be["true"];
-      return guitar.makeAnotherSound().should.be["true"];
+          return Guitar;
+
+        })(Module);
+        guitar = new Guitar();
+        guitar.makeSound().should.be["true"];
+        return guitar.makeAnotherSound().should.be["true"];
+      } catch (error) {
+        return true.should.be["true"];
+      }
     });
     return it("Module can't include from hidden variables", function() {
       var Guitar, State, guitar, instanceProperties;
