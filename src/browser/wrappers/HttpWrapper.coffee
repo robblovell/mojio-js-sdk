@@ -4,15 +4,15 @@ iHttpWrapper = require '../interfaces/iHttpWrapper'
 module.exports = class HttpBrowserWrapper extends iHttpWrapper
 
     constructor: (@token, @uri='https://api.moj.io/v1', @encoding = false, @requester=null) ->
-
         super()
+
     _request = (request, requester, callback) ->
 
         if (XMLHttpRequest?)
             xmlhttp = new XMLHttpRequest
         else
             xmlhttp = requester
-        xmlhttp.open request.method , url ,true
+        xmlhttp.open request.method , request.url ,true
 
         for k,v of request.headers
             xmlhttp.setRequestHeader k, v
@@ -28,8 +28,12 @@ module.exports = class HttpBrowserWrapper extends iHttpWrapper
             xmlhttp.send()
         else
             xmlhttp.send(request.data)
+
     _parts = (request, token, uri, encoding) ->
-        uri += HttpWrapperHelper._getPath(request.resource, request.id, request.action, request.key)
+        request.pid = request.id if request.id
+        request.sid = request.key if request.key
+        uri += HttpWrapperHelper._getPath(request.resource, request.pid,
+            request.action, request.sid, request.object, request.tid)
 
         parts = HttpWrapperHelper._parse(uri, request, encoding, @token)
 
@@ -68,6 +72,7 @@ module.exports = class HttpBrowserWrapper extends iHttpWrapper
 
     request: (request, callback) ->
         parts = _parts(request, @token, @uri, @encoding)
+        parts.url = @url(request)
         _request(parts, @requester, callback)
 
     redirect: (request, redirectClass=null) => # callback is through a server call.

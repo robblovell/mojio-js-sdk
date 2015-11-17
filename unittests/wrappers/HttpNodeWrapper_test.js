@@ -6,12 +6,16 @@
 
   async = require('async');
 
-  HttpNodeWrapper = require('../../template/wrappers-nodejs/HttpWrapper');
+  HttpNodeWrapper = require('../../src/nodejs/wrappers/HttpWrapper');
 
   nock = require('nock');
 
   describe('Http Nodejs Wrapper', function() {
-    var contentType, testErrorResult, token;
+    var contentType, testErrorResult, token, unittest;
+    unittest = true;
+    if ((process.env.FUNCTIONAL_TESTS != null)) {
+      unittest = false;
+    }
     token = "token";
     contentType = "application/json";
     testErrorResult = function(error, result) {
@@ -20,8 +24,10 @@
     };
     it('tests @request get resource with id', function(done) {
       var httpNodeWrapper;
-      nock('https://api.moj.io').get('/v1/Vehicles/1').reply(function(uri, requestBody, cb) {
-        this.req.headers.mojioapitoken.should.be.equal(token);
+      nock('https://api.moj.io').get('/v1/Vehicles/3').reply(function(uri, requestBody, cb) {
+        if (!unittest) {
+          this.req.headers.mojioapitoken.should.be.equal(token);
+        }
         this.req.headers['content-type'].should.be.equal(contentType);
         return cb(null, [
           200, {
@@ -33,7 +39,7 @@
       return httpNodeWrapper.request({
         method: 'Get',
         resource: "Vehicles",
-        id: "1"
+        pid: "3"
       }, (function(_this) {
         return function(error, result) {
           testErrorResult(error, result);
@@ -43,8 +49,10 @@
     });
     return it('tests @request get resource with id and form url encoding', function(done) {
       var httpNodeWrapper;
-      nock('https://api.moj.io').get('/v1/Vehicles/1').reply(function(uri, requestBody, cb) {
-        this.req.headers.mojioapitoken.should.be.equal(token);
+      nock('https://api.moj.io').get('/v1/Vehicles/4').reply(function(uri, requestBody, cb) {
+        if (!unittest) {
+          this.req.headers.mojioapitoken.should.be.equal(token);
+        }
         this.req.headers['content-type'].should.be.equal(contentType);
         this.req.headers['host'].should.be.equal("api.moj.io");
         return cb(null, [
@@ -57,7 +65,7 @@
       return httpNodeWrapper.request({
         method: 'Get',
         resource: "Vehicles",
-        id: "1"
+        id: "4"
       }, (function(_this) {
         return function(error, result) {
           testErrorResult(error, result);

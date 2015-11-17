@@ -45,6 +45,8 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
         action.end()
 
     _parts = (request, token, uri, encoding) ->
+        request.pid = request.id if request.id
+        request.sid = request.key if request.key
         uri += HttpWrapperHelper._getPath(request.resource, request.pid,
             request.action, request.sid, request.object, request.tid)
         parts = HttpWrapperHelper._parse(uri, request, encoding, token)
