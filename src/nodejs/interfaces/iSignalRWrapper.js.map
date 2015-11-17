@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "iSignalRWrapper.js",
+  "sourceRoot": "",
+  "sources": [
+    "iSignalRWrapper.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA;AAAA,MAAA;;EAAA,MAAM,CAAC,OAAP,GAAuB;IAEN,4BAAA,GAAA;;iCAEb,SAAA,GAAW,SAAC,OAAD,EAAU,MAAV,EAAkB,UAAlB,EAA8B,OAA9B,EAAuC,cAAvC,EAAuD,QAAvD;AACP,YAAU,IAAA,KAAA,CAAM,iBAAN;IADH;;iCAGX,WAAA,GAAa,SAAC,OAAD,EAAU,MAAV,EAAkB,UAAlB,EAA8B,OAA9B,EAAuC,YAAvC,EAAqD,QAArD;AACT,YAAU,IAAA,KAAA,CAAM,iBAAN;IADD;;;;;AAPjB"
+}

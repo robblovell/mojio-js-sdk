@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "MojioAsyncAwaitStyle.js",
+  "sourceRoot": "",
+  "sources": [
+    "MojioAsyncAwaitStyle.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAEA;AAAA,MAAA;;EAAA,KAAA,GAAQ,OAAA,CAAQ,kBAAR;;EACR,KAAA,GAAQ,OAAA,CAAQ,kBAAR;;EAER,MAAM,CAAC,OAAP,GAAuB;;;mCAMnB,KAAA,GAAO,KAAA,CAAM,SAAA;aACT,KAAA,CAAM,IAAC,CAAA,YAAY,CAAC,QAAd,CAAuB,SAAC,KAAD,EAAQ,MAAR;QACzB,IAAiB,cAAjB;AAAA,iBAAO,OAAP;;QACA,IAAgB,aAAhB;AAAA,iBAAO,MAAP;;MAFyB,CAAvB,CAAN;IADS,CAAN;;;;;AATX"
+}

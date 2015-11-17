@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>CoffeeScript API Documentation</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>MojioRestSDK</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        MojioRestSDK
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>MojioRestSDK.coffee</td>
+        </tr>
+        <tr>
+          <td>Inherits:</td>
+          <td>
+            <a href='../class/MojioAuthSDK.html'>MojioAuthSDK</a>
+          </td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>The REST segment of the Mojio SDK. The REST methods provide a mechanism to retrieve, create, save, or destroy
+objects in the Mojio API. Availablity of REST calls is subject to the access rights of the user authenticated.</p><p>There are two types of resources within the Mojio Domain Model, primary objects and secondary associated objects.
+Primary objects are: Vehicles, Users, Mojios, Trips, Apps, and Groups.  Secondary Objects are Images and Tags.</p><p>This segement of the SDK provides a set of verbs that represent actions within the fluent chain.</p><p>Verbs on primary resources are GET, PUT, POST, DELETE.  QUERY is an alias for GET, both provide a subset of ODATA
+style criteria for retrieval of lists of objects.  ODATA verbs include: TAKE, TOP, SKIP, FILTER, SELECT, and ORDERBY.
+Direct inspection of the code will reveal aliases for all of these verbs.</p><p>Verbs available for actions on secondary resources provide mechanisms to associate secondary resources with primary.
+These are ADD, SET, REMOVE, and GET.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>mojioRestSdk = new MojioSDK({sdk: MojioRestSDK}) # instantiate the mojioSDK to do only REST and authentication methods.</code></pre>
+  </div>
+</div>
+<div class='tags'>
+</div>
+      <h2>Direct Known Subclasses</h2>
+      <p class='children'>
+        <a href='../class/MojioPushSDK.html'>MojioPushSDK</a>
+      </p>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#put-dynamic'>
+        #
+(object)
+<b>put</b><span>(object_or_json_string)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Put sets up the fluent chain in order to save an already persisted object in the Mojio system. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#post-dynamic'>
+        #
+(object)
+<b>post</b><span>(object_or_json_string)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Post sets up the fluent chain in order to create a new persisted object in the Mojio system. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#delete-dynamic'>
+        #
+(object)
+<b>delete</b><span>(id_or_array_of_ids)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Delete sets up the fluent chain to delete an existing persisted object in the Mojio system. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#get-dynamic'>
+        #
+(object)
+<b>get</b><span>(id_example_or_query)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Get sets up the fluent chain for retrieving an existing persisted object in the Mojio system. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#query-dynamic'>
+        #
+(object)
+<b>query</b><span>(id_example_or_query)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Query sets up the fluent chain for retrieving an existing persisted object in the Mojio system. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#select-dynamic'>
+        #
+(object)
+<b>select</b><span>(id_example_or_query)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Select specifies a criteria for the objects that will be returned. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#filter-dynamic'>
+        #
+(object)
+<b>filter</b><span>(filter)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Filter specifies which fields are returned in the objects returned. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#top-dynamic'>
+        #
+(object)
+<b>top</b><span>(top)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Top specifies that the query should only return the given number of results. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#skip-dynamic'>
+        #
+(object)
+<b>skip</b><span>(offset)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Skip specifies that the query should skip the specified number of records when it return the results. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#orderby-dynamic'>
+        #
+(object)
+<b>orderby</b><span>(field, desc = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Orderby specifies that the query results should be ordered by the given field and if it&#39;s descending (true) or ascending (false). 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#field-dynamic'>
+        #
+(object)
+<b>field</b><span>(field, desc = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Field specifies that the query results should be ordered by the given field (partial alias: desc)
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#add-dynamic'>
+        #
+(object)
+<b>add</b><span>(field, desc = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Add allows the code to associate add a tag to a vehicle, mojio, group, user, or app. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#set-dynamic'>
+        #
+(object)
+<b>set</b><span>(field, desc = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Set allows the code to associate an image with a vehicle or user, a tag with a vehicle, mojio, group, user, or app. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#remove-dynamic'>
+        #
+(object)
+<b>remove</b><span>(field, desc = null)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Remove allows the code to remove an associated image with a vehicle or user, or remove a tag from a vehicle, mojio, group, user, or app. 
+    </span>
+  </li>
+</ul>
+      <h2>
+        <small>Inherited Method Summary</small>
+        <h3 class='inherited'>
+          Methods inherited from
+          <a href='../class/MojioAuthSDK.html'>MojioAuthSDK</a>
+        </h3>
+        <p class='inherited'>
+          <a href='../class/MojioAuthSDK.html#authorize-dynamic'>#authorize</a>
+          <a href='../class/MojioAuthSDK.html#unauthorize-dynamic'>#unauthorize</a>
+          <a href='../class/MojioAuthSDK.html#token-dynamic'>#token</a>
+          <a href='../class/MojioAuthSDK.html#parse-dynamic'>#parse</a>
+          <a href='../class/MojioAuthSDK.html#refresh-dynamic'>#refresh</a>
+          <a href='../class/MojioAuthSDK.html#login-dynamic'>#login</a>
+          <a href='../class/MojioAuthSDK.html#consent-dynamic'>#consent</a>
+          <a href='../class/MojioAuthSDK.html#loginAndConsent-dynamic'>#loginAndConsent</a>
+          <a href='../class/MojioAuthSDK.html#prompt-dynamic'>#prompt</a>
+          <a href='../class/MojioAuthSDK.html#scope-dynamic'>#scope</a>
+          <a href='../class/MojioAuthSDK.html#username-dynamic'>#username</a>
+          <a href='../class/MojioAuthSDK.html#email-dynamic'>#email</a>
+          <a href='../class/MojioAuthSDK.html#password-dynamic'>#password</a>
+          <a href='../class/MojioAuthSDK.html#credentials-dynamic'>#credentials</a>
+          <a href='../class/MojioAuthSDK.html#with-dynamic'>#with</a>
+          <a href='../class/MojioModelSDK.html#setup-dynamic'>#setup</a>
+          <a href='../class/MojioModelSDK.html#setCriteria-dynamic'>#setCriteria</a>
+          <a href='../class/MojioModelSDK.html#users-dynamic'>#users</a>
+          <a href='../class/MojioModelSDK.html#vehicles-dynamic'>#vehicles</a>
+          <a href='../class/MojioModelSDK.html#mojios-dynamic'>#mojios</a>
+          <a href='../class/MojioModelSDK.html#trips-dynamic'>#trips</a>
+          <a href='../class/MojioModelSDK.html#apps-dynamic'>#apps</a>
+          <a href='../class/MojioModelSDK.html#groups-dynamic'>#groups</a>
+          <a href='../class/MojioModelSDK.html#permissions-dynamic'>#permissions</a>
+          <a href='../class/MojioModelSDK.html#images-dynamic'>#images</a>
+          <a href='../class/MojioModelSDK.html#tags-dynamic'>#tags</a>
+          <a href='../class/MojioModelSDK.html#details-dynamic'>#details</a>
+          <a href='../class/MojioModelSDK.html#histories-dynamic'>#histories</a>
+          <a href='../class/MojioModelSDK.html#states-dynamic'>#states</a>
+          <a href='../class/MojioModelSDK.html#locations-dynamic'>#locations</a>
+          <a href='../class/MojioModelSDK.html#mock-dynamic'>#mock</a>
+        </p>
+      </h2>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='put-dynamic'>
+      #
+(object)
+<b>put</b><span>(object_or_json_string)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Put sets up the fluent chain in order to save an already persisted object in the Mojio system.
+Use with one of the ModelSDK calls to specify the data for a vehicle, mojio, user, trip, group, or permission.
+(alias: save and update)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.put().vehicle([resourceObject])</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='post-dynamic'>
+      #
+(object)
+<b>post</b><span>(object_or_json_string)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Post sets up the fluent chain in order to create a new persisted object in the Mojio system.
+Use with one of the ModelSDK calls to specify the data for a vehicle, mojio, user, trip, group, or permission.
+(alias: create)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.post().vehicle([resourceObject])</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='delete-dynamic'>
+      #
+(object)
+<b>delete</b><span>(id_or_array_of_ids)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Delete sets up the fluent chain to delete an existing persisted object in the Mojio system.
+Use with one of the ModelSDK calls to specify the Id for a vehicle, mojio, user, trip, group, or permission.
+(alias: destroy)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.delete().vehicle([resourceId])</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='get-dynamic'>
+      #
+(object)
+<b>get</b><span>(id_example_or_query)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Get sets up the fluent chain for retrieving an existing persisted object in the Mojio system.
+Use with one of the ModelSDK calls to specify the Id for a vehicle, mojio, user, trip, group, or permission.
+(alias: query)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get().mojio([resourceId]).submit()</code></pre>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get().tag(key).vehicle(vehicleId).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='query-dynamic'>
+      #
+(object)
+<b>query</b><span>(id_example_or_query)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Query sets up the fluent chain for retrieving an existing persisted object in the Mojio system.
+Use with one of the ModelSDK calls to specify the type of object for a vehicle, mojio, user, trip, group, or permission.
+The query is specified with follow on query specificaiton calls: select, top, skip, orderby, fields and desc.
+(alias: get)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().fields([FieldsList]).select([selectString]).top(#).skip(#).orderby(field).desc(bool)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='select-dynamic'>
+      #
+(object)
+<b>select</b><span>(id_example_or_query)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Select specifies a criteria for the objects that will be returned.
+(alias: where)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().select(&quot;query string&quot;).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='filter-dynamic'>
+      #
+(object)
+<b>filter</b><span>(filter)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Filter specifies which fields are returned in the objects returned.
+(alias: fields)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().top(#).filter([&quot;Location&quot;, &quot;Speed&quot;, &quot;RPM&quot;].submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='top-dynamic'>
+      #
+(object)
+<b>top</b><span>(top)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Top specifies that the query should only return the given number of results.
+(alias: limit)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().top(#).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='skip-dynamic'>
+      #
+(object)
+<b>skip</b><span>(offset)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Skip specifies that the query should skip the specified number of records when it return the results.
+(alias: offset)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().top(#).skip(#).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='orderby-dynamic'>
+      #
+(object)
+<b>orderby</b><span>(field, desc = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Orderby specifies that the query results should be ordered by the given field and if it&#39;s descending (true) or ascending (false). The default is by id ascending.
+(partial alias: desc)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().top(#).skip(#).orderby(TimeStamp, true).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='field-dynamic'>
+      #
+(object)
+<b>field</b><span>(field, desc = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Field specifies that the query results should be ordered by the given field
+(partial alias: desc)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.get&#47;query().vehicles().top(#).skip(#).field(TimeStamp).desc().submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='add-dynamic'>
+      #
+(object)
+<b>add</b><span>(field, desc = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Add allows the code to associate add a tag to a vehicle, mojio, group, user, or app.
+When used with the Sharing SDK, it allows the code to add users to groups or to add permission &#39;access rules&#39; to groups for resources.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.add().tag(key, value).vehicle(vehicleId).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='set-dynamic'>
+      #
+(object)
+<b>set</b><span>(field, desc = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Set allows the code to associate an image with a vehicle or user, a tag with a vehicle, mojio, group, user, or app.
+When used with the Sharing SDK, it allows the code to set users for groups or to set permission &#39;access rules&#39; to resources from groups.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.add().tag(key, value).vehicle(vehicleId).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='remove-dynamic'>
+      #
+(object)
+<b>remove</b><span>(field, desc = null)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Remove allows the code to remove an associated image with a vehicle or user, or remove a tag from a vehicle, mojio, group, user, or app.
+(alias: revoke)</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>sdk.remove().tag(key).vehicle(vehicleId).submit()</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>object</tt>
+      )
+      &mdash;
+      <span class='desc'>this </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  November 16, 15 16:23:59 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.11
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>

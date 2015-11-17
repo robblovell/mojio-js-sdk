@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "NodeRestSDK2_test.js",
+  "sourceRoot": "",
+  "sources": [
+    "NodeRestSDK2_test.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;;AAAA"
+}

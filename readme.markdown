@@ -1,11 +1,11 @@
 ﻿# mojio-js-sdk
 
-Mojio javascript SDK
+This is a pre-release of a new fluent Javascript SDK for Mojio's connected car platform. 
+The SDK is currently under development and is not complete.
+
+Notes: 
 
 Generate documentation:
 
 gulp docs
-
-Not using: jsdoc -d jsdoc ./*.js
-not using: docco -o docco *.coffee
 using codo -o cododocs *.coffee

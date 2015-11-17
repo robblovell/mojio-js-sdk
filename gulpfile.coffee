@@ -12,7 +12,7 @@ parallelize = require("concurrent-transform")
 
 threads = 100
 useSourceMaps = true
-coffeeFiles = ['./src/**/*.coffee','test/**/*.coffee','example/**/*.coffee','examples/**/*.coffee']
+coffeeFiles = ['./*.coffee', './test/**/*.coffee','./unittests/**/*.coffee','./src/**/*.coffee','test/**/*.coffee','example/**/*.coffee','examples/**/*.coffee']
 nodeJsFiles = './src/nodejs/*.js'
 
 handleError = (err) ->
