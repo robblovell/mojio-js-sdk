@@ -65,3 +65,5 @@
   })();
 
 }).call(this);
+
+//# sourceMappingURL=Module.js.map
