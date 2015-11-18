@@ -302,6 +302,10 @@
       return this.credentials(usernameOrEmail_or_credentials, password);
     };
 
+    MojioAuthSDK.prototype.getToken = function() {
+      return this.stateMachine.getToken();
+    };
+
     return MojioAuthSDK;
 
   })(MojioModelSDK);

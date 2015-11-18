@@ -49,3 +49,19 @@ describe 'Node Mojio Auth SDK Methods', ->
         stuff.resource.should.be.equal('oauth2')
         stuff.action.should.be.equal('token')
         stuff.body.redirect_uri.should.be.equal(redirect_url)
+    testErrorResult = (error, result) ->
+        (error==null).should.be.true
+        (result!=null).should.be.true
+    it 'can set token with string', (done) ->
+        sdk = new MojioSDK(init)
+        sdk.token().parse("Token").callback((error, result) ->
+            testErrorResult(error,result)
+            sdk.getToken().access_token.should.be.equal("Token")
+            stuff = sdk.show()
+            stuff.method.should.be.equal('POST')
+            stuff.endpoint.should.be.equal('accounts')
+            stuff.resource.should.be.equal('oauth2')
+            stuff.action.should.be.equal('token')
+            done()
+        )
+        return
