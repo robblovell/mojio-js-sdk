@@ -175,6 +175,15 @@
       } else if (typeof return_url === 'object' && (return_url.access_token != null)) {
         this.stateMachine.setToken(return_url);
         this.stateMachine.setAnswer(return_url);
+      } else if (typeof return_url === 'string') {
+        return_url = {
+          access_token: return_url,
+          expires_in: "unknown",
+          referesh_token: "unknown",
+          token_type: "bearer"
+        };
+        this.stateMachine.setToken(return_url);
+        this.stateMachine.setAnswer(return_url);
       }
       return this;
     };
@@ -291,6 +300,10 @@
         password = null;
       }
       return this.credentials(usernameOrEmail_or_credentials, password);
+    };
+
+    MojioAuthSDK.prototype.getToken = function() {
+      return this.stateMachine.getToken();
     };
 
     return MojioAuthSDK;

@@ -201,6 +201,10 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
         else if (typeof return_url is 'object' and return_url.access_token?)
             @stateMachine.setToken(return_url)
             @stateMachine.setAnswer(return_url)
+        else if (typeof return_url is 'string')
+            return_url = { access_token: return_url, expires_in: "unknown", referesh_token: "unknown", token_type: "bearer" }
+            @stateMachine.setToken(return_url)
+            @stateMachine.setAnswer(return_url)
         return @
 
     # A method that refreshes an authorization token, gives it more active time. Actually, a new token is returned
@@ -331,4 +335,5 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     with: (usernameOrEmail_or_credentials, password=null) ->
         return @credentials(usernameOrEmail_or_credentials, password)
 
-
+    getToken: () ->
+        return @stateMachine.getToken()

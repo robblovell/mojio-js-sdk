@@ -120,6 +120,8 @@ module.exports = class MojioSDKState
         state.token = token
         return
 
+    getToken: () ->
+        return state.token
     # @nodoc
     setAnswer: (token) ->
         state.answer = token
