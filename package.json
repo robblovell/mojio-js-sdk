@@ -2,12 +2,13 @@
   "name": "mojio-js-sdk",
   "author": "Robb Lovell",
   "description": "Mojio javascript REST client.",
-  "version": "4.0.2",
+  "version": "4.0.3",
   "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/mojio/mojio-js"
   },
+  "main": "src/nodejs/sdk/MojioSDK.js",
   "dependencies": {
     "async": "^1.4.2",
     "asyncawait": "^1.0.1",
