@@ -12,15 +12,25 @@ await = require('asyncawait/await')
 describe 'Node Mojio Auth SDK password type auth', ->
 
     call = null
-    timeout = 50
+    timeout = 5000
     callback_url = "http://localhost:3000/callback"
     authorization = {
-        client_id: 'id',
-        client_secret: 'secret'
+        client_id: 'cacc0d94-b6b4-4da7-9983-3991de197038',
+        client_secret: '427d5794-5021-4274-a6e8-a38d5d83bf99'
         redirect_uri: 'http://localhost:3000/callback'
         username: 'testing'
         password: 'Test123!',
         grant_type: 'password',
+    }
+    options = {
+        sdk: MojioAuthSDK,
+        environment: 'staging'
+        accountsURL: 'accounts.moj.io'
+        apiURL: 'api.moj.io'
+        pushURL: 'push.moj.io'
+        client_id: authorization.client_id,
+        client_secret: authorization.client_secret,
+        styles: [MojioPromiseStyle]
     }
 
     setupNock = () ->
@@ -28,7 +38,7 @@ describe 'Node Mojio Auth SDK password type auth', ->
             timeout = 3000
             return {done: () ->}
         else
-            call = nock('https://accounts.moj.io')
+            call = nock('https://staging-accounts.moj.io')
                 .post("/oauth2/token", authorization)
                 .reply((uri, requestBody, cb) ->
                     cb(null, [200, { id: 1}]))
@@ -39,10 +49,10 @@ describe 'Node Mojio Auth SDK password type auth', ->
         (result!=null).should.be.true
 
     it 'can authorize with password flow, callback async', (done) ->
-        @.timeout(timeout)
+#        @.timeout(timeout)
         call = setupNock()
 
-        sdk = new MojioSDK({sdk: MojioAuthSDK, client_id: 'id', client_secret: 'secret', test: true})
+        sdk = new MojioSDK(options)
 
         sdk
         .token(callback_url)
@@ -57,8 +67,7 @@ describe 'Node Mojio Auth SDK password type auth', ->
     it 'can authorize with promise', (done) ->
 #        @.timeout(timeout)
         call = setupNock()
-        sdk = new MojioSDK({sdk: MojioAuthSDK, styles: [MojioPromiseStyle],
-        client_id: 'id', client_secret: 'secret', test: true})
+        sdk = new MojioSDK(options)
 
         promise = sdk
         .token(callback_url)

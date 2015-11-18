@@ -12,14 +12,19 @@ module.exports = class MojioSDKState
 
     # @nodoc
     constructor: (options = {environment: '', version: 'v2'}) ->
-        options.environment = '' if !options.environment?
-        options.version = 'v2' if !options.version?
+        @options = {}
+        @options[p] = v for p,v of options
 
-        options.environment += '-' if options.environment != ''
+        @options.environment = '' if !@options.environment?
+        @options.version = 'v2' if !@options.version?
+        @options.environment += '-' if @options.environment != ''
+        @options.accountsURL = accountsURL if !@options.accountsURL
+        @options.apiURL = apiURL if !@options.apiURL
+        @options.pushURL = pushURL if !@options.pushURL
         @endpoints = {
-            accounts: { uri: "https://" + options.environment + accountsURL , encoding: true }
-            api: { uri: "https://" + options.environment + apiURL + '/' + options.version, encoding: false }
-            push: { uri: "https://" + options.environment + pushURL + '/' + options.version, encoding: false }
+            accounts: { uri: "https://" + @options.environment + @options.accountsURL , encoding: true }
+            api: { uri: "https://" + @options.environment + @options.apiURL + '/' + @options.version, encoding: false }
+            push: { uri: "https://" + @options.environment + @options.pushURL + '/' + @options.version, encoding: false }
         }
         @validator = new MojioValidator()
         @reset()

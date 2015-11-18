@@ -20,7 +20,7 @@ MojioAuthSDK = require './MojioAuthSDK'
 #
 module.exports = class MojioRestSDK extends MojioAuthSDK
     defaults = {
-        hostname: 'api2.moj.io'
+        apiURL: 'api2.moj.io'
         version: 'v2'
     }
     # Constructor for the MojioRestSDK

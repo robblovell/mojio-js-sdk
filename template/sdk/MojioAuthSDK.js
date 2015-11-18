@@ -12,7 +12,9 @@
 
     extend(MojioAuthSDK, superClass);
 
-    defaults = {};
+    defaults = {
+      accountsURL: 'accounts.moj.io'
+    };
 
     styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async'];
 

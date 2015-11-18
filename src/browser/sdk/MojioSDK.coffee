@@ -47,6 +47,7 @@ module.exports = class MojioSDK extends Module
     defaults = {
         sdk_env: 'nodejs'
         test: false
+        environment: ''
     }
     # MojioSDK is a container for working with the Mojio API.
     # The sdk works with either the PushSDK, or can be paired down to just the REST SDK.
@@ -135,5 +136,6 @@ module.exports = class MojioSDK extends Module
 
     me: () ->
         @setup()
+        @stateMachine.setMethod('get')
         @stateMachine.setResource('me')
         return @

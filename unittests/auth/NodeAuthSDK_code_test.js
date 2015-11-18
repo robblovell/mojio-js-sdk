@@ -23,17 +23,27 @@
   await = require('asyncawait/await');
 
   describe('Node Mojio Auth SDK password type auth', function() {
-    var authorization, call, callback_url, setupNock, testErrorResult, timeout;
+    var authorization, call, callback_url, options, setupNock, testErrorResult, timeout;
     call = null;
-    timeout = 50;
+    timeout = 5000;
     callback_url = "http://localhost:3000/callback";
     authorization = {
-      client_id: 'id',
-      client_secret: 'secret',
+      client_id: 'cacc0d94-b6b4-4da7-9983-3991de197038',
+      client_secret: '427d5794-5021-4274-a6e8-a38d5d83bf99',
       redirect_uri: 'http://localhost:3000/callback',
       username: 'testing',
       password: 'Test123!',
       grant_type: 'password'
+    };
+    options = {
+      sdk: MojioAuthSDK,
+      environment: 'staging',
+      accountsURL: 'accounts.moj.io',
+      apiURL: 'api.moj.io',
+      pushURL: 'push.moj.io',
+      client_id: authorization.client_id,
+      client_secret: authorization.client_secret,
+      styles: [MojioPromiseStyle]
     };
     setupNock = function() {
       if ((process.env.FUNCTIONAL_TESTS != null)) {
@@ -42,7 +52,7 @@
           done: function() {}
         };
       } else {
-        call = nock('https://accounts.moj.io').post("/oauth2/token", authorization).reply(function(uri, requestBody, cb) {
+        call = nock('https://staging-accounts.moj.io').post("/oauth2/token", authorization).reply(function(uri, requestBody, cb) {
           return cb(null, [
             200, {
               id: 1
@@ -58,14 +68,8 @@
     };
     it('can authorize with password flow, callback async', function(done) {
       var sdk;
-      this.timeout(timeout);
       call = setupNock();
-      sdk = new MojioSDK({
-        sdk: MojioAuthSDK,
-        client_id: 'id',
-        client_secret: 'secret',
-        test: true
-      });
+      sdk = new MojioSDK(options);
       return sdk.token(callback_url).credentials('testing', 'Test123!').callback(function(error, result) {
         testErrorResult(error, result);
         if (call != null) {
@@ -77,13 +81,7 @@
     return it('can authorize with promise', function(done) {
       var promise, sdk;
       call = setupNock();
-      sdk = new MojioSDK({
-        sdk: MojioAuthSDK,
-        styles: [MojioPromiseStyle],
-        client_id: 'id',
-        client_secret: 'secret',
-        test: true
-      });
+      sdk = new MojioSDK(options);
       promise = sdk.token(callback_url).credentials('testing', 'Test123!').promise();
       return promise.then(function(result) {
         testErrorResult(null, result);

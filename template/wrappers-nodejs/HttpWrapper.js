@@ -103,6 +103,7 @@
     HttpNodeWrapper.prototype.request = function(request, callback) {
       var parts;
       parts = _parts(request, this.token, this.uri, this.encoding);
+      console.log("REQUEST:" + this.url(request));
       return _request(parts, this.requester, callback);
     };
 

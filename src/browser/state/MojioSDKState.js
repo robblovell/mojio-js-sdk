@@ -21,6 +21,7 @@
     defaultEndpoint = "api";
 
     function MojioSDKState(options) {
+      var p, v;
       if (options == null) {
         options = {
           environment: '',
@@ -29,26 +30,40 @@
       }
       this.redirect = bind(this.redirect, this);
       this.initiate = bind(this.initiate, this);
-      if (options.environment == null) {
-        options.environment = '';
+      this.options = {};
+      for (p in options) {
+        v = options[p];
+        this.options[p] = v;
       }
-      if (options.version == null) {
-        options.version = 'v2';
+      if (this.options.environment == null) {
+        this.options.environment = '';
       }
-      if (options.environment !== '') {
-        options.environment += '-';
+      if (this.options.version == null) {
+        this.options.version = 'v2';
+      }
+      if (this.options.environment !== '') {
+        this.options.environment += '-';
+      }
+      if (!this.options.accountsURL) {
+        this.options.accountsURL = accountsURL;
+      }
+      if (!this.options.apiURL) {
+        this.options.apiURL = apiURL;
+      }
+      if (!this.options.pushURL) {
+        this.options.pushURL = pushURL;
       }
       this.endpoints = {
         accounts: {
-          uri: "https://" + options.environment + accountsURL,
+          uri: "https://" + this.options.environment + this.options.accountsURL,
           encoding: true
         },
         api: {
-          uri: "https://" + options.environment + apiURL + '/' + options.version,
+          uri: "https://" + this.options.environment + this.options.apiURL + '/' + this.options.version,
           encoding: false
         },
         push: {
-          uri: "https://" + options.environment + pushURL + '/' + options.version,
+          uri: "https://" + this.options.environment + this.options.pushURL + '/' + this.options.version,
           encoding: false
         }
       };

@@ -17,7 +17,8 @@
 
     defaults = {
       sdk_env: 'nodejs',
-      test: false
+      test: false,
+      environment: ''
     };
 
     function MojioSDK(options) {
@@ -90,6 +91,7 @@
 
     MojioSDK.prototype.me = function() {
       this.setup();
+      this.stateMachine.setMethod('get');
       this.stateMachine.setResource('me');
       return this;
     };
