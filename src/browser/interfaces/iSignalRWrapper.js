@@ -18,3 +18,5 @@
   })();
 
 }).call(this);
+
+//# sourceMappingURL=iSignalRWrapper.js.map

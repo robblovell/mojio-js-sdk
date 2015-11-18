@@ -62,3 +62,5 @@
   })();
 
 }).call(this);
+
+//# sourceMappingURL=SignalRRegistry.js.map
