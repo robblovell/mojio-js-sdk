@@ -48,7 +48,7 @@
       stuff.body.username.should.be.equal(username);
       return stuff.body.password.should.be.equal(password);
     });
-    return it('can set token parameters', function() {
+    it('can set token parameters', function() {
       var sdk, stuff;
       sdk = new MojioSDK(init);
       sdk.token(redirect_url);
@@ -58,6 +58,25 @@
       stuff.resource.should.be.equal('oauth2');
       stuff.action.should.be.equal('token');
       return stuff.body.redirect_uri.should.be.equal(redirect_url);
+    });
+    testErrorResult = function(error, result) {
+      (error === null).should.be["true"];
+      return (result !== null).should.be["true"];
+    };
+    return it('can set token with string', function(done) {
+      var sdk;
+      sdk = new MojioSDK(init);
+      sdk.token().parse("Token").callback(function(error, result) {
+        var stuff;
+        testErrorResult(error, result);
+        sdk.getToken().access_token.should.be.equal("Token");
+        stuff = sdk.show();
+        stuff.method.should.be.equal('POST');
+        stuff.endpoint.should.be.equal('accounts');
+        stuff.resource.should.be.equal('oauth2');
+        stuff.action.should.be.equal('token');
+        return done();
+      });
     });
   });
 

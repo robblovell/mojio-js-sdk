@@ -138,6 +138,10 @@
       state.token = token;
     };
 
+    MojioSDKState.prototype.getToken = function() {
+      return state.token;
+    };
+
     MojioSDKState.prototype.setAnswer = function(token) {
       return state.answer = token;
     };

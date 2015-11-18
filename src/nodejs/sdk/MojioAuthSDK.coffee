@@ -335,4 +335,5 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     with: (usernameOrEmail_or_credentials, password=null) ->
         return @credentials(usernameOrEmail_or_credentials, password)
 
-
+    getToken: () ->
+        return @stateMachine.getToken()
