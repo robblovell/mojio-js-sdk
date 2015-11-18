@@ -103,5 +103,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=HttpWrapperHelper.js.map

@@ -24,5 +24,3 @@
   })();
 
 }).call(this);
-
-//# sourceMappingURL=MojioSyncStyle.js.map
