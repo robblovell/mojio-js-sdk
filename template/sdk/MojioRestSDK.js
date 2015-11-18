@@ -12,7 +12,7 @@
     extend(MojioRestSDK, superClass);
 
     defaults = {
-      hostname: 'api2.moj.io',
+      apiURL: 'api2.moj.io',
       version: 'v2'
     };
 

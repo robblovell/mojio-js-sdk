@@ -14,6 +14,7 @@ MojioModelSDK = require './MojioModelSDK'
 #
 module.exports = class MojioAuthSDK extends MojioModelSDK
     defaults = {
+        accountsURL: 'accounts.moj.io'
     }
     styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async']
     token = null

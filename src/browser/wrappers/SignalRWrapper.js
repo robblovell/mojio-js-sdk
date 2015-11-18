@@ -105,5 +105,3 @@
   })(iSignalRWrapper);
 
 }).call(this);
-
-//# sourceMappingURL=SignalRWrapper.js.map

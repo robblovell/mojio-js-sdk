@@ -58,6 +58,7 @@ module.exports = class HttpNodeWrapper extends iHttpWrapper
 
     request: (request, callback) ->
         parts = _parts(request, @token, @uri, @encoding)
+        console.log("REQUEST:"+@url(request))
         _request(parts, @requester, callback)
 
     redirect: (request, redirectClass=null) => # @applicationName is appname

@@ -12,8 +12,7 @@
     extend(MojioPushSDK, superClass);
 
     defaults = {
-      hostname: 'api2.moj.io',
-      version: 'v2'
+      pushURL: 'push.moj.io'
     };
 
     defaultTransports = {
@@ -66,5 +65,3 @@
   })(MojioRestSDK);
 
 }).call(this);
-
-//# sourceMappingURL=MojioPushSDK.js.map
