@@ -55,7 +55,7 @@ describe 'Node Mojio Auth SDK password type auth', ->
         sdk = new MojioSDK(options)
 
         sdk
-        .token(callb`ack_url)
+        .token(callback_url)
         .credentials('testing', 'Test123!')
         .callback(
             (error, result) ->
