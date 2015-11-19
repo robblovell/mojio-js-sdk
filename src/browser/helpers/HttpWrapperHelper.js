@@ -77,7 +77,7 @@
       }
       parts.headers['Accept'] = 'application/json';
       parts.headers["Content-Type"] = 'application/json';
-      if ((request.body != null)) {
+      if ((request.body != null) && encoding !== false) {
         if ((encoding != null)) {
           parts.headers["Content-Type"] = 'application/x-www-form-urlencoded';
           parts.body = FormUrlencoded.encode(request.body);
@@ -87,7 +87,7 @@
         parts.data = parts.body;
       }
       if ((request.data != null)) {
-        if ((encoding != null)) {
+        if ((encoding != null) && encoding !== false) {
           parts.headers["Content-Type"] = 'application/x-www-form-urlencoded';
           parts.data = FormUrlencoded.encode(request.data);
         } else {

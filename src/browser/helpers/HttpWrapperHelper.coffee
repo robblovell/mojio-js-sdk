@@ -45,7 +45,7 @@ module.exports = class HttpWrapperHelper
         parts.headers['Accept'] = 'application/json'
         parts.headers["Content-Type"] = 'application/json'
 
-        if (request.body?)
+        if (request.body? and encoding != false)
             if (encoding?) #
                 parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
                 parts.body = FormUrlencoded.encode(request.body)
@@ -54,7 +54,7 @@ module.exports = class HttpWrapperHelper
             parts.data = parts.body
 
         if (request.data?)
-            if (encoding?) #
+            if (encoding? and encoding != false) #
                 parts.headers["Content-Type"] = 'application/x-www-form-urlencoded'
                 parts.data = FormUrlencoded.encode(request.data)
             else
