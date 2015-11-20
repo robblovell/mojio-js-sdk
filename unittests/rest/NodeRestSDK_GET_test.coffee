@@ -41,7 +41,6 @@ describe 'Node Mojio Fluent Rest SDK GET calls', ->
         testAccountsURL = 'https://'+options.accountsURL
         testApiURL = 'https://'+options.apiURL
 
-
     beforeEach () ->
         user = null
         mojio = null
