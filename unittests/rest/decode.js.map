@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "decode.js",
+  "sourceRoot": "",
+  "sources": [
+    "decode.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;EAAA,GAAG,CAAC,GAAJ,CAAA,CAAS,CAAC,QAAV,CAAmB,SAAnB,CAA6B,CAAC,OAA9B,CAAA,CAAuC,CAAC,SAAxC,CAAkD,qBAAlD;;EACA,GAAG,CAAC,GAAJ,CAAA,CAAS,CAAC,IAAV,CAAe,qBAAf,CAAqC,CAAC,QAAtC,CAAA,CAEA,CAAC,QAFD,CAEU,SAAC,KAAD,EAAQ,MAAR,GAAA,CAFV;AADA"
+}

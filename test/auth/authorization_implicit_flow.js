@@ -11,6 +11,7 @@
   sdk = new MojioSDK({
     client_id: client_id,
     client_secret: client_secret,
+    environment: "staging",
     site: 'https://accounts.moj.io',
     tokenPath: '/oauth2/token',
     authorizationPath: '/oauth2/authorize',

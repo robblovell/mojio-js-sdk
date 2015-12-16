@@ -139,3 +139,5 @@ module.exports = class MojioSDK extends Module
         @stateMachine.setMethod('get')
         @stateMachine.setResource('me')
         return @
+
+

@@ -15,10 +15,10 @@ describe 'Node Mojio Auth SDK Methods', ->
     grant_type = 'grant_type'
     redirect_url = "http://localhost:3000/callback"
     init = {
-    sdk: MojioAuthSDK,
-    client_id: client_id,
-    client_secret: client_secret
-    test: true,
+        sdk: MojioAuthSDK,
+        client_id: client_id,
+        client_secret: client_secret
+        test: true,
     }
     testErrorResult = (error, result) ->
         (error==null).should.be.true
