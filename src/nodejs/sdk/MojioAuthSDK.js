@@ -139,29 +139,33 @@
           redirect_uri: redirect_uri
         });
       }
+      this.stateMachine.setParse(this.parse);
       return this;
     };
 
-    MojioAuthSDK.prototype.parse = function(return_url) {
+    MojioAuthSDK.prototype.parse = function(return_url, stateMachine) {
       var code, i, len, obj, ref3, t;
+      if (stateMachine == null) {
+        stateMachine = this.stateMachine;
+      }
       if ((return_url != null) && (return_url.query != null) && (return_url.query.code != null)) {
         code = return_url.query.code;
-        this.stateMachine.setBody({
+        stateMachine.setBody({
           code: code,
           grant_type: 'authorization_code'
         });
-        this.stateMachine.setCallback((function(_this) {
+        stateMachine.setCallback((function(_this) {
           return function(error, result) {
             if (error) {
               return console.log('Access Token Error', JSON.stringify(error.content) + "  message:" + error.statusMessage);
             } else {
-              return _this.stateMachine.setToken(result);
+              return stateMachine.setToken(result);
             }
           };
         })(this));
       } else if (return_url.location != null) {
         if (return_url.location.hash === "") {
-          this.stateMachine.setAnswer("");
+          stateMachine.setAnswer("");
         } else if ((return_url.location.hash != null)) {
           obj = {};
           ref3 = return_url.location.hash.split("#")[1].split("&");
@@ -169,12 +173,12 @@
             t = ref3[i];
             obj[t.split("=")[0]] = t.split("=")[1];
           }
-          this.stateMachine.setToken(obj);
-          this.stateMachine.setAnswer(obj);
+          stateMachine.setToken(obj);
+          stateMachine.setAnswer(obj);
         }
       } else if (typeof return_url === 'object' && (return_url.access_token != null)) {
-        this.stateMachine.setToken(return_url);
-        this.stateMachine.setAnswer(return_url);
+        stateMachine.setToken(return_url);
+        stateMachine.setAnswer(return_url);
       } else if (typeof return_url === 'string') {
         return_url = {
           access_token: return_url,
@@ -182,8 +186,8 @@
           referesh_token: "unknown",
           token_type: "bearer"
         };
-        this.stateMachine.setToken(return_url);
-        this.stateMachine.setAnswer(return_url);
+        stateMachine.setToken(return_url);
+        stateMachine.setAnswer(return_url);
       }
       return this;
     };

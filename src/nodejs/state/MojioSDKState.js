@@ -28,6 +28,7 @@
           version: 'v2'
         };
       }
+      this.setParse = bind(this.setParse, this);
       this.redirect = bind(this.redirect, this);
       this.initiate = bind(this.initiate, this);
       this.options = {};
@@ -73,14 +74,20 @@
 
     MojioSDKState.prototype.initiate = function(callback) {
       var callbacks, httpWrapper;
-      callbacks = function(error, result) {
-        if ((state.callback != null)) {
-          state.callback(error, result);
-        }
-        if (callback) {
-          return callback(error, result);
-        }
-      };
+      callbacks = (function(_this) {
+        return function(error, result) {
+          if (state.saveAction === "token" && (_this.parse != null)) {
+            _this.parse(result, _this);
+            state.saveAction = null;
+          }
+          if ((state.callback != null)) {
+            state.callback(error, result);
+          }
+          if (callback) {
+            return callback(error, result);
+          }
+        };
+      })(this);
       if (state.answer != null) {
         callbacks(null, state.answer);
       } else {
@@ -269,6 +276,10 @@
       return state;
     };
 
+    MojioSDKState.prototype.setParse = function(parse) {
+      return this.parse = parse;
+    };
+
     MojioSDKState.prototype.fixup = function() {
       var lowP, lowV, p, results, v;
       results = [];
@@ -296,6 +307,7 @@
       state.pid = null;
       state.sid = null;
       state.tid = null;
+      state.saveAction = state.action;
       state.action = null;
       state.object = null;
       state.parameters = {};

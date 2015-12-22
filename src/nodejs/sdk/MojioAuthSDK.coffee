@@ -161,6 +161,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
         @stateMachine.setAction("token")
         @stateMachine.setBody({ client_id: @client_id, client_secret: @client_secret })
         @stateMachine.setBody({ redirect_uri: redirect_uri}) if redirect_uri?
+        @stateMachine.setParse(@parse)
         return @
 
     # second half of authorization code flow, or parse of the return from the implicit flow
@@ -175,36 +176,36 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @example Get the token after returning from an implicit flow
     #   sdk.token().parse(response).callback(...)
     # @return {object} this
-    parse: (return_url) ->
+    parse: (return_url, stateMachine=@stateMachine) -> # only use stateMachine parameter from the state machine itself.
         if (return_url? and return_url.query? and return_url.query.code?)
             code = return_url.query.code
-            @stateMachine.setBody({
+            stateMachine.setBody({
                 code: code,
                 grant_type: 'authorization_code'
             })
-            @stateMachine.setCallback((error, result) =>
+            stateMachine.setCallback((error, result) =>
                 if (error)
                     console.log('Access Token Error', JSON.stringify(error.content)+"  message:"+error.statusMessage)
                 else
                     # recover the token
-                    @stateMachine.setToken(result)
+                    stateMachine.setToken(result)
             )
         else if return_url.location?
             if (return_url.location.hash== "")
-                @stateMachine.setAnswer("")
+                stateMachine.setAnswer("")
             else if (return_url.location.hash?)
                 obj = {}
                 obj[t.split("=")[0]] = t.split("=")[1] for t in return_url.location.hash.split("#")[1].split("&")
 
-                @stateMachine.setToken(obj)
-                @stateMachine.setAnswer(obj)
+                stateMachine.setToken(obj)
+                stateMachine.setAnswer(obj)
         else if (typeof return_url is 'object' and return_url.access_token?)
-            @stateMachine.setToken(return_url)
-            @stateMachine.setAnswer(return_url)
+            stateMachine.setToken(return_url)
+            stateMachine.setAnswer(return_url)
         else if (typeof return_url is 'string')
             return_url = { access_token: return_url, expires_in: "unknown", referesh_token: "unknown", token_type: "bearer" }
-            @stateMachine.setToken(return_url)
-            @stateMachine.setAnswer(return_url)
+            stateMachine.setToken(return_url)
+            stateMachine.setAnswer(return_url)
         return @
 
     # A method that refreshes an authorization token, gives it more active time. Actually, a new token is returned

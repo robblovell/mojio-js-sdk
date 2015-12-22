@@ -51,7 +51,10 @@ module.exports = class MojioSDKState
     # @nodoc
     # form the request and make the call
     initiate: (callback) =>
-        callbacks = (error, result) ->
+        callbacks = (error, result) =>
+            if (state.saveAction == "token" and @parse?)
+                @parse(result, @)
+                state.saveAction = null
             state.callback(error, result) if (state.callback?)
             callback(error,result) if (callback)
 
@@ -222,6 +225,9 @@ module.exports = class MojioSDKState
                     state.where = id_example_or_query
         return state
 
+    setParse: (parse) =>
+        @parse = parse
+
     # @nodoc
     fixup: () ->
         # remove capitals from fields and values in the state.
@@ -245,6 +251,7 @@ module.exports = class MojioSDKState
         state.pid = null
         state.sid = null
         state.tid = null
+        state.saveAction = state.action
         state.action = null
         state.object = null
 

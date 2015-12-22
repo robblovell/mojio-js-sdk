@@ -91,7 +91,7 @@ app.get('/unauth', (req, res) ->
 #    res.redirect(redirect_url)
 )
 
-# Callback service parsing the authorization token and asking for the access token
+# Callback service parsing the aufthorization token and asking for the access token
 app.get('/callback', (req, res) ->
     code = req.query.code
     console.log('/callback')
