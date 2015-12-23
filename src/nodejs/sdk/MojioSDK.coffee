@@ -129,6 +129,7 @@ module.exports = class MojioSDK extends Module
     # @return {string} Fully formed REST url
     url: () ->
         return @stateMachine.url()
+
     # return the internal state object. Used for debugging this sdk.
     # @return {object} Internal state object built up by the fluent chain.
     show: () ->

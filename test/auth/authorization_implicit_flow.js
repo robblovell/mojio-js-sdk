@@ -2,9 +2,9 @@
 (function() {
   var client_id, client_secret, redirect_uri, sdk;
 
-  client_id = '41a04077-0157-49fb-a35c-6e2824f3b348';
+  client_id = '42c6dfd7-1a58-4fcf-9a94-e287d40cfec7';
 
-  client_secret = 'd80357f8-cbc9-4022-b340-6e99a72e7e0b';
+  client_secret = '1d7d8c3b-7fbc-48bd-b7b7-8549598bfdbb';
 
   redirect_uri = 'http://localhost:63342/mojio-js-sdk/test/auth/authorize.html';
 
