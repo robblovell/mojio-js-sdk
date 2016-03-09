@@ -337,3 +337,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
 
     getToken: () ->
         return @stateMachine.getToken()
+
+    setToken: (token) ->
+        @stateMachine.setToken(token)
+        return
