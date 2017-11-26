@@ -2,7 +2,7 @@
 #MojioSDK = require '../../dist/sdk/MojioSDK'
 #MojioAuthSDK = require '../../src/nodejs/sdk/MojioAuthSDK'
 
-client_id = '0310fd43-beb0-407a-8dcd-c521e339b4f8'
+client_id = 'xxx'
 
 redirect_uri = 'http://localhost:63342/mojio-js-sdk/test/auth/authorize.html'
 

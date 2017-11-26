@@ -6,9 +6,9 @@
 
   app = express();
 
-  client_id = '0310fd43-beb0-407a-8dcd-c521e339b4f8';
+  client_id = 'xxx';
 
-  client_secret = 'ec978a52-7a81-4b7a-90e5-f65e4bc49584';
+  client_secret = 'xxx';
 
   oauth2 = require('simple-oauth2')({
     clientID: client_id,
