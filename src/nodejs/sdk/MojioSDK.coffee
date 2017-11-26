@@ -57,6 +57,7 @@ module.exports = class MojioSDK extends Module
     # @public
     # @nodoc
     constructor: (options={}) ->
+        @stateMachine = new MojioSDKState(options)
 
         # include the sdk level instance functions.
         @include if options.sdk then options.sdk else MojioPushSDK
@@ -70,7 +71,6 @@ module.exports = class MojioSDK extends Module
         # add the rest of the options or defaults to the instance.
         @configure(options, defaults)
         # instantiate the state of the fluent chain.
-        @stateMachine = new MojioSDKState(options)
         super()
 
     # Configure the SDK's options

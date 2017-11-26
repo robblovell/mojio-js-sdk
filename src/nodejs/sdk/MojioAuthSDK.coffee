@@ -1,5 +1,6 @@
 # version 4.0.0
 MojioModelSDK = require './MojioModelSDK'
+MojioSDKState = require '../state/MojioSDKState'
 
 # The authentication segment of the Mojio SDK. Authentication is accomplished through the use of a Mojio OAuth server.
 # Consumer applications authenticate by redirecting to the OAuth server and waiting for a redirect back to the application's
@@ -18,7 +19,14 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     }
     styleParameters = ['callback', 'promise', 'sync', 'subscribe', 'observable', 'async']
     token = null
-
+    configureAuth: (options={}, defaults={}) ->
+        #        _.extend(@, options)
+        #        _.defaults(@, defaults)
+        for property,value of options
+            @[property] = value
+        for property,value of defaults
+            @[property] = value if !@[property]?
+        return @
     # Construct a MojioAuthSDK object.
     #
     # @example New MojioAuthSDK
@@ -29,9 +37,11 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @nodoc
     constructor: (options={}) ->
         super()
-        @configure(options, defaults)
+        @configureAuth(options, defaults)
         @currentUser = null
         # set up the state variables needed for the Auth SDK
+        @stateMachine = new MojioSDKState(options) if !@stateMachine
+    
         @stateMachine.client = @client_id
         @stateMachine.secret = @client_secret
         @stateMachine.site = @site
@@ -175,7 +185,7 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     # @example Get the token after returning from an implicit flow
     #   sdk.token().parse(response).callback(...)
     # @return {object} this
-    parse: (return_url) ->
+    parse: (return_url) =>
         if (return_url? and return_url.query? and return_url.query.code?)
             code = return_url.query.code
             @stateMachine.setBody({
@@ -337,7 +347,3 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
 
     getToken: () ->
         return @stateMachine.getToken()
-
-    setToken: (token) ->
-        @stateMachine.setToken(token)
-        return

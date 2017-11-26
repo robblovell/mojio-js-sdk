@@ -31,49 +31,10 @@
         <tr>
           <td>Inherits:</td>
           <td>
-            Module
+            <a href='../class/MojioRestSDK.html'>MojioRestSDK</a>
           </td>
         </tr>
       </table>
-      <h2>Overview</h2>
-      <div class='docstring'>
-  <p>The Mojio SDK. The Mojio SDK provides a means to easily use Mojio&#39;s Authentication Server, REST API, and Push API.</p><p>The SDK works with four code segments: MojioModel, MojioAuth, MojioRest, and MojioPush that work together to provide
-methods for constructing fluent method calls.</p><p>MojioModel provides mechanisms for specifying resources and data for resources.</p><p>MojioAuth provides a security layer through OAuth2.</p><p>MojioRest provides ways to make rest calls to the API and preform CRUD operations as well as update associates with
-secondary resources like permissions, images or tags.</p><p>MojioPush methods provide a way to subscribe to changes that occur on primary resources. The Push SDK allows data to
-be sent to the application without it requesting it through transports like SignalR, Http Post, MQTT or others.</p><p>Four programming styles are supported, synchronous, asynchronous with callbacks (node js style), asynchronous with promises,
-and asynchronous with reactive streams. Choose one style and or multiple, but each fluent call must operate in one of
-these modes at the end of the fluent chain.</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      initate a fluent chain to retrieve a the vehicle given using a synchronous call. (don&#39;t do this very often).
-    </h4>
-    <pre><code class='coffeescript'>sdk = new MojioSDK()
-result = sdk.get().vehicle(vehicleId).sync()
-...</code></pre>
-    <h4>
-      initate a fluent chain to retrieve a the vehicle given using an asynchronous initiation with a callback.
-    </h4>
-    <pre><code class='coffeescript'>sdk = new MojioSDK()
-sdk.get().vehicle(vehicleId).callback((error, result) -&gt;
-  ...
-)</code></pre>
-    <h4>
-      initate a fluent chain to retrieve a the vehicle given using an asynchronous initiation with a promise.
-    </h4>
-    <pre><code class='coffeescript'>sdk = new MojioSDK()
-promise = sdk.get().vehicle(vehicleId).callback()
-...</code></pre>
-    <h4>
-      initate a fluent chain to retrieve a the vehicle given using an asynchronous initiation with a reative stream.
-    </h4>
-    <pre><code class='coffeescript'>sdk = new MojioSDK()
-stream = sdk.get().vehicle(vehicleId).callback()
-...</code></pre>
-  </div>
-</div>
-<div class='tags'>
-</div>
       <h2>Instance Method Summary</h2>
       <ul class='summary'>
   <li>
@@ -150,6 +111,61 @@ stream = sdk.get().vehicle(vehicleId).callback()
     </span>
   </li>
 </ul>
+      <h2>
+        <small>Inherited Method Summary</small>
+        <h3 class='inherited'>
+          Methods inherited from
+          <a href='../class/MojioRestSDK.html'>MojioRestSDK</a>
+        </h3>
+        <p class='inherited'>
+          <a href='../class/MojioRestSDK.html#put-dynamic'>#put</a>
+          <a href='../class/MojioRestSDK.html#post-dynamic'>#post</a>
+          <a href='../class/MojioRestSDK.html#delete-dynamic'>#delete</a>
+          <a href='../class/MojioRestSDK.html#get-dynamic'>#get</a>
+          <a href='../class/MojioRestSDK.html#query-dynamic'>#query</a>
+          <a href='../class/MojioRestSDK.html#select-dynamic'>#select</a>
+          <a href='../class/MojioRestSDK.html#filter-dynamic'>#filter</a>
+          <a href='../class/MojioRestSDK.html#top-dynamic'>#top</a>
+          <a href='../class/MojioRestSDK.html#skip-dynamic'>#skip</a>
+          <a href='../class/MojioRestSDK.html#orderby-dynamic'>#orderby</a>
+          <a href='../class/MojioRestSDK.html#field-dynamic'>#field</a>
+          <a href='../class/MojioRestSDK.html#add-dynamic'>#add</a>
+          <a href='../class/MojioRestSDK.html#set-dynamic'>#set</a>
+          <a href='../class/MojioRestSDK.html#remove-dynamic'>#remove</a>
+          <a href='../class/MojioAuthSDK.html#authorize-dynamic'>#authorize</a>
+          <a href='../class/MojioAuthSDK.html#unauthorize-dynamic'>#unauthorize</a>
+          <a href='../class/MojioAuthSDK.html#token-dynamic'>#token</a>
+          <a href='../class/MojioAuthSDK.html#parse-dynamic'>#parse</a>
+          <a href='../class/MojioAuthSDK.html#refresh-dynamic'>#refresh</a>
+          <a href='../class/MojioAuthSDK.html#login-dynamic'>#login</a>
+          <a href='../class/MojioAuthSDK.html#consent-dynamic'>#consent</a>
+          <a href='../class/MojioAuthSDK.html#loginAndConsent-dynamic'>#loginAndConsent</a>
+          <a href='../class/MojioAuthSDK.html#prompt-dynamic'>#prompt</a>
+          <a href='../class/MojioAuthSDK.html#scope-dynamic'>#scope</a>
+          <a href='../class/MojioAuthSDK.html#username-dynamic'>#username</a>
+          <a href='../class/MojioAuthSDK.html#email-dynamic'>#email</a>
+          <a href='../class/MojioAuthSDK.html#password-dynamic'>#password</a>
+          <a href='../class/MojioAuthSDK.html#credentials-dynamic'>#credentials</a>
+          <a href='../class/MojioAuthSDK.html#with-dynamic'>#with</a>
+          <a href='../class/MojioAuthSDK.html#getToken-dynamic'>#getToken</a>
+          <a href='../class/MojioModelSDK.html#setup-dynamic'>#setup</a>
+          <a href='../class/MojioModelSDK.html#setCriteria-dynamic'>#setCriteria</a>
+          <a href='../class/MojioModelSDK.html#users-dynamic'>#users</a>
+          <a href='../class/MojioModelSDK.html#vehicles-dynamic'>#vehicles</a>
+          <a href='../class/MojioModelSDK.html#mojios-dynamic'>#mojios</a>
+          <a href='../class/MojioModelSDK.html#trips-dynamic'>#trips</a>
+          <a href='../class/MojioModelSDK.html#apps-dynamic'>#apps</a>
+          <a href='../class/MojioModelSDK.html#groups-dynamic'>#groups</a>
+          <a href='../class/MojioModelSDK.html#permissions-dynamic'>#permissions</a>
+          <a href='../class/MojioModelSDK.html#images-dynamic'>#images</a>
+          <a href='../class/MojioModelSDK.html#tags-dynamic'>#tags</a>
+          <a href='../class/MojioModelSDK.html#details-dynamic'>#details</a>
+          <a href='../class/MojioModelSDK.html#histories-dynamic'>#histories</a>
+          <a href='../class/MojioModelSDK.html#states-dynamic'>#states</a>
+          <a href='../class/MojioModelSDK.html#locations-dynamic'>#locations</a>
+          <a href='../class/MojioModelSDK.html#mock-dynamic'>#mock</a>
+        </p>
+      </h2>
       <h2>Instance Method Details</h2>
       <div class='methods'>
   <div class='method_details'>
@@ -291,11 +307,11 @@ in server environments, the redirect call may need to be wrapped as it is in the
 </div>
     </div>
     <div id='footer'>
-  November 17, 15 17:54:44 by
+  By
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
-  2.0.11
+  2.1.2
   &#10034;
   Press H to see the keyboard shortcuts
   &#10034;

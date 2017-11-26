@@ -11,7 +11,7 @@ module.exports = class SignalRNodeWrapper extends iSignalRWrapper
         @available_hubs = hubNames
         @signalr = null
         super()
-            
+        
     getHub: (which, callback, retries = 10) ->
         @signalr ?= new SignalR.client(@url, @available_hubs, null)
         hub = registry.hubs[which]

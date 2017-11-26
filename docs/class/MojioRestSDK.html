@@ -35,27 +35,10 @@
           </td>
         </tr>
       </table>
-      <h2>Overview</h2>
-      <div class='docstring'>
-  <p>The REST segment of the Mojio SDK. The REST methods provide a mechanism to retrieve, create, save, or destroy
-objects in the Mojio API. Availablity of REST calls is subject to the access rights of the user authenticated.</p><p>There are two types of resources within the Mojio Domain Model, primary objects and secondary associated objects.
-Primary objects are: Vehicles, Users, Mojios, Trips, Apps, and Groups.  Secondary Objects are Images and Tags.</p><p>This segement of the SDK provides a set of verbs that represent actions within the fluent chain.</p><p>Verbs on primary resources are GET, PUT, POST, DELETE.  QUERY is an alias for GET, both provide a subset of ODATA
-style criteria for retrieval of lists of objects.  ODATA verbs include: TAKE, TOP, SKIP, FILTER, SELECT, and ORDERBY.
-Direct inspection of the code will reveal aliases for all of these verbs.</p><p>Verbs available for actions on secondary resources provide mechanisms to associate secondary resources with primary.
-These are ADD, SET, REMOVE, and GET.</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      
-    </h4>
-    <pre><code class='coffeescript'>mojioRestSdk = new MojioSDK({sdk: MojioRestSDK}) # instantiate the mojioSDK to do only REST and authentication methods.</code></pre>
-  </div>
-</div>
-<div class='tags'>
-</div>
       <h2>Direct Known Subclasses</h2>
       <p class='children'>
         <a href='../class/MojioPushSDK.html'>MojioPushSDK</a>
+        <a href='../class/MojioSDK.html'>MojioSDK</a>
       </p>
       <h2>Instance Method Summary</h2>
       <ul class='summary'>
@@ -733,11 +716,11 @@ When used with the Sharing SDK, it allows the code to set users for groups or to
 </div>
     </div>
     <div id='footer'>
-  November 17, 15 17:54:44 by
+  By
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
-  2.0.11
+  2.1.2
   &#10034;
   Press H to see the keyboard shortcuts
   &#10034;

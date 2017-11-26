@@ -4,7 +4,7 @@ FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class HttpWrapperHelper
     constructor: () ->
-        super()
+#        super()
 
     @_makeParameters: (params) ->
         '' if params.length==0
@@ -40,7 +40,7 @@ module.exports = class HttpWrapperHelper
         parts.path += parts.params
         parts.headers = {}
 
-        parts.headers["MojioAPIToken"] = token.access_token if token?
+        parts.headers["MojioAPIToken"] = token.access_token if token? and token.access_token?
         parts.headers += request.headers if (request.headers?)
         parts.headers['Accept'] = 'application/json'
         parts.headers["Content-Type"] = 'application/json'

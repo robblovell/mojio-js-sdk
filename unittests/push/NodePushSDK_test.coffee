@@ -66,20 +66,23 @@ describe 'Node Mojio Fluent Push SDK', ->
             ,
                 (cb) ->
                     console.log("Mock User")
-                    sdk.mock().user({}).callback(
-                        (error, result) -> user = result; cb(error, result))
+                    sdk.mock().users({}).callback(
+                        (error, result) ->
+                            user = result; cb(error, result))
             ,
                 (cb) ->
                     console.log("Mock Mojio")
 
-                    sdk.mojio({UserId: user.id, Imei: "9991234567891234"})
-                    .mock((error, result) -> mojio = result; cb(error, result))
+                    sdk.mock().mojios({UserId: user.id, Imei: "9991234567891234"}).callback(
+                        (error, result) ->
+                            mojio = result; cb(error, result))
             ,
                 (cb) ->
                     console.log("Mock Vehicle")
 
-                    sdk.mock().vehicle({MojioId: mojio.id, UserId: user.id, Speed: 80},
-                        ((error, result) -> vehicle = result; cb(error, result)))
+                    sdk.mock().vehicles({MojioId: mojio.id, UserId: user.id, Speed: 80}).callback(
+                        (error, result) ->
+                            vehicle = result; cb(error, result))
             ,
                 (cb) ->
                     test(cb) # execute a test.
@@ -100,6 +103,7 @@ describe 'Node Mojio Fluent Push SDK', ->
 
     it 'can create an observer of vehicles with minimum defaults', (done) ->
         @.timeout(2000)
+        callbackTimes = 0
         execute(
             (cb) ->
                 console.log("Start observer test")
@@ -112,7 +116,7 @@ describe 'Node Mojio Fluent Push SDK', ->
                         # change the vehicle
                         console.log("Change Vehicle")
                         changeVehicle(vehicle, cb)
-                    else if (++callbackTimes == 2 or result instanceof 'object') # we are in a callback via signalR
+                    else if (++callbackTimes == 2 or typeof result is 'object') # we are in a callback via signalR
                         # todo: test validity of vehicle
                         cb(null, result)
                 )
@@ -121,45 +125,45 @@ describe 'Node Mojio Fluent Push SDK', ->
         )
 
 
-    it 'can create a complex observer of vehicles', (done) ->
-        @.timeout(2000)
-        execute(
-            (cb) ->
-                sdk.observe({key: "AccidentStateOnVehicleForMojio"})
-                .vehicles()
-                .fields([
-                        "VIN",
-                        "AccidentState",
-                        "Battery",
-                        "Location",
-                        "Heading",
-                        "Altitude",
-                        "Speed",
-                        "Accelerometer",
-                        "LastContactTime",
-                        "GatewayTimeStamp",
-                        "FuelLevel"
-                    ])
-
-                .where("Battery > min or Battery < max and MojioId == [mojio id]")
-# later: .Where("Battery ∆ -20")
-
-                .throttle("1 second") # 1 second, 1 minute, 3.17:25:30.5000000
-                .throttle("5 samples") # 1 second, 1 minute, 3.17:25:30.5000000
-                .debounce("3 samples")
-                .debounce("3 seconds")
-                .timing(['edge','high'])
-                .transport({
-                        Type: "SignalR",
-                        Callback: (error, result) ->
-                            testErrorResult(error, result)
-                            # todo: test validity of vehicle
-                            done()
-                    })
-                .callback((error, result) ->
-                    testErrorResult(error, result)
-                    changeVehicle(vehicle, cb)
-                )
-            ,
-            done
-        )
+#    it 'can create a complex observer of vehicles', (done) ->
+#        @.timeout(2000)
+#        execute(
+#            (cb) ->
+#                sdk.observe({key: "AccidentStateOnVehicleForMojio"})
+#                .vehicles()
+#                .fields([
+#                        "VIN",
+#                        "AccidentState",
+#                        "Battery",
+#                        "Location",
+#                        "Heading",
+#                        "Altitude",
+#                        "Speed",
+#                        "Accelerometer",
+#                        "LastContactTime",
+#                        "GatewayTimeStamp",
+#                        "FuelLevel"
+#                    ])
+#
+#                .where("Battery > min or Battery < max and MojioId == [mojio id]")
+## later: .Where("Battery ∆ -20")
+#
+#                .throttle("1 second") # 1 second, 1 minute, 3.17:25:30.5000000
+#                .throttle("5 samples") # 1 second, 1 minute, 3.17:25:30.5000000
+#                .debounce("3 samples")
+#                .debounce("3 seconds")
+#                .timing(['edge','high'])
+#                .transport({
+#                        Type: "SignalR",
+#                        Callback: (error, result) ->
+#                            testErrorResult(error, result)
+#                            # todo: test validity of vehicle
+#                            done()
+#                    })
+#                .callback((error, result) ->
+#                    testErrorResult(error, result)
+#                    changeVehicle(vehicle, cb)
+#                )
+#            ,
+#            done
+#        )

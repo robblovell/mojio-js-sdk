@@ -11,13 +11,13 @@ cp -f template/styles-nodejs/* src/nodejs/styles
 cp -f template/wrappers-nodejs/* src/nodejs/wrappers
 
 echo "Build Javascript from Coffeescript..."
-coffee --compile src/nodejs
+node_modules/.bin/coffee --compile src/nodejs
 
-echo "Build the documentation"
-cd src/nodejs/sdk
-codo -o ../../../lib/docs *.coffee
-codo -o ../../../docs *.coffee
-cd ../../../
+#echo "Build the documentation"
+#cd src/nodejs/sdk
+#codo -o ../../../lib/docs *.coffee
+#codo -o ../../../docs *.coffee
+#cd ../../../
 
 echo "Combine files using browserify..."
 
@@ -61,9 +61,9 @@ cd ../styles
 
 echo "Uglify and minimize browser sdk..."
 cd ../../../dist
-uglifyjs --preamble "// version 4.0.0" mojio-sdk.js -p relative -o ./mojio-sdk.min.js
-uglifyjs --preamble "// version 4.0.0" mojio-sdk-promise.js -p relative -o ./mojio-sdk-promise.min.js
-uglifyjs --preamble "// version 4.0.0" mojio-sdk-reactive.js -p relative -o ./mojio-sdk-reactive.min.js
+uglifyjs --preamble "// version 4.0.0" mojio-sdk.js -o ./mojio-sdk.min.js
+uglifyjs --preamble "// version 4.0.0" mojio-sdk-promise.js  -o ./mojio-sdk-promise.min.js
+uglifyjs --preamble "// version 4.0.0" mojio-sdk-reactive.js -o ./mojio-sdk-reactive.min.js
 cd ../../../
 echo "Completed browser SDK"
 

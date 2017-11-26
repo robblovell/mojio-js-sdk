@@ -11589,27 +11589,27 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       e.preventDefault();
       try {
         parent.frames.list.$('#search input').focus().select();
-      } catch (_error) {}
+      } catch (error) {}
       try {
         return $('#search input').focus().select();
-      } catch (_error) {}
+      } catch (error) {}
     });
     key('esc', function() {
       try {
         parent.frames.list.$('#search input').blur();
         parent.frames.main.$('#help').hide();
         parent.frames.main.$('#fuzzySearch').hide();
-      } catch (_error) {}
+      } catch (error) {}
       try {
         parent.$("#search .active").click();
         parent.$('#help').hide();
         parent.$('#fuzzySearch').hide();
-      } catch (_error) {}
+      } catch (error) {}
       try {
         $('#search input').blur();
         $('#help').hide();
         return $('#fuzzySearch').hide();
-      } catch (_error) {}
+      } catch (error) {}
     });
     key('l', function() {
       var body;
@@ -11640,10 +11640,10 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
     key('h', function() {
       try {
         return parent.frames.main.$('#help').toggle();
-      } catch (_error) {
+      } catch (error) {
         try {
           return $('#help').toggle();
-        } catch (_error) {}
+        } catch (error) {}
       }
     });
     return key('t', function(e) {
@@ -11651,11 +11651,11 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
       try {
         $('#fuzzySearch').toggle();
         $('#fuzzySearch input').focus().select();
-      } catch (_error) {}
+      } catch (error) {}
       try {
         parent.frames.main.$('#fuzzySearch').show();
         return parent.frames.main.$('#fuzzySearch input').focus().select();
-      } catch (_error) {}
+      } catch (error) {}
     });
   });
 
@@ -11721,6 +11721,29 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
         return $('#fuzzySearch').height(45);
       }
     });
+  });
+
+}).call(this);
+(function() {
+  $(function() {
+    var parser, starter;
+    if ($('frameset').length > 0) {
+      parser = document.createElement('a');
+      parser.href = location.href;
+      starter = parser.hash.substr(1);
+      if (starter.length > 0) {
+        $('#content')[0].contentWindow.location.href = starter;
+      }
+      return $('#content').load(function() {
+        var hash;
+        hash = encodeURI(this.contentWindow.location.href);
+        if (history.pushState) {
+          return history.replaceState(null, document.title, '#' + hash);
+        } else {
+          return location.hash = hash;
+        }
+      });
+    }
   });
 
 }).call(this);

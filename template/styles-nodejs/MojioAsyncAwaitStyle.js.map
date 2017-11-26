@@ -6,5 +6,8 @@
     "MojioAsyncAwaitStyle.coffee"
   ],
   "names": [],
-  "mappings": ";AAEA;AAAA,MAAA;;EAAA,KAAA,GAAQ,OAAA,CAAQ,kBAAR;;EACR,KAAA,GAAQ,OAAA,CAAQ,kBAAR;;EAER,MAAM,CAAC,OAAP,GAAuB;;;mCAMnB,KAAA,GAAO,KAAA,CAAM,SAAA;aACT,KAAA,CAAM,IAAC,CAAA,YAAY,CAAC,QAAd,CAAuB,SAAC,KAAD,EAAQ,MAAR;QACzB,IAAiB,cAAjB;AAAA,iBAAO,OAAP;;QACA,IAAgB,aAAhB;AAAA,iBAAO,MAAP;;MAFyB,CAAvB,CAAN;IADS,CAAN;;;;;AATX"
+  "mappings": ";AAAA;EAAA;AAAA,MAAA,oBAAA,EAAA,OAAA,EAAA;;EAEA,OAAA,GAAU,OAAA,CAAQ,kBAAR;;EACV,OAAA,GAAU,OAAA,CAAQ,kBAAR;;EAEV,MAAM,CAAC,OAAP,GAAuB;IAAN,MAAA,qBAAA,CAAA;;;;;;;mCAMb,OAAA,GAAS,OAAA,CAAQ,QAAA,CAAA,CAAA;aACb,OAAA,CAAQ,IAAC,CAAA,YAAY,CAAC,QAAd,CAAuB,QAAA,CAAC,KAAD,EAAQ,MAAR,CAAA;QAC3B,IAAiB,cAAjB;AAAA,iBAAO,OAAP;;QACA,IAAgB,aAAhB;AAAA,iBAAO,MAAP;;MAF2B,CAAvB,CAAR;IADa,CAAR;;;;;AAXb",
+  "sourcesContent": [
+    "# version 5.0.0\n\nasyncIt = require('asyncawait/async')\nawaitIt = require('asyncawait/await')\n\nmodule.exports = class MojioAsyncAwaitStyle\n    # async initiates the fluent chain asynchronously using async await constructs that will be updated once\n    # the request has returned. It is one of four ways to initiate fluent requests, one of which must be called for requests to be made.\n    # When the actions of the chain are completed, the promise is updated and its then clause executed. Anyone\n    # attaching to the promise is also called.\n    # @public\n    asyncIt: asyncIt () ->\n        awaitIt @stateMachine.initiate((error, result) ->\n            return result if result?\n            return error if error?\n        )\n\n\n"
+  ]
 }

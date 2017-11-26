@@ -1,23 +1,14 @@
-MojioREST = require '.././rest/MojioREST'
-User = require '.././models/User'
-Mojio = require '.././models/Mojio'
-Vehicle = require '.././models/Vehicle'
-Trip = require '.././models/Trip'
-App = require '.././models/App'
-should = require('should')
-async = require('async')
+MojioREST = require '../../src/nodejs/sdk/MojioRestSDK'
+
 nock = require 'nock'
 
 describe 'Node Mojio Rest SDK', ->
-    user = null
-    mojio = null
-    vehicle = null
 
     testErrorResult = (error, result) ->
         (error==null).should.be.true
         (result!=null).should.be.true
 
-    it 'can query, create, save, and delete user, vehicle, mojio, or trip', (done) ->
+    it 'can query, create, save, and delete user, vehicle, mojio, or trip', () ->
         sdk = new MojioREST(token="test") # when the token is "test" return the rest url.
         for call in ["get", "put", "post", "delete"]
             for resource in ["users", "vehicles", "trips", "mojios", "apps"]

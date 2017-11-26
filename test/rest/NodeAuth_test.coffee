@@ -1,4 +1,4 @@
-MojioAuth = require '.././rest/MojioAuth'
+MojioAuth = require '../../src/nodejs/sdk/MojioAuthSDK'
 
 should = require('should')
 async = require('async')

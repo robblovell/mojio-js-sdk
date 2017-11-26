@@ -32,18 +32,19 @@ module.exports = class MojioPushSDK extends MojioRestSDK
     defaults = {
         pushURL: 'push.moj.io'
     }
-    defaultTransports = { signalr: {}, httpPost: {}}
+    transports = { signalr: {}, httpPost: {}}
 
+    defaultTransport = transports.signalr
     # Instantiate the Mojio Push SDK.
     #
     # @param {object} options
     # @return {object} this
     # @nodoc
-    constructor: (transports, options={}) ->
+    constructor: (options={}, transports=defaultTransport) ->
+        super(options)
         for property, value of transports
             @[property] = value
 #        _.extend(@, transports)
-        super(options)
 
     # Observe a Vehicle, Mojio, or User object in the Mojio API.
     #

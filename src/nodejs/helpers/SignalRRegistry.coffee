@@ -3,8 +3,8 @@ module.exports = class SignalRRegistry
     observer_callbacks:  {}
 
     constructor: () ->
+#        super()
         @hubs = {}
-        super()
 
     observer_registry: (entity) =>
         # need to have the observer id to look this up here.

@@ -35,23 +35,6 @@
           </td>
         </tr>
       </table>
-      <h2>Overview</h2>
-      <div class='docstring'>
-  <p>The authentication segment of the Mojio SDK. Authentication is accomplished through the use of a Mojio OAuth server.
-Consumer applications authenticate by redirecting to the OAuth server and waiting for a redirect back to the application&#39;s
-authentication return url.  Once the authentication server has validated the user&#39;s credentials it passes back a token
-through the redirect url to the consumer application.</p><p>For server applications that have their own username and password within the Mojio API, the OAuth server provides a means
-to directly authenticate the server with it&#39;s credentials with a direct client-server request.</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      
-    </h4>
-    <pre><code class='coffeescript'>mojioAuthSdk = new MojioSDK({sdk: MojioAuthSDK}) # instantiate the mojioSDK to do only authentication methods.</code></pre>
-  </div>
-</div>
-<div class='tags'>
-</div>
       <h2>Direct Known Subclasses</h2>
       <p class='children'>
         <a href='../class/MojioRestSDK.html'>MojioRestSDK</a>
@@ -103,8 +86,9 @@ to directly authenticate the server with it&#39;s credentials with a direct clie
       </a>
     </span>
     <span class='desc'>
-      second half of authorization code flow, or parse of the return from the implicit flow <p>the authorization token returned from the authorization workflow is an object that has several fields, one of
-which is labeled &quot;refresh_token&quot;.</p>
+      second half of authorization code flow, or parse of the return from the implicit flow the authorization token returned from the authorization workflow is an object that has several fields, one of
+which is labeled &quot;refresh_token&quot;.
+
     </span>
   </li>
   <li>
@@ -951,11 +935,11 @@ format: {username: &#39;&#39;, password: &#39;&#39;}</p>
 </div>
     </div>
     <div id='footer'>
-  November 17, 15 17:54:44 by
+  By
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
-  2.0.11
+  2.1.2
   &#10034;
   Press H to see the keyboard shortcuts
   &#10034;

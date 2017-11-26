@@ -3,7 +3,6 @@ HttpWrapper = require '../wrappers/HttpWrapper'
 MojioValidator = require './MojioValidator'
 # @nodoc
 module.exports = class MojioSDKState
-    state = {}
 
     accountsURL = "accounts.moj.io"
     pushURL = "push.moj.io"
@@ -12,6 +11,7 @@ module.exports = class MojioSDKState
 
     # @nodoc
     constructor: (options = {environment: '', version: 'v2'}) ->
+        @_state = {}
         @options = {}
         @options[p] = v for p,v of options
 
@@ -51,49 +51,52 @@ module.exports = class MojioSDKState
     # @nodoc
     # form the request and make the call
     initiate: (callback) =>
-        callbacks = (error, result) ->
-            state.callback(error, result) if (state.callback?)
-            callback(error,result) if (callback)
-
-        if state.answer?
-            callbacks(null, state.answer)
+        if @_state.mock
+            callback(null, { id: "1" })
         else
-#            @validator.credentials(state.body)
-
-            # the http wrapper holds the url, the token, and the encoding type for the endpoint.
-            httpWrapper = new HttpWrapper(state.token,
-                @endpoints[state.endpoint].uri,
-                @endpoints[state.endpoint].encoding) # push, accounts, or api
-            # the request needs at least method and resource.
-            # parameters, method, headers, resource, id, action, key, body.
-            httpWrapper.request(@parts(false), callbacks)
-        @reset()
+            callbacks = (error, result) =>
+                @_state.callback(error, result) if (@_state.callback?)
+                callback(error,result) if (callback)
+    
+            if @_state.answer?
+                callbacks(null, @_state.answer)
+            else
+    #            @validator.credentials(@_state.body)
+    
+                # the http wrapper holds the url, the token, and the encoding type for the endpoint.
+                httpWrapper = new HttpWrapper(@_state.token,
+                    @endpoints[@_state.endpoint].uri,
+                    @endpoints[@_state.endpoint].encoding) # push, accounts, or api
+                # the request needs at least method and resource.
+                # parameters, method, headers, resource, id, action, key, body.
+                httpWrapper.request(@parts(false), callbacks)
+            @reset()
     # @nodoc
     redirect: (redirectClass=null) =>
-        httpWrapper = new HttpWrapper(state.token,
-            @endpoints[state.endpoint].uri, @endpoints[state.endpoint].encoding)
+        httpWrapper = new HttpWrapper(@_state.token,
+            @endpoints[@_state.endpoint].uri, @endpoints[@_state.endpoint].encoding)
         httpWrapper.redirect(@parts(true), redirectClass)
 
     # @nodoc
     url: (bodyAsParameters = true) ->
-        httpWrapper = new HttpWrapper(state.token,
-            @endpoints[state.endpoint].uri,
-            @endpoints[state.endpoint].encoding)
+        httpWrapper = new HttpWrapper(@_state.token,
+            @endpoints[@_state.endpoint].uri,
+            @endpoints[@_state.endpoint].encoding)
         url = httpWrapper.url(@parts(bodyAsParameters))
         return url
 
     # @nodoc
     parts: (bodyAsParameters = true) ->
         return {
-            method: state.method,
-            resource: state.resource,
-            pid: state.pid,
-            action: state.action,
-            sid: state.sid,
-            object: state.object,
-            tid: state.tid,
-            body: if bodyAsParameters then "" else state.body,
-            params: if bodyAsParameters then state.body else state.params
+            method: @_state.method,
+            resource: @_state.resource,
+            pid: @_state.pid,
+            action: @_state.action,
+            sid: @_state.sid,
+            object: @_state.object,
+            tid: @_state.tid,
+            body: if bodyAsParameters then "" else @_state.body,
+            params: if bodyAsParameters then @_state.body else @_state.params
         }
 
 #method: 'POST', resource: if @options.live then '/OAuth2/token' else '/OAuth2Sandbox/token',
@@ -107,33 +110,33 @@ module.exports = class MojioSDKState
 #}
     # @nodoc
     show: () ->
-#        console.log(JSON.stringify(state))
-        return state
+#        console.log(JSON.stringify(@_state))
+        return @_state
 
     # @nodoc
-    setCallback: (callback) ->
-        state.callback = callback
+    setCallback: (callback) =>
+        @_state.callback = callback
         return
 
     # @nodoc
     setToken: (token) ->
-        state.token = token
+        @_state.token = token
         return
 
     getToken: () ->
-        return state.token
+        return @_state.token
     # @nodoc
     setAnswer: (token) ->
-        state.answer = token
+        @_state.answer = token
 
     # @nodoc
     setBody_ObjectOrJson: (object_or_json_string) ->
         switch typeof object_or_json_string
             when "string"
-                state.body = object_or_json_string
+                @_state.body = object_or_json_string
             when "object"
-                state.body = object_or_json_string
-        return state
+                @_state.body = object_or_json_string
+        return @_state
 
     # @nodoc
     setEndpoint: (endpoint) ->
@@ -146,126 +149,126 @@ module.exports = class MojioSDKState
             throw "Endpoint must be accounts, api, or push" if !found
             return found
         if validateEndpoint(endpoint, @endpoints)
-            state.endpoint = endpoint
+            @_state.endpoint = endpoint
 
     # @nodoc
     setMethod: (method) ->
         @reset()
-        state.method = method
+        @_state.method = method
 
     # @nodoc
     setResource: (resource) ->
-        if state.resource == 'Groups'
+        if @_state.resource == 'Groups'
             @setObject(resource)
         else
-            state.resource = resource
+            @_state.resource = resource
 
     # @nodoc
     setObject: (object) ->
-        state.object = object
+        @_state.object = object
 
     # @nodoc
     setAction: (action) ->
-        state.action = action
+        @_state.action = action
 
     # @nodoc
     setParams: (parameters) ->
         for property, value of parameters
-            state.parameters[property] = value
-#        _.extend(state.parameters, parameters)
+            @_state.parameters[property] = value
+#        _.extend(@_state.parameters, parameters)
 
 # @nodoc
     setBody: (parameters) ->
         for property, value of parameters
-            state.body[property] = value
-#        _.extend(state.body, parameters)
+            @_state.body[property] = value
+#        _.extend(@_state.body, parameters)
         return
 
     setId: (id) ->
         @setPrimaryId(id)
 
     setPrimaryId: (id) ->
-        state.pid = id
+        @_state.pid = id
 
     setSecondaryId: (id) ->
-        state.sid = id
+        @_state.sid = id
 
     setTertiaryId: (id) ->
-        state.tid = id
+        @_state.tid = id
 
     # @nodoc
     getBody: () ->
-        return state.body
+        return @_state.body
 
     # @nodoc
     getParams: () ->
-        return state.parameters
+        return @_state.parameters
 
     # @nodoc
     setWhere: (id_example_or_query) ->
-        state.type = "all"
-        state.where = null
+        @_state.type = "all"
+        @_state.where = null
 
         if (id_example_or_query != null)
             switch typeof id_example_or_query
                 when "number"
-                    state.type = "id"
-                    state.where = id_example_or_query
+                    @_state.type = "id"
+                    @_state.where = id_example_or_query
                 when "string"
-                    state.type = "query"
-                    state.where = id_example_or_query
+                    @_state.type = "query"
+                    @_state.where = id_example_or_query
                 when "object"
-                    state.type = "example"
-                    state.where = id_example_or_query
+                    @_state.type = "example"
+                    @_state.where = id_example_or_query
                 else
-                    state.type = "query"
-                    state.where = id_example_or_query
-        return state
+                    @_state.type = "query"
+                    @_state.where = id_example_or_query
+        return @_state
 
     # @nodoc
     fixup: () ->
-        # remove capitals from fields and values in the state.
-        for p, v of state
+        # remove capitals from fields and values in the @_state.
+        for p, v of @_state
             lowP = p.toLowerCase()
             lowV = v.toLowerCase()
-            state[lowP]= lowV
-            delete state[p]
+            @_state[lowP]= lowV
+            delete @_state[p]
 
     mock: () ->
-        state.mock = true
+        @_state.mock = true
 
     # @nodoc
     reset: () ->
-        state.mock = false
-        state.callback = null
-        state.answer = null # return this immediately if not null, otherwise make an api call.
-        state.endpoint = defaultEndpoint
-        state.method = "GET" # GET, PUT, POST, DELETE
-        state.resource = "Vehicles" # authorize, vehicle,
-        state.pid = null
-        state.sid = null
-        state.tid = null
-        state.action = null
-        state.object = null
+        @_state.mock = false
+        @_state.callback = null
+        @_state.answer = null # return this immediately if not null, otherwise make an api call.
+        @_state.endpoint = defaultEndpoint
+        @_state.method = "GET" # GET, PUT, POST, DELETE
+        @_state.resource = "Vehicles" # authorize, vehicle,
+        @_state.pid = null
+        @_state.sid = null
+        @_state.tid = null
+        @_state.action = null
+        @_state.object = null
 
         # parameters
-        state.parameters = {}
+        @_state.parameters = {}
 
         # GET
-        state.operation = ""
-        state.limit = 10
-        state.offset = 0
-        state.desc = false
-        state.query = null
-        state.field = null
-        state.fields = null
+        @_state.operation = ""
+        @_state.limit = 10
+        @_state.offset = 0
+        @_state.desc = false
+        @_state.query = null
+        @_state.field = null
+        @_state.fields = null
 
         # GET/DELETE
         # id, object example, query string, or array.
-        state.type = "all"
-        state.where = null
+        @_state.type = "all"
+        @_state.where = null
 
         # body
         # PUT/POST
         # can specify an object, json string
-        state.body = {}
+        @_state.body = {}

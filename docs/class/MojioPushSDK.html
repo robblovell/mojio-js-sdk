@@ -35,27 +35,6 @@
           </td>
         </tr>
       </table>
-      <h2>Overview</h2>
-      <div class='docstring'>
-  <p>The Push segment of the Mojio SDK. The Push segement of the SDK provides a mechanism for applications to subscribe
-to changes occurring on primary API resources of Vehicles, Users, Mojios, Trips, Groups, and Apps.</p><p>Mojio maintains a separate &quot;Push&quot; style API where applications can subscribe to changes on resources and receive those
-changes across multiple transports.  Current transports include: SIGNALR, HTTPS POST, and MQTT.</p><p>Subscriptions are instantiated by posting &quot;Observers&quot; to the Push API&#39;s REST interface.  Observers define what, when
-and how data is channeled to the application from the server.</p><p>What is defined by specification of the resource type and id.
-The &quot;What&quot; delivered can be narrowed down to a specific set of fields through a filter specification (basically a list of the names of the fields).</p><p>The &quot;When&quot; is defined by optional conditions, debounce, throttle, and timings.</p><p>The &quot;How&quot; is defined by a transport specification
-that has the connection details to a method, server or hub, depending on the transport type.  For SignalR, Mojio provides
-the hub of communication, for other protocols like MQTT or Http Post, the application writer is responsible for the
-communication infrastructure.</p><p>The inheritance path is:
-   MojioPushSDK-&gt;MojioRestSDK-&gt;MojioAuthSDK-&gt;MojioModelSDK</p>
-  <div class='examples'>
-    <h3>Examples:</h3>
-    <h4>
-      
-    </h4>
-    <pre><code class='coffeescript'>mojioSdk = new MojioSDK({sdk: MojioPushSDK}) # instantiate the mojioSDK to all available API calls.</code></pre>
-  </div>
-</div>
-<div class='tags'>
-</div>
       <h2>Instance Method Summary</h2>
       <ul class='summary'>
   <li>
@@ -639,11 +618,11 @@ Possible timings are: leading, trailing, high, low, edge, and continuous.</p><p>
 </div>
     </div>
     <div id='footer'>
-  November 17, 15 17:54:44 by
+  By
   <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
-  2.0.11
+  2.1.2
   &#10034;
   Press H to see the keyboard shortcuts
   &#10034;

@@ -7,7 +7,7 @@ MojioAsyncAwaitStyle = require '../../src/nodejs/styles/MojioAsyncAwaitStyle'
 MojioSyncStyle = require '../../src/nodejs/styles/MojioSyncStyle'
 nock = require 'nock'
 async = require('asyncawait/async')
-await = require('asyncawait/await')
+awaitIt = require('asyncawait/await')
 
 describe 'Node Mojio Auth SDK password type auth', ->
 
@@ -64,7 +64,7 @@ describe 'Node Mojio Auth SDK password type auth', ->
                 done()
         )
 
-    it 'can authorize with promise', (done) ->
+    it 'can authorize with promise', () ->
 #        @.timeout(timeout)
         call = setupNock()
         sdk = new MojioSDK(options)
@@ -79,7 +79,7 @@ describe 'Node Mojio Auth SDK password type auth', ->
             (result) ->
                 testErrorResult(null, result)
                 call.done() if call?
-                done()
+#                done()
             ,
             (error) ->
                 console.log("")
@@ -87,7 +87,6 @@ describe 'Node Mojio Auth SDK password type auth', ->
                 process.exit(1)
 
         )
-
 
 #
 #    it 'can authorize with reactive observable.', (done) ->

@@ -2,8 +2,7 @@
 #MojioSDK = require '../../dist/sdk/MojioSDK'
 #MojioAuthSDK = require '../../src/nodejs/sdk/MojioAuthSDK'
 
-client_id = '41a04077-0157-49fb-a35c-6e2824f3b348'
-client_secret = 'd80357f8-cbc9-4022-b340-6e99a72e7e0b'
+client_id = '0310fd43-beb0-407a-8dcd-c521e339b4f8'
 
 redirect_uri = 'http://localhost:63342/mojio-js-sdk/test/auth/authorize.html'
 
@@ -11,7 +10,6 @@ redirect_uri = 'http://localhost:63342/mojio-js-sdk/test/auth/authorize.html'
 
 sdk = new MojioSDK({
     client_id: client_id,
-    client_secret: client_secret
     site: 'https://accounts.moj.io',
     tokenPath: '/oauth2/token',
     authorizationPath: '/oauth2/authorize'

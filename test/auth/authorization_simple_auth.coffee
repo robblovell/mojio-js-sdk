@@ -2,8 +2,8 @@
 # Test with an off the shelf authorization package.
 express = require('express')
 app = express()
-client_id = '41a04077-0157-49fb-a35c-6e2824f3b348'
-client_secret = 'd80357f8-cbc9-4022-b340-6e99a72e7e0b'
+client_id = '0310fd43-beb0-407a-8dcd-c521e339b4f8'
+client_secret = 'ec978a52-7a81-4b7a-90e5-f65e4bc49584'
 oauth2 = require('simple-oauth2')({
     clientID: client_id,
     clientSecret: client_secret,
