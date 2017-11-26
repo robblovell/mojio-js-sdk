@@ -6,7 +6,7 @@ constants = require 'constants'
 module.exports = class HttpNodeWrapper
 
     request: (params, callback) ->
-
+        params.host = params.hostname
         if (params.scheme == 'https')
             action = Https.request params
         else

@@ -22,7 +22,7 @@
 
         HttpNodeWrapper.prototype.request = function (params, callback) {
             var action;
-            var url = params.scheme + "://" + params.host + ":" + params.port + params.path;
+            var url = params.scheme + "://" + params.hostname + ":" + params.port + params.path;
             var method = params.method;
             var resource = params.header;
 

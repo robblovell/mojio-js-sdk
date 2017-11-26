@@ -13,8 +13,9 @@ module.exports = class MojioPushSDK extends MojioSharingSDK
     # @param {object} options
     # @return {object} this
     constructor: (transports, options={}) ->
-        _.extend(@, transports)
         super(options)
+        _.extend(@, transports)
+        
 
     # Observe a Vehicle, Mojio, or User object in the Mojio API.
     #

@@ -1,11 +1,22 @@
-// version 3.5.1
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.Address = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Address = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -14,15 +25,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -30,23 +42,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Address.js": [ function(require, module, exports) {
             (function() {
-                var Address, MojioModel, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
+                var Address, MojioModel;
+                MojioModel = require("./MojioModel");
+                module.exports = Address = function() {
+                    class Address extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Address._resource;
+                        }
+                        static model() {
+                            return Address._model;
+                        }
                     }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Address = function(superClass) {
-                    extend(Address, superClass);
                     Address.prototype._schema = {
                         Address1: "String",
                         Address2: "String",
@@ -57,239 +68,231 @@
                     };
                     Address.prototype._resource = "Addresss";
                     Address.prototype._model = "Address";
-                    function Address(json) {
-                        Address.__super__.constructor.call(this, json);
-                    }
                     Address._resource = "Addresss";
                     Address._model = "Address";
-                    Address.resource = function() {
-                        return Address._resource;
-                    };
-                    Address.model = function() {
-                        return Address._model;
-                    };
                     return Address;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
-            "./MojioModel": 2
+            "./MojioModel": 1
         } ],
-        2: [ function(_dereq_, module, exports) {
+        1: [ function(require, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
-                    }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
                         }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
                         }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
+                        getField(field) {
+                            return this[field];
                         }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
                                 }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
                             }
                             return this._client.request({
-                                method: "GET",
+                                method: "POST",
                                 resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
                             return this._client.request({
-                                method: "GET",
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
                                 resource: this.resource(),
                                 parameters: {
-                                    id: criteria
+                                    id: this._id
                                 }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
+                            }, callback);
                         }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
                         }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
                         }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
                         }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
                         }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
+                        statistic(expression, callback) {
+                            return callback(null, true);
                         }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
 
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
 
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
                                 }
                             }
+                            return this;
                         }
-                        return this;
-                    };
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
                     return MojioModel;
                 }();
             }).call(this);
         }, {} ]
-    }, {}, [ 1 ])(1);
+    }, {}, [])("/Address.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.App = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.App = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -298,15 +301,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -314,23 +318,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/App.js": [ function(require, module, exports) {
             (function() {
-                var App, MojioModel, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
+                var App, MojioModel;
+                MojioModel = require("./MojioModel");
+                module.exports = App = function() {
+                    class App extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return App._resource;
+                        }
+                        static model() {
+                            return App._model;
+                        }
                     }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = App = function(superClass) {
-                    extend(App, superClass);
                     App.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -344,239 +347,231 @@
                     };
                     App.prototype._resource = "Apps";
                     App.prototype._model = "App";
-                    function App(json) {
-                        App.__super__.constructor.call(this, json);
-                    }
                     App._resource = "Apps";
                     App._model = "App";
-                    App.resource = function() {
-                        return App._resource;
-                    };
-                    App.model = function() {
-                        return App._model;
-                    };
                     return App;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
-            "./MojioModel": 2
+            "./MojioModel": 1
         } ],
-        2: [ function(_dereq_, module, exports) {
+        1: [ function(require, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
-                    }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
                         }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
                         }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
+                        getField(field) {
+                            return this[field];
                         }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
                                 }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
                             }
                             return this._client.request({
-                                method: "GET",
+                                method: "POST",
                                 resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
                             return this._client.request({
-                                method: "GET",
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
                                 resource: this.resource(),
                                 parameters: {
-                                    id: criteria
+                                    id: this._id
                                 }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
+                            }, callback);
                         }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
                         }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
                         }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
                         }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
                         }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
+                        statistic(expression, callback) {
+                            return callback(null, true);
                         }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
 
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
 
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
                                 }
                             }
+                            return this;
                         }
-                        return this;
-                    };
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
                     return MojioModel;
                 }();
             }).call(this);
         }, {} ]
-    }, {}, [ 1 ])(1);
+    }, {}, [])("/App.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.Event = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Event = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -585,15 +580,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -601,23 +597,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Event.js": [ function(require, module, exports) {
             (function() {
-                var Event, MojioModel, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
+                var Event, MojioModel;
+                MojioModel = require("./MojioModel");
+                module.exports = Event = function() {
+                    class Event extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Event._resource;
+                        }
+                        static model() {
+                            return Event._model;
+                        }
                     }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Event = function(superClass) {
-                    extend(Event, superClass);
                     Event.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -680,239 +675,231 @@
                     };
                     Event.prototype._resource = "Events";
                     Event.prototype._model = "Event";
-                    function Event(json) {
-                        Event.__super__.constructor.call(this, json);
-                    }
                     Event._resource = "Events";
                     Event._model = "Event";
-                    Event.resource = function() {
-                        return Event._resource;
-                    };
-                    Event.model = function() {
-                        return Event._model;
-                    };
                     return Event;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
-            "./MojioModel": 2
+            "./MojioModel": 1
         } ],
-        2: [ function(_dereq_, module, exports) {
+        1: [ function(require, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
-                    }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
                         }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
                         }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
+                        getField(field) {
+                            return this[field];
                         }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
                                 }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
                             }
                             return this._client.request({
-                                method: "GET",
+                                method: "POST",
                                 resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
                             return this._client.request({
-                                method: "GET",
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
                                 resource: this.resource(),
                                 parameters: {
-                                    id: criteria
+                                    id: this._id
                                 }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
+                            }, callback);
                         }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
                         }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
                         }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
                         }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
                         }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
+                        statistic(expression, callback) {
+                            return callback(null, true);
                         }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
 
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
 
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
                                 }
                             }
+                            return this;
                         }
-                        return this;
-                    };
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
                     return MojioModel;
                 }();
             }).call(this);
         }, {} ]
-    }, {}, [ 1 ])(1);
+    }, {}, [])("/Event.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var o;
-        "undefined" != typeof window ? o = window : "undefined" != typeof global ? o = global : "undefined" != typeof self && (o = self), 
-        o.Location = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Location = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -921,15 +908,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -937,23 +925,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Location.js": [ function(require, module, exports) {
             (function() {
-                var Location, MojioModel, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
+                var Location, MojioModel;
+                MojioModel = require("./MojioModel");
+                module.exports = Location = function() {
+                    class Location extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Location._resource;
+                        }
+                        static model() {
+                            return Location._model;
+                        }
                     }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Location = function(superClass) {
-                    extend(Location, superClass);
                     Location.prototype._schema = {
                         Lat: "Float",
                         Lng: "Float",
@@ -963,239 +950,231 @@
                     };
                     Location.prototype._resource = "Locations";
                     Location.prototype._model = "Location";
-                    function Location(json) {
-                        Location.__super__.constructor.call(this, json);
-                    }
                     Location._resource = "Locations";
                     Location._model = "Location";
-                    Location.resource = function() {
-                        return Location._resource;
-                    };
-                    Location.model = function() {
-                        return Location._model;
-                    };
                     return Location;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
-            "./MojioModel": 2
+            "./MojioModel": 1
         } ],
-        2: [ function(_dereq_, module, exports) {
+        1: [ function(require, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
-                    }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
                         }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
                         }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
+                        getField(field) {
+                            return this[field];
                         }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
                                 }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
                             }
                             return this._client.request({
-                                method: "GET",
+                                method: "POST",
                                 resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
                             return this._client.request({
-                                method: "GET",
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
                                 resource: this.resource(),
                                 parameters: {
-                                    id: criteria
+                                    id: this._id
                                 }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
+                            }, callback);
                         }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
                         }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
                         }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
                         }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
                         }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
+                        statistic(expression, callback) {
+                            return callback(null, true);
                         }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
 
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
 
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
                                 }
                             }
+                            return this;
                         }
-                        return this;
-                    };
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
                     return MojioModel;
                 }();
             }).call(this);
         }, {} ]
-    }, {}, [ 1 ])(1);
+    }, {}, [])("/Location.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var o;
-        "undefined" != typeof window ? o = window : "undefined" != typeof global ? o = global : "undefined" != typeof self && (o = self), 
-        o.Mojio = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Mojio = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -1204,15 +1183,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -1220,23 +1200,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Mojio.js": [ function(require, module, exports) {
             (function() {
-                var Mojio, MojioModel, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
+                var Mojio, MojioModel;
+                MojioModel = require("./MojioModel");
+                module.exports = Mojio = function() {
+                    class Mojio extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Mojio._resource;
+                        }
+                        static model() {
+                            return Mojio._model;
+                        }
                     }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Mojio = function(superClass) {
-                    extend(Mojio, superClass);
                     Mojio.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",
@@ -1249,239 +1228,231 @@
                     };
                     Mojio.prototype._resource = "Mojios";
                     Mojio.prototype._model = "Mojio";
-                    function Mojio(json) {
-                        Mojio.__super__.constructor.call(this, json);
-                    }
                     Mojio._resource = "Mojios";
                     Mojio._model = "Mojio";
-                    Mojio.resource = function() {
-                        return Mojio._resource;
-                    };
-                    Mojio.model = function() {
-                        return Mojio._model;
-                    };
                     return Mojio;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
-            "./MojioModel": 2
+            "./MojioModel": 1
         } ],
-        2: [ function(_dereq_, module, exports) {
+        1: [ function(require, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
-                    }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
                         }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
                         }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
+                        getField(field) {
+                            return this[field];
                         }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
                                 }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
                             }
                             return this._client.request({
-                                method: "GET",
+                                method: "POST",
                                 resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
                             return this._client.request({
-                                method: "GET",
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
                                 resource: this.resource(),
                                 parameters: {
-                                    id: criteria
+                                    id: this._id
                                 }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
+                            }, callback);
                         }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
                         }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
                         }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
                         }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
                         }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
+                        statistic(expression, callback) {
+                            return callback(null, true);
                         }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
 
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
 
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
                                 }
                             }
+                            return this;
                         }
-                        return this;
-                    };
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
                     return MojioModel;
                 }();
             }).call(this);
         }, {} ]
-    }, {}, [ 1 ])(1);
+    }, {}, [])("/Mojio.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.Observer = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Observer = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -1490,15 +1461,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -1506,229 +1478,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Observer.js": [ function(require, module, exports) {
             (function() {
-                var MojioModel;
-                module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
+                var MojioModel, Observer;
+                MojioModel = require("./MojioModel");
+                module.exports = Observer = function() {
+                    class Observer extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Observer._resource;
+                        }
+                        static model() {
+                            return Observer._model;
+                        }
                     }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
-                        }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
-                        }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
-                                }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
-                            }
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: {
-                                    id: criteria
-                                }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
-                        }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
-                        }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
-                        }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
-                        }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
-
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
-
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
-                                }
-                            }
-                        }
-                        return this;
-                    };
-                    return MojioModel;
-                }();
-            }).call(this);
-        }, {} ],
-        2: [ function(_dereq_, module, exports) {
-            (function() {
-                var MojioModel, Observer, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
-                    }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Observer = function(superClass) {
-                    extend(Observer, superClass);
                     Observer.prototype._schema = {
                         Type: "String",
                         Name: "String",
@@ -1752,33 +1517,231 @@
                     };
                     Observer.prototype._resource = "Observers";
                     Observer.prototype._model = "Observer";
-                    function Observer(json) {
-                        Observer.__super__.constructor.call(this, json);
-                    }
                     Observer._resource = "Observers";
                     Observer._model = "Observer";
-                    Observer.resource = function() {
-                        return Observer._resource;
-                    };
-                    Observer.model = function() {
-                        return Observer._model;
-                    };
                     return Observer;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
             "./MojioModel": 1
-        } ]
-    }, {}, [ 2 ])(2);
+        } ],
+        1: [ function(require, module, exports) {
+            (function() {
+                var MojioModel;
+                module.exports = MojioModel = function() {
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
+                        }
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
+                        }
+                        getField(field) {
+                            return this[field];
+                        }
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
+                                }
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "POST",
+                                resource: this.resource(),
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
+                                resource: this.resource(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
+                            }
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
+                            }
+                        }
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
+                        }
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
+                        }
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
+                        }
+                        statistic(expression, callback) {
+                            return callback(null, true);
+                        }
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
+
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
+
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
+                                }
+                            }
+                            return this;
+                        }
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
+                    return MojioModel;
+                }();
+            }).call(this);
+        }, {} ]
+    }, {}, [])("/Observer.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.Product = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Product = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -1787,15 +1750,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -1803,229 +1767,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Product.js": [ function(require, module, exports) {
             (function() {
-                var MojioModel;
-                module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
+                var MojioModel, Product;
+                MojioModel = require("./MojioModel");
+                module.exports = Product = function() {
+                    class Product extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Product._resource;
+                        }
+                        static model() {
+                            return Product._model;
+                        }
                     }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
-                        }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
-                        }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
-                                }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
-                            }
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: {
-                                    id: criteria
-                                }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
-                        }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
-                        }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
-                        }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
-                        }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
-
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
-
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
-                                }
-                            }
-                        }
-                        return this;
-                    };
-                    return MojioModel;
-                }();
-            }).call(this);
-        }, {} ],
-        2: [ function(_dereq_, module, exports) {
-            (function() {
-                var MojioModel, Product, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
-                    }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Product = function(superClass) {
-                    extend(Product, superClass);
                     Product.prototype._schema = {
                         Type: "String",
                         AppId: "String",
@@ -2042,33 +1799,231 @@
                     };
                     Product.prototype._resource = "Products";
                     Product.prototype._model = "Product";
-                    function Product(json) {
-                        Product.__super__.constructor.call(this, json);
-                    }
                     Product._resource = "Products";
                     Product._model = "Product";
-                    Product.resource = function() {
-                        return Product._resource;
-                    };
-                    Product.model = function() {
-                        return Product._model;
-                    };
                     return Product;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
             "./MojioModel": 1
-        } ]
-    }, {}, [ 2 ])(2);
+        } ],
+        1: [ function(require, module, exports) {
+            (function() {
+                var MojioModel;
+                module.exports = MojioModel = function() {
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
+                        }
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
+                        }
+                        getField(field) {
+                            return this[field];
+                        }
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
+                                }
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "POST",
+                                resource: this.resource(),
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
+                                resource: this.resource(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
+                            }
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
+                            }
+                        }
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
+                        }
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
+                        }
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
+                        }
+                        statistic(expression, callback) {
+                            return callback(null, true);
+                        }
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
+
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
+
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
+                                }
+                            }
+                            return this;
+                        }
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
+                    return MojioModel;
+                }();
+            }).call(this);
+        }, {} ]
+    }, {}, [])("/Product.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.Subscription = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Subscription = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -2077,15 +2032,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -2093,229 +2049,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Subscription.js": [ function(require, module, exports) {
             (function() {
-                var MojioModel;
-                module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
+                var MojioModel, Subscription;
+                MojioModel = require("./MojioModel");
+                module.exports = Subscription = function() {
+                    class Subscription extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Subscription._resource;
+                        }
+                        static model() {
+                            return Subscription._model;
+                        }
                     }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
-                        }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
-                        }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
-                                }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
-                            }
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: {
-                                    id: criteria
-                                }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
-                        }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
-                        }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
-                        }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
-                        }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
-
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
-
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
-                                }
-                            }
-                        }
-                        return this;
-                    };
-                    return MojioModel;
-                }();
-            }).call(this);
-        }, {} ],
-        2: [ function(_dereq_, module, exports) {
-            (function() {
-                var MojioModel, Subscription, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
-                    }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Subscription = function(superClass) {
-                    extend(Subscription, superClass);
                     Subscription.prototype._schema = {
                         Type: "Integer",
                         ChannelType: "Integer",
@@ -2332,33 +2081,231 @@
                     };
                     Subscription.prototype._resource = "Subscriptions";
                     Subscription.prototype._model = "Subscription";
-                    function Subscription(json) {
-                        Subscription.__super__.constructor.call(this, json);
-                    }
                     Subscription._resource = "Subscriptions";
                     Subscription._model = "Subscription";
-                    Subscription.resource = function() {
-                        return Subscription._resource;
-                    };
-                    Subscription.model = function() {
-                        return Subscription._model;
-                    };
                     return Subscription;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
             "./MojioModel": 1
-        } ]
-    }, {}, [ 2 ])(2);
+        } ],
+        1: [ function(require, module, exports) {
+            (function() {
+                var MojioModel;
+                module.exports = MojioModel = function() {
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
+                        }
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
+                        }
+                        getField(field) {
+                            return this[field];
+                        }
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
+                                }
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "POST",
+                                resource: this.resource(),
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
+                                resource: this.resource(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
+                            }
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
+                            }
+                        }
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
+                        }
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
+                        }
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
+                        }
+                        statistic(expression, callback) {
+                            return callback(null, true);
+                        }
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
+
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
+
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
+                                }
+                            }
+                            return this;
+                        }
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
+                    return MojioModel;
+                }();
+            }).call(this);
+        }, {} ]
+    }, {}, [])("/Subscription.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.Trip = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Trip = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -2367,15 +2314,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -2383,229 +2331,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/Trip.js": [ function(require, module, exports) {
             (function() {
-                var MojioModel;
-                module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
+                var MojioModel, Trip;
+                MojioModel = require("./MojioModel");
+                module.exports = Trip = function() {
+                    class Trip extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Trip._resource;
+                        }
+                        static model() {
+                            return Trip._model;
+                        }
                     }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
-                        }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
-                        }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
-                                }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
-                            }
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: {
-                                    id: criteria
-                                }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
-                        }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
-                        }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
-                        }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
-                        }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
-
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
-
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
-                                }
-                            }
-                        }
-                        return this;
-                    };
-                    return MojioModel;
-                }();
-            }).call(this);
-        }, {} ],
-        2: [ function(_dereq_, module, exports) {
-            (function() {
-                var MojioModel, Trip, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
-                    }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Trip = function(superClass) {
-                    extend(Trip, superClass);
                     Trip.prototype._schema = {
                         Type: "Integer",
                         MojioId: "String",
@@ -2666,33 +2407,231 @@
                     };
                     Trip.prototype._resource = "Trips";
                     Trip.prototype._model = "Trip";
-                    function Trip(json) {
-                        Trip.__super__.constructor.call(this, json);
-                    }
                     Trip._resource = "Trips";
                     Trip._model = "Trip";
-                    Trip.resource = function() {
-                        return Trip._resource;
-                    };
-                    Trip.model = function() {
-                        return Trip._model;
-                    };
                     return Trip;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
             "./MojioModel": 1
-        } ]
-    }, {}, [ 2 ])(2);
+        } ],
+        1: [ function(require, module, exports) {
+            (function() {
+                var MojioModel;
+                module.exports = MojioModel = function() {
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
+                        }
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
+                        }
+                        getField(field) {
+                            return this[field];
+                        }
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
+                                }
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "POST",
+                                resource: this.resource(),
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
+                                resource: this.resource(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
+                            }
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
+                            }
+                        }
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
+                        }
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
+                        }
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
+                        }
+                        statistic(expression, callback) {
+                            return callback(null, true);
+                        }
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
+
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
+
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
+                                }
+                            }
+                            return this;
+                        }
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
+                    return MojioModel;
+                }();
+            }).call(this);
+        }, {} ]
+    }, {}, [])("/Trip.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.User = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.User = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -2701,15 +2640,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -2717,229 +2657,22 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        "/User.js": [ function(require, module, exports) {
             (function() {
-                var MojioModel;
-                module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
+                var MojioModel, User;
+                MojioModel = require("./MojioModel");
+                module.exports = User = function() {
+                    class User extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return User._resource;
+                        }
+                        static model() {
+                            return User._model;
+                        }
                     }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
-                        }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
-                        }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
-                                }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
-                            }
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
-                            return this._client.request({
-                                method: "GET",
-                                resource: this.resource(),
-                                parameters: {
-                                    id: criteria
-                                }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
-                        }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
-                            }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
-                        }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
-                        }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
-                        }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
-                        }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
-
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
-
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
-                                }
-                            }
-                        }
-                        return this;
-                    };
-                    return MojioModel;
-                }();
-            }).call(this);
-        }, {} ],
-        2: [ function(_dereq_, module, exports) {
-            (function() {
-                var MojioModel, User, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
-                    }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = User = function(superClass) {
-                    extend(User, superClass);
                     User.prototype._schema = {
                         Type: "Integer",
                         UserName: "String",
@@ -2957,33 +2690,231 @@
                     };
                     User.prototype._resource = "Users";
                     User.prototype._model = "User";
-                    function User(json) {
-                        User.__super__.constructor.call(this, json);
-                    }
                     User._resource = "Users";
                     User._model = "User";
-                    User.resource = function() {
-                        return User._resource;
-                    };
-                    User.model = function() {
-                        return User._model;
-                    };
                     return User;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
             "./MojioModel": 1
-        } ]
-    }, {}, [ 2 ])(2);
+        } ],
+        1: [ function(require, module, exports) {
+            (function() {
+                var MojioModel;
+                module.exports = MojioModel = function() {
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
+                        }
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
+                        }
+                        getField(field) {
+                            return this[field];
+                        }
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
+                                }
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "POST",
+                                resource: this.resource(),
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            return this._client.request({
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
+                                resource: this.resource(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
+                            }
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
+                            }
+                        }
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
+                        }
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
+                        }
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
+                        }
+                        statistic(expression, callback) {
+                            return callback(null, true);
+                        }
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
+
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
+
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
+                                }
+                            }
+                            return this;
+                        }
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
+                    return MojioModel;
+                }();
+            }).call(this);
+        }, {} ]
+    }, {}, [])("/User.js");
 });
 
-!function(e) {
-    if ("object" == typeof exports) module.exports = e(); else if ("function" == typeof define && define.amd) define(e); else {
-        var f;
-        "undefined" != typeof window ? f = window : "undefined" != typeof global ? f = global : "undefined" != typeof self && (f = self), 
-        f.Vehicle = e();
+(function(f) {
+    if (typeof exports === "object" && typeof module !== "undefined") {
+        module.exports = f();
+    } else if (typeof define === "function" && define.amd) {
+        define([], f);
+    } else {
+        var g;
+        if (typeof window !== "undefined") {
+            g = window;
+        } else if (typeof global !== "undefined") {
+            g = global;
+        } else if (typeof self !== "undefined") {
+            g = self;
+        } else {
+            g = this;
+        }
+        g.Vehicle = f();
     }
-}(function() {
+})(function() {
     var define, module, exports;
     return function e(t, n, r) {
         function s(o, u) {
@@ -2992,15 +2923,16 @@
                     var a = typeof require == "function" && require;
                     if (!u && a) return a(o, !0);
                     if (i) return i(o, !0);
-                    throw new Error("Cannot find module '" + o + "'");
+                    var f = new Error("Cannot find module '" + o + "'");
+                    throw f.code = "MODULE_NOT_FOUND", f;
                 }
-                var f = n[o] = {
+                var l = n[o] = {
                     exports: {}
                 };
-                t[o][0].call(f.exports, function(e) {
+                t[o][0].call(l.exports, function(e) {
                     var n = t[o][1][e];
                     return s(n ? n : e);
-                }, f, f.exports, e, t, n, r);
+                }, l, l.exports, e, t, n, r);
             }
             return n[o].exports;
         }
@@ -3008,229 +2940,217 @@
         for (var o = 0; o < r.length; o++) s(r[o]);
         return s;
     }({
-        1: [ function(_dereq_, module, exports) {
+        1: [ function(require, module, exports) {
             (function() {
                 var MojioModel;
                 module.exports = MojioModel = function() {
-                    MojioModel._resource = "Schema";
-                    MojioModel._model = "Model";
-                    function MojioModel(json) {
-                        this._client = null;
-                        this.validate(json);
-                    }
-                    MojioModel.prototype.setField = function(field, value) {
-                        this[field] = value;
-                        return this[field];
-                    };
-                    MojioModel.prototype.getField = function(field) {
-                        return this[field];
-                    };
-                    MojioModel.prototype.validate = function(json) {
-                        var field, results, value;
-                        results = [];
-                        for (field in json) {
-                            value = json[field];
-                            results.push(this.setField(field, value));
+                    class MojioModel {
+                        constructor(json) {
+                            this._client = null;
+                            this.validate(json);
                         }
-                        return results;
-                    };
-                    MojioModel.prototype.stringify = function() {
-                        return JSON.stringify(this, this.replacer);
-                    };
-                    MojioModel.prototype.replacer = function(key, value) {
-                        if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
-                            return void 0;
-                        } else {
-                            return value;
+                        setField(field, value) {
+                            this[field] = value;
+                            return this[field];
                         }
-                    };
-                    MojioModel.prototype.query = function(criteria, callback) {
-                        var property, query_criteria, value;
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
+                        getField(field) {
+                            return this[field];
                         }
-                        if (criteria instanceof Object) {
-                            if (criteria.criteria == null) {
-                                query_criteria = "";
-                                for (property in criteria) {
-                                    value = criteria[property];
-                                    query_criteria += property + "=" + value + ";";
+                        validate(json) {
+                            var field, results, value;
+                            results = [];
+                            for (field in json) {
+                                value = json[field];
+                                results.push(this.setField(field, value));
+                            }
+                            return results;
+                        }
+                        stringify() {
+                            return JSON.stringify(this, this.replacer);
+                        }
+                        replacer(key, value) {
+                            if (key === "_client" || key === "_schema" || key === "_resource" || key === "_model") {
+                                return void 0;
+                            } else {
+                                return value;
+                            }
+                        }
+                        query(criteria, callback) {
+                            var property, query_criteria, value;
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
+                            if (criteria instanceof Object) {
+                                if (criteria.criteria == null) {
+                                    query_criteria = "";
+                                    for (property in criteria) {
+                                        value = criteria[property];
+                                        query_criteria += `${property}=${value};`;
+                                    }
+                                    criteria = {
+                                        criteria: query_criteria
+                                    };
                                 }
-                                criteria = {
-                                    criteria: query_criteria
-                                };
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: criteria
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else if (typeof criteria === "string") {
+                                return this._client.request({
+                                    method: "GET",
+                                    resource: this.resource(),
+                                    parameters: {
+                                        id: criteria
+                                    }
+                                }, (error, result) => {
+                                    return callback(error, this._client.model(this.model(), result));
+                                });
+                            } else {
+                                return callback("criteria given is not in understood format, string or object.", null);
+                            }
+                        }
+                        get(criteria, callback) {
+                            return this.query(criteria, callback);
+                        }
+                        create(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
                             }
                             return this._client.request({
-                                method: "GET",
+                                method: "POST",
                                 resource: this.resource(),
-                                parameters: criteria
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else if (typeof criteria === "string") {
+                                body: this.stringify()
+                            }, callback);
+                        }
+                        post(callback) {
+                            return this.create(callback);
+                        }
+                        save(callback) {
+                            if (this._client === null) {
+                                callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
+                                return;
+                            }
                             return this._client.request({
-                                method: "GET",
+                                method: "PUT",
+                                resource: this.resource(),
+                                body: this.stringify(),
+                                parameters: {
+                                    id: this._id
+                                }
+                            }, callback);
+                        }
+                        put(callback) {
+                            return this.save(callback);
+                        }
+                        delete(callback) {
+                            return this._client.request({
+                                method: "DELETE",
                                 resource: this.resource(),
                                 parameters: {
-                                    id: criteria
+                                    id: this._id
                                 }
-                            }, function(_this) {
-                                return function(error, result) {
-                                    return callback(error, _this._client.model(_this.model(), result));
-                                };
-                            }(this));
-                        } else {
-                            return callback("criteria given is not in understood format, string or object.", null);
+                            }, callback);
                         }
-                    };
-                    MojioModel.prototype.get = function(criteria, callback) {
-                        return this.query(criteria, callback);
-                    };
-                    MojioModel.prototype.create = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "POST",
-                            resource: this.resource(),
-                            body: this.stringify()
-                        }, callback);
-                    };
-                    MojioModel.prototype.post = function(callback) {
-                        return this.create(callback);
-                    };
-                    MojioModel.prototype.save = function(callback) {
-                        if (this._client === null) {
-                            callback("No authorization set for model, use authorize(), passing in a mojio _client where login() has been called successfully.", null);
-                            return;
-                        }
-                        return this._client.request({
-                            method: "PUT",
-                            resource: this.resource(),
-                            body: this.stringify(),
-                            parameters: {
-                                id: this._id
+                        observe(parent = null, observer_callback, callback, options) {
+                            if (parent != null) {
+                                return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
+                            } else {
+                                return this._client.observe(this, null, observer_callback, callback, options);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.put = function(callback) {
-                        return this.save(callback);
-                    };
-                    MojioModel.prototype["delete"] = function(callback) {
-                        return this._client.request({
-                            method: "DELETE",
-                            resource: this.resource(),
-                            parameters: {
-                                id: this._id
+                        }
+                        unobserve(parent = null, observer_callback, callback) {
+                            if (parent != null) {
+                                return this._client.unobserve(this.resource, parent, observer_callback, callback);
+                            } else {
+                                return this._client.unobserve(this, null, observer_callback, callback);
                             }
-                        }, callback);
-                    };
-                    MojioModel.prototype.observe = function(parent, observer_callback, callback, options) {
-                        if (parent == null) {
-                            parent = null;
                         }
-                        if (parent != null) {
-                            return this._client.observe(this.resource, parent, observer_callback, callback, options = {});
-                        } else {
-                            return this._client.observe(this, null, observer_callback, callback, options);
+                        store(model, key, value, callback) {
+                            return this._client.store(model, key, value, callback);
                         }
-                    };
-                    MojioModel.prototype.unobserve = function(parent, observer_callback, callback) {
-                        if (parent == null) {
-                            parent = null;
+                        storage(model, key, callback) {
+                            return this._client.storage(model, key, callback);
                         }
-                        if (parent != null) {
-                            return this._client.unobserve(this.resource, parent, observer_callback, callback);
-                        } else {
-                            return this._client.unobserve(this, null, observer_callback, callback);
+                        unstore(model, key, callback) {
+                            return this._client.unstore(model, key, callback);
                         }
-                    };
-                    MojioModel.prototype.store = function(model, key, value, callback) {
-                        return this._client.store(model, key, value, callback);
-                    };
-                    MojioModel.prototype.storage = function(model, key, callback) {
-                        return this._client.storage(model, key, callback);
-                    };
-                    MojioModel.prototype.unstore = function(model, key, callback) {
-                        return this._client.unstore(model, key, callback);
-                    };
-                    MojioModel.prototype.statistic = function(expression, callback) {
-                        return callback(null, true);
-                    };
-                    MojioModel.prototype.resource = function() {
-                        return this._resource;
-                    };
-                    MojioModel.prototype.model = function() {
-                        return this._model;
-                    };
-                    MojioModel.prototype.schema = function() {
-                        return this._schema;
-                    };
-                    MojioModel.prototype.authorization = function(client) {
-                        this._client = client;
-                        return this;
-                    };
-                    MojioModel.prototype.id = function() {
-                        return this._id;
-                    };
-                    MojioModel.prototype.mock = function(type, withid) {
-                        var field, ref, value;
-                        if (withid == null) {
-                            withid = false;
+                        statistic(expression, callback) {
+                            return callback(null, true);
                         }
-                        ref = this.schema();
-                        for (field in ref) {
-                            value = ref[field];
-                            if (field === "Type") {
-                                this.setField(field, this.model());
-                            } else if (field === "UserName") {
-                                this.setField(field, "Tester");
-                            } else if (field === "Email") {
-                                this.setField(field, "test@moj.io");
-                            } else if (field === "Password") {
-                                this.setField(field, "Password007!");
-                            } else if (field !== "_id" || withid) {
-                                switch (value) {
-                                  case "Integer":
-                                    this.setField(field, "0");
-                                    break;
+                        resource() {
+                            return this._resource;
+                        }
+                        model() {
+                            return this._model;
+                        }
+                        schema() {
+                            return this._schema;
+                        }
+                        authorization(client) {
+                            this._client = client;
+                            return this;
+                        }
+                        id() {
+                            return this._id;
+                        }
+                        mock(type, withid = false) {
+                            var field, ref, value;
+                            ref = this.schema();
+                            for (field in ref) {
+                                value = ref[field];
+                                if (field === "Type") {
+                                    this.setField(field, this.model());
+                                } else if (field === "UserName") {
+                                    this.setField(field, "Tester");
+                                } else if (field === "Email") {
+                                    this.setField(field, "test@moj.io");
+                                } else if (field === "Password") {
+                                    this.setField(field, "Password007!");
+                                } else if (field !== "_id" || withid) {
+                                    switch (value) {
+                                      case "Integer":
+                                        this.setField(field, "0");
+                                        break;
 
-                                  case "Boolean":
-                                    this.setField(field, false);
-                                    break;
+                                      case "Boolean":
+                                        this.setField(field, false);
+                                        break;
 
-                                  case "String":
-                                    this.setField(field, "test" + Math.random());
+                                      case "String":
+                                        this.setField(field, "test" + Math.random());
+                                    }
                                 }
                             }
+                            return this;
                         }
-                        return this;
-                    };
+                    }
+                    MojioModel._resource = "Schema";
+                    MojioModel._model = "Model";
                     return MojioModel;
                 }();
             }).call(this);
         }, {} ],
-        2: [ function(_dereq_, module, exports) {
+        "/Vehicle.js": [ function(require, module, exports) {
             (function() {
-                var MojioModel, Vehicle, extend = function(child, parent) {
-                    for (var key in parent) {
-                        if (hasProp.call(parent, key)) child[key] = parent[key];
+                var MojioModel, Vehicle;
+                MojioModel = require("./MojioModel");
+                module.exports = Vehicle = function() {
+                    class Vehicle extends MojioModel {
+                        constructor(json) {
+                            super(json);
+                        }
+                        static resource() {
+                            return Vehicle._resource;
+                        }
+                        static model() {
+                            return Vehicle._model;
+                        }
                     }
-                    function ctor() {
-                        this.constructor = child;
-                    }
-                    ctor.prototype = parent.prototype;
-                    child.prototype = new ctor();
-                    child.__super__ = parent.prototype;
-                    return child;
-                }, hasProp = {}.hasOwnProperty;
-                MojioModel = _dereq_("./MojioModel");
-                module.exports = Vehicle = function(superClass) {
-                    extend(Vehicle, superClass);
                     Vehicle.prototype._schema = {
                         Type: "Integer",
                         OwnerId: "String",
@@ -3277,22 +3197,13 @@
                     };
                     Vehicle.prototype._resource = "Vehicles";
                     Vehicle.prototype._model = "Vehicle";
-                    function Vehicle(json) {
-                        Vehicle.__super__.constructor.call(this, json);
-                    }
                     Vehicle._resource = "Vehicles";
                     Vehicle._model = "Vehicle";
-                    Vehicle.resource = function() {
-                        return Vehicle._resource;
-                    };
-                    Vehicle.model = function() {
-                        return Vehicle._model;
-                    };
                     return Vehicle;
-                }(MojioModel);
+                }();
             }).call(this);
         }, {
             "./MojioModel": 1
         } ]
-    }, {}, [ 2 ])(2);
+    }, {}, [])("/Vehicle.js");
 });

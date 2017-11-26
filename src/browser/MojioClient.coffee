@@ -5,25 +5,30 @@ FormUrlencoded = require 'form-urlencoded'
 
 module.exports = class MojioClient
 
-    defaults = { hostname: 'api.moj.io', port: '443', version: 'v1', scheme: 'https', signalr_scheme: 'https', signalr_port: '443', signalr_hub: 'ObserverHub', live: true }
+    defaults = {
+        hostname: 'api.moj.io', authUrl: 'accounts.moj.io',
+        port: '443', version: 'v2', scheme: 'https',
+        signalr_scheme: 'https', signalr_port: '443',
+        signalr_hub: 'ObserverHub', live: true
+    }
 
     constructor: (@options) ->
         @options ?= { hostname: @defaults.hostname, port: @defaults.port, version: @defaults.version, scheme: @defaults.scheme, live: @defaults.live }
         @options.hostname ?= defaults.hostname
+        @options.authUrl ?= defaults.authUrl
         @options.port ?= defaults.port
         @options.version ?= defaults.version
         @options.scheme ?= defaults.scheme
         @options.signalr_port ?= defaults.signalr_port
         @options.signalr_scheme ?= defaults.signalr_scheme
         @options.signalr_hub ?= defaults.signalr_hub
-        @options.application = @options.application
-        @options.secret = @options.secret
         @options.observerTransport = 'SingalR'
         @conn = null
         @hub = null
         @connStatus = null
         @setToken(null)
         @options.tokenRequester ?= (() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))
+        @options.tokenRequesterImplicit ?= (() -> return document.location.hash.match(/access_token=([0-9a-f-].+?)&/))
 
         @signalr = new SignalR(@options.signalr_scheme+"://"+@options.hostname+":"+@options.signalr_port+"/v1/signalr",[@options.signalr_hub], $)
 
@@ -44,6 +49,7 @@ module.exports = class MojioClient
             objects.push(new type(result))
 
         return objects
+
 
     @_makeParameters: (params) ->
         '' if params.length==0
@@ -73,15 +79,20 @@ module.exports = class MojioClient
         return JSON.stringify(data)
 
     request: (request, callback, isOauth = false) ->
+        if (isOauth is null)
+            isOauth = false
+
         parts = {
             hostname: @options.hostname
-            host: @options.hostname
             port: @options.port
             scheme: @options.scheme
             path: (if isOauth then '' else '/' + @options.version)
             method: request.method,
             withCredentials: false
         }
+        if (isOauth)
+            parts.hostname = @options.authUrl
+        parts.host = parts.hostbame
         parts.path = parts.path + @getPath(request.resource, request.id, request.action, request.key)
 
         if (request.parameters? and Object.keys(request.parameters).length > 0)
@@ -106,44 +117,37 @@ module.exports = class MojioClient
         Authorize and Login
     ###
     login_resource: 'Login'
+    auth_response_type: 'token'
 
-    ###
-    Function: authorize
-
-    Redirects to the Mojio OAuth2 server and authenticates a user. A token is returned that is used by the SDK for subsequent calls.
-
-    Parameters:
-
-        redirect_url - The place where the OAuth2 server redirects after authentication
-        scope - What scope of authentication to request from the user.
-        callback - For server based authentication only, this function is called after direct authentication.
-
-    See Also:
-
-        unauthorize, login, token, logout
-    ###
-    authorize: (redirect_url, scope='full', callback) ->
+    authorize: (redirect_url, type="token", scope='full', state=null, callback) ->
+        @auth_response_type = type
         if (@options? and @options.secret? and @options.username? and @options.password?)
             @_login(@options.username, @options.password, callback)
         else
             parts = {
-                hostname: @options.hostname
-                host: @options.hostname
+                hostname: @options.authUrl
                 port: @options.port
                 scheme: @options.scheme
                 path: if @options.live then '/OAuth2/authorize' else '/OAuth2Sandbox/authorize'
                 method: 'Get'
                 withCredentials: false
             }
-            parts.path += "?response_type=token"
+            parts.path += "?response_type="+type
             parts.path += "&client_id=" + @options.application
             parts.path += "&redirect_uri="+redirect_url
-            parts.path += "&scope="+scope
+
+            if (scope)
+                parts.path += "&scope=" + scope
+
+            if (state)
+                parts.path += "&state="+state
+
             parts.headers = {}
             parts.headers["MojioAPIToken"] = @getTokenId() if @getTokenId()?
             parts.headers["Content-Type"] = 'application/json'
 
             # url = parts.scheme+"://"+parts.host+":"+parts.port+parts.path
+            http = new Http();
             http.redirect(parts, (error, result) ->
                 @setToken(result)
                 return if (!callback?)
@@ -154,10 +158,16 @@ module.exports = class MojioClient
     token: (callback) ->
         @user = null
 
-        token = @options.tokenRequester()
-        match = !!token && token[1]
+        token1 = @options.tokenRequester()
+        match1 = !!token1&& token1[1]
+        token2 = @options.tokenRequesterImplicit()
+        match2 = !!token2&& token2[1]
+        match = match1 || match2
         if (!match)
             callback("token for authorization not found.", null)
+        else if (@auth_response_type is "token" || @auth_response_type is "password")
+            @setToken(match)
+            return callback(null, match);
         else
             # get the user id by requesting login information, then set the auth_token:
             @request(
@@ -171,19 +181,7 @@ module.exports = class MojioClient
                     @setToken(result)
                     callback(null, @getToken())
             )
-    ###
-    Function: unauthorize
 
-    Logs the user out and invalidates the token.
-
-    Parameters:
-
-        callback - This function is called after the token is destoryed.
-
-    See Also:
-
-        authorize, login, token, logout
-    ###
     unauthorize: (callback) ->
         if (@options? and @options.secret? and @options.username? and @options.password?)
             @_logout(callback)
@@ -213,21 +211,7 @@ module.exports = class MojioClient
 
         )
 
-    ###
-    Function: login
-
-    For server based authentication, log in a server with a username and password.
-
-    Parameters:
-
-        username - A registered mojio user's username or email. See the my.moj.io registration page.
-        password - The password associated with the account.
-        callback - This function is called after login.
-
-    See Also:
-
-        authorize, unauthorize, token, logout
-    ###
+    # Login
     login: (username, password, callback) ->
         @_login(username, password, (error, result) =>
             @setToken(result)
@@ -244,19 +228,7 @@ module.exports = class MojioClient
                 callback(error, result)
         )
 
-    ###
-    Function: logout
-
-    Log the user out. Destroys tokens created with authorization or login.
-
-    Parameters:
-
-        callback - This function is called after the token is destroyed.
-
-    See Also:
-
-        authorize, unauthorize, token, login
-    ###
+    # Logout
     logout: (callback) ->
         @_logout((error, result) =>
             @setToken(null)

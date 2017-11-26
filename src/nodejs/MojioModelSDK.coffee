@@ -7,7 +7,7 @@ _ = require 'underscore'
 module.exports = class MojioModelSDK
 
     constructor: (options={}) ->
-        super(options)
+#        super(options)
 
     # Specify a list of users to apply operations to in the fluent chain.
     #

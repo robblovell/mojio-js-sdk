@@ -7,8 +7,9 @@ _ = require 'underscore'
 module.exports = class MojioBaseSDK
 
     constructor: (options={}) ->
-        super(options)
+#        super(options)
 
+    
     # Create models entities for testing purposes.
     #
     # Mocks up objects for testing, objects are not persisted and are created with random values.

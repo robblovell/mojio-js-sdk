@@ -15,7 +15,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                 models = []
                 i=0
                 for model, schema of result
-                    console.log("Looking at "+model)
+#                    console.log("Looking at "+model)
 
                     continue if (model != "App" && model != "Login" && model != "Address" && model != "Location" && model != "Trip" &&
                         model != "User" && model != "Vehicle"  && model != "Event" && model != "Mojio" &&
@@ -28,7 +28,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                         model != "HeadingObserver" && model != "OdometerObserver" &&
                         model != "RPMObserver" && model != "ScriptObserver" && model != "SpeedObserver")
 
-                    console.log("Processing "+model)
+#                    console.log("Processing "+model)
 
                     view = {
                         Resource: model+"s"
@@ -84,6 +84,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     view['http_require'] = "Http = require './HttpNodeWrapper'"
                     view['http_request'] = "http = new Http()"
                     view['token_requester'] = "@getTokenId()"
+                    view['token_requester_implicit'] = "(() -> return null)"
                     view['signalr_default_scheme'] = 'http'
                     view['signalr_default_port'] = '80'
                     view['extra_signalr_params'] = "" # none.
@@ -98,6 +99,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     view['http_require'] = "Http = require './HttpBrowserWrapper'"
                     view['http_request'] = "http = new Http()"
                     view['token_requester'] = "(() -> return document.location.hash.match(/access_token=([0-9a-f-]{36})/))"
+                    view['token_requester_implicit'] = "(() -> return document.location.hash.match(/access_token=([0-9a-f-].+?)&/))"
                     view['extra_signalr_params'] = ", $"
                     view['signalr_default_scheme'] = 'https'
                     view['signalr_default_port'] = '443'
@@ -112,6 +114,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     view['http_require'] = "Http = require './HttpTitaniumWrapper'"
                     view['http_request'] = "http = new Http()"
                     view['token_requester'] = "@getTokenId()"
+                    view['token_requester_implicit'] = "(() -> return null)"
                     view['extra_signalr_params'] = ""
                     view['signalr_default_scheme'] = 'https'
                     view['signalr_default_port'] = '443'
@@ -126,6 +129,7 @@ fs.readFile('./models/schema.coffee', (err, data) ->
                     view['http_require'] = "Http = require './HttpCordovaWrapper'"
                     view['http_request'] = "http = new Http()"
                     view['token_requester'] = "@getTokenId()"
+                    view['token_requester_implicit'] = "(() -> return null)"
                     view['extra_signalr_params'] = ""
                     view['signalr_default_scheme'] = 'https'
                     view['signalr_default_port'] = '443'

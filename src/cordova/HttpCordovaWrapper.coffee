@@ -18,7 +18,7 @@ module.exports = class HttpCordovaWrapper
     )
 
     resquest: (params, callback) ->
-        url = params.scheme + ":#" + params.host + ":" + params.port + params.path
+        url = params.scheme + ":#" + params.hostname + ":" + params.port + params.path
         method = params.method
         resource = params.header
 
@@ -61,7 +61,7 @@ module.exports = class HttpCordovaWrapper
         Http.send()
 
     redirect: (params, callback) -> # @applicationName is appname
-        url = params.scheme+"://"+params.host+":"+params.port+params.path
+        url = params.scheme+"://"+params.hostname+":"+params.port+params.path
 
         webview = Titanium.UI.createWebView()
         Ti.API.info("webview")

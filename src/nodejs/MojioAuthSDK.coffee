@@ -16,8 +16,8 @@ module.exports = class MojioAuthSDK extends MojioModelSDK
     #
     # @param [object] options Configurable options for the sdk.
     constructor: (options={}) ->
-        @configure(options)
         super(options)
+        @configure(options)
 
     # Configure the SDK's options
     #
