@@ -5,3 +5,6 @@ npm-debug.log
 .elasticbeanstalk/
 lib
 dist
+/testApp.coffee
+/testApp.js
+/testApp.js.map

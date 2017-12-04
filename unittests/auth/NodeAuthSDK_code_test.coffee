@@ -15,8 +15,8 @@ describe 'Node Mojio Auth SDK password type auth', ->
     timeout = 5000
     callback_url = "http://localhost:3000/callback"
     authorization = {
-        client_id: 'cacc0d94-b6b4-4da7-9983-3991de197038',
-        client_secret: '427d5794-5021-4274-a6e8-a38d5d83bf99'
+        client_id: 'cacc0d94-',
+        client_secret: '427d5794-'
         redirect_uri: 'http://localhost:3000/callback'
         username: 'testing'
         password: 'Test123!',

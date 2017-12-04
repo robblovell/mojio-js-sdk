@@ -9,8 +9,8 @@ describe 'Node Mojio Fluent Rest SDK POST calls', ->
     user = null
     mojio = null
     vehicle = null
-    client_id = 'cacc0d94-b6b4-4da7-9983-3991de197038'
-    client_secret = '427d5794-5021-4274-a6e8-a38d5d83bf99'
+    client_id = 'cacc0d94-'
+    client_secret = '427d5794-'
     call = null
     timeout = 50
     callback_url = "http://localhost:3000/callback"
